@@ -1,0 +1,150 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ScsReader.ScsMap
+{
+    /// <summary>
+    /// A sign override, which overrides attributes of a sign template object.
+    /// </summary>
+    public class SignOverride : IMapSerializable
+    {
+        /// <summary>
+        /// The ID of the sign template object. Every sign_template_* object has one.
+        /// </summary>
+        public uint Id;
+
+        /// <summary>
+        /// The name of the sign area the object is placed on, as defined in the sign's model.
+        /// </summary>
+        public Token AreaName;
+
+        /// <summary>
+        /// The overridden attributes of this object.
+        /// </summary>
+        public List<ISignOverrideAttribute> Attributes = new List<ISignOverrideAttribute>();
+
+        public void ReadFromStream(BinaryReader r)
+        {
+            // id
+            Id = r.ReadUInt32();
+
+            // area name
+            AreaName = r.ReadToken();
+
+            // attributes
+            var attributeCount = r.ReadUInt32();
+            for(int i = 0; i < attributeCount; i++)
+            {
+                var type = (AttributeType)r.ReadUInt16();
+                ISignOverrideAttribute attrib;
+
+                switch(type)
+                {
+                    case AttributeType.SByte:
+                        attrib = new SignOverrideAtttribute<sbyte>();
+                        attrib.Index = r.ReadUInt32();
+                        attrib.SetValue(r.ReadSByte());
+                        break;
+                    case AttributeType.Int32:
+                        attrib = new SignOverrideAtttribute<int>();
+                        attrib.Index = r.ReadUInt32();
+                        attrib.SetValue(r.ReadInt32());
+                        break;
+                    case AttributeType.UInt32:
+                        attrib = new SignOverrideAtttribute<uint>();
+                        attrib.Index = r.ReadUInt32();
+                        attrib.SetValue(r.ReadUInt32());
+                        break;
+                    case AttributeType.Float:
+                        attrib = new SignOverrideAtttribute<float>();
+                        attrib.Index = r.ReadUInt32();
+                        attrib.SetValue(r.ReadSingle());
+                        break;
+                    case AttributeType.String:
+                        attrib = new SignOverrideAtttribute<string>();
+                        attrib.Index = r.ReadUInt32();
+                        attrib.SetValue(r.ReadPascalString());
+                        break;
+                    case AttributeType.UInt64:
+                        attrib = new SignOverrideAtttribute<ulong>();
+                        attrib.Index = r.ReadUInt32();
+                        attrib.SetValue(r.ReadUInt64());
+                        break;
+                    default:
+                        throw new NotImplementedException($"Unknown attribute type {type}");
+                }
+
+                Attributes.Add(attrib);
+            }
+
+        }
+
+        public void WriteToStream(BinaryWriter w)
+        {
+            w.Write(Id);
+            w.Write(AreaName);
+
+            w.Write(Attributes.Count);
+            foreach(var attrib in Attributes)
+            {
+                w.Write((ushort)TypeToEnum(attrib.Type));
+
+                w.Write(attrib.Index);
+
+                object value = attrib.GetValue();
+                if(value is sbyte)
+                {
+                    w.Write((sbyte)value);
+                }
+                else if (value is int)
+                {
+                    w.Write((int)value);
+                }
+                else if (value is uint)
+                {
+                    w.Write((uint)value);
+                }
+                else if (value is float)
+                {
+                    w.Write((float)value);
+                }
+                else if (value is string)
+                {
+                    w.WritePascalString((string)value);
+                }
+                else if(value is ulong)
+                {
+                    w.Write((ulong)value);
+                }
+            }
+        }
+
+        protected AttributeType TypeToEnum(Type type)
+        {
+            if (type == typeof(sbyte)) return AttributeType.SByte;
+            if (type == typeof(int)) return AttributeType.Int32;
+            if (type == typeof(uint)) return AttributeType.UInt32;
+            if (type == typeof(float)) return AttributeType.Float;
+            if (type == typeof(string)) return AttributeType.String;
+
+            throw new NotImplementedException($"No matching enum entry for type {type.ToString()}");
+        }
+
+        protected enum AttributeType
+        {
+            SByte = 1,
+            Int32 = 2,
+            UInt32 = 3,
+            Float = 4,
+            String = 5,   
+            UInt64 = 6
+        }
+
+    }
+
+ 
+}

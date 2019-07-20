@@ -11,7 +11,7 @@ namespace ScsReader
     /// A string type used in Prism3D which packs up to 12 characters 
     /// of a limited character set into 8 bytes.
     /// </summary>
-    public struct Token : IMapSerializable
+    public struct Token : IBinarySerializable
     {
         /// <summary>
         /// The character set.

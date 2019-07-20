@@ -10,7 +10,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// A map file header.
     /// </summary>
-    public class Header : IMapSerializable
+    public class Header : IBinarySerializable
     {
         private const int supportedVer = 869;
         /// <summary>

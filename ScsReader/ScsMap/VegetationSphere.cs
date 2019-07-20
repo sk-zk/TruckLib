@@ -11,7 +11,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// A vegetation sphere.
     /// </summary>
-    public class VegetationSphere : IMapSerializable
+    public class VegetationSphere : IBinarySerializable
     {
         /// <summary>
         /// The position of the sphere.

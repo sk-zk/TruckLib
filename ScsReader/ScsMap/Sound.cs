@@ -81,7 +81,7 @@ namespace ScsReader.ScsMap
             w.Write(FullIntensityDistance);
             w.Write(ActivationDistance);
 
-            w.Write(SoundFlags.ToUint());
+            w.Write(SoundFlags.ToUInt());
 
             w.Write(Node.Uid);
         }

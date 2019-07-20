@@ -93,7 +93,7 @@ namespace ScsReader.ScsMap
             base.WriteToStream(w);
 
             WriteNodeRefList(w, Nodes);
-            w.Write(NavigationFlags.ToUint());
+            w.Write(NavigationFlags.ToUInt());
             w.Write(AccessRule);
             WriteObjectList(w, Rules);
 

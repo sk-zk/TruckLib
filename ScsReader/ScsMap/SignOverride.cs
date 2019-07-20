@@ -10,7 +10,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// A sign override, which overrides attributes of a sign template object.
     /// </summary>
-    public class SignOverride : IMapSerializable
+    public class SignOverride : IBinarySerializable
     {
         /// <summary>
         /// The ID of the sign template object. Every sign_template_* object has one.

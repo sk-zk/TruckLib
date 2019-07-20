@@ -109,7 +109,7 @@ namespace ScsReader.ScsMap
             w.Write(ResetDistance);
             w.Write(ActivationSpeedFrom / 3.6f);
             w.Write(ActivationSpeedTo / 3.6f);
-            w.Write(TriggerFlags.ToUint());
+            w.Write(TriggerFlags.ToUInt());
         }
     }
 }

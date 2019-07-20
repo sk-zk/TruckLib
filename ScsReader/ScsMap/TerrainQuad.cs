@@ -10,7 +10,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// A single terrain quad.
     /// </summary>
-    public class TerrainQuad : IMapSerializable
+    public class TerrainQuad : IBinarySerializable
     {
         /// <summary>
         /// Main terrain material of this quad.

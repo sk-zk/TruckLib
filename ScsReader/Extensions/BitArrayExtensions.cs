@@ -14,7 +14,7 @@ namespace ScsReader
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
-        public static uint ToUint(this BitArray arr)
+        public static uint ToUInt(this BitArray arr)
         {
             // via https://stackoverflow.com/a/51430897
             var len = Math.Min(64, arr.Count);
@@ -35,7 +35,7 @@ namespace ScsReader
         /// <returns></returns>
         public static byte GetByte(this BitArray arr, int byteIdx)
         {
-            return BitConverter.GetBytes(arr.ToUint())[byteIdx];
+            return BitConverter.GetBytes(arr.ToUInt())[byteIdx];
         }
 
         /// <summary>

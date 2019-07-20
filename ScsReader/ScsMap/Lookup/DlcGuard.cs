@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScsReader.Lookup
+namespace ScsReader.ScsMap.Lookup
 {
     public sealed class DlcGuard
     {

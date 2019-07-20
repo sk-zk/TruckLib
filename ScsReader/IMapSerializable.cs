@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace ScsReader
 {
     /// <summary>
-    /// Interface for classes that can de/serialize themselves to the binary map format.
+    /// Interface for classes that can de/serialize themselves to a binary map format.
     /// </summary>
-    public interface IMapSerializable
+    public interface IBinarySerializable
     {
         /// <summary>
         /// Reads the object from a BinaryReader

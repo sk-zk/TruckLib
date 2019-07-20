@@ -10,7 +10,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// Vegetation on the terrain on the side of a road.
     /// </summary>
-    public class RoadVegetation : Vegetation, IMapSerializable
+    public class RoadVegetation : Vegetation, IBinarySerializable
     {
         private float from;
         /// <summary>

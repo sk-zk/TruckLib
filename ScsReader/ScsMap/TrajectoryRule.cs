@@ -4,7 +4,7 @@ using System.IO;
 
 namespace ScsReader.ScsMap
 {
-    public class TrajectoryRule : IMapSerializable
+    public class TrajectoryRule : IBinarySerializable
     {
         public uint NodeIndex;
 

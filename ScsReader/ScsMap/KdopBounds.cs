@@ -11,7 +11,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// Holds k-DOP bounding box values.
     /// </summary>
-    public class KdopBounds : IMapSerializable
+    public class KdopBounds : IBinarySerializable
     {
         public float[] Minimums = new float[5];
         public float[] Maximums = new float[5];

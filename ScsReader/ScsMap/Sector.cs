@@ -347,7 +347,7 @@ namespace ScsReader.ScsMap
                 w.Write((int)(MaxBoundary.Y * boundaryFactor));
 
                 // flags - always 0?
-                w.Write(Flags.ToUint());
+                w.Write(Flags.ToUInt());
 
                 // climate profile
                 w.Write(Climate);

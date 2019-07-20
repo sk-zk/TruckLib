@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ScsReader.ScsMap
 {
-    public class VegetationPart : IMapSerializable
+    public class VegetationPart : IBinarySerializable
     {
         public Token PartName;
 

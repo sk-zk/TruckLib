@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScsReader.Lookup
+namespace ScsReader.ScsMap.Lookup
 {
     /// <summary>
     /// SCS' official country IDs. Mods might use other IDs.

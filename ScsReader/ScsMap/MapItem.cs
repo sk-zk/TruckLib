@@ -11,7 +11,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// Base class for all map items.
     /// </summary>
-    public abstract class MapItem : IMapObject, IMapSerializable
+    public abstract class MapItem : IMapObject, IBinarySerializable
     {
         /// <summary>
         /// The item_type used as identifier in the map format.
@@ -140,49 +140,30 @@ namespace ScsReader.ScsMap
             KdopItem.BoundingBox.WriteToStream(w);
 
             // Flags
-            w.Write(KdopItem.Flags.ToUint());
+            w.Write(KdopItem.Flags.ToUInt());
 
             // View distance
             w.Write((byte)(KdopItem.ViewDistance / viewDistanceFactor));
         }
 
         /// <summary>
-        /// Reads a list of objects.
+        /// Reads a list of IBinarySerializable objects or numerical types.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="r"></param>
         /// <returns></returns>
         protected List<T> ReadObjectList<T>(BinaryReader r) where T : new()
         {
-            var list = new List<T>();
             var count = r.ReadUInt32();
-            if (typeof(IMapSerializable).IsAssignableFrom(typeof(T))) // scsreader objects
-            {
-                for (int i = 0; i < count; i++)
-                {
-                    var obj = new T();
-                    (obj as IMapSerializable).ReadFromStream(r);
-                    list.Add(obj);
-                }
-            }
-            else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
-            {
-                for (int i = 0; i < count; i++)
-                {
-                    var val = r.Read<T>();
-                    // copy-pasting methods suddenly doesn't seem so bad anymore
-                    var Tval = (T)Convert.ChangeType(val, typeof(T)); 
-                    list.Add(Tval);
-                }
-            }
-            else
-            {
-                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
-            }
-
-            return list;
+            return r.ReadObjectList<T>(count);
         }
 
+        /// <summary>
+        /// Writes a list of IBinarySerializable objects or numerical primitives.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="w"></param>
+        /// <param name="list"></param>
         protected void WriteObjectList<T>(BinaryWriter w, List<T> list)
         {
             if(list is null)
@@ -192,81 +173,7 @@ namespace ScsReader.ScsMap
             }
 
             w.Write((uint)list.Count);
-            if (typeof(IMapSerializable).IsAssignableFrom(typeof(T))) // scsreader objects
-            {
-                foreach (var obj in list)
-                {
-                    (obj as IMapSerializable).WriteToStream(w);
-                }
-            }
-            else if(typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
-            {
-                foreach (var value in list)
-                {
-                    WriteListValue(w, value);
-                }
-            }
-            else
-            {
-                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
-            }
-        }
-
-        private static void WriteListValue<T>(BinaryWriter w, T value)
-        {
-            // dont @ me.
-            if (value is bool _bool)
-            {
-                w.Write(_bool);
-            }
-            else if (value is byte _byte)
-            {
-                w.Write(_byte);
-            }
-            else if (value is sbyte _sbyte)
-            {
-                w.Write(_sbyte);
-            }
-            else if (value is char _char)
-            {
-                w.Write(_char);
-            }
-            else if (value is double _double)
-            {
-                w.Write(_double);
-            }
-            else if (value is float _float)
-            {
-                w.Write(_float);
-            }
-            else if (value is short _short)
-            {
-                w.Write(_short);
-            }
-            else if (value is int _int)
-            {
-                w.Write(_int);
-            }
-            else if (value is long _long)
-            {
-                w.Write(_long);
-            }
-            else if (value is ushort _ushort)
-            {
-                w.Write(_ushort);
-            }
-            else if (value is uint _uint)
-            {
-                w.Write(_uint);
-            }
-            else if (value is ulong _ulong)
-            {
-                w.Write(_ulong);
-            }
-            else
-            {
-                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
-            }
+            w.WriteObjectList<T>(list);
         }
 
         protected List<Node> ReadNodeRefList(BinaryReader r)

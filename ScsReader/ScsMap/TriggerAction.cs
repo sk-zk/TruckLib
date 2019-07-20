@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ScsReader.ScsMap
 {
-    public class TriggerAction : IMapSerializable
+    public class TriggerAction : IBinarySerializable
     {
         /// <summary>
         /// Unit name of the action.

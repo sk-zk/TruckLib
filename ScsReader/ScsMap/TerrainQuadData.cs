@@ -12,7 +12,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// Represents the terrain configuration of one side of a road or prefab.
     /// </summary>
-    public class TerrainQuadData : IMapSerializable
+    public class TerrainQuadData : IBinarySerializable
     {
         /// <summary>
         /// The main terrain material.

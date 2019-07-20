@@ -24,6 +24,16 @@ namespace ScsReader
         }
 
         /// <summary>
+        /// Reads a Vector4.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static Vector4 ReadVector4(this BinaryReader r)
+        {
+            return new Vector4(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
+        }
+
+        /// <summary>
         /// Reads a token.
         /// </summary>
         /// <param name="r"></param>
@@ -63,6 +73,20 @@ namespace ScsReader
             return Color.FromArgb(alpha, red, green, blue);
         }
 
+        /// <summary>
+        /// Reads a quaternion in WXYZ format.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static Quaternion ReadQuaternion(this BinaryReader r)
+        {
+            var w = r.ReadSingle();
+            var x = r.ReadSingle();
+            var y = r.ReadSingle();
+            var z = r.ReadSingle();
+            return new Quaternion(x, y, z, w);
+        }
+
         public static object Read<T>(this BinaryReader r)
         {
             // send help.
@@ -87,7 +111,53 @@ namespace ScsReader
         }
 
         /// <summary>
-        /// Writes Vector3.X; Vector3.Y; Vector3.Z to the stream.
+        /// Reads a list of IBinarySerializable objects or various other types.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="r"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static List<T> ReadObjectList<T>(this BinaryReader r, uint count) where T : new()
+        {
+            var list = new List<T>();
+            if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // scsreader objects
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var obj = new T();
+                    (obj as IBinarySerializable).ReadFromStream(r);
+                    list.Add(obj);
+                }
+            }
+            else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var val = r.Read<T>();
+                    // copy-pasting methods suddenly doesn't seem so bad anymore
+                    var Tval = (T)Convert.ChangeType(val, typeof(T));
+                    list.Add(Tval);
+                }
+            }
+            else if (typeof(T) == typeof(Vector3))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var vector = r.ReadVector3();
+                    var Tvector = (T)Convert.ChangeType(vector, typeof(T));
+                    list.Add(Tvector);
+                }
+            }
+            else
+            {
+                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Writes a Vector3.
         /// </summary>
         /// <param name="w"></param>
         /// <param name="vector"></param>
@@ -96,6 +166,19 @@ namespace ScsReader
             w.Write(vector.X);
             w.Write(vector.Y);
             w.Write(vector.Z);
+        }
+
+        /// <summary>
+        /// Writes a Vector4.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="vector"></param>
+        public static void Write(this BinaryWriter w, Vector4 vector)
+        {
+            w.Write(vector.X);
+            w.Write(vector.Y);
+            w.Write(vector.Z);
+            w.Write(vector.W);
         }
 
         /// <summary>
@@ -138,7 +221,119 @@ namespace ScsReader
                 w.Write((ulong)bytes.Length);
                 w.Write(bytes);
             }
-        }       
+        }
+
+        /// <summary>
+        /// Writes a quaternion in WXYZ format.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="q"></param>
+        public static void Write(this BinaryWriter w, Quaternion q)
+        {
+            w.Write(q.W);
+            w.Write(q.X);
+            w.Write(q.Y);
+            w.Write(q.Z);
+
+        }
+
+        /// <summary>
+        /// Writes a list of IBinarySerializable objects or various other types.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="w"></param>
+        /// <param name="list"></param>
+        public static void WriteObjectList<T>(this BinaryWriter w, List<T> list)
+        {
+            if (list is null || list.Count == 0) return;
+
+            if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // scsreader objects
+            {
+                foreach (var obj in list)
+                {
+                    (obj as IBinarySerializable).WriteToStream(w);
+                }
+            }
+            else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
+            {
+                foreach (var value in list)
+                {
+                    WriteListValue(w, value);
+                }
+            }
+            else if(typeof(T) == typeof(Vector3))
+            {
+                foreach (var value in list)
+                {
+                    WriteListValue(w, value);
+                }
+            }
+            else
+            {
+                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
+            }
+        }
+
+        private static void WriteListValue<T>(BinaryWriter w, T value)
+        {
+            // dont @ me.
+            if (value is bool _bool)
+            {
+                w.Write(_bool);
+            }
+            else if (value is byte _byte)
+            {
+                w.Write(_byte);
+            }
+            else if (value is sbyte _sbyte)
+            {
+                w.Write(_sbyte);
+            }
+            else if (value is char _char)
+            {
+                w.Write(_char);
+            }
+            else if (value is double _double)
+            {
+                w.Write(_double);
+            }
+            else if (value is float _float)
+            {
+                w.Write(_float);
+            }
+            else if (value is short _short)
+            {
+                w.Write(_short);
+            }
+            else if (value is int _int)
+            {
+                w.Write(_int);
+            }
+            else if (value is long _long)
+            {
+                w.Write(_long);
+            }
+            else if (value is ushort _ushort)
+            {
+                w.Write(_ushort);
+            }
+            else if (value is uint _uint)
+            {
+                w.Write(_uint);
+            }
+            else if (value is ulong _ulong)
+            {
+                w.Write(_ulong);
+            }
+            else if(value is Vector3 _vec3)
+            {
+                w.Write(_vec3);
+            }
+            else
+            {
+                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
+            }
+        }
 
     }
 }

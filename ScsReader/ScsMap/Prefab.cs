@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using ScsReader.Model.Ppd;
 
 namespace ScsReader.ScsMap
 {
@@ -51,7 +52,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The index of the origin node.
         /// </summary>
-        public ushort Origin;
+        public ushort Origin = 0;
 
         /// <summary>
         /// Unit names of additional parts used.
@@ -209,7 +210,21 @@ namespace ScsReader.ScsMap
             Corners = new PrefabCorner[cornerAmnt].Select(h => new PrefabCorner()).ToArray();
         }
 
-        public static Prefab Add(IItemContainer map, Token model, Vector3[] positions, ushort origin)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="map">The map the prefab is added to.</param>
+        /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
+        /// <param name="unitName">The unit name of the prefab.</param>
+        /// <param name="position">The position of control node 0.</param>
+        /// <returns></returns>
+        public static Prefab Add(IItemContainer map, string unitName, string variant, string look, PpdFile ppd, Vector3 position)
+        {
+            return  new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position);
+        }
+
+        [Obsolete]
+        public static Prefab Add(IItemContainer map, Token model, Vector3[] positions, ushort origin = 0)
         {
             var prefab = new Prefab();
 

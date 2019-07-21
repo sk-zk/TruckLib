@@ -100,6 +100,11 @@ namespace ScsReader
             var angle = AngleOffAroundAxis(direction, -Vector3.UnitZ, Vector3.UnitY, false);
             return angle;
         }
-       
+
+        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rot)
+        {
+            return Vector3.Transform((point - pivot), rot) + pivot;
+        }
+
     }
 }

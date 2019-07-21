@@ -74,6 +74,7 @@
     <Compile Include="ScsMap\IItemReferences.cs" />
     <Compile Include="ScsMap\IMapObject.cs" />
     <Compile Include="ScsMap\IItemContainer.cs" />
+    <Compile Include="ScsMap\PrefabCreator.cs" />
     <Compile Include="ScsMap\PrefabSlaveItem.cs" />
     <Compile Include="ScsMap\Service.cs" />
     <Compile Include="ScsMap\Trajectory.cs" />

@@ -95,8 +95,6 @@ namespace ScsReader.Model.Ppd
                 }
                 Unknown.Add(newdata);
             }
-
-            var f = NavCurves.Where(x => x.RightBlinker);
         }
 
         public void WriteToStream(BinaryWriter w)

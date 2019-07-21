@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +41,14 @@ namespace ScsReader.ScsMap
 
         public List<Node> Unknown1 = new List<Node>();
         public List<Node> Unknown2 = new List<Node>();
+
+        public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
+        {
+            var company = Add<Company>(map, position);
+            company.PrefabLink = parent;
+            parent.SlaveItems.Add(company);
+            return company;
+        }
 
         public override void ReadFromStream(BinaryReader r)
         {

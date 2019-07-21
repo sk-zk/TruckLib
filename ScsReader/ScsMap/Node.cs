@@ -44,31 +44,53 @@ namespace ScsReader.ScsMap
         /// </summary>
         public IMapObject ForwardItem;
 
-        /// <summary>
-        /// If true, the game will use whichever rotation is specified without
-        /// reverting to its default rotation when the node is updated.
-        /// </summary>
-        public bool FreeRotation;
-
-        /// <summary>
-        /// Defines if this node is a country border.
-        /// </summary>
-        public bool IsCountryBorder;
-
-        /// <summary>
-        /// The country of the backward item if this node is a country border.
-        /// </summary>
-        public byte BackwardCountry;
-
-        /// <summary>
-        /// The country of the forward item if this node is a country border.
-        /// </summary>
-        public byte ForwardCountry;
+        public BitArray Flags = new BitArray(32);
 
         /// <summary>
         /// Determines if this node is red or green.
         /// </summary>
-        public bool IsRed;
+        public bool IsRed
+        {
+            get => Flags[0];
+            set => Flags[0] = value;
+        }
+
+        /// <summary>
+        /// If true, the game will use whichever rotation is specified without
+        /// reverting to its default rotation when the node is updated.
+        /// </summary>
+        public bool FreeRotation
+        {
+            get => Flags[2];
+            set => Flags[2] = value;
+        }
+
+        /// <summary>
+        /// Defines if this node is a country border.
+        /// </summary>
+        public bool IsCountryBorder
+        {
+            get => Flags[1];
+            set => Flags[1] = value;
+        }
+
+        /// <summary>
+        /// The country of the backward item if this node is a country border.
+        /// </summary>
+        public byte BackwardCountry
+        {
+            get => Flags.GetByte(2);
+            set => Flags.SetByte(2, value);
+        }
+
+        /// <summary>
+        /// The country of the forward item if this node is a country border.
+        /// </summary>
+        public byte ForwardCountry
+        {
+            get => Flags.GetByte(1);
+            set => Flags.SetByte(1, value);
+        }
 
         public Node()
         {
@@ -106,38 +128,21 @@ namespace ScsReader.ScsMap
             Sectors.Add(sector);
 
             // rotation as quaternion
-            Rotation.W = r.ReadSingle();
-            Rotation.X = r.ReadSingle();
-            Rotation.Y = r.ReadSingle();
-            Rotation.Z = r.ReadSingle();
+            Rotation = r.ReadQuaternion();
 
             // The item attached to the node in backward direction.
             // This reference will be resolved in Map.UpdateItemReferences()
             // once all sectors are loaded
-            BackwardItem = new UnresolvedItem(r.ReadUInt64());
+            var bwItemUid = r.ReadUInt64();
+            BackwardItem = bwItemUid == 0 ? null : new UnresolvedItem(bwItemUid);
 
             // The item attached to the node in forward direction.
             // This reference will be resolved in Map.UpdateItemReferences()
             // once all sectors are loaded
-            ForwardItem = new UnresolvedItem(r.ReadUInt64());
+            var fwItemUid = r.ReadUInt64();
+            ForwardItem = fwItemUid == 0 ? null : new UnresolvedItem(fwItemUid);
 
-            // 6: free rotation; 
-            // 7: country border; 8: is green node
-            // rest unknown
-            var flags1 = r.ReadByte();
-            var bitArr1 = new BitArray(new byte[] { flags1 });
-            FreeRotation = bitArr1[8 - 6];
-            IsCountryBorder = bitArr1[8 - 7];
-            IsRed = bitArr1[8 - 8];
-
-            // country id in forward direction
-            ForwardCountry = r.ReadByte();
-
-            // country id in the backward direction
-            BackwardCountry = r.ReadByte();
-
-            // unknown
-            r.ReadByte();
+            Flags = new BitArray(r.ReadBytes(4));
         }
 
         /// <summary>
@@ -166,21 +171,7 @@ namespace ScsReader.ScsMap
             // Forward UID
             w.Write(ForwardItem is null ? 0UL : ForwardItem.Uid);
 
-            // 6: free rotation; 
-            // 7: country border; 8: is red node
-            // rest unknown
-            byte flags1 = 0;
-            flags1 |= (byte)(Convert.ToByte(FreeRotation) << 2);
-            flags1 |= (byte)(Convert.ToByte(IsCountryBorder) << 1);
-            flags1 |= IsRed.ToByte();
-            w.Write(flags1);
-
-            // country ids
-            w.Write(ForwardCountry);
-            w.Write(BackwardCountry);
-
-            // unknown
-            w.Write((byte)0);
+            w.Write(Flags.ToUInt());
         }
 
         public override string ToString()

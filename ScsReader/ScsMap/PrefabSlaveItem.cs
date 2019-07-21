@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,23 @@ namespace ScsReader.ScsMap
 {
     public abstract class PrefabSlaveItem : SingleNodeItem, IItemReferences
     {
-        // TODO: Figure out the kdop flags for these items
-
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
         public MapItem PrefabLink;
+
+        /// <summary>
+        /// TEMP FIELD
+        /// <para>TODO: Figure out the kdop flags for these items</para>
+        /// </summary>
+        public new BitArray Flags
+        {
+            get => base.Flags;
+        }
+
+        public PrefabSlaveItem()
+        {
+            Flags[31] = true; // always set to true, no idea what it means though
+        }
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 

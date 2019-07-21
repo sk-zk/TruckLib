@@ -220,7 +220,7 @@ namespace ScsReader.ScsMap
         /// <returns></returns>
         public static Prefab Add(IItemContainer map, string unitName, string variant, string look, PpdFile ppd, Vector3 position)
         {
-            return  new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position);
+            return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position);
         }
 
         [Obsolete]

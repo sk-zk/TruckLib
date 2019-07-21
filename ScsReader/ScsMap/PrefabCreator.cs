@@ -35,10 +35,9 @@ namespace ScsReader.ScsMap
             {
                 CreateCompany();
             }
+            // TODO: BusStop, FuelPump, Garage, Service
 
             map.AddItem(prefab, prefab.Nodes[0]);
-            // TODO: Which node determines the sector? 
-            // Nodes[0] or Nodes[origin]?
             return prefab;
         }
 
@@ -69,10 +68,10 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Creates map nodes for all spawn points of the given type.
         /// </summary>
-        /// <param name="company"></param>
-        /// <param name="spawnPointType"></param>
-        /// <param name="node0Pos"></param>
-        /// <returns></returns>
+        /// <param name="company">The company item.</param>
+        /// <param name="spawnPointType">The spawn point type.</param>
+        /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
+        /// <returns>A list of map nodes.</returns>
         private List<Node> CreateSpawnPointNodes(Company company, SpawnPointType spawnPointType, Vector3 node0Pos)
         {
             var list = new List<Node>();
@@ -109,8 +108,6 @@ namespace ScsReader.ScsMap
                 var ppdNode = ppd.Nodes[i];
 
                 var ppdNodePos = ppdNode.Position;
-                // ??? sometimes points have to be rotated to match the default ingame rotation ???
-                // ppdNodePos = RotateNode(ppdNodePos, node0Pos);
 
                 // set map node position
                 Vector3 nodePos;

@@ -22,12 +22,12 @@ namespace ScsReader.ScsMap
             get => base.Flags;
         }
 
+        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
+
         public PrefabSlaveItem()
         {
             Flags[31] = true; // always set to true, no idea what it means though
         }
-
-        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {

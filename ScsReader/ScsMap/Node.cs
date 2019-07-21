@@ -44,7 +44,7 @@ namespace ScsReader.ScsMap
         /// </summary>
         public IMapObject ForwardItem;
 
-        public BitArray Flags = new BitArray(32);
+        protected BitArray Flags = new BitArray(32);
 
         /// <summary>
         /// Determines if this node is red or green.
@@ -92,6 +92,9 @@ namespace ScsReader.ScsMap
             set => Flags.SetByte(1, value);
         }
 
+        /// <summary>
+        /// Creates a new node with a random UID.
+        /// </summary>
         public Node()
         {
             Uid = Utils.GenerateUuid();
@@ -102,14 +105,12 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Reads the node from a BinaryReader.
         /// </summary>
-        /// <param name="sector"></param>
+        /// <param name="sector">The sector the node was in.</param>
         /// <param name="r"></param>
         public void ReadFromStream(Sector sector, BinaryReader r)
         {            
-            // Uid
             Uid = r.ReadUInt64();
 
-            // Position
             Position.X = r.ReadInt32() / positionFactor;
             Position.Y = r.ReadInt32() / positionFactor;
             Position.Z = r.ReadInt32() / positionFactor;
@@ -127,7 +128,6 @@ namespace ScsReader.ScsMap
             */
             Sectors.Add(sector);
 
-            // rotation as quaternion
             Rotation = r.ReadQuaternion();
 
             // The item attached to the node in backward direction.
@@ -145,30 +145,17 @@ namespace ScsReader.ScsMap
             Flags = new BitArray(r.ReadBytes(4));
         }
 
-        /// <summary>
-        /// Writes the node.
-        /// </summary>
-        /// <param name="w"></param>
         public void WriteToStream(BinaryWriter w)
         {
-            // UID
             w.Write(Uid);
 
-            // Position
             w.Write((int)(Position.X * positionFactor));
             w.Write((int)(Position.Y * positionFactor));
             w.Write((int)(Position.Z * positionFactor));
 
-            // Rotation
-            w.Write(Rotation.W);
-            w.Write(Rotation.X);
-            w.Write(Rotation.Y);
-            w.Write(Rotation.Z);
+            w.Write(Rotation);
 
-            // Backward UID
             w.Write(BackwardItem is null ? 0UL : BackwardItem.Uid);
-
-            // Forward UID
             w.Write(ForwardItem is null ? 0UL : ForwardItem.Uid);
 
             w.Write(Flags.ToUInt());
@@ -180,11 +167,6 @@ namespace ScsReader.ScsMap
             return $"{Uid:X16} ({Position.X}|{Position.Y}|{Position.Z})";
         }
 
-        /// <summary>
-        /// Searches a list of all items for the items referenced by uid in this node
-        /// and adds references to them in the node's MapItem fields.
-        /// </summary>
-        /// <param name="allItems">A list containing all map items.</param>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             if (ForwardItem is UnresolvedItem && allItems.ContainsKey(ForwardItem.Uid))

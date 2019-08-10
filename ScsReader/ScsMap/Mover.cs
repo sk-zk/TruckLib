@@ -21,23 +21,23 @@ namespace ScsReader.ScsMap
             set => base.ViewDistance = value;
         }
 
-        public Token Model;
+        public Token Model { get; set; }
 
-        public Token Look;
+        public Token Look { get; set; }
 
-        public float Speed = 1;
+        public float Speed { get; set; } = 1;
 
-        public float DelayAtEnd = 0;
+        public float DelayAtEnd { get; set; } = 0;
 
-        public float Width = 0;
+        public float Width { get; set; } = 0;
 
-        public uint Count = 1;
+        public uint Count { get; set; } = 1;
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
-        public List<float> Lengths = new List<float>();
+        public List<float> Lengths { get; set; } = new List<float>();
 
-        public List<Token> Tags = new List<Token>();
+        public List<Token> Tags { get; set; } = new List<Token>();
 
         public bool ActiveDuringDay
         {

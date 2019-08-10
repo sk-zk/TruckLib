@@ -31,29 +31,30 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Terrain and vegetation on the left side.
         /// </summary>
-        public TerrainSide Left = new TerrainSide();
+        public TerrainSide Left { get; set; } = new TerrainSide();
 
         /// <summary>
         /// Terrain and vegetation on the right side.
         /// </summary>
-        public TerrainSide Right = new TerrainSide();
+        public TerrainSide Right { get; set; } = new TerrainSide();
 
         /// <summary>
         /// The terrain quad density. Roads would do this with hi-poly and superfine flags.
         /// </summary>
-        public StepSize StepSize = StepSize.Meters4;
+        public StepSize StepSize { get; set; } = StepSize.Meters4;
 
-        public Railings Railings = new Railings();
+        public Railings Railings { get; set; } = new Railings();
 
         /// <summary>
         /// The random seed which determines the placement of vegetation models.
         /// </summary>
-        public uint RandomSeed;
+        public uint RandomSeed { get; set; }
 
         /// <summary>
         /// The vegetation spheres on this terrain.
         /// </summary>
-        public List<VegetationSphere> VegetationSpheres = new List<VegetationSphere>();
+        public List<VegetationSphere> VegetationSpheres { get; set; } 
+            = new List<VegetationSphere>();
 
         /// <summary>
         /// Determines if the item is reflected in water.

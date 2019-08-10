@@ -29,7 +29,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Color of the map area.
         /// </summary>
-        public MapAreaColor Color = MapAreaColor.Road;
+        public MapAreaColor Color { get; set; } = MapAreaColor.Road;
 
         public byte DlcGuard
         {

@@ -17,32 +17,33 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The X coordinate of this sector. 
         /// </summary>
-        public int X;
+        public int X { get; set; }
 
         /// <summary>
         /// The Z coordinate of this sector.
         /// </summary>
-        public int Z;
+        public int Z { get; set; }
 
         /// <summary>
         /// The map the sector belongs to.
         /// </summary>
-        public Map Map;
+        public Map Map { get; set; }
 
         /// <summary>
         /// The path of the .base file of this sector.
         /// </summary>
-        public string BasePath;
+        public string BasePath { get; set; }
 
         /// <summary>
         /// A list of all map items in this sector.
         /// </summary>
-        public Dictionary<ulong, MapItem> MapItems = new Dictionary<ulong, MapItem>();
+        public Dictionary<ulong, MapItem> MapItems { get; set; } 
+            = new Dictionary<ulong, MapItem>();
 
         /// <summary>
         /// The climate of this sector.
         /// </summary>
-        public Token Climate = "default";
+        public Token Climate { get; set; } = "default";
 
         /// <summary>
         /// The header of this sector.
@@ -52,9 +53,9 @@ namespace ScsReader.ScsMap
         // Always 2 in both ETS2 and ATS.
         private uint SectorDescVersion = 2;
 
-        public Vector2 MinBoundary = new Vector2(0, 0);
+        public Vector2 MinBoundary { get; set; } = new Vector2(0, 0);
 
-        public Vector2 MaxBoundary = new Vector2(4000, 4000);
+        public Vector2 MaxBoundary { get; set; } = new Vector2(4000, 4000);
 
         private BitArray Flags = new BitArray(32);
 
@@ -172,6 +173,8 @@ namespace ScsReader.ScsMap
             }
         }
 
+        private const float boundaryFactor = 256f;
+
         /// <summary>
         /// Reads the .desc file of the sector.
         /// </summary>
@@ -191,10 +194,14 @@ namespace ScsReader.ScsMap
                 SectorDescVersion = r.ReadUInt32();
 
                 // boundaries
-                MinBoundary.X = r.ReadInt32() / 256f;
-                MinBoundary.Y = r.ReadInt32() / 256f;
-                MaxBoundary.X = r.ReadInt32() / 256f;
-                MaxBoundary.Y = r.ReadInt32() / 256f;
+                MinBoundary = new Vector2(
+                    r.ReadInt32() / boundaryFactor,
+                    r.ReadInt32() / boundaryFactor
+                    );
+                MaxBoundary = new Vector2(
+                    r.ReadInt32() / boundaryFactor,
+                    r.ReadInt32() / boundaryFactor
+                    );
 
                 // flags - unknown
                 Flags = new BitArray(r.ReadBytes(4));
@@ -340,7 +347,6 @@ namespace ScsReader.ScsMap
                 w.Write(SectorDescVersion);
 
                 // boundaries
-                const int boundaryFactor = 256;
                 w.Write((int)(MinBoundary.X * boundaryFactor));
                 w.Write((int)(MinBoundary.Y * boundaryFactor));
                 w.Write((int)(MaxBoundary.X * boundaryFactor));

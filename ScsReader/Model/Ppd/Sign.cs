@@ -13,15 +13,15 @@ namespace ScsReader.Model.Ppd
     /// </summary>
     public class Sign : IBinarySerializable
     {
-        public Token Name;
+        public Token Name { get; set; }
 
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
 
-        public Quaternion Rotation;
+        public Quaternion Rotation { get; set; }
 
-        public Token Model;
+        public Token Model { get; set; }
 
-        public Token Part;
+        public Token Part { get; set; }
 
         public void ReadFromStream(BinaryReader r)
         {

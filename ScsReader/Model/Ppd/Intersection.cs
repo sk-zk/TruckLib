@@ -12,13 +12,13 @@ namespace ScsReader.Model.Ppd
     {
         // TODO: Figure out what this obj does
 
-        public uint CurveId;
+        public uint CurveId { get; set; }
 
-        public float Position;
+        public float Position { get; set; }
 
-        public float Radius;
+        public float Radius { get; set; }
 
-        public BitArray Flags = new BitArray(32);
+        public BitArray Flags  = new BitArray(32);
 
         public void ReadFromStream(BinaryReader r)
         {

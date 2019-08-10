@@ -38,12 +38,9 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The default location for the item type.
         /// </summary>
-        public abstract ItemFile DefaultItemFile
-        {
-            get;
-        }
+        public abstract ItemFile DefaultItemFile { get; }
 
-        private KdopItem KdopItem;
+        private KdopItem KdopItem { get; set; }
 
         /// <summary>
         /// The UID of this item. 
@@ -80,10 +77,7 @@ namespace ScsReader.ScsMap
             set => KdopItem.ViewDistance = value;
         }
 
-        protected abstract ushort DefaultViewDistance
-        {
-            get;
-        }
+        protected abstract ushort DefaultViewDistance { get; }
 
         /// <summary>
         /// Creates a new item and generates a UID for it.

@@ -19,16 +19,16 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Width of the area in which the model is visible.
         /// </summary>
-        public float Width;
+        public float Width { get; set; }
 
         /// <summary>
         /// Height of the area in which the model is visible.
         /// </summary>
-        public float Height;
+        public float Height { get; set; }
 
-        public FarModelData[] Models;
+        public FarModelData[] Models { get; set; }
 
-        public Node Node;
+        public Node Node { get; set; }
 
         /// <summary>
         /// Determines if the item is reflected in water.

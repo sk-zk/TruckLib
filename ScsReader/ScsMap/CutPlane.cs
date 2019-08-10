@@ -17,7 +17,7 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
         /// <summary>
         /// Determines if the cut plane is active in one direction only

@@ -15,9 +15,9 @@ namespace ScsReader.Model.Ppd
     /// </summary>
     public class MapPoint : IBinarySerializable
     {
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
 
-        public int[] Neighbours = new int[6];
+        public int[] Neighbours { get; set; } = new int[6];
 
         protected BitArray VisFlags = new BitArray(32);
 

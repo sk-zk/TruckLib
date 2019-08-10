@@ -18,18 +18,18 @@ namespace ScsReader.ScsMap
         /// </summary>
         // 1.33 & 1.34 := 0x35A (858)
         // 1.35 := 0x365 (869)
-        public uint CoreMapVersion = supportedVer;
+        public uint CoreMapVersion { get; set; } = supportedVer;
 
         /// <summary>
         /// Game ID token.
         /// <para>The ID "euro2" is used for both ETS2 and ATS.</para>
         /// </summary>
-        public Token GameId = "euro2";
+        public Token GameId { get; set; } = "euro2";
 
         /// <summary>
         /// Game map version. Not sure what this value affects.
         /// </summary>
-        public uint GameMapVersion = 3;
+        public uint GameMapVersion { get; set; } = 3;
 
         /// <summary>
         /// Reads the header.

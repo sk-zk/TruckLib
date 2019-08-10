@@ -19,9 +19,9 @@ namespace ScsReader.ScsMap
 
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
-        public List<Token> Tags = new List<Token>();
+        public List<Token> Tags { get; set; } = new List<Token>();
 
-        public Token Model = new Token();
+        public Token Model { get; set; } = new Token();
      
         public bool InitHidden
         {

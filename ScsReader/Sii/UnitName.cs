@@ -14,7 +14,7 @@ namespace ScsReader.Sii
     /// </summary>
     public struct UnitName
     {
-        public string Value;
+        public string Value { get; set; }
 
         public UnitName(string value)
         {

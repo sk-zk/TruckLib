@@ -15,17 +15,18 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The ID of the sign template object. Every sign_template_* object has one.
         /// </summary>
-        public uint Id;
+        public uint Id { get; set; }
 
         /// <summary>
         /// The name of the sign area the object is placed on, as defined in the sign's model.
         /// </summary>
-        public Token AreaName;
+        public Token AreaName { get; set; }
 
         /// <summary>
         /// The overridden attributes of this object.
         /// </summary>
-        public List<ISignOverrideAttribute> Attributes = new List<ISignOverrideAttribute>();
+        public List<ISignOverrideAttribute> Attributes { get; set; } 
+            = new List<ISignOverrideAttribute>();
 
         public void ReadFromStream(BinaryReader r)
         {

@@ -30,12 +30,12 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the building.
         /// </summary>
-        public Token BuildingName;
+        public Token BuildingName { get; set; }
 
         /// <summary>
         /// The building look.
         /// </summary>
-        public Token Look;
+        public Token Look { get; set; }
 
         public byte DlcGuard
         {
@@ -46,12 +46,12 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The seed for this building.
         /// </summary>
-        public uint RandomSeed = 1;
+        public uint RandomSeed { get; set; } = 1;
 
         /// <summary>
         /// Stretch coefficient.
         /// </summary>
-        public float Stretch = 1f;
+        public float Stretch { get; set; } = 1f;
 
         /// <summary>
         /// Height offsets for individual elements of the building.
@@ -60,7 +60,7 @@ namespace ScsReader.ScsMap
         /// This feature exists in the format and works ingame, but I have not
         /// been able to find a way to apply it in the official editor.
         /// </remarks>
-        public List<float> HeightOffsets = new List<float>();
+        public List<float> HeightOffsets { get; set; } = new List<float>();
 
         public bool Collision
         {

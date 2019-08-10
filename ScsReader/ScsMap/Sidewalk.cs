@@ -9,16 +9,16 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// Sidewalk data for legacy roads.
     /// </summary>
-    public struct Sidewalk
+    public class Sidewalk
     {
         /// <summary>
         /// The name of the sidewalk material.
         /// </summary>
-        public Token Material;
+        public Token Material { get; set; }
 
         /// <summary>
         /// The size of the sidewalk.
         /// </summary>
-        public SidewalkSize Size;
+        public SidewalkSize Size { get; set; }
     }
 }

@@ -12,23 +12,23 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Unit name of the action.
         /// </summary>
-        public Token Name;
+        public Token Name { get; set; }
 
         /// <summary>
         /// Custom parameters. Only saved if OverrideParameters is set to true.
         /// </summary>
-        public List<float> NumParams = new List<float>();
+        public List<float> NumParams { get; set; } = new List<float>();
 
         /// <summary>
         /// Custom parameters. Only saved if OverrideParameters is set to true.
         /// </summary>
-        public List<string> StringParams = new List<string>();
+        public List<string> StringParams { get; set; } = new List<string>();
 
-        public bool OverrideParameters;
+        public bool OverrideParameters { get; set; }
 
-        public ulong TargetId;
+        public ulong TargetId { get; set; }
 
-        public List<Token> TargetTags = new List<Token>();
+        public List<Token> TargetTags { get; set; } = new List<Token>();
 
         public void ReadFromStream(BinaryReader r)
         {

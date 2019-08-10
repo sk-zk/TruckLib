@@ -14,33 +14,33 @@ namespace ScsReader.Model.Ppd
     /// </summary>
     public class NavCurve : IBinarySerializable
     {
-        public Token Name;
+        public Token Name { get; set; }
 
         public (byte EndNode, byte EndLane, byte StartNode, byte StartLane) LeadsToNodes;
 
-        public Vector3 StartPosition;
+        public Vector3 StartPosition { get; set; }
 
-        public Vector3 EndPosition;
+        public Vector3 EndPosition { get; set; }
 
-        public Quaternion StartRotation;
+        public Quaternion StartRotation { get; set; }
 
-        public Quaternion EndRotation;
+        public Quaternion EndRotation { get; set; }
 
-        public float Length;
+        public float Length { get; set; }
 
-        public int[] NextLines = new int[4];
+        public int[] NextLines { get; set; } = new int[4];
 
-        public int[] PreviousLines = new int[4];
+        public int[] PreviousLines { get; set; } = new int[4];
 
-        public uint CountNext;
+        public uint CountNext { get; set; }
 
-        public uint CountPrevious;
+        public uint CountPrevious { get; set; }
 
-        public int SemaphoreId;
+        public int SemaphoreId { get; set; }
 
-        public Token TrafficRule;
+        public Token TrafficRule { get; set; }
 
-        public uint NewData1Id;
+        public uint NewData1Id { get; set; }
 
         protected BitArray Flags = new BitArray(32);
 

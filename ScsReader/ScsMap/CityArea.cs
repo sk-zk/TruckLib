@@ -23,11 +23,11 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the city.
         /// </summary>
-        public Token CityName;
+        public Token CityName { get; set; }
 
-        public float Width = 100f;
+        public float Width { get; set; } = 100f;
 
-        public float Height = 100f;
+        public float Height { get; set; } = 100f;
 
         public bool TriggerVisit
         {

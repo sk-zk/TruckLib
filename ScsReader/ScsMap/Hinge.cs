@@ -22,13 +22,13 @@ namespace ScsReader.ScsMap
             set => base.ViewDistance = value;
         }
 
-        public Token Model;
+        public Token Model { get; set; }
 
-        public Token Variant;
+        public Token Variant { get; set; }
 
-        public float MinRotation;
+        public float MinRotation { get; set; }
 
-        public float MaxRotation;
+        public float MaxRotation { get; set; }
 
         public static Hinge Add(IItemContainer map, Vector3 position, float minRot, float maxRot)
         {

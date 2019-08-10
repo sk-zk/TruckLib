@@ -16,15 +16,17 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
-        public Token AccessRule = "_tj_default";
+        public Token AccessRule { get; set; } = "_tj_default";
 
-        public List<TrajectoryRule> Rules = new List<TrajectoryRule>();
+        public List<TrajectoryRule> Rules { get; set; } 
+            = new List<TrajectoryRule>();
 
-        public List<TrajectoryCheckpoint> Checkpoints = new List<TrajectoryCheckpoint>();
+        public List<TrajectoryCheckpoint> Checkpoints { get; set; } 
+            = new List<TrajectoryCheckpoint>();
 
-        public List<Token> Tags = new List<Token>();
+        public List<Token> Tags { get; set; } = new List<Token>();
 
         private BitArray NavigationFlags = new BitArray(32);
 

@@ -20,21 +20,21 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => 120;
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
-        public Token NamePrefix = "walker_";
+        public Token NamePrefix { get; set; } = "walker_";
 
-        public float Speed = 1f;
+        public float Speed { get; set; } = 1f;
 
-        public float EndDelay = 0f;
+        public float EndDelay { get; set; } = 0f;
 
-        public uint Count = 1;
+        public uint Count { get; set; } = 1;
 
-        public float Width = 2f;
+        public float Width { get; set; } = 2f;
 
-        public float Angle = 0f;
+        public float Angle { get; set; } = 0f;
 
-        public List<float> Lengths = new List<float>();
+        public List<float> Lengths { get; set; } = new List<float>();
 
         public bool UseCurvedPath
         {

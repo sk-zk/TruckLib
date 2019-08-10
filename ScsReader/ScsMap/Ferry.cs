@@ -17,11 +17,11 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public Token Port;
+        public Token Port { get; set; }
 
-        public Vector3 UnloadOffset = Vector3.Zero;
+        public Vector3 UnloadOffset { get; set; } = Vector3.Zero;
 
-        public MapItem PrefabLink;
+        public MapItem PrefabLink { get; set; }
 
         /// <summary>
         /// Determines if the item is actually a train transport.
@@ -31,7 +31,6 @@ namespace ScsReader.ScsMap
             get => Flags[0];
             set => Flags[0] = value;
         }
-
 
         public static Ferry Add(IItemContainer map, Vector3 position, Token port)
         {

@@ -17,19 +17,19 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Token> Tags = new List<Token>();
+        public List<Token> Tags { get; set; } = new List<Token>();
 
-        public List<TriggerAction> Actions = new List<TriggerAction>();
+        public List<TriggerAction> Actions { get; set; } = new List<TriggerAction>();
 
-        public float Range = 1f;
+        public float Range { get; set; } = 1f;
 
-        public float ResetDelay;
+        public float ResetDelay { get; set; }
 
-        public float ResetDistance;
+        public float ResetDistance { get; set; }
 
-        public float ActivationSpeedFrom;
+        public float ActivationSpeedFrom { get; set; }
 
-        public float ActivationSpeedTo;
+        public float ActivationSpeedTo { get; set; }
 
         private BitArray TriggerFlags = new BitArray(32);
 

@@ -18,20 +18,20 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The UID of the item.
         /// </summary>
-        public ulong Uid = 0;
+        public ulong Uid { get; set; } = 0;
 
         /// <summary>
         /// The kDOP bounding box which is used for rendering and collision detection.
         /// <para>Note that recomputing these values is out of scope for this library, so if you
         /// create or modify an object, don't forget to recompute the map in the editor.</para>
         /// </summary>
-        public KdopBounds BoundingBox = new KdopBounds();
+        public KdopBounds BoundingBox { get; set; } = new KdopBounds();
 
         /// <summary>
         /// A flag field which is part of the kdop_item but is actually used for item flags 
         /// rather than flags relating to the bounding box.
         /// </summary>
-        public BitArray Flags = new BitArray(32);
+        public BitArray Flags { get; set; } = new BitArray(32);
 
         private static ushort MinDistance = 10;
         private static ushort MaxDistance = 1500;

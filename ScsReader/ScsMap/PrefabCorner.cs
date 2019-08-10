@@ -14,30 +14,31 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The terrain of this corner.
         /// </summary>
-        public RoadTerrain Terrain = new RoadTerrain();
+        public RoadTerrain Terrain { get; set; } = new RoadTerrain();
 
         /// <summary>
         /// The vegetation of this corner.
         /// </summary>
-        public RoadVegetation[] Vegetation;
+        public RoadVegetation[] Vegetation { get; set; }
 
-        public float DetailVegetationFrom = 5;
-        public float DetailVegetationTo = 100;
+        public float DetailVegetationFrom { get; set; } = 5;
+
+        public float DetailVegetationTo { get; set; } = 100;
 
         /// <summary>
         /// The unit name of the corner model.
         /// </summary>
-        public Token Model;
+        public Token Model { get; set; }
 
         /// <summary>
         /// The corner look.
         /// </summary>
-        public Token Look;
+        public Token Look { get; set; }
 
         /// <summary>
         /// The corner variant.
         /// </summary>
-        public Token Variant;
+        public Token Variant { get; set; }
 
         public PrefabCorner()
         {

@@ -9,9 +9,9 @@ namespace ScsReader.Model.Ppd
 {
     public class TerrainPointVariant : IBinarySerializable
     {
-        public uint Attach0;
+        public uint Attach0 { get; set; }
 
-        public uint Attach1;
+        public uint Attach1 { get; set; }
 
         public void ReadFromStream(BinaryReader r)
         {

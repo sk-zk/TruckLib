@@ -17,11 +17,11 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Token> Tags = new List<Token>();
+        public List<Token> Tags { get; set; } = new List<Token>();
 
-        public Token Rule;
+        public Token Rule { get; set; }
 
-        public float Range;
+        public float Range { get; set; }
 
         public bool CrossroadArea
         {

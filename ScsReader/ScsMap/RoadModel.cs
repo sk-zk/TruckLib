@@ -14,7 +14,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The name of the model.
         /// </summary>
-        public Token ModelName;
+        public Token Name { get; set; }
 
         private float distance = 40;
         public float Distance

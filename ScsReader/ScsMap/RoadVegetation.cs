@@ -35,7 +35,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Cutoff point for high poly models, in meters from the center.
         /// </summary>
-        public byte HighPolyDistance = 50;
+        public byte HighPolyDistance { get; set; } = 50;
 
         public RoadVegetation Clone()
         {

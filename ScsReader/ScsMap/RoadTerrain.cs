@@ -21,17 +21,17 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The terrain profile.
         /// </summary>
-        public Token Profile = "profile0";
+        public Token Profile { get; set; } = "profile0";
 
         /// <summary>
         /// Vertical scale of the terrain profile.
         /// </summary>
-        public float Coefficient = 1f;
+        public float Coefficient { get; set; } = 1f;
 
-        public TerrainNoise Noise = TerrainNoise.Percent100;
-        public TerrainTransition Transition = TerrainTransition._16;
+        public TerrainNoise Noise { get; set; } = TerrainNoise.Percent100;
+        public TerrainTransition Transition { get; set; } = TerrainTransition._16;
 
-        public TerrainQuadData QuadData = new TerrainQuadData();
+        public TerrainQuadData QuadData { get; set; } = new TerrainQuadData();
 
         /// <summary>
         /// Updates the amount of quad columns and rows of this terrain.

@@ -38,24 +38,25 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the sign model.
         /// </summary>
-        public Token Model;
+        public Token Model { get; set; }
 
         private const int signBoardCount = 3;
         /// <summary>
         /// Sign text for legacy navigation signs (e.g. be-navigation/board straight left right b).
         /// </summary>
-        public SignBoard[] SignBoards = new SignBoard[signBoardCount];
+        public SignBoard[] SignBoards { get; set; } = new SignBoard[signBoardCount];
 
         /// <summary>
         /// The sign template on this sign.
         /// </summary>
         /// <example>sign_templ.balt_40</example>
-        public string SignTemplate;
+        public string SignTemplate { get; set; }
 
         /// <summary>
         /// The attribute overrides used on the sign template.
         /// </summary>
-        public List<SignOverride> SignOverrides = new List<SignOverride>();
+        public List<SignOverride> SignOverrides { get; set; } 
+            = new List<SignOverride>();
 
         /// <summary>
         /// Adds a sign to the map.

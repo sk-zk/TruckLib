@@ -15,32 +15,32 @@ namespace ScsReader.ScsMap
     {
         public override ItemType ItemType => ItemType.Company;
 
-        public Token CompanyName;
+        public Token CompanyName { get; set; }
 
-        public Token CityName;
+        public Token CityName { get; set; }
 
         /// <summary>
         /// List of easy difficulty (15 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsEasy = new List<Node>();
+        public List<Node> UnloadPointsEasy { get; set; } = new List<Node>();
 
         /// <summary>
         /// List of medium difficulty (40 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsMedium = new List<Node>();
+        public List<Node> UnloadPointsMedium { get; set; } = new List<Node>();
 
         /// <summary>
         /// List of hard difficulty (90 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsHard = new List<Node>();
+        public List<Node> UnloadPointsHard { get; set; } = new List<Node>();
 
         /// <summary>
         /// List of trailer spawn points.
         /// </summary>
-        public List<Node> TrailerSpawnPoints = new List<Node>();
+        public List<Node> TrailerSpawnPoints { get; set; } = new List<Node>();
 
-        public List<Node> Unknown1 = new List<Node>();
-        public List<Node> Unknown2 = new List<Node>();
+        public List<Node> Unknown1 { get; set; } = new List<Node>();
+        public List<Node> Unknown2 { get; set; } = new List<Node>();
 
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
         {

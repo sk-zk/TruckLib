@@ -30,17 +30,17 @@ namespace ScsReader.ScsMap
         /// The backward node / the node which holds this item as ForwardItem
         /// (= the node which highlights the item if you mouse over it).
         /// </summary>
-        public Node Node;
+        public Node Node { get; set; }
 
         /// <summary>
         /// The forward node (= the one which is green on a single segment of this item).
         /// </summary>
-        public Node ForwardNode;
+        public Node ForwardNode { get; set; }
 
         /// <summary>
         /// The length of the item's path.
         /// </summary>
-        public float Length;
+        public float Length { get; set; }
 
         /// <summary>
         /// Creates a single, unconnected item. 

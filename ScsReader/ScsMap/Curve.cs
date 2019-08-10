@@ -16,27 +16,27 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public Token Model;
+        public Token Model { get; set; }
 
-        public Token Look = "default";
+        public Token Look { get; set; } = "default";
 
-        public Token FirstPart;
+        public Token FirstPart { get; set; }
 
-        public Token CenterPart;
+        public Token CenterPart { get; set; }
 
-        public Token LastPart;
+        public Token LastPart { get; set; }
 
-        public Token TerrainMaterial;
+        public Token TerrainMaterial { get; set; }
 
-        public Color TerrainColor;
+        public Color TerrainColor { get; set; }
 
-        public uint RandomSeed;
+        public uint RandomSeed { get; set; }
 
-        public float Stretch = 1f;
+        public float Stretch { get; set; } = 1f;
 
-        public float FixedStep = 0f;
+        public float FixedStep { get; set; } = 0f;
 
-        public List<float> HeightOffsets = new List<float>();
+        public List<float> HeightOffsets { get; set; } = new List<float>();
 
         /// <summary>
         /// Determines if the item is reflected in water.

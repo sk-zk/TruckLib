@@ -25,17 +25,17 @@ namespace ScsReader.Sii
         /// <summary>
         /// Units in this file.
         /// </summary>
-        public List<Unit> Units = new List<Unit>();
+        public List<Unit> Units { get; set; } = new List<Unit>();
 
         /// <summary>
         /// Top-level includes in this file.
         /// </summary>
-        public List<string> Includes = new List<string>();
+        public List<string> Includes { get; set; } = new List<string>();
 
         /// <summary>
         /// Sets if the file has global scope ("SiiNunit {") or not.
         /// </summary>
-        public bool GlobalScope = true;
+        public bool GlobalScope { get; set; } = true;
 
         public SiiFile()
         {

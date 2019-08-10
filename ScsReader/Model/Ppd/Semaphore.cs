@@ -13,27 +13,27 @@ namespace ScsReader.Model.Ppd
     /// </summary>
     public class Semaphore : IBinarySerializable
     {
-        public Token Profile;
+        public Token Profile { get; set; }
 
-        public SemaphoreType Type;
+        public SemaphoreType Type { get; set; }
 
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
 
-        public Quaternion Rotation;
+        public Quaternion Rotation { get; set; }
 
-        public uint SemaphoreId;
+        public uint SemaphoreId { get; set; }
 
         /// <summary>
         /// Intervals/distances for each state of a semaphore. 
         /// Enabled only if Type is not UseProfile.
         /// </summary>
-        public Vector4 Intervals;
+        public Vector4 Intervals { get; set; }
 
         /// <summary>
         /// Delay for which each semaphore cycle will be delayed before starting again. 
         /// Enabled only if Type is not UseProfile.
         /// </summary>
-        public float CycleDelay;
+        public float CycleDelay { get; set; }
 
         private uint Unknown1;
 

@@ -13,8 +13,8 @@ namespace ScsReader.ScsMap
     /// </summary>
     public class KdopBounds : IBinarySerializable
     {
-        public float[] Minimums = new float[5];
-        public float[] Maximums = new float[5];
+        public float[] Minimums { get; set; } = new float[5];
+        public float[] Maximums { get; set; } = new float[5];
 
         public KdopBounds()
         {

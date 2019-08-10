@@ -16,7 +16,7 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Token> Tags = new List<Token>();
+        public List<Token> Tags { get; set; } = new List<Token>();
 
         public static CameraPoint Add(IItemContainer map, Vector3 position, List<Token> tags)
         {

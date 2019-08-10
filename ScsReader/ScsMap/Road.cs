@@ -33,46 +33,47 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the road.
         /// </summary>
-        public Token RoadType;
+        public Token RoadType { get; set; }
 
         /// <summary>
         /// The road material.
         /// </summary>
-        public Token Material;
+        public Token Material { get; set; }
 
         /// <summary>
         /// Terrain, models, railings, sidewalk on the left side of this road.
         /// </summary>
-        public RoadSide Left = new RoadSide();
+        public RoadSide Left { get; set; } = new RoadSide();
 
         /// <summary>
         /// Terrain, models, railings, sidewalk on the right side of this road.
         /// </summary>
-        public RoadSide Right = new RoadSide();
+        public RoadSide Right { get; set; } = new RoadSide();
 
         /// <summary>
         /// The terrain material used in the center of the road.
         /// </summary>
-        public Token CenterMaterial = "0";
+        public Token CenterMaterial { get; set; } = "0";
 
         /// <summary>
         /// The vegetation used in the center of the road.
         /// </summary>
-        public CenterVegetation CenterVegetation = new CenterVegetation();
+        public CenterVegetation CenterVegetation { get; set; } = new CenterVegetation();
 
-        public Color CenterMaterialColor = Color.FromArgb(0xffffff);
+        public Color CenterMaterialColor { get; set; } = Color.FromArgb(0xffffff);
 
         /// <summary>
         /// The seed which determines the placement of vegetation models.
         /// </summary>
-        public uint RandomSeed = 0;
+        public uint RandomSeed { get; set; } = 0;
 
-        public Token OverlayScheme;
+        public Token OverlayScheme { get; set; }
 
         /// <summary>
         /// The vegetation spheres on this road.
         /// </summary>
-        public List<VegetationSphere> VegetationSpheres = new List<VegetationSphere>();
+        public List<VegetationSphere> VegetationSpheres { get; set; } 
+            = new List<VegetationSphere>();
 
         /// <summary>
         /// The segment step size.
@@ -80,7 +81,7 @@ namespace ScsReader.ScsMap
         // set to HighPoly by default since you probably aren't creating non-template roads,
         // so the road is HighPoly no matter what, but this setting is needed regardless to
         // make the terrain match the road.
-        public RoadResolution Resolution = RoadResolution.HighPoly;
+        public RoadResolution Resolution { get; set; } = RoadResolution.HighPoly;
 
         /// <summary>
         /// [Legacy roads only] 
@@ -431,7 +432,7 @@ namespace ScsReader.ScsMap
                 // Model data
                 foreach (var model in side.Models)
                 {
-                    model.ModelName = r.ReadToken();
+                    model.Name = r.ReadToken();
                     model.Offset = r.ReadInt16() / modelOffsetFactor;
                     model.Distance = r.ReadUInt16() / modelDistanceFactor;
                 }
@@ -639,7 +640,7 @@ namespace ScsReader.ScsMap
                 // Model data
                 foreach (var model in side.Models)
                 {
-                    w.Write(model.ModelName);
+                    w.Write(model.Name);
                     w.Write((short)(model.Offset * modelOffsetFactor));
                     w.Write((short)(model.Distance * modelDistanceFactor));
                 }

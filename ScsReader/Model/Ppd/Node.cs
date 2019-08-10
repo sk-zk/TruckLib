@@ -15,22 +15,22 @@ namespace ScsReader.Model.Ppd
     { 
         // is this a ref. we can resolve instead of
         // having an index?
-        public uint TerrainPointIdx;
+        public uint TerrainPointIdx { get; set; }
 
         // and can we replace this with a property then?
-        public uint TerrainPointCount;
+        public uint TerrainPointCount { get; set; }
 
-        public uint VariantIdx;
+        public uint VariantIdx { get; set; }
 
-        public uint VariantCount;
+        public uint VariantCount { get; set; }
 
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
 
-        public Vector3 Direction;
+        public Vector3 Direction { get; set; }
 
-        public int[] InputLines = new int[8];
+        public int[] InputLines { get; set; } = new int[8];
 
-        public int[] OutputLines = new int[8];
+        public int[] OutputLines { get; set; } = new int[8];
 
         public void ReadFromStream(BinaryReader r)
         {

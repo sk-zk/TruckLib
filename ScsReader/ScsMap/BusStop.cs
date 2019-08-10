@@ -11,7 +11,7 @@ namespace ScsReader.ScsMap
     {
         public override ItemType ItemType => ItemType.BusStop;
 
-        public Token CityName;
+        public Token CityName { get; set; }
 
         public override void ReadFromStream(BinaryReader r)
         {

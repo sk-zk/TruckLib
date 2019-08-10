@@ -11,39 +11,39 @@ namespace ScsReader.ScsMap
     /// </summary>
     public class RoadSide
     {
-        public Token Variant;
+        public Token Variant { get; set; }
 
-        public Token Look;
+        public Token Look { get; set; }
 
-        public Token RightEdge;
+        public Token RightEdge { get; set; }
 
-        public Token LeftEdge;
+        public Token LeftEdge { get; set; }
 
-        public float RoadHeightOffset;
+        public float RoadHeightOffset { get; set; }
 
         public bool ShoulderBlocked = false;
 
         /// <summary>
         /// Sidewalk for legacy city roads.
         /// </summary>
-        public Sidewalk Sidewalk = new Sidewalk();
+        public Sidewalk Sidewalk { get; set; } = new Sidewalk();
 
         /// <summary>
         /// Terrain for this side of the road.
         /// </summary>
-        public RoadTerrain Terrain = new RoadTerrain();
+        public RoadTerrain Terrain { get; set; } = new RoadTerrain();
 
         /// <summary>
         /// Vegetation on this side of the road.
         /// </summary>
-        public RoadVegetation[] Vegetation;
+        public RoadVegetation[] Vegetation { get; set; }
 
         /// <summary>
         /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
         /// </summary>
         public bool NoDetailVegetation = false;
-        public float NoDetailVegetationFrom;
-        public float NoDetailVegetationTo;
+        public float NoDetailVegetationFrom { get; set; }
+        public float NoDetailVegetationTo { get; set; }
 
         /// <summary>
         /// Determines if the player can collide with vegetation.
@@ -53,14 +53,14 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Models on the side of a road.
         /// </summary>
-        public RoadModel[] Models;
+        public RoadModel[] Models { get; set; }
 
         /// <summary>
         /// Railings on or on the side of road.
         /// </summary>
-        public RoadRailings Railings = new RoadRailings();
+        public RoadRailings Railings { get; set; } = new RoadRailings();
 
-        public List<Token> AdditionalParts = new List<Token>();
+        public List<Token> AdditionalParts { get; set; } = new List<Token>();
 
         public RoadSide()
         {
@@ -87,6 +87,5 @@ namespace ScsReader.ScsMap
             return rs;
         }
     }
-
 
 }

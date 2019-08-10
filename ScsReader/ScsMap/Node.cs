@@ -22,29 +22,29 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The sectors this node is in.
         /// </summary>
-        public List<Sector> Sectors = new List<Sector>();
+        public List<Sector> Sectors { get; set; } = new List<Sector>();
 
         /// <summary>
         /// Position of the node. Note that this will be converted to fixed length floats.
         /// </summary>
-        public Vector3 Position = new Vector3();
+        public Vector3 Position { get; set; } = new Vector3();
 
         /// <summary>
         /// Rotation of the node.
         /// </summary>
-        public Quaternion Rotation = new Quaternion(0f, 0f, 0f, 1f);
+        public Quaternion Rotation { get; set; } = new Quaternion(0f, 0f, 0f, 1f);
 
         /// <summary>
         /// The backward item belonging to this node. 
         /// </summary>
-        public IMapObject BackwardItem;
+        public IMapObject BackwardItem { get; set; }
 
         /// <summary>
         /// The forward item belonging to this node. 
         /// </summary>
-        public IMapObject ForwardItem;
+        public IMapObject ForwardItem { get; set; }
 
-        protected BitArray Flags = new BitArray(32);
+        protected BitArray Flags { get; set; } = new BitArray(32);
 
         /// <summary>
         /// Determines if this node is red or green.
@@ -111,9 +111,12 @@ namespace ScsReader.ScsMap
         {            
             Uid = r.ReadUInt64();
 
-            Position.X = r.ReadInt32() / positionFactor;
-            Position.Y = r.ReadInt32() / positionFactor;
-            Position.Z = r.ReadInt32() / positionFactor;
+            Position = new Vector3(
+                r.ReadInt32() / positionFactor,
+                r.ReadInt32() / positionFactor,
+                r.ReadInt32() / positionFactor
+            );
+ 
 
             /* TODO: Figure out why I needed this code to begin with,
              * if I needed it at all

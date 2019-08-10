@@ -26,39 +26,41 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Brush materials used on terrain quads.
         /// </summary>
-        public List<Token> BrushMaterials = new List<Token> { "0" };
+        public List<Token> BrushMaterials { get; set; } 
+            = new List<Token> { "0" };
 
         /// <summary>
         /// Brush colors used on terrain quads.
         /// </summary>
-        public List<Color> BrushColors = new List<Color>() { Color.FromArgb(0, 255, 255, 255) };
+        public List<Color> BrushColors { get; set; } 
+            = new List<Color>() { Color.FromArgb(0, 255, 255, 255) };
 
         /// <summary>
         /// Amount of terrain quad rows.
         /// </summary>
-        public ushort Rows;
+        public ushort Rows { get; set; }
 
         /// <summary>
         /// Amount of terrain quad columns.
         /// </summary>
-        public ushort Cols;
+        public ushort Cols { get; set; }
 
         /// <summary>
         /// Terrain quads in this terrain. Indexing begins in the bottom left corner
         /// in driving direction.
         /// </summary>
-        public List<TerrainQuad> Quads = new List<TerrainQuad>();
+        public List<TerrainQuad> Quads { get; set; } = new List<TerrainQuad>();
 
         // TODO: Change implementation of this data to be easier to work with
         /// <summary>
         /// Offsets in terrain vertices created with the vertex tool.
         /// </summary>
-        public List<VertexData> Offsets = new List<VertexData>();
+        public List<VertexData> Offsets { get; set; } = new List<VertexData>();
 
         /// <summary>
         /// TODO: What is this?
         /// </summary>
-        public List<VertexData> Normals = new List<VertexData>();
+        public List<VertexData> Normals { get; set; } = new List<VertexData>();
 
         public TerrainQuadData Clone()
         {

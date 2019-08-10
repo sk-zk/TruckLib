@@ -17,7 +17,7 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public Token Look;
+        public Token Look { get; set; }
 
         public bool[] HideForZoomLevel
         {

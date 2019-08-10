@@ -13,11 +13,11 @@ namespace ScsReader.Model.Ppd
     /// </summary>
     public class SpawnPoint : IBinarySerializable
     {
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
 
-        public Quaternion Rotation;
+        public Quaternion Rotation { get; set; }
 
-        public SpawnPointType Type;
+        public SpawnPointType Type { get; set; }
 
         public void ReadFromStream(BinaryReader r)
         {

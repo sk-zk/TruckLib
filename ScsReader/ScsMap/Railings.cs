@@ -14,9 +14,9 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The railings.
         /// </summary>
-        public RoadRailing[] Models;
+        public RoadRailing[] Models { get; set; }
 
-        public bool InvertRailing;
+        public bool InvertRailing { get; set; }
 
         public Railings()
         {

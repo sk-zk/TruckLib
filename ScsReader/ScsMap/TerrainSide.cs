@@ -11,19 +11,19 @@ namespace ScsReader.ScsMap
     /// </summary>
     public class TerrainSide
     {
-        public Token Edge;
+        public Token Edge { get; set; }
 
-        public Token EdgeLook;
+        public Token EdgeLook { get; set; }
 
         /// <summary>
         /// The terrain on this side.
         /// </summary>
-        public RoadTerrain Terrain = new RoadTerrain();
+        public RoadTerrain Terrain { get; set; } = new RoadTerrain();
 
         /// <summary>
         /// The vegetation on this side.
         /// </summary>
-        public RoadVegetation[] Vegetation;
+        public RoadVegetation[] Vegetation { get; set; }
 
         /// <summary>
         /// Determines if the player can collide with vegetation.
@@ -35,9 +35,9 @@ namespace ScsReader.ScsMap
         /// </summary>
         public bool NoDetailVegetation = false;
 
-        public float NoDetailVegetationFrom;
+        public float NoDetailVegetationFrom { get; set; }
 
-        public float NoDetailVegetationTo;
+        public float NoDetailVegetationTo { get; set; }
 
         public TerrainSide()
         {

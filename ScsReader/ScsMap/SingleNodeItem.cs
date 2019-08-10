@@ -15,7 +15,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The node of the item.
         /// </summary>
-        public Node Node;
+        public Node Node { get; set; }
 
         /// <summary>
         /// Base method for adding a new SingleNodeItem to the map.

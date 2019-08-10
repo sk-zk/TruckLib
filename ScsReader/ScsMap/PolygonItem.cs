@@ -15,7 +15,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The nodes of the polygon.
         /// </summary>
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
         /// <summary>
         /// Base method for adding a new PolygonItem to the map.

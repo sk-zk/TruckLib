@@ -11,7 +11,7 @@ namespace ScsReader.ScsMap
     {
         public override ItemType ItemType => ItemType.FuelPump;
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
         public override void ReadFromStream(BinaryReader r)
         {

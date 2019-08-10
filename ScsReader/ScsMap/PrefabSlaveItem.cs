@@ -11,7 +11,7 @@ namespace ScsReader.ScsMap
     {
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
-        public MapItem PrefabLink;
+        public MapItem PrefabLink { get; set; }
 
         /// <summary>
         /// TEMP FIELD

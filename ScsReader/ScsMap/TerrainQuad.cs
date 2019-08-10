@@ -15,38 +15,38 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Main terrain material of this quad.
         /// </summary>
-        public byte MainMaterial;
+        public byte MainMaterial { get; set; }
 
         /// <summary>
         /// Additional material that will be drawn on top with the specified
         /// opacity value.
         /// </summary>
-        public byte BlendMaterial;
+        public byte BlendMaterial { get; set; }
 
         /// <summary>
         /// Opacity for the blend material.
         /// </summary>
-        public byte Opacity;
+        public byte Opacity { get; set; }
 
         /// <summary>
         /// Texture color in the bottom left corner.
         /// </summary>
-        public byte ColorBottomLeft;
+        public byte ColorBottomLeft { get; set; }
 
         /// <summary>
         /// Texture color in the bottom right corner.
         /// </summary>
-        public byte ColorBottomRight;
+        public byte ColorBottomRight { get; set; }
 
         /// <summary>
         /// Texture color in the top left corner.
         /// </summary>
-        public byte ColorTopLeft;
+        public byte ColorTopLeft { get; set; }
 
         /// <summary>
         /// Texture color in the top right corner.
         /// </summary>
-        public byte ColorTopRight;
+        public byte ColorTopRight { get; set; }
 
         /// <summary>
         /// Vegetation setting for this quad.

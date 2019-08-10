@@ -6,11 +6,11 @@ namespace ScsReader.ScsMap
 {
     public class TrajectoryRule : IBinarySerializable
     {
-        public uint NodeIndex;
+        public uint NodeIndex { get; set; }
 
-        public Token Rule;
+        public Token Rule { get; set; }
 
-        public List<float> RuleParameters = new List<float>();
+        public List<float> RuleParameters { get; set; } = new List<float>();
 
         public override string ToString()
         {

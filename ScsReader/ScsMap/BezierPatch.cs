@@ -30,21 +30,22 @@ namespace ScsReader.ScsMap
         /// </summary>
         public Vector3[,] ControlPoints = new Vector3[ControlPointCols, ControlPointRows];
 
-        public ushort XTesselation = 4;
+        public ushort XTesselation { get; set; } = 4;
 
-        public ushort ZTesselation = 4;
+        public ushort ZTesselation { get; set; } = 4;
 
-        public float UvRotation;
+        public float UvRotation { get; set; }
 
-        public uint RandomSeed;
+        public uint RandomSeed { get; set; }
 
-        public Vegetation[] Vegetation = new Vegetation[3];
+        public Vegetation[] Vegetation { get; set; } = new Vegetation[3];
 
-        public List<VegetationSphere> VegetationSpheres = new List<VegetationSphere>();
+        public List<VegetationSphere> VegetationSpheres { get; set; } 
+            = new List<VegetationSphere>();
 
         static readonly ushort DefaultQuadRows = 5;
         static readonly ushort DefaultQuadCols = 5;
-        public TerrainQuadData QuadData = new TerrainQuadData();
+        public TerrainQuadData QuadData { get; set; } = new TerrainQuadData();
 
         private readonly int noisePowerStart = 2;
         private readonly int noisePowerLength = 2;

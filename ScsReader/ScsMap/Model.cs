@@ -30,17 +30,17 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the model.
         /// </summary>
-        public Token ModelName;
+        public Token ModelName { get; set; }
 
         /// <summary>
         /// The model look.
         /// </summary>
-        public Token Look;
+        public Token Look { get; set; }
 
         /// <summary>
         /// The model variant.
         /// </summary>
-        public Token Variant;
+        public Token Variant { get; set; }
 
         private int colorVariantPos = 8;
         private int colorVariantLength = 4;
@@ -60,16 +60,16 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The relative scale of the model.
         /// </summary>
-        public Vector3 Scale = new Vector3(1f, 1f, 1f);
+        public Vector3 Scale { get; set; } = new Vector3(1f, 1f, 1f);
 
         /// <summary>
         /// Unit names of additional parts used by the model.
         /// </summary>
-        public List<Token> AdditionalParts = new List<Token>();
+        public List<Token> AdditionalParts { get; set; } = new List<Token>();
 
-        public Token TerrainMaterial;
+        public Token TerrainMaterial { get; set; }
 
-        public Color TerrainColor = Color.FromArgb(0x00ffffff);
+        public Color TerrainColor { get; set; } = Color.FromArgb(0x00ffffff);
 
         private int staticLodPos = 4;
         private int staticLodLength = 2;

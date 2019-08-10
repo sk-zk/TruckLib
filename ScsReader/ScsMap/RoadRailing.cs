@@ -14,7 +14,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The name of the model.
         /// </summary>
-        public Token Model;
+        public Token Model { get; set; }
 
         private float offset;
         public float Offset

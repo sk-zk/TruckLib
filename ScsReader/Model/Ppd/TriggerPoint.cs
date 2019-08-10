@@ -14,14 +14,14 @@ namespace ScsReader.Model.Ppd
     /// </summary>
     public class TriggerPoint : IBinarySerializable
     {
-        public uint TriggerId;
+        public uint TriggerId { get; set; }
 
         /// <summary>
         /// The trigger action.
         /// </summary>
-        public Token Action;
+        public Token Action { get; set; }
 
-        public Vector3 Position;
+        public Vector3 Position { get; set; }
 
         /// <summary>
         /// Range of the trigger point or area of activation.
@@ -29,17 +29,17 @@ namespace ScsReader.Model.Ppd
         /// around the trigger point. Otherwise, it defines the vertical range
         /// of the trigger area.</para>
         /// </summary>
-        public float Range;
+        public float Range { get; set; }
 
         /// <summary>
         /// How long the player has to be outside the trigger area until
         /// it can be activated again, in seconds.
         /// </summary>
-        public float ResetDelay;
+        public float ResetDelay { get; set; }
 
-        public float ResetDistance;
+        public float ResetDistance { get; set; }
 
-        public int[] Neighbours = new int[2];
+        public int[] Neighbours { get; set; } = new int[2];
 
         protected BitArray Flags = new BitArray(32);
 

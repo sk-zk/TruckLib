@@ -16,9 +16,9 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public float Width;
+        public float Width { get; set; }
 
-        public float Height;
+        public float Height { get; set; }
 
         /// <summary>
         /// Adds a NoWeatherArea to the map.

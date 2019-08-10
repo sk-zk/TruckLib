@@ -17,13 +17,13 @@ namespace ScsReader.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public Token Name;
+        public Token Name { get; set; }
 
-        public float FullIntensityDistance;
+        public float FullIntensityDistance { get; set; }
 
-        public float ActivationDistance;
+        public float ActivationDistance { get; set; }
 
-        private BitArray SoundFlags = new BitArray(32);
+        private BitArray SoundFlags { get; set; } = new BitArray(32);
 
         public bool Stream
         {

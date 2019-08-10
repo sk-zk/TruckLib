@@ -17,12 +17,13 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The name of the map, which is used for file and directory names.
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         /// The map's sectors.
         /// </summary>
-        public Dictionary<ValueTuple<int, int>, Sector> Sectors = new Dictionary<ValueTuple<int, int>, Sector>();
+        public Dictionary<ValueTuple<int, int>, Sector> Sectors { get; set; } 
+            = new Dictionary<ValueTuple<int, int>, Sector>();
 
         /// <summary>
         /// Contains all nodes in this sector.
@@ -31,17 +32,18 @@ namespace ScsReader.ScsMap
         // per Sector. This is because certain nodes of items that cross 
         // sector boundaries are written to both sectors, and doing this was
         // the best way to prevent two instances of the same node.
-        public Dictionary<ulong, Node> Nodes = new Dictionary<ulong, Node>();
+        public Dictionary<ulong, Node> Nodes { get; set; } 
+            = new Dictionary<ulong, Node>();
 
         /// <summary>
         /// Scale of the game outside cities.
         /// </summary>
-        public float NormalScale = 19;
+        public float NormalScale { get; set; } = 19;
 
         /// <summary>
         /// Scale of the game inside cities.
         /// </summary>
-        public float CityScale = 3;
+        public float CityScale { get; set; } = 3;
 
         /// <summary>
         /// Editor start position. TODO: Figure out these values
@@ -63,7 +65,7 @@ namespace ScsReader.ScsMap
         /// <para>Not sure what it does, but it might have something to do
         /// with the scale of the UK in the official map.</para>
         /// </summary>
-        public bool EuropeMapUiCorrections = false;
+        public bool EuropeMapUiCorrections { get; set; } = false;
 
         // This value is used in both ETS2 and ATS.
         protected uint gameTag = 2998976734; //TODO: What is this?

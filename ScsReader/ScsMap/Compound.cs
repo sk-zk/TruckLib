@@ -28,12 +28,14 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Contains all map items owned by this compound.
         /// </summary>
-        public Dictionary<ulong, MapItem> CompoundItems = new Dictionary<ulong, MapItem>();
+        public Dictionary<ulong, MapItem> CompoundItems { get; set; } 
+            = new Dictionary<ulong, MapItem>();
 
         /// <summary>
         /// Contains all nodes owned by this compound.
         /// </summary>
-        public Dictionary<ulong, Node> CompoundNodes = new Dictionary<ulong, Node>();
+        public Dictionary<ulong, Node> CompoundNodes { get; set; } 
+            = new Dictionary<ulong, Node>();
 
         /// <summary>
         /// Determines if the compounded items are reflected in water.

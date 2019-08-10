@@ -12,29 +12,29 @@ namespace ScsReader.Model.Ppd
     {
         private uint Version = 0x16;
 
-        public List<ControlNode> Nodes = new List<ControlNode>();
+        public List<ControlNode> Nodes { get; set; } = new List<ControlNode>();
 
-        public List<NavCurve> NavCurves = new List<NavCurve>();
+        public List<NavCurve> NavCurves { get; set; } = new List<NavCurve>();
 
-        public List<Sign> Signs = new List<Sign>();
+        public List<Sign> Signs { get; set; } = new List<Sign>();
 
-        public List<Semaphore> Semaphores = new List<Semaphore>();
+        public List<Semaphore> Semaphores { get; set; } = new List<Semaphore>();
 
-        public List<SpawnPoint> SpawnPoints = new List<SpawnPoint>();
+        public List<SpawnPoint> SpawnPoints { get; set; } = new List<SpawnPoint>();
 
-        public List<Vector3> TerrainPointPositions = new List<Vector3>();
+        public List<Vector3> TerrainPointPositions { get; set; } = new List<Vector3>();
 
-        public List<Vector3> TerrainPointNormals = new List<Vector3>();
+        public List<Vector3> TerrainPointNormals { get; set; } = new List<Vector3>();
 
-        public List<TerrainPointVariant> TerrainPointVariants = new List<TerrainPointVariant>();
+        public List<TerrainPointVariant> TerrainPointVariants { get; set; } = new List<TerrainPointVariant>();
 
-        public List<MapPoint> MapPoints = new List<MapPoint>();
+        public List<MapPoint> MapPoints { get; set; } = new List<MapPoint>();
 
-        public List<TriggerPoint> TriggerPoints = new List<TriggerPoint>();
+        public List<TriggerPoint> TriggerPoints { get; set; } = new List<TriggerPoint>();
 
-        public List<Intersection> Intersections = new List<Intersection>();
+        public List<Intersection> Intersections { get; set; } = new List<Intersection>();
 
-        public List<uint[]> Unknown = new List<uint[]>();
+        public List<uint[]> Unknown { get; set; } = new List<uint[]>();
 
         public void Open(string path)
         {

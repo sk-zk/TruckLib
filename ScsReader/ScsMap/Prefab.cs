@@ -32,17 +32,17 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the prefab.
         /// </summary>
-        public Token Model;
+        public Token Model { get; set; }
 
         /// <summary>
         /// The prefab variant.
         /// </summary>
-        public Token Variant;
+        public Token Variant { get; set; }
 
         /// <summary>
         /// The prefab look.
         /// </summary>
-        public Token Look;
+        public Token Look { get; set; }
 
         /// <summary>
         /// The nodes belonging to this prefab.
@@ -52,12 +52,12 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The index of the origin node.
         /// </summary>
-        public ushort Origin = 0;
+        public ushort Origin { get; set; } = 0;
 
         /// <summary>
         /// Unit names of additional parts used.
         /// </summary>
-        public List<Token> AdditionalParts = new List<Token>();
+        public List<Token> AdditionalParts { get; set; } = new List<Token>();
 
         public byte DlcGuard
         {
@@ -68,22 +68,24 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// Vegetation and terrain data for each of the prefab's corners.
         /// </summary>
-        public PrefabCorner[] Corners;
+        public PrefabCorner[] Corners { get; set; }
 
         /// <summary>
         /// Semaphore profile for this crossing.
         /// </summary>
-        public Token SemaphoreProfile;
+        public Token SemaphoreProfile { get; set; }
 
-        public MapItem FerryLink;
+        public MapItem FerryLink { get; set; }
 
-        public uint RandomSeed;
+        public uint RandomSeed { get; set; }
 
-        public List<MapItem> SlaveItems = new List<MapItem>();
+        public List<MapItem> SlaveItems { get; set; } = new List<MapItem>();
 
-        public List<VegetationPart> VegetationParts = new List<VegetationPart>();
+        public List<VegetationPart> VegetationParts { get; set; } 
+            = new List<VegetationPart>();
 
-        public List<VegetationSphere> VegetationSpheres = new List<VegetationSphere>();
+        public List<VegetationSphere> VegetationSpheres { get; set; } 
+            = new List<VegetationSphere>();
 
         /// <summary>
         /// Determines if the prefab is a tunnel. 

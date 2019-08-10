@@ -9,9 +9,9 @@ namespace ScsReader.ScsMap
 {
     public class VegetationPart : IBinarySerializable
     {
-        public Token PartName;
+        public Token PartName { get; set; }
 
-        public Vegetation[] Vegetation;
+        public Vegetation[] Vegetation { get; set; }
 
         public VegetationPart()
         {

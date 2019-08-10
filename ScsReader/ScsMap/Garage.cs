@@ -14,14 +14,14 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The city the garage is in.
         /// </summary>
-        public Token CityName;
+        public Token CityName { get; set; }
 
         /// <summary>
         /// TODO: What is this?
         /// </summary>
-        public uint BuyMode;
+        public uint BuyMode { get; set; }
 
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>();
 
         public override void ReadFromStream(BinaryReader r)
         {

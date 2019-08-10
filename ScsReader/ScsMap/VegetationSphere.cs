@@ -23,17 +23,18 @@ namespace ScsReader.ScsMap
         /// <para>Z describes the position on the axis perpendicular to the road
         ///       in meters (so 20 means 20 meters into the terrain at X).</para>
         /// </summary>
-        public Vector3 Position = new Vector3();
+        public Vector3 Position { get; set; } = new Vector3();
 
         /// <summary>
         /// The radius of the sphere.
         /// </summary>
-        public float Radius;
+        public float Radius { get; set; }
 
         /// <summary>
         /// The modifier which is applied to the vegetation inside the sphere.
         /// </summary>
-        public VegetationSphereType Type;
+        public VegetationSphereType Type { get; set; } 
+            = VegetationSphereType.NoVegetation;
 
         public void ReadFromStream(BinaryReader r)
         {

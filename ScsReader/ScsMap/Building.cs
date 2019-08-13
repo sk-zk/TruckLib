@@ -30,7 +30,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The unit name of the building.
         /// </summary>
-        public Token BuildingName { get; set; }
+        public Token Name { get; set; }
 
         /// <summary>
         /// The building look.
@@ -133,7 +133,7 @@ namespace ScsReader.ScsMap
         /// </summary>
         private void InitFromAddOrAppend(Token name, Token look, Vector3 backwardPos, Vector3 forwardPos)
         {
-            BuildingName = name;
+            Name = name;
             Look = look;
             Length = Vector3.Distance(backwardPos, forwardPos);
         }
@@ -143,9 +143,25 @@ namespace ScsReader.ScsMap
         /// </summary>
         /// <param name="position">The position of the ForwardNode of the new building.</param>
         /// <returns>The newly created building.</returns>
-        public Building Append(Vector3 position)
+        public Building Append(Vector3 position, bool cloneSettings = true)
         {
-            return Append(position, BuildingName, Look);
+            if (!cloneSettings)
+            {
+                return Append(position, Name, Look);
+            }
+
+            var b = Append(position, Name, Look);
+            CopySettingsTo(b);
+            return b;
+        }
+
+        private void CopySettingsTo(Building b)
+        {
+            b.Flags = Flags;
+            b.ViewDistance = ViewDistance;
+            b.RandomSeed = RandomSeed;
+            b.Stretch = Stretch;
+            b.HeightOffsets = new List<float>(HeightOffsets);
         }
 
         /// <summary>
@@ -170,7 +186,7 @@ namespace ScsReader.ScsMap
         {
             base.ReadFromStream(r);
 
-            BuildingName = r.ReadToken();
+            Name = r.ReadToken();
             Look = r.ReadToken();
 
             Node = new UnresolvedNode(r.ReadUInt64());
@@ -190,7 +206,7 @@ namespace ScsReader.ScsMap
         {
             base.WriteToStream(w);
 
-            w.Write(BuildingName);
+            w.Write(Name);
             w.Write(Look);
 
             w.Write(Node.Uid);

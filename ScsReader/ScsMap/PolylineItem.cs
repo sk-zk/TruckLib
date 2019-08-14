@@ -11,9 +11,6 @@ namespace ScsReader.ScsMap
     /// <para>Parent class for map items which form a polyline with other 
     /// items, like roads and buildings.</para>
     /// </summary>
-    // Cut planes do not use this class since a cut plane is a single 
-    // item containing a list of all its nodes rather than multiple items
-    // linked together with a ForwardItem and BackwardItem.
     public abstract class PolylineItem : MapItem
     {
         /// <summary>
@@ -119,17 +116,17 @@ namespace ScsReader.ScsMap
             // =========
             //
             // for every item that is added to the chain,
-            // 1) the rotation for the new (= now forward) node
-            //    is calculated the same way as in Add.
-            //    the Rotation of the nodes is the angle formed by 
-            //    pos2-pos1 and the Z axis.
-            // 2) the rotation of the existing (= now backward) node 
-            //      a) is set to (p0_direction + p2_direction) / 2 if there are 3 nodes in the chain;
-            //      b) is set to the derivative of the spline at that point otherwise.
+            // 1) the rotation of p2 is calculated the same way as in Add.
+            //    the rotation of the nodes is the angle formed by
+            //    p2-p1 and the Z axis.
+            // 2) the rotation of the node p1
+            //      a) is set to (rot0 + rot2)/2 if there are only 
+            //         3 nodes in the chain;
+            //      b) is set to god knows what otherwise.
+            //         it must be the derivative of the spline at that point, but 
+            //         I don't even know which spline function the game uses.
             //
-            // The angles calculated by this shit code are still a little off
-            // because I don't even know which spline function is used in game.
-            // It'll have to do for now
+            // basically, this code is just wrong but it'll have to do for now.
             //
             // TL;DR: O MAN i don't know how to math pls to halp
 
@@ -179,26 +176,27 @@ namespace ScsReader.ScsMap
 
         internal static void SetRotation(Node p0, Node p1, Node p2)
         {
-            var p2_direction = Vector3.Normalize((p2.Position - p1.Position / 2));
+            var p2_direction = Vector3.Normalize((p2.Position - p1.Position) / 2f);
             p2.Rotation = MathEx.GetNodeRotation(p1.Position, p2.Position);
 
             var p0_direction = Vector3.Transform(-Vector3.UnitZ, p0.Rotation);
             var old_p1_direction = Vector3.Transform(-Vector3.UnitZ, p1.Rotation);
             Vector3 new_p1_direction;
             double new_p1_angle;
-            if (p0.BackwardItem != null) // more than 3 items in the chain
+
+            if (p0.BackwardItem is null) // exactly three items in the chain
             {
+                new_p1_direction = (p2_direction + p0_direction) / 2f;
+            }
+            else // more than 3 items in the chain
+            {
+                // ?????????
                 new_p1_direction = Vector3.Normalize(
                     MathEx.CatmullRomDerivative(0, p0.Position, p1.Position, p2.Position, p2.Position + p2_direction)
                 );
-                new_p1_angle = MathEx.AngleOffAroundAxis(new_p1_direction, -Vector3.UnitZ, Vector3.UnitY, false);
-            }
-            else
-            {
-                new_p1_direction = (p2_direction + p0_direction) / 2f;
-                new_p1_angle = MathEx.AngleOffAroundAxis(new_p1_direction, -Vector3.UnitZ, Vector3.UnitY, false);
             }
 
+            new_p1_angle = MathEx.AngleOffAroundAxis(new_p1_direction, -Vector3.UnitZ, Vector3.UnitY, false);
             p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)new_p1_angle, 0, 0);
         }
 

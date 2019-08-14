@@ -51,7 +51,7 @@ namespace ScsReader
             return Math.Atan2(Vector3.Dot(v, right), Vector3.Dot(v, forward));
         }
 
-        public static Vector3 GetCatmullRomPosition(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+        public static Vector3 CatmullRomPosition(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
         {
             // via https://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines/
 

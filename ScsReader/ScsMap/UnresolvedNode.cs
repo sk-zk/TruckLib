@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 namespace ScsReader.ScsMap
 {
     /// <summary>
-    /// Used to hold a UID reference while loading map items, before 
-    /// references can be resolved. Once all nodes have been read, all 
-    /// instances of this class are replaced with the actual nodes.
+    /// Holds a UID reference while loading map items (before 
+    /// references can be resolved). Once all nodes have been read, all 
+    /// instances of this class are replaced with the actual nodes 
+    /// (if they exist).
     /// </summary>
-    internal class UnresolvedNode : Node
+    internal sealed class UnresolvedNode : Node
     {
         public UnresolvedNode(ulong uid)
         {

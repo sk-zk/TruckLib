@@ -47,7 +47,7 @@ namespace ScsReader.ScsMap
 
         public void ReadFromStream(BinaryReader r)
         {
-            VegetationName = r.ReadToken();
+            Name = r.ReadToken();
             Density = r.ReadUInt16() / densityFactor;
             HighPolyDistance = r.ReadByte();
             Scale = (VegetationScale)r.ReadByte();
@@ -57,7 +57,7 @@ namespace ScsReader.ScsMap
 
         public void WriteToStream(BinaryWriter w)
         {
-            w.Write(VegetationName);
+            w.Write(Name);
             w.Write((ushort)(Density * densityFactor));
             w.Write(HighPolyDistance);
             w.Write((byte)Scale);

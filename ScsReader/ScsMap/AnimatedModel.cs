@@ -66,5 +66,6 @@ namespace ScsReader.ScsMap
             w.Write(Model);
             w.Write(Node.Uid);
         }
+
     }
 }

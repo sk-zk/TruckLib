@@ -453,7 +453,7 @@ namespace ScsReader.ScsMap
             CenterMaterialColor = r.ReadColor();
 
             RandomSeed = r.ReadUInt32();
-            CenterVegetation.VegetationName = r.ReadToken();
+            CenterVegetation.Name = r.ReadToken();
             CenterVegetation.Density = r.ReadUInt16() / centerVegDensityFactor;
             CenterVegetation.Scale = (VegetationScale)r.ReadByte();
             CenterVegetation.Offset = r.ReadByte() / centerVegOffsetFactor;
@@ -660,7 +660,7 @@ namespace ScsReader.ScsMap
             w.Write(CenterMaterial);
             w.Write(CenterMaterialColor);
             w.Write(RandomSeed);
-            w.Write(CenterVegetation.VegetationName);
+            w.Write(CenterVegetation.Name);
             w.Write((ushort)(CenterVegetation.Density * centerVegDensityFactor));
             w.Write((byte)CenterVegetation.Scale);
             w.Write((byte)(CenterVegetation.Offset * centerVegOffsetFactor));

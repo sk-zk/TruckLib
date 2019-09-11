@@ -14,14 +14,14 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The railings.
         /// </summary>
-        public RoadRailing[] Models { get; set; }
+        public Railing[] Models { get; set; }
 
         public bool InvertRailing { get; set; }
 
         public Railings()
         {
             const int railingCount = 3;
-            Models = (new RoadRailing[railingCount]).Select(h => new RoadRailing()).ToArray();
+            Models = (new Railing[railingCount]).Select(h => new Railing()).ToArray();
         }
     }
 }

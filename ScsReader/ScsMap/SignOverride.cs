@@ -46,32 +46,32 @@ namespace ScsReader.ScsMap
                 switch(type)
                 {
                     case AttributeType.SByte:
-                        attrib = new SignOverrideAtttribute<sbyte>();
+                        attrib = new SignOverrideAttribute<sbyte>();
                         attrib.Index = r.ReadUInt32();
                         attrib.SetValue(r.ReadSByte());
                         break;
                     case AttributeType.Int32:
-                        attrib = new SignOverrideAtttribute<int>();
+                        attrib = new SignOverrideAttribute<int>();
                         attrib.Index = r.ReadUInt32();
                         attrib.SetValue(r.ReadInt32());
                         break;
                     case AttributeType.UInt32:
-                        attrib = new SignOverrideAtttribute<uint>();
+                        attrib = new SignOverrideAttribute<uint>();
                         attrib.Index = r.ReadUInt32();
                         attrib.SetValue(r.ReadUInt32());
                         break;
                     case AttributeType.Float:
-                        attrib = new SignOverrideAtttribute<float>();
+                        attrib = new SignOverrideAttribute<float>();
                         attrib.Index = r.ReadUInt32();
                         attrib.SetValue(r.ReadSingle());
                         break;
                     case AttributeType.String:
-                        attrib = new SignOverrideAtttribute<string>();
+                        attrib = new SignOverrideAttribute<string>();
                         attrib.Index = r.ReadUInt32();
                         attrib.SetValue(r.ReadPascalString());
                         break;
                     case AttributeType.UInt64:
-                        attrib = new SignOverrideAtttribute<ulong>();
+                        attrib = new SignOverrideAttribute<ulong>();
                         attrib.Index = r.ReadUInt32();
                         attrib.SetValue(r.ReadUInt64());
                         break;
@@ -146,6 +146,4 @@ namespace ScsReader.ScsMap
         }
 
     }
-
- 
 }

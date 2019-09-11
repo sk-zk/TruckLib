@@ -24,7 +24,7 @@ namespace ScsReader.ScsMap
             PartName = r.ReadToken();
             for (int i = 0; i < Vegetation.Length; i++)
             {
-                Vegetation[i].VegetationName = r.ReadToken();
+                Vegetation[i].Name = r.ReadToken();
                 Vegetation[i].Density = r.ReadUInt16() / 10f;
                 Vegetation[i].Scale = (VegetationScale)r.ReadUInt16();
             }
@@ -35,7 +35,7 @@ namespace ScsReader.ScsMap
             w.Write(PartName);
             for (int i = 0; i < Vegetation.Length; i++)
             {
-                w.Write(Vegetation[i].VegetationName);
+                w.Write(Vegetation[i].Name);
                 w.Write((ushort)(Vegetation[i].Density * 10f));
                 w.Write((ushort)Vegetation[i].Scale);
             }

@@ -14,7 +14,7 @@ namespace ScsReader.ScsMap
         /// <summary>
         /// The vegetation file used.
         /// </summary>
-        public Token VegetationName { get; set; }
+        public Token Name { get; set; }
 
         /// <summary>
         /// The scale of vegetation models.
@@ -22,6 +22,9 @@ namespace ScsReader.ScsMap
         public VegetationScale Scale { get; set; }
 
         private float density = 400f;
+        /// <summary>
+        /// The density of placed vegetation.
+        /// </summary>
         public float Density
         {
             get => density;

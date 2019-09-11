@@ -15,7 +15,8 @@ namespace ScsReader.ScsMap
         private Vector3 prefabPos;
         private Prefab prefab;
 
-        public Prefab FromPpd(IItemContainer map, string unitName, string variant, string look, PpdFile ppd, Vector3 prefabPos)
+        public Prefab FromPpd(IItemContainer map, string unitName, string variant, string look, 
+            PpdFile ppd, Vector3 prefabPos)
         {
             this.map = map;
             this.ppd = ppd;
@@ -144,9 +145,7 @@ namespace ScsReader.ScsMap
             return ppdPointPos;
         }
 
-        private bool IsCompany()
-        {
-            return ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.CompanyPoint);
-        }
+        private bool IsCompany() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.CompanyPoint);
+
     }
 }

@@ -11,8 +11,14 @@ namespace ScsReader.ScsMap
     /// </summary>
     public class TerrainSide
     {
+        /// <summary>
+        /// The edge model on this side.
+        /// </summary>
         public Token Edge { get; set; }
 
+        /// <summary>
+        /// The look of the edge model.
+        /// </summary>
         public Token EdgeLook { get; set; }
 
         /// <summary>

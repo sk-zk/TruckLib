@@ -62,10 +62,10 @@ namespace ScsReader.Sii
 
                     // only parse top level includes, so
                     // make sure we're not inside a unit
-                    foreach (var c in line)
+                    foreach (var character in line)
                     {
-                        if (c == '{') ++bracketsStack;
-                        if (c == '}') --bracketsStack;
+                        if (character == '{') ++bracketsStack;
+                        if (character == '}') --bracketsStack;
                     }
 
                     if (bracketsStack == 0 && line.StartsWith(IncludeKeyword))
@@ -103,10 +103,12 @@ namespace ScsReader.Sii
             var openBracketPos = unitStr.IndexOf('{');
             var closeBracketPos = unitStr.IndexOf('}');
 
-            var unit = new Unit();
-            unit.Class = unitStr.Substring(0, firstColonPos).Trim();
-            unit.Name = new UnitName(unitStr.Substring(firstColonPos + 1,
-                openBracketPos - firstColonPos - 1).Trim());
+            var unit = new Unit
+            {
+                Class = unitStr.Substring(0, firstColonPos).Trim(),
+                Name = new UnitName(unitStr.Substring(firstColonPos + 1,
+                openBracketPos - firstColonPos - 1).Trim())
+            };
 
             var attributeLines = unitStr.Substring(openBracketPos + 1,
                 closeBracketPos - openBracketPos - 1).Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
@@ -237,7 +239,7 @@ namespace ScsReader.Sii
         private static T[] FinishArray<T>(string[] tupleVals, T first)
         {
             var arr = new T[tupleVals.Length];
-            arr[0] = (T)first;
+            arr[0] = first;
             for (int i = 1; i < arr.Length; i++)
             {
                 arr[i] = (T)ParseAttributeValue(tupleVals[i]);
@@ -358,5 +360,6 @@ namespace ScsReader.Sii
                 sb.AppendLine($"{IncludeKeyword} \"{include}\"");
             }
         }
+
     }
 }

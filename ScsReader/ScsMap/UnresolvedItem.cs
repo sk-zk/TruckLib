@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 namespace ScsReader.ScsMap
 {
     /// <summary>
-    /// Used to hold a UID reference while loading map items, before 
-    /// references can be resolved. Once all items have been read, all 
-    /// instances of this class are replaced with the actual items.
+    /// Holds a UID reference while loading map items (before 
+    /// references can be resolved). Once all items have been read, all 
+    /// instances of this class are replaced with the actual items 
+    /// (if they exist).
     /// </summary>
-    internal class UnresolvedItem : MapItem
+    internal sealed class UnresolvedItem : MapItem
     {
-        readonly string exceptionMessage = "This item is unresolved.";
+        private readonly string exceptionMessage = "This item is unresolved.";
 
         public override ItemType ItemType => throw new InvalidOperationException(exceptionMessage);
         public override ItemFile DefaultItemFile => throw new InvalidOperationException(exceptionMessage);

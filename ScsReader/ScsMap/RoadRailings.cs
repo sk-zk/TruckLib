@@ -18,7 +18,7 @@ namespace ScsReader.ScsMap
         public RoadRailings Clone()
         {
             var rr = (RoadRailings)MemberwiseClone();
-            rr.Models = (RoadRailing[])Models.Clone();
+            rr.Models = (Railing[])Models.Clone();
             return rr;
         }
     }

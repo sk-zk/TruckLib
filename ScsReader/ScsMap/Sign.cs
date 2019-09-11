@@ -121,7 +121,8 @@ namespace ScsReader.ScsMap
         }
 
         /// <summary>
-        /// Sign text struct for legacy navigation signs, e.g. be-navigation->board straight left right b.
+        /// Sign text struct for legacy navigation signs, 
+        /// e.g. be-navigation->board straight left right b.
         /// </summary>
         public struct SignBoard
         {
@@ -129,5 +130,6 @@ namespace ScsReader.ScsMap
             public Token City1;
             public Token City2;
         }
+
     }
 }

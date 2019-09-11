@@ -34,7 +34,7 @@ namespace ScsReader.ScsMap
 
         public ushort ZTesselation { get; set; } = 4;
 
-        public float UvRotation { get; set; }
+        public float UVRotation { get; set; }
 
         public uint RandomSeed { get; set; }
 
@@ -194,7 +194,7 @@ namespace ScsReader.ScsMap
             ZTesselation = r.ReadUInt16();
 
             // UV rotation
-            UvRotation = r.ReadSingle();
+            UVRotation = r.ReadSingle();
 
             // node
             Node = new UnresolvedNode(r.ReadUInt64());
@@ -205,7 +205,7 @@ namespace ScsReader.ScsMap
             // vegetation
             for (int i = 0; i < Vegetation.Length; i++)
             {
-                Vegetation[i].VegetationName = r.ReadToken();
+                Vegetation[i].Name = r.ReadToken();
                 Vegetation[i].Density = r.ReadUInt16() / vegDensityFactor;
                 Vegetation[i].Scale = (VegetationScale)r.ReadByte();
             }
@@ -236,7 +236,7 @@ namespace ScsReader.ScsMap
             w.Write(ZTesselation);
 
             // UV rotation
-            w.Write(UvRotation);
+            w.Write(UVRotation);
 
             // node
             w.Write(Node.Uid);
@@ -247,7 +247,7 @@ namespace ScsReader.ScsMap
             // vegetation
             foreach(var veg in Vegetation)
             {
-                w.Write(veg.VegetationName);
+                w.Write(veg.Name);
                 w.Write((ushort)(veg.Density * vegDensityFactor));
                 w.Write((byte)veg.Scale);
             }

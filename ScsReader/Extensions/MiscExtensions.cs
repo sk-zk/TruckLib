@@ -12,7 +12,7 @@ namespace ScsReader
     public static class MiscExtensions
     {
         /// <summary>
-        /// Converts the quaternion to Euler angles.
+        /// Converts a quaternion to Euler angles.
         /// </summary>
         /// <param name="q"></param>
         /// <returns>Euler angles in radians.</returns>
@@ -36,7 +36,7 @@ namespace ScsReader
         }
 
         /// <summary>
-        /// Converts the quaternion to Euler angles in degrees.
+        /// Converts a quaternion to Euler angles in degrees.
         /// </summary>
         /// <param name="q"></param>
         /// <returns>Euler angles in degrees.</returns>
@@ -75,6 +75,6 @@ namespace ScsReader
             arr.CopyTo(bytes, 0);
             return bytes[0];
         }
-    }
 
+    }
 }

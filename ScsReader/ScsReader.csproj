@@ -104,7 +104,7 @@
     <Compile Include="ScsMap\RoadTerrain.cs" />
     <Compile Include="ScsMap\Sign.cs" />
     <Compile Include="ScsMap\SignOverride.cs" />
-    <Compile Include="ScsMap\SignOverrideAtttribute.cs" />
+    <Compile Include="ScsMap\SignOverrideAttribute.cs" />
     <Compile Include="ScsMap\SingleNodeItem.cs" />
     <Compile Include="ScsMap\Sound.cs" />
     <Compile Include="ScsMap\TrafficArea.cs" />
@@ -127,7 +127,7 @@
     <Compile Include="ScsMap\Railings.cs" />
     <Compile Include="ScsMap\Road.cs" />
     <Compile Include="ScsMap\RoadModel.cs" />
-    <Compile Include="ScsMap\RoadRailing.cs" />
+    <Compile Include="ScsMap\Railing.cs" />
     <Compile Include="ScsMap\RoadRailings.cs" />
     <Compile Include="ScsMap\RoadSide.cs" />
     <Compile Include="ScsMap\TerrainQuadData.cs" />

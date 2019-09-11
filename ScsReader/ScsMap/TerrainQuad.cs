@@ -13,7 +13,7 @@ namespace ScsReader.ScsMap
     public class TerrainQuad : IBinarySerializable
     {
         /// <summary>
-        /// Main terrain material of this quad.
+        /// Index of the main terrain material of this quad.
         /// </summary>
         public byte MainMaterial { get; set; }
 
@@ -60,29 +60,32 @@ namespace ScsReader.ScsMap
 
         public void ReadFromStream(BinaryReader r)
         {
+            const int n1Mask = 0x0F;
+            const int n2Mask = 0xF0;
+
             // nibble 1: main material
             // nibble 2: 2nd material to blend on top of main material
             var byte1 = r.ReadByte();
-            MainMaterial = (byte)(byte1 & 0x0F);
-            BlendMaterial = (byte)((byte1 & 0xF0) >> 4);
+            MainMaterial = (byte)(byte1 & n1Mask);
+            BlendMaterial = (byte)((byte1 & n2Mask) >> 4);
 
             // nibble 1: material blend opacity
             // nibble 2: bottom left color
             var byte2 = r.ReadByte();
-            Opacity = (byte)(byte2 & 0x0F);
-            ColorBottomLeft = (byte)((byte2 & 0xF0) >> 4);
+            Opacity = (byte)(byte2 & n1Mask);
+            ColorBottomLeft = (byte)((byte2 & n2Mask) >> 4);
 
             // nibble 1: bottom right color
             // nibble 2: top left color
             var byte3 = r.ReadByte();
-            ColorBottomRight = (byte)(byte3 & 0x0F);
-            ColorTopLeft = (byte)((byte3 & 0xF0) >> 4);
+            ColorBottomRight = (byte)(byte3 & n1Mask);
+            ColorTopLeft = (byte)((byte3 & n2Mask) >> 4);
 
             // nibble 1: top right color
             // nibble 2: normal veg. / no detail veg. / no veg.
             var byte4 = r.ReadByte();
-            ColorTopRight = (byte)(byte4 & 0x0F);
-            Vegetation = (QuadVegetation)((byte4 & 0xF0) >> 4);
+            ColorTopRight = (byte)(byte4 & n1Mask);
+            Vegetation = (QuadVegetation)((byte4 & n2Mask) >> 4);
         }
 
         public void WriteToStream(BinaryWriter w)

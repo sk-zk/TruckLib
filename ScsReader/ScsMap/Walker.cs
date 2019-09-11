@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace ScsReader.ScsMap
 {
     /// <summary>
-    /// Creates pedestrians along the given path.
-    /// <para>This item has been merged into Mover and will probably be 
+    /// Creates pedestrians along a given path.
+    /// <para>This item has been replaced by Movers and will probably be 
     /// removed from the game at some point.</para>
     /// </summary>
     public class Walker : MapItem

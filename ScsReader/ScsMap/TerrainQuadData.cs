@@ -14,6 +14,8 @@ namespace ScsReader.ScsMap
     /// </summary>
     public class TerrainQuadData : IBinarySerializable
     {
+        public static readonly Token QuadErase = new Token(0xB823);
+
         /// <summary>
         /// The main terrain material.
         /// </summary>
@@ -80,7 +82,6 @@ namespace ScsReader.ScsMap
             // the uids of the material brushes used on this terrain.
             // first one is the main mat.
             // 0xB823 is Quad Erase.
-            // also, erased quads are always No Veg. as well.
             var brushMatCount = r.ReadUInt16();
             BrushMaterials.Clear();
             for (int i = 0; i < brushMatCount; i++)

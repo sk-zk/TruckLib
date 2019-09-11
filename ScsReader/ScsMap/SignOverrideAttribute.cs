@@ -10,7 +10,7 @@ namespace ScsReader.ScsMap
     /// A sign override attribute, used to define which attributes of an
     /// object in a sign template have been changed.
     /// </summary>
-    public class SignOverrideAtttribute<T> : ISignOverrideAttribute
+    public class SignOverrideAttribute<T> : ISignOverrideAttribute
     {
         /// <summary>
         /// The index of the attribute in the attribute list of the object.

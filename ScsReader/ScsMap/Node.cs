@@ -117,9 +117,8 @@ namespace ScsReader.ScsMap
                 r.ReadInt32() / positionFactor
             );
  
-
             /* TODO: Figure out why I needed this code to begin with,
-             * if I needed it at all
+             * if I ever needed it at all
             // Sector
             // not all nodes in a sector file are actually in that sector,
             // so we'll check for each of them

@@ -9,7 +9,7 @@ namespace ScsReader.ScsMap
     /// <summary>
     /// Represents one railing model of a road.
     /// </summary>
-    public struct RoadRailing
+    public struct Railing
     {
         /// <summary>
         /// The name of the model.

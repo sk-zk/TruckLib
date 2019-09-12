@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScsReader.ScsMap;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,42 @@ namespace ScsReader
 {
     public static class MiscExtensions
     {
+        /// <summary>
+        /// Clones an object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T Clone<T>(this T obj) where T : IBinarySerializable, new()
+        {
+            T cloned = new T();
+            using (var stream = new MemoryStream())
+            using (var writer = new BinaryWriter(stream))
+            {
+                obj.WriteToStream(writer);
+                if (obj is IDataPart) (obj as IDataPart).WriteDataPart(writer);
+                stream.Position = 0;
+
+                using (var reader = new BinaryReader(stream))
+                {
+                    cloned.ReadFromStream(reader);
+                    if (obj is IDataPart) (obj as IDataPart).ReadDataPart(reader);
+                }
+            }
+
+            // don't allow duplicate uids
+            if(cloned is IMapObject mapObject)
+            {
+                mapObject.Uid = Utils.GenerateUuid();
+            }
+
+            // TODO: also deepclone certain referenced
+            // items such as nodes
+            // TODO: then add the cloned item to the map
+          
+            return cloned;
+        }
+
         /// <summary>
         /// Converts a quaternion to Euler angles.
         /// </summary>

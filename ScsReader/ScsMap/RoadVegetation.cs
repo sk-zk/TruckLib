@@ -37,11 +37,6 @@ namespace ScsReader.ScsMap
         /// </summary>
         public byte HighPolyDistance { get; set; } = 50;
 
-        public RoadVegetation Clone()
-        {
-            return (RoadVegetation)MemberwiseClone();
-        }
-
         private const float densityFactor = 10f;
         private const float fromToFactor = 10f;
 

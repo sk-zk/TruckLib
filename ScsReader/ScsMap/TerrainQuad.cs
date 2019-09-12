@@ -53,11 +53,6 @@ namespace ScsReader.ScsMap
         /// </summary>
         public QuadVegetation Vegetation;
 
-        public TerrainQuad Clone()
-        {
-            return (TerrainQuad)MemberwiseClone();
-        }
-
         public void ReadFromStream(BinaryReader r)
         {
             const int n1Mask = 0x0F;

@@ -620,8 +620,8 @@ namespace ScsReader.ScsMap
             w.Write((int)(Right.RoadHeightOffset * heightOffsetFactor));
             w.Write((int)(Left.RoadHeightOffset * heightOffsetFactor));
 
-            w.Write(Node.Uid);
-            w.Write(ForwardNode.Uid);
+            w.Write(Node?.Uid ?? 0UL);
+            w.Write(ForwardNode?.Uid ?? 0UL);
 
             w.Write(Length);
         }

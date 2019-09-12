@@ -64,19 +64,6 @@ namespace ScsReader.ScsMap
         /// </summary>
         public List<VertexData> Normals { get; set; } = new List<VertexData>();
 
-        public TerrainQuadData Clone()
-        {
-            var q = new TerrainQuadData();
-            q.Rows = Rows;
-            q.Cols = Cols;
-            q.BrushMaterials = new List<Token>(BrushMaterials);
-            q.BrushColors = new List<Color>(BrushColors);
-            q.Quads = new List<TerrainQuad>(Quads.Select(x => x.Clone()));
-            q.Offsets = new List<VertexData>(Offsets);
-            q.Normals = new List<VertexData>(Normals);
-            return q;
-        }
-
         public void ReadFromStream(BinaryReader r)
         {
             // the uids of the material brushes used on this terrain.

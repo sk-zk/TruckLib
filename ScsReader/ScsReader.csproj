@@ -70,7 +70,7 @@
     <Compile Include="ScsMap\Curve.cs" />
     <Compile Include="ScsMap\FuelPump.cs" />
     <Compile Include="ScsMap\Garage.cs" />
-    <Compile Include="IMapSerializable.cs" />
+    <Compile Include="IBinarySerializable.cs" />
     <Compile Include="ScsMap\IItemReferences.cs" />
     <Compile Include="ScsMap\IMapObject.cs" />
     <Compile Include="ScsMap\IItemContainer.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -233,7 +234,7 @@ namespace ScsReader.ScsMap
                 }
                 else if(item.DefaultItemFile != file)
                 {
-                    DebugOutput.WriteLine($"{itemType} in {file}?");
+                    Trace.WriteLine($"{itemType} in {file}?");
                 }
 
                 MapItems.Add(item.Uid, item);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -95,17 +96,17 @@ namespace ScsReader.ScsMap
         /// <param name="mbdPath">The mbd file of the map.</param>
         public static Map Open(string mbdPath)
         {
-            DebugOutput.WriteLine("Loading map ...");
+            Trace.WriteLine("Loading map " + mbdPath);
             var name = Path.GetFileNameWithoutExtension(mbdPath);
             var mapDirectory = Directory.GetParent(mbdPath).FullName;
             var sectorDirectory = Path.Combine(mapDirectory, name);
 
             var map = new Map(name);
             map.ReadMbd(mbdPath);
-            DebugOutput.WriteLine("Parsing sectors ...");
+            Trace.WriteLine("Parsing sectors");
             map.ReadSectors(sectorDirectory);
 
-            DebugOutput.WriteLine("Updating references ...");
+            Trace.WriteLine("Updating references");
             map.UpdateReferences();
 
             return map;
@@ -194,7 +195,7 @@ namespace ScsReader.ScsMap
             var allItems = GetAllItems();
 
             // first of all, find map items referenced in nodes
-            DebugOutput.WriteLine("Updating item references in nodes");
+            Trace.WriteLine("Updating item references in nodes");
             foreach(var kvp in allNodes)
             {
                 kvp.Value.UpdateItemReferences(allItems);
@@ -202,7 +203,7 @@ namespace ScsReader.ScsMap
 
             // then find nodes referenced in map items
             // and map items referenced in map items
-            DebugOutput.WriteLine("Updating node & item references in items");
+            Trace.WriteLine("Updating node & item references in items");
             foreach (var item in allItems)
             {
                 item.Value.UpdateNodeReferences(allNodes);
@@ -328,7 +329,7 @@ namespace ScsReader.ScsMap
             var sectorList = Sectors.ToList();
             foreach (var sectorKvp in sectorList)
             {
-                DebugOutput.WriteLine($"Reading sector {sectorKvp.Value.ToString()}");
+                Trace.WriteLine($"Reading sector {sectorKvp.Value.ToString()}");
                 sectorKvp.Value.Read();
             }
         }

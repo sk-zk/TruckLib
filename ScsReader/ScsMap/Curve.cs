@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,12 @@ namespace ScsReader.ScsMap
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
+
+        public new ushort ViewDistance
+        {
+            get => base.ViewDistance;
+            set => base.ViewDistance = value;
+        }
 
         public Token Model { get; set; }
 
@@ -123,6 +130,56 @@ namespace ScsReader.ScsMap
         {
             get => Flags[22];
             set => Flags[22] = value;
+        }
+
+        public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)
+        {
+            var curve = Add<Curve>(map, backwardPos, forwardPos);
+
+            curve.InitFromAddOrAppend(backwardPos, forwardPos, model);
+
+            return curve;
+        }
+
+        public Curve Append(Vector3 position, bool cloneSettings = true)
+        {
+            if (!cloneSettings)
+            {
+                return Append(position, Model);
+            }
+
+            var b = Append(position, Model);
+            CopySettingsTo(b);
+            return b;
+        }
+
+        public Curve Append(Vector3 position, Token model)
+        {
+            var curve = Append<Curve>(position);
+            curve.InitFromAddOrAppend(ForwardNode.Position, position, model);
+            return curve;
+        }
+
+        private void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token model)
+        {
+            Model = model;
+            Length = Vector3.Distance(backwardPos, forwardPos);
+        }
+
+        private void CopySettingsTo(Curve c)
+        {
+            c.Flags = Flags;
+            c.FirstPart = FirstPart;
+            c.CenterPart = CenterPart;
+            c.LastPart = LastPart;
+            c.Look = Look;
+            c.TerrainMaterial = TerrainMaterial;
+            c.TerrainColor = TerrainColor;
+            c.ViewDistance = ViewDistance;
+            c.RandomSeed = RandomSeed;
+            c.Stretch = Stretch;
+            c.FixedStep = FixedStep;
+            c.HeightOffsets = new List<float>(HeightOffsets);
         }
 
         public override void ReadFromStream(BinaryReader r)

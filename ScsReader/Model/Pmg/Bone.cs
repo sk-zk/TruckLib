@@ -26,6 +26,11 @@ namespace ScsReader.Model.Pmg
 
         public int Parent { get; set; } = -1;
 
+        public override string ToString()
+        {
+            return Name.String;
+        }
+
         public void ReadFromStream(BinaryReader r)
         {
             Name = r.ReadToken();

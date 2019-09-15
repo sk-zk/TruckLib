@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ScsReader.Model.Ppd
 {
+    /// <summary>
+    /// Prism Prefab Descriptor.
+    /// </summary>
     public class PpdFile : IBinarySerializable
     {
         private uint Version = 0x16;

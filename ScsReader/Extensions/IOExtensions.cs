@@ -14,6 +14,16 @@ namespace ScsReader
         private static readonly Encoding StringEncoding = Encoding.UTF8;
 
         /// <summary>
+        /// Reads a Vector2.
+        /// </summary>
+        /// <param name="r"></param>
+        /// <returns></returns>
+        public static Vector2 ReadVector2(this BinaryReader r)
+        {
+            return new Vector2(r.ReadSingle(), r.ReadSingle());
+        }
+
+        /// <summary>
         /// Reads a Vector3.
         /// </summary>
         /// <param name="r"></param>
@@ -120,6 +130,8 @@ namespace ScsReader
         public static List<T> ReadObjectList<T>(this BinaryReader r, uint count) where T : new()
         {
             var list = new List<T>();
+            if (count == 0) return list;
+
             if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // scsreader objects
             {
                 for (int i = 0; i < count; i++)
@@ -139,6 +151,15 @@ namespace ScsReader
                     list.Add(Tval);
                 }
             }
+            else if (typeof(T) == typeof(Vector2))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var vector = r.ReadVector2();
+                    var Tvector = (T)Convert.ChangeType(vector, typeof(T));
+                    list.Add(Tvector);
+                }
+            }
             else if (typeof(T) == typeof(Vector3))
             {
                 for (int i = 0; i < count; i++)
@@ -154,6 +175,17 @@ namespace ScsReader
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Writes a Vector2.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="vector"></param>
+        public static void Write(this BinaryWriter w, Vector2 vector)
+        {
+            w.Write(vector.X);
+            w.Write(vector.Y);
         }
 
         /// <summary>
@@ -261,7 +293,8 @@ namespace ScsReader
                     WriteListValue(w, value);
                 }
             }
-            else if(typeof(T) == typeof(Vector3))
+
+            else if(typeof(T) == typeof(Vector2) || typeof(T) == typeof(Vector3))
             {
                 foreach (var value in list)
                 {
@@ -324,6 +357,10 @@ namespace ScsReader
             else if (value is ulong _ulong)
             {
                 w.Write(_ulong);
+            }
+            else if (value is Vector2 _vec2)
+            {
+                w.Write(_vec2);
             }
             else if(value is Vector3 _vec3)
             {

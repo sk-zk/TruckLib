@@ -29,11 +29,21 @@ namespace ScsReader.Model.Pmg
 
         public AxisAlignedBox BoundingBox { get; set; }
 
+        private string[] strings;
+
         public void Open(string path)
         {
             using (var r = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
                 ReadFromStream(r);
+            }
+        }
+
+        public void Save(string path)
+        {
+            using(var w = new BinaryWriter(new FileStream(path, FileMode.Create)))
+            {
+                WriteToStream(w);
             }
         }
 
@@ -83,15 +93,154 @@ namespace ScsReader.Model.Pmg
 
             // TODO: deal with these.
             // referenced by Locator.HookupOffset I think??
-            r.BaseStream.Position = stringPoolOffset;
-            var stringsBytes = r.ReadBytes((int)stringPoolSize);
-            var strings = Encoding.ASCII.GetString(stringsBytes).Split(
-                new char[] { '\0' }, StringSplitOptions.None);
+            if (stringPoolSize > 0)
+            {
+                r.BaseStream.Position = stringPoolOffset;
+                var stringsBytes = r.ReadBytes((int)stringPoolSize);
+                strings = Encoding.ASCII.GetString(stringsBytes).Split(
+                    new char[] { '\0' }, StringSplitOptions.None);
+            }
         }
 
         public void WriteToStream(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(Version);
+
+            w.Write(Encoding.ASCII.GetBytes(Signature).Reverse().ToArray());
+
+            w.Write(Pieces.Count);
+            w.Write(Parts.Count);
+            w.Write(Skeleton.Count);
+            w.Write(0); // TODO: What is "weight width"?
+            w.Write(Locators.Count);
+            w.Write(Skeleton.Count == 0 ? 0UL : 0UL); // TODO: How is the "skeleton hash" calculated?
+
+            w.Write(BoundingBoxCenter);
+            w.Write(BoundingBoxDiagonalSize);
+            BoundingBox.WriteToStream(w);
+
+            // from this point onward we need to deal with offset vals
+            // which pretty much breaks my workflow but I can't be bothered
+            // to do it properly
+
+            // start from the bottom with the triangles,
+            // write everything to byte[]s, get the offsets,
+            // then output everything in the correct order
+
+            var offsetSectionLength = sizeof(int) * 10;
+
+            byte[] skeleton = ListAsByteArray(Skeleton);
+            byte[] parts = ListAsByteArray(Parts);
+            byte[] locators = ListAsByteArray(Locators);
+
+            // index pool
+            byte[] piecesTris; 
+            using (var ms = new MemoryStream())
+            using (var w2 = new BinaryWriter(ms))
+            {
+                foreach (var piece in Pieces)
+                {
+                    piece.WriteTriangles(w2);
+                }
+                piecesTris = ms.ToArray();
+            }
+
+            // vert pool
+            byte[] piecesVerts;
+            using (var ms = new MemoryStream())
+            using (var w2 = new BinaryWriter(ms))
+            {
+                foreach (var piece in Pieces)
+                {
+                    piece.WriteVertPart(w2);
+                }
+                piecesVerts = ms.ToArray();
+            }
+
+            // string pool
+            byte[] stringPool = new byte[0];
+            if(strings != null && strings.Length > 0)
+            {
+                List<byte> bytes = new List<byte>(); 
+                foreach (var str in strings)
+                {
+                    bytes.AddRange(Encoding.ASCII.GetBytes(str + '\0'));
+                }
+                stringPool = bytes.ToArray();
+            }
+
+            // pieces header
+            // first, get the byte length of the pieces segment
+            // because we need it to calculate the vert*Offset values.
+            var skeletonOffset = (int)w.BaseStream.Position + offsetSectionLength;
+            var partsOffset = skeletonOffset + skeleton.Length;
+            var locatorsOffset = partsOffset + parts.Length;
+            var pieceHeaderOffset = locatorsOffset + locators.Length;
+            var stringStart = (int)(pieceHeaderOffset + GetLengthOfPieceIndex());
+            var vertStart = stringStart + stringPool.Length;
+            var trisStart = vertStart + piecesVerts.Length;
+
+            // then actually get the bytes
+            byte[] piecesHeader;
+            using (var ms = new MemoryStream())
+            using (var w2 = new BinaryWriter(ms))
+            {
+                foreach (var piece in Pieces)
+                {
+                    piece.WriteHeaderPart(w2, vertStart, trisStart);
+                }
+                piecesHeader = ms.ToArray();
+            }
+
+            // and now we can finally write everything
+            w.Write(skeletonOffset);
+            w.Write(partsOffset);
+            w.Write(locatorsOffset);
+            w.Write(pieceHeaderOffset);
+
+            w.Write(stringStart);
+            w.Write(strings is null ? 0 : strings.Length);
+            w.Write(vertStart);
+            w.Write(piecesVerts.Length);
+            w.Write(trisStart);
+            w.Write(piecesTris.Length);
+
+            w.Write(skeleton);
+            w.Write(parts);
+            w.Write(locators);
+            w.Write(piecesHeader);
+
+            w.Write(stringPool);
+            w.Write(piecesVerts);
+            w.Write(piecesTris);
+        }
+
+        private long GetLengthOfPieceIndex()
+        {
+            long length = 0;
+            using (var ms = new MemoryStream())
+            using (var w2 = new BinaryWriter(ms))
+            {
+                foreach (var piece in Pieces)
+                {
+                    piece.WriteHeaderPart(w2, 0, 0);
+                }
+
+                length += ms.Length;
+            }
+            return length;
+        }
+
+        private byte[] ListAsByteArray<T>(List<T> list)
+        {
+            byte[] array;
+            using (var ms = new MemoryStream())
+            using (var w2 = new BinaryWriter(ms))
+            {
+                w2.WriteObjectList(list);
+                array = ms.ToArray();
+            }
+            return array;
         }
     }
 }

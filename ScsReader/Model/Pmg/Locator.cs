@@ -29,7 +29,11 @@ namespace ScsReader.Model.Pmg
 
         public void WriteToStream(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(Name);
+            w.Write(Position);
+            w.Write(Scale);
+            w.Write(Rotation);
+            w.Write(HookupOffset);
         }
     }
 }

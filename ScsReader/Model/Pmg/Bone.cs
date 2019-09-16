@@ -35,20 +35,8 @@ namespace ScsReader.Model.Pmg
         {
             Name = r.ReadToken();
 
-            // TODO
-            Transformation = new Matrix4x4(
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()
-                );
-
-            TransformationReserved = new Matrix4x4(
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()
-                );
+            Transformation = r.ReadMatrix4x4();
+            TransformationReserved = r.ReadMatrix4x4();
 
             Stretch = r.ReadQuaternion();
             Rotation = r.ReadQuaternion();
@@ -61,7 +49,18 @@ namespace ScsReader.Model.Pmg
 
         public void WriteToStream(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(Name);
+
+            w.Write(Transformation);
+            w.Write(TransformationReserved);
+
+            w.Write(Stretch);
+            w.Write(Rotation);
+            w.Write(Translation);
+            w.Write(Scale);
+            w.Write(SignOfDeterminantOfMatrix);
+
+            w.Write(Parent);
         }
 
     }

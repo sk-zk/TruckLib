@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 
@@ -19,6 +20,23 @@ namespace ScsReader.Model.Pmg
 
         public AxisAlignedBox BoundingBox { get; set; }
 
+        public int TextureCoordinateWidth { get; set; } = 3;
+
+        public uint Material { get; set; }
+
+        public bool UseTangents { get; set; } = false;
+
+        public bool UseSecondaryColor { get; set; } = false;
+
+        public bool UseTextureCoordinates { get; set; } = false;
+
+        public bool UseBoneIndexes { get; set; } = false;
+
+        public bool UseBoneWeights { get; set; } = false;
+
+        private const int Unused = -1;
+
+
         /// <summary>
         /// ! BE ADVISED ! <br />
         /// I usually prefer deserialization to be forward-only,
@@ -30,15 +48,15 @@ namespace ScsReader.Model.Pmg
         {
             var edges = r.ReadUInt32();
             var verts = r.ReadUInt32();
-            var texCoordMask = r.ReadUInt32();
-            var texCoordWidth = r.ReadInt32();
-            var material = r.ReadUInt32();
+            var texCoordMask = r.ReadUInt32(); // what is this even used for?
+            TextureCoordinateWidth = r.ReadInt32();
+            Material = r.ReadUInt32();
             BoundingBoxCenter = r.ReadVector3();
             BoundingBoxDiagonalSize = r.ReadSingle();
-            var BoundingBox = new AxisAlignedBox();
+            BoundingBox = new AxisAlignedBox();
             BoundingBox.ReadFromStream(r);
 
-            var skeletonOffset = r.ReadInt32();
+            var skeletonOffset = r.ReadInt32(); // TODO: What is this?
             var vertPositionOffset = r.ReadInt32();
             var vertNormalOffset = r.ReadInt32();
             var vertTexcoordOffset = r.ReadInt32();
@@ -49,6 +67,12 @@ namespace ScsReader.Model.Pmg
             var vertBoneWeightOffset = r.ReadInt32();
             var indexOffset = r.ReadInt32();
 
+            UseTangents = (vertTangentOffset != Unused);
+            UseSecondaryColor = (vertColor2Offset != Unused);
+            UseTextureCoordinates = (vertTexcoordOffset != Unused);
+            UseBoneIndexes = (vertBoneIndexOffset != Unused);
+            UseBoneWeights = (vertBoneWeightOffset != Unused);
+
             var prevStreamPosition = r.BaseStream.Position;
             r.BaseStream.Position = vertPositionOffset;
 
@@ -57,24 +81,25 @@ namespace ScsReader.Model.Pmg
                 var vertex = new Vertex();
                 vertex.Position = r.ReadVector3();
                 vertex.Normal = r.ReadVector3();
-                if (vertTangentOffset != -1)
+
+                if (vertTangentOffset != Unused)
                 {
                     vertex.Tangent = r.ReadVector4();
                 }
                 vertex.Color = r.ReadColor();
-                if (vertColor2Offset != -1)
+                if (vertColor2Offset != Unused)
                 {
                     vertex.SecondaryColor = r.ReadColor();
                 }
-                if (vertTexcoordOffset != -1)
+                if (vertTexcoordOffset != Unused)
                 {
-                    vertex.TextureCoordinates = r.ReadObjectList<Vector2>((uint)texCoordWidth);
+                    vertex.TextureCoordinates = r.ReadObjectList<Vector2>((uint)TextureCoordinateWidth);
                 }
-                if (vertBoneIndexOffset != -1)
+                if (vertBoneIndexOffset != Unused)
                 {
                     vertex.BoneIndexes = r.ReadBytes(4);
                 }
-                if (vertBoneWeightOffset != -1)
+                if (vertBoneWeightOffset != Unused)
                 {
                     vertex.BoneWeights = r.ReadBytes(4);
                 }
@@ -90,18 +115,152 @@ namespace ScsReader.Model.Pmg
                 Triangles.Add(t);
             }
 
-            Console.WriteLine(r.BaseStream.Position);
             r.BaseStream.Position = prevStreamPosition;
         }
 
-        public void ReadSecondPart(BinaryReader r)
+        public void WriteHeaderPart(BinaryWriter w, int vertStart, int trisStart)
         {
+            w.Write(Triangles.Count * 3); // Edge count
+            w.Write(Vertices.Count);
 
+            uint texCoordMask;
+            texCoordMask = GetTexCoordMask();
+            w.Write(texCoordMask);
+            w.Write(TextureCoordinateWidth);
+
+            w.Write(Material);
+
+            w.Write(BoundingBoxCenter);
+            w.Write(BoundingBoxDiagonalSize);
+            BoundingBox.WriteToStream(w);
+
+            w.Write(0); // TODO: Skeleton offset
+
+            // more fun with offsets
+            int offset = vertStart;
+
+            var vertPositionOffset = offset;
+            offset += 3 * sizeof(float);
+
+            var vertNormalOffset = offset;
+            offset += 3 * sizeof(float);
+
+            int vertTangentOffset;
+            if (UseTangents)
+            {
+                vertTangentOffset = offset;
+                offset += 4 * sizeof(float);
+            }
+            else
+            {
+                vertTangentOffset = Unused;
+            }
+
+            var vertColorOffset = offset;
+            offset += sizeof(uint);
+
+            int vertColor2Offset;
+            if (UseSecondaryColor)
+            {
+                vertColor2Offset = offset;
+                offset += sizeof(uint);
+            }
+            else
+            {
+                vertColor2Offset = Unused;
+            }
+
+            int vertTexcoordOffset;
+            if (UseTextureCoordinates)
+            {
+                vertTexcoordOffset = offset;
+                offset += 2 * sizeof(float) * TextureCoordinateWidth;
+            }
+            else
+            {
+                vertTexcoordOffset = Unused;
+            }
+
+            int vertBoneIndexOffset;
+            if (UseBoneIndexes)
+            {
+                vertBoneIndexOffset = offset;
+                offset += sizeof(byte) * 4;
+            }
+            else
+            {
+                vertBoneIndexOffset = Unused;
+            }
+
+            int vertBoneWeightOffset;
+            if (UseBoneIndexes)
+            {
+                vertBoneWeightOffset = offset;
+                offset += sizeof(byte) * 4;
+            }
+            else
+            {
+                vertBoneWeightOffset = Unused;
+            }
+
+            w.Write(vertPositionOffset);
+            w.Write(vertNormalOffset);
+            w.Write(vertTexcoordOffset);
+            w.Write(vertColorOffset);
+            w.Write(vertColor2Offset);
+            w.Write(vertTangentOffset);
+            w.Write(vertBoneIndexOffset);
+            w.Write(vertBoneWeightOffset);
+
+            w.Write(trisStart);
+        }
+
+        private uint GetTexCoordMask()
+        {
+            uint texCoordMask;
+            switch (TextureCoordinateWidth)
+            {
+                case 1:
+                    texCoordMask = 0xFFFFFFF0;
+                    break;
+                case 2:
+                    texCoordMask = 0xFFFFFF10;
+                    break;
+                case 3:
+                    texCoordMask = 0xFFFFF210;
+                    break;
+                default:
+                    throw new NotImplementedException("Turns out that a tex coord width of "
+                    + $"{TextureCoordinateWidth} exists and that I need to reverse engineer this "
+                    + "properly after all.");
+            }
+
+            return texCoordMask;
+        }
+
+        public void WriteVertPart(BinaryWriter w)
+        {
+            foreach (var vert in Vertices)
+            {
+                w.Write(vert.Position);
+                w.Write(vert.Normal);
+                if (UseTangents) w.Write(vert.Tangent.Value);
+                w.Write(vert.Color);
+                if (UseSecondaryColor) w.Write(vert.SecondaryColor.Value);
+                if (UseTextureCoordinates) w.WriteObjectList(vert.TextureCoordinates.Take(TextureCoordinateWidth).ToList());
+                if (UseBoneIndexes) w.Write(vert.BoneIndexes);
+                if (UseBoneWeights) w.Write(vert.BoneWeights);
+            }
+        }
+
+        public void WriteTriangles(BinaryWriter w)
+        {
+            w.WriteObjectList(Triangles);
         }
 
         public void WriteToStream(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Use the other Write* methods instead; see PmgFile");
         }
 
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScsReader.Sii
+namespace ScsReader
 {
     internal static class StringUtils
     {
@@ -89,6 +89,33 @@ namespace ScsReader.Sii
                 if (!isHex) return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Converts a byte array containing null-terminated strings
+        /// to a List&lt;string&gt;.
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="encoding">Encoding to use. Defaults to ASCII.</param>
+        /// <returns></returns>
+        public static List<string> CStringBytesToList(byte[] bytes, 
+            Encoding encoding = null)
+        {
+            if (encoding is null) encoding = Encoding.ASCII;
+
+            var strings = new List<string>();
+            int lastNull = -1;
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                if (bytes[i] == 0)
+                {
+                    strings.Add(encoding.GetString(bytes,
+                        lastNull + 1,
+                        i - lastNull - 1));
+                    lastNull = i;
+                }
+            }
+            return strings;
         }
     }
 }

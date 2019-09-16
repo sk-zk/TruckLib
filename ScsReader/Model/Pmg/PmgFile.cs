@@ -29,7 +29,7 @@ namespace ScsReader.Model.Pmg
 
         public AxisAlignedBox BoundingBox { get; set; }
 
-        private string[] strings;
+        private List<string> strings = new List<string>();
 
         public void Open(string path)
         {
@@ -97,8 +97,7 @@ namespace ScsReader.Model.Pmg
             {
                 r.BaseStream.Position = stringPoolOffset;
                 var stringsBytes = r.ReadBytes((int)stringPoolSize);
-                strings = Encoding.ASCII.GetString(stringsBytes).Split(
-                    new char[] { '\0' }, StringSplitOptions.None);
+                strings = StringUtils.CStringBytesToList(stringsBytes);
             }
         }
 
@@ -159,7 +158,7 @@ namespace ScsReader.Model.Pmg
 
             // string pool
             byte[] stringPool = new byte[0];
-            if(strings != null && strings.Length > 0)
+            if(strings != null && strings.Count > 0)
             {
                 List<byte> bytes = new List<byte>(); 
                 foreach (var str in strings)
@@ -203,7 +202,7 @@ namespace ScsReader.Model.Pmg
             w.Write(pieceHeaderOffset);
 
             w.Write(stringStart);
-            w.Write(strings is null ? 0 : strings.Length);
+            w.Write(strings is null ? 0 : stringPool.Length);
             w.Write(vertStart);
             w.Write(piecesVerts.Sum(x => x.Length));
             w.Write(trisStart);

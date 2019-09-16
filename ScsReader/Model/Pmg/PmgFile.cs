@@ -134,27 +134,27 @@ namespace ScsReader.Model.Pmg
             byte[] locators = ListAsByteArray(Locators);
 
             // index pool
-            byte[] piecesTris; 
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            var piecesTris = new List<byte[]>();
+            foreach (var piece in Pieces)
             {
-                foreach (var piece in Pieces)
+                using (var ms = new MemoryStream())
+                using (var w2 = new BinaryWriter(ms))
                 {
                     piece.WriteTriangles(w2);
+                    piecesTris.Add(ms.ToArray());
                 }
-                piecesTris = ms.ToArray();
             }
 
             // vert pool
-            byte[] piecesVerts;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            var piecesVerts = new List<byte[]>();
+            foreach (var piece in Pieces)
             {
-                foreach (var piece in Pieces)
+                using (var ms = new MemoryStream())
+                using (var w2 = new BinaryWriter(ms))
                 {
                     piece.WriteVertPart(w2);
+                    piecesVerts.Add(ms.ToArray());
                 }
-                piecesVerts = ms.ToArray();
             }
 
             // string pool
@@ -178,16 +178,20 @@ namespace ScsReader.Model.Pmg
             var pieceHeaderOffset = locatorsOffset + locators.Length;
             var stringStart = (int)(pieceHeaderOffset + GetLengthOfPieceIndex());
             var vertStart = stringStart + stringPool.Length;
-            var trisStart = vertStart + piecesVerts.Length;
+            var trisStart = vertStart + piecesVerts.Sum(x => x.Length);
 
             // then actually get the bytes
             byte[] piecesHeader;
             using (var ms = new MemoryStream())
             using (var w2 = new BinaryWriter(ms))
             {
-                foreach (var piece in Pieces)
+                var currVert = vertStart;
+                var currTris = trisStart;
+                for (int i = 0; i < Pieces.Count; i++)
                 {
-                    piece.WriteHeaderPart(w2, vertStart, trisStart);
+                    Pieces[i].WriteHeaderPart(w2, currVert, currTris);
+                    currVert += piecesVerts[i].Length;
+                    currTris += piecesTris[i].Length;
                 }
                 piecesHeader = ms.ToArray();
             }
@@ -201,9 +205,9 @@ namespace ScsReader.Model.Pmg
             w.Write(stringStart);
             w.Write(strings is null ? 0 : strings.Length);
             w.Write(vertStart);
-            w.Write(piecesVerts.Length);
+            w.Write(piecesVerts.Sum(x => x.Length));
             w.Write(trisStart);
-            w.Write(piecesTris.Length);
+            w.Write(piecesTris.Sum(x => x.Length));
 
             w.Write(skeleton);
             w.Write(parts);
@@ -211,8 +215,14 @@ namespace ScsReader.Model.Pmg
             w.Write(piecesHeader);
 
             w.Write(stringPool);
-            w.Write(piecesVerts);
-            w.Write(piecesTris);
+            foreach (var vert in piecesVerts)
+            {
+                w.Write(vert);
+            }
+            foreach (var tri in piecesTris)
+            {
+                w.Write(tri);
+            }
         }
 
         private long GetLengthOfPieceIndex()

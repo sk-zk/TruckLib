@@ -146,9 +146,9 @@ namespace ScsReader
             {
                 for (int i = 0; i < count; i++)
                 {
-                    var obj = new T();
-                    (obj as IBinarySerializable).ReadFromStream(r);
-                    list.Add(obj);
+                    var obj = new T() as IBinarySerializable;
+                    obj.ReadFromStream(r);
+                    list.Add((T)obj);
                 }
             }
             else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.

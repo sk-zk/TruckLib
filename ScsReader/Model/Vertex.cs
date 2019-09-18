@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Text;
 
-namespace ScsReader.Model.Pmg
+namespace ScsReader.Model
 {
     public class Vertex
     {

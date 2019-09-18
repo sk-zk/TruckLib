@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace ScsReader.Model.Pmg
+namespace ScsReader.Model
 {
     public class Piece : IBinarySerializable
     {
@@ -36,6 +36,8 @@ namespace ScsReader.Model.Pmg
 
         private const int Unused = -1;
 
+        private int skeletonOffset_temp;
+
 
         /// <summary>
         /// ! BE ADVISED ! <br />
@@ -56,7 +58,7 @@ namespace ScsReader.Model.Pmg
             BoundingBox = new AxisAlignedBox();
             BoundingBox.ReadFromStream(r);
 
-            var skeletonOffset = r.ReadInt32(); // TODO: What is this?
+            skeletonOffset_temp = r.ReadInt32(); // TODO: What is this?
             var vertPositionOffset = r.ReadInt32();
             var vertNormalOffset = r.ReadInt32();
             var vertTexcoordOffset = r.ReadInt32();
@@ -134,15 +136,15 @@ namespace ScsReader.Model.Pmg
             w.Write(BoundingBoxDiagonalSize);
             BoundingBox.WriteToStream(w);
 
-            w.Write(0); // TODO: Skeleton offset
+            w.Write(skeletonOffset_temp); // TODO: Skeleton offset
 
             // more fun with offsets
             int offset = vertStart;
 
-            var vertPositionOffset = offset;
+            int vertPositionOffset = offset;
             offset += 3 * sizeof(float);
 
-            var vertNormalOffset = offset;
+            int vertNormalOffset = offset;
             offset += 3 * sizeof(float);
 
             int vertTangentOffset;
@@ -156,7 +158,7 @@ namespace ScsReader.Model.Pmg
                 vertTangentOffset = Unused;
             }
 
-            var vertColorOffset = offset;
+            int vertColorOffset = offset;
             offset += sizeof(uint);
 
             int vertColor2Offset;
@@ -193,7 +195,7 @@ namespace ScsReader.Model.Pmg
             }
 
             int vertBoneWeightOffset;
-            if (UseBoneIndexes)
+            if (UseBoneWeights)
             {
                 vertBoneWeightOffset = offset;
                 offset += sizeof(byte) * 4;

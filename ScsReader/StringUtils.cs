@@ -98,8 +98,7 @@ namespace ScsReader
         /// <param name="bytes"></param>
         /// <param name="encoding">Encoding to use. Defaults to ASCII.</param>
         /// <returns></returns>
-        public static List<string> CStringBytesToList(byte[] bytes, 
-            Encoding encoding = null)
+        public static List<string> CStringBytesToList(byte[] bytes, Encoding encoding = null)
         {
             if (encoding is null) encoding = Encoding.ASCII;
 
@@ -116,6 +115,18 @@ namespace ScsReader
                 }
             }
             return strings;
+        }
+
+        public static List<byte[]> ListToCStringByteList(List<string> strings, Encoding encoding = null)
+        {
+            if (encoding is null) encoding = Encoding.ASCII;
+
+            List<byte[]> bytes = new List<byte[]>();
+            foreach (var str in strings)
+            {
+                bytes.Add(encoding.GetBytes(str + '\0'));
+            }
+            return bytes;
         }
     }
 }

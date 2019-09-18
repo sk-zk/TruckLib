@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ScsReader.Model.Pmd
+namespace ScsReader.Model
 {
     public class PartAttribute
     {

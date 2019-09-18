@@ -4,7 +4,7 @@ using System.IO;
 using System.Numerics;
 using System.Text;
 
-namespace ScsReader.Model.Pmg
+namespace ScsReader.Model
 {
     public class Locator : IBinarySerializable
     {
@@ -17,6 +17,11 @@ namespace ScsReader.Model.Pmg
         public Quaternion Rotation { get; set; }
 
         public int HookupOffset { get; set; }
+
+        public override string ToString()
+        {
+            return Name.String;
+        }
 
         public void ReadFromStream(BinaryReader r)
         {

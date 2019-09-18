@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace ScsReader.Model.Pmg
+namespace ScsReader.Model
 {
     public struct Triangle : IBinarySerializable
     {

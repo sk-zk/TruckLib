@@ -4,7 +4,7 @@ using System.IO;
 using System.Numerics;
 using System.Text;
 
-namespace ScsReader.Model.Pmg
+namespace ScsReader.Model
 {
     /// <summary>
     /// Axis-aligned bounding box (AABB).

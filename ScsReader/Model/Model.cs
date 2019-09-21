@@ -8,6 +8,7 @@ using System.Text;
 
 namespace ScsReader.Model
 {
+    // hi r/badcode
 
     public class Model
     {
@@ -242,69 +243,54 @@ namespace ScsReader.Model
             w.Write(Parts.Count);
             w.Write(Parts.Count); // attribs count
 
-            byte[] lookNames;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            byte[] lookNames = WriteToByteArray((_w) =>
             {
                 foreach (var look in Looks)
                 {
-                    w2.Write(look.Name);
+                    _w.Write(look.Name);
                 }
-                lookNames = ms.ToArray();
-            }
+            });
 
-            byte[] variantNames;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            byte[] variantNames = WriteToByteArray((_w) =>
             {
                 foreach (var variant in Variants)
                 {
-                    w2.Write(variant.Name);
+                    _w.Write(variant.Name);
                 }
-                variantNames = ms.ToArray();
-            }
+            });
 
             // placeholder code
-            byte[] partAttribs;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            byte[] partAttribs = WriteToByteArray((_w) =>
             {
                 for (int i = 0; i < Parts.Count; i++)
                 {
-                    w2.Write(i);
-                    w2.Write(i + 1);
+                    _w.Write(i);
+                    _w.Write(i + 1);
                 }
-                partAttribs = ms.ToArray();
-            }
+            });
 
-            byte[] attribsHeader;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            byte[] attribsHeader = WriteToByteArray((_w) =>
             {
                 var offset = 0;
-                 foreach (var attrib in Variants[0].Attributes)
-                 {
-                        w2.Write(attrib.Tag);
-                        w2.Write(attrib.Type);
-                        w2.Write(offset);
-                        offset += 4;
-                 }
-                attribsHeader = ms.ToArray();
-            }
-
-            byte[] attribsValues;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
-            {
-                foreach(var variant in Variants)
+                foreach (var attrib in Variants[0].Attributes)
                 {
-                    foreach(var attrib in variant.Attributes)
+                    _w.Write(attrib.Tag);
+                    _w.Write(attrib.Type);
+                    _w.Write(offset);
+                    offset += 4;
+                }
+            });
+
+            byte[] attribsValues = WriteToByteArray((_w) =>
+            {
+                foreach (var variant in Variants)
+                {
+                    foreach (var attrib in variant.Attributes)
                     {
-                        w2.Write(attrib.Value);
+                        _w.Write(attrib.Value);
                     }
                 }
-                attribsValues = ms.ToArray();
-            }
+            });
 
             // materials offsets
             var materialOffsetsLength = Materials.Count * sizeof(int);
@@ -384,20 +370,17 @@ namespace ScsReader.Model
 
             byte[] skeleton = ListAsByteArray(Skeleton);
 
-            byte[] parts;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            byte[] parts = WriteToByteArray((_w) =>
             {
                 foreach (var part in Parts)
                 {
-                    w2.Write(part.Name);
-                    w2.Write(part.PieceCount);
-                    w2.Write(part.PiecesIndex);
-                    w2.Write(part.LocatorCount);
-                    w2.Write(part.LocatorsIndex);
+                    _w.Write(part.Name);
+                    _w.Write(part.PieceCount);
+                    _w.Write(part.PiecesIndex);
+                    _w.Write(part.LocatorCount);
+                    _w.Write(part.LocatorsIndex);
                 }
-                parts = ms.ToArray();
-            }
+            });
 
             byte[] locators = ListAsByteArray(Locators);
 
@@ -405,24 +388,24 @@ namespace ScsReader.Model
             var piecesTris = new List<byte[]>();
             foreach (var piece in Pieces)
             {
-                using (var ms = new MemoryStream())
-                using (var w2 = new BinaryWriter(ms))
-                {
-                    piece.WriteTriangles(w2);
-                    piecesTris.Add(ms.ToArray());
-                }
+                piecesTris.Add(
+                    WriteToByteArray((_w) =>
+                    {
+                        piece.WriteTriangles(_w);
+                    })
+                );
             }
 
             // vert pool
             var piecesVerts = new List<byte[]>();
             foreach (var piece in Pieces)
             {
-                using (var ms = new MemoryStream())
-                using (var w2 = new BinaryWriter(ms))
-                {
-                    piece.WriteVertPart(w2);
-                    piecesVerts.Add(ms.ToArray());
-                }
+                piecesVerts.Add(
+                    WriteToByteArray((_w) =>
+                    {
+                        piece.WriteVertPart(_w);
+                    })
+                 );
             }
 
             // string pool
@@ -440,20 +423,17 @@ namespace ScsReader.Model
             var trisStart = vertStart + piecesVerts.Sum(x => x.Length);
 
             // then actually get the bytes
-            byte[] piecesHeader;
-            using (var ms = new MemoryStream())
-            using (var w2 = new BinaryWriter(ms))
+            byte[] piecesHeader = WriteToByteArray((_w) =>
             {
                 var currVert = vertStart;
                 var currTris = trisStart;
                 for (int i = 0; i < Pieces.Count; i++)
                 {
-                    Pieces[i].WriteHeaderPart(w2, currVert, currTris);
+                    Pieces[i].WriteHeaderPart(_w, currVert, currTris);
                     currVert += piecesVerts[i].Length;
                     currTris += piecesTris[i].Length;
                 }
-                piecesHeader = ms.ToArray();
-            }
+            });
 
             // and now we can finally write everything
             w.Write(skeletonOffset);
@@ -485,6 +465,18 @@ namespace ScsReader.Model
             {
                 w.Write(tri);
             }
+        }
+
+        private byte[] WriteToByteArray(Action<BinaryWriter> action)
+        {
+            byte[] arr;
+            using (var ms = new MemoryStream())
+            using (var w = new BinaryWriter(ms))
+            {
+                action(w);
+                arr = ms.ToArray();
+            }
+            return arr;
         }
 
         private long GetLengthOfPieceIndex()

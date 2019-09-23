@@ -55,9 +55,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScsReader\ScsReader.csproj">
+    <ProjectReference Include="..\TruckLib\TruckLib.csproj">
       <Project>{D28F37E7-6A77-4925-B789-5F4B1AB363CD}</Project>
-      <Name>ScsReader</Name>
+      <Name>TruckLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

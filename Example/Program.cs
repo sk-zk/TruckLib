@@ -1,4 +1,4 @@
-﻿using ScsReader.ScsMap;
+﻿using TruckLib.ScsMap;
 using System;
 using System.Collections.Generic;
 using System.IO;

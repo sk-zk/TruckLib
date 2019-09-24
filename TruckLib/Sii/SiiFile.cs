@@ -48,7 +48,7 @@ namespace TruckLib.Sii
         /// <returns></returns>
         public static SiiFile FromString(string sii)
         {
-            return SiiParser.DeserializeFromString(sii);
+            return new SiiParser().DeserializeFromString(sii);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace TruckLib.Sii
         /// <returns></returns>
         public static SiiFile FromFile(string path)
         {
-            return SiiParser.DeserializeFromFile(path);
+            return new SiiParser().DeserializeFromFile(path);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace TruckLib.Sii
         /// <returns></returns>
         public string Serialize()
         {
-            return SiiParser.Serialize(this);
+            return new SiiParser().Serialize(this);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace TruckLib.Sii
         /// <param name="path"></param>
         public void Serialize(string path)
         {
-            SiiParser.Serialize(this, path);
+            new SiiParser().Serialize(this, path);
         }
     }
 }

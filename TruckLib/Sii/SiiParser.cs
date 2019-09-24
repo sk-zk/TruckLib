@@ -12,14 +12,16 @@ namespace TruckLib.Sii
     /// <summary>
     /// De/serializes a SII file.
     /// </summary>
-    internal static class SiiParser
+    internal class SiiParser
     {
-        private static readonly string SiiHeader = "SiiNunit";
-        private static readonly char TupleSeperator = ',';
-        private static readonly string IncludeKeyword = "@include";
-        private static string Indentation = "    "; // no tabs for you.
+        internal string TupleAttribOpen = "(";
+        internal string TupleAttribClose = ")";
+        private readonly string SiiHeader = "SiiNunit";
+        private readonly char TupleSeperator = ',';
+        private readonly string IncludeKeyword = "@include";
+        private string Indentation = "    "; // no tabs for you.
 
-        public static SiiFile DeserializeFromString(string sii)
+        public SiiFile DeserializeFromString(string sii)
         {
             var siiFile = new SiiFile();
 
@@ -28,10 +30,34 @@ namespace TruckLib.Sii
             siiFile.GlobalScope = sii.StartsWith(SiiHeader);
 
             // get units
-            string matchUnits = @"[\w]+?\s*:\s*[\w.]+?\s*{.*?}"; // don't @ me
-            foreach (Match m in Regex.Matches(sii, matchUnits, RegexOptions.Singleline))
+            string unitDeclarations = @"[\w]+?\s*:\s*\""?[\w.]+?\""?\s*{"; // don't @ me
+            foreach (Match m in Regex.Matches(sii, unitDeclarations, RegexOptions.Singleline))
             {
-                siiFile.Units.Add(ParseUnit(m.Value));
+                // find ending bracket of this unit
+                var start = m.Index;
+                var startBracket = start + m.Length; // start after the opening bracket of the unit
+                int? end = null;
+                var bracketsStack = 0;
+                for(int i = startBracket; i < sii.Length; i++)
+                {
+                    if (sii[i] == '{') bracketsStack++;
+                    if (sii[i] == '}') bracketsStack--;
+
+                    if (bracketsStack == -1)
+                    {
+                        end = i;
+                        break;
+                    }
+                }
+
+                if(end is null)
+                {
+                    throw new SiiParserException($"Expected '}}' at {sii.Length - 1}, found EOF");
+                }
+                else
+                {
+                    siiFile.Units.Add(ParseUnit(sii.Substring(start, end.Value - start + 1)));
+                }
             }
 
             // parse top level includes
@@ -40,13 +66,13 @@ namespace TruckLib.Sii
             return siiFile;
         }
 
-        public static SiiFile DeserializeFromFile(string path)
+        public SiiFile DeserializeFromFile(string path)
         {
             var str = File.ReadAllText(path);
             return DeserializeFromString(str);
         }
 
-        private static void GetTopLevelIncludes(string sii, SiiFile siiFile)
+        private void GetTopLevelIncludes(string sii, SiiFile siiFile)
         {
             using (var sr = new StringReader(sii))
             {
@@ -77,7 +103,7 @@ namespace TruckLib.Sii
             }
         }
 
-        private static string RemoveComments(string sii)
+        private string RemoveComments(string sii)
         {
             // TODO: Remove block comments
             var siiNoComments = new StringBuilder();
@@ -97,11 +123,11 @@ namespace TruckLib.Sii
             return siiNoComments.ToString();
         }
 
-        private static Unit ParseUnit(string unitStr)
+        private Unit ParseUnit(string unitStr)
         {
             var firstColonPos = unitStr.IndexOf(':');
             var openBracketPos = unitStr.IndexOf('{');
-            var closeBracketPos = unitStr.IndexOf('}');
+            var closeBracketPos = unitStr.LastIndexOf('}');
 
             var unit = new Unit
             {
@@ -144,7 +170,7 @@ namespace TruckLib.Sii
             return unit;
         }
 
-        private static (string Name, object Value) ParseAttribute(string line)
+        private (string Name, object Value) ParseAttribute(string line)
         {
             line = line.Trim();
             var firstColonPos = line.IndexOf(':');
@@ -154,7 +180,7 @@ namespace TruckLib.Sii
             return (attributeName, value);
         }
 
-        private static object ParseAttributeValue(string valueStr)
+        private object ParseAttributeValue(string valueStr)
         {
             if (string.IsNullOrWhiteSpace(valueStr))
             {
@@ -174,11 +200,10 @@ namespace TruckLib.Sii
             // inline struct / tuple types like float3, quaternion etc.
             // which type is actually used isn't possible to determine from
             // the .sii file alone
-            if (valueStr.StartsWith("(") && valueStr.EndsWith(")")
+            if (valueStr.StartsWith(TupleAttribOpen) && valueStr.EndsWith(TupleAttribClose)
                 && valueStr.Contains(TupleSeperator))
             {
                 return ParseTuple(valueStr);
-
             }
 
             // bools
@@ -210,44 +235,56 @@ namespace TruckLib.Sii
             return valueStr;
         }
 
-        private static object ParseTuple(string valueStr)
+        private object ParseTuple(string valueStr)
         {
             var tupleVals = valueStr.Substring(1, valueStr.Length - 2)
                 .Split(TupleSeperator);
 
-            // read the first which determines the type
-            var first = ParseAttributeValue(tupleVals[0]);
-            if (first is int)
+            // determine the type of the tuple
+            Type[] types = new Type[tupleVals.Count()];
+            for (int i = 0; i < tupleVals.Length; i++)
             {
-                return FinishArray(tupleVals, (int)first);
+                types[i] = ParseAttributeValue(tupleVals[i]).GetType();
             }
-            if (first is long)
+
+            if (types.Contains(typeof(float)))
             {
-                return FinishArray(tupleVals, (long)first);
+                return TupleValsToArray<float>(tupleVals);
             }
-            if (first is ulong)
+            if (types.Contains(typeof(ulong)))
             {
-                return FinishArray(tupleVals, (ulong)first);
+                return TupleValsToArray<ulong>(tupleVals);
             }
-            if (first is float)
+            if (types.Contains(typeof(long)))
             {
-                return FinishArray(tupleVals, (float)first);
+                return TupleValsToArray<long>(tupleVals);
             }
-            return FinishArray(tupleVals, first); // whatever, object array it is
+            if (types.Contains(typeof(int)))
+            {
+                return TupleValsToArray<int>(tupleVals);
+            }
+
+            return TupleValsToArray<object>(tupleVals); // whatever, object array it is
         }
 
-        private static T[] FinishArray<T>(string[] tupleVals, T first)
+        private T[] TupleValsToArray<T>(string[] tupleVals)
         {
             var arr = new T[tupleVals.Length];
-            arr[0] = first;
-            for (int i = 1; i < arr.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
-                arr[i] = (T)ParseAttributeValue(tupleVals[i]);
+                if (typeof(T) == typeof(float))
+                {
+                    arr[i] = (T)(object)float.Parse(tupleVals[i]);
+                }
+                else
+                {
+                    arr[i] = (T)ParseAttributeValue(tupleVals[i]);
+                }
             }
             return arr;
         }
 
-        private static object ParseNumber(string valueStr)
+        private object ParseNumber(string valueStr)
         {
             if (valueStr.Contains("."))
             {
@@ -275,7 +312,7 @@ namespace TruckLib.Sii
             return null;
         }
 
-        private static string ParseInclude(string line)
+        private string ParseInclude(string line)
         {
             var firstQuotePos = line.IndexOf('"');
             var lastQuotePos = line.LastIndexOf('"');
@@ -283,13 +320,13 @@ namespace TruckLib.Sii
             return include;
         }
 
-        public static void Serialize(SiiFile siiFile, string path)
+        public void Serialize(SiiFile siiFile, string path)
         {
             var str = Serialize(siiFile);
             File.WriteAllText(path, str);
         }
 
-        public static string Serialize(SiiFile siiFile)
+        public string Serialize(SiiFile siiFile)
         {
             var sb = new StringBuilder();
 
@@ -317,7 +354,7 @@ namespace TruckLib.Sii
             return sb.ToString();
         }
 
-        private static void SerializeAttributes(StringBuilder sb, Unit unit)
+        private void SerializeAttributes(StringBuilder sb, Unit unit)
         {
             foreach (var attrib in unit.Attributes)
             {
@@ -339,7 +376,7 @@ namespace TruckLib.Sii
             }
         }
 
-        private static void SerializeAttributeValue(StringBuilder sb, object attribValue)
+        private void SerializeAttributeValue(StringBuilder sb, object attribValue)
         {
             // TODO: Finish this method
 
@@ -353,7 +390,7 @@ namespace TruckLib.Sii
             }
         }
 
-        private static void SerializeIncludes(StringBuilder sb, List<string> includes)
+        private void SerializeIncludes(StringBuilder sb, List<string> includes)
         {
             foreach (var include in includes)
             {

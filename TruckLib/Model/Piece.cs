@@ -18,7 +18,7 @@ namespace TruckLib.Model
 
         public float BoundingBoxDiagonalSize { get; set; }
 
-        public AxisAlignedBox BoundingBox { get; set; }
+        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
 
         public int TextureCoordinateWidth { get; set; } = 3;
 
@@ -80,9 +80,7 @@ namespace TruckLib.Model
 
             for (int i = 0; i < verts; i++)
             {
-                var vertex = new Vertex();
-                vertex.Position = r.ReadVector3();
-                vertex.Normal = r.ReadVector3();
+                var vertex = new Vertex(r.ReadVector3(), r.ReadVector3());
 
                 if (vertTangentOffset != Unused)
                 {

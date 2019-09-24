@@ -10,6 +10,11 @@ namespace TruckLib.Model
 
         public List<PartAttribute> Attributes { get; set; } = new List<PartAttribute>();
 
+        public Variant(Token name)
+        {
+            Name = name;
+        }
+
         public override string ToString()
         {
             return Name.String;

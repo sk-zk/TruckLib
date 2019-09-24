@@ -30,7 +30,7 @@ namespace TruckLib.Model
 
         public float BoundingBoxDiagonalSize { get; set; }
 
-        public AxisAlignedBox BoundingBox { get; set; }
+        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
 
         public List<Bone> Skeleton { get; set; } = new List<Bone>();
 
@@ -41,6 +41,15 @@ namespace TruckLib.Model
         public List<Piece> Pieces { get; set; } = new List<Piece>();
 
         private List<string> strings = new List<string>();
+
+        public Model()
+        {
+        }
+
+        public Model(string name)
+        {
+            Name = name;
+        }
 
         public void Open(string pmdPath)
         {
@@ -109,7 +118,7 @@ namespace TruckLib.Model
             // variant names
             for (int i = 0; i < variantCount; i++)
             {
-                Variants.Add(new Variant() { Name = r.ReadToken() });
+                Variants.Add(new Variant(r.ReadToken()));
             }
 
             // "partAttribs"

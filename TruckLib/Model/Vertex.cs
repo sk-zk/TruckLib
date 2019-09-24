@@ -23,5 +23,16 @@ namespace TruckLib.Model
         public byte[] BoneIndexes { get; set; }
 
         public byte[] BoneWeights { get; set; }
+
+        public Vertex(Vector3 position)
+        {
+            Position = position;
+        }
+
+        public Vertex(Vector3 position, Vector3 normal)
+        {
+            Position = position;
+            Normal = normal;
+        }
     }
 }

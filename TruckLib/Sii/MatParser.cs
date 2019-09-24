@@ -16,7 +16,7 @@ namespace TruckLib.Sii
 
             var mat = new MatFile();
             mat.Attributes = sii.Units[0].Attributes;
-            mat.Effect = sii.Units[0].Name.Value.Replace("\"", "");
+            mat.Effect = sii.Units[0].Name.Replace("\"", "");
             return mat;
         }
 

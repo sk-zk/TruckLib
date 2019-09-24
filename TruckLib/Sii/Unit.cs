@@ -19,7 +19,7 @@ namespace TruckLib.Sii
         /// <summary>
         /// Name of this unit.
         /// </summary>
-        public UnitName Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Attributes of this unit.
@@ -38,7 +38,7 @@ namespace TruckLib.Sii
         {
         }
 
-        public Unit(string className, UnitName name)
+        public Unit(string className, string name)
         {
             Class = className;
             Name = name;

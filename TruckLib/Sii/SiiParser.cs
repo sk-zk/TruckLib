@@ -132,8 +132,8 @@ namespace TruckLib.Sii
             var unit = new Unit
             {
                 Class = unitStr.Substring(0, firstColonPos).Trim(),
-                Name = new UnitName(unitStr.Substring(firstColonPos + 1,
-                openBracketPos - firstColonPos - 1).Trim())
+                Name = unitStr.Substring(firstColonPos + 1,
+                openBracketPos - firstColonPos - 1).Trim()
             };
 
             var attributeLines = unitStr.Substring(openBracketPos + 1,
@@ -219,10 +219,9 @@ namespace TruckLib.Sii
             }
 
             // unit pointers
-            // TODO: proper type check
             if (valueStr.Contains("."))
             {
-                return new UnitName(valueStr);
+                return valueStr;
             }
 
             // token

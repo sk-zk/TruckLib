@@ -7,11 +7,36 @@ using System.Threading.Tasks;
 
 namespace TruckLib
 {
-    public static class MathEx
+    internal static class MathEx
     {
         // Don't look too closely at this file
 
-        
+
+        /// <summary>
+        /// Returns the angle between (b - a) and the Z axis as a quaternion.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Quaternion GetNodeRotation(Vector3 a, Vector3 b)
+        {
+            var angle = GetNodeAngle(a, b);
+            var rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0f, 0f);
+            return rotation;
+        }
+
+        public static double GetNodeAngle(Vector3 a, Vector3 b)
+        {
+            var direction = Vector3.Normalize(b - a);
+            var angle = AngleOffAroundAxis(direction, -Vector3.UnitZ, Vector3.UnitY, false);
+            return angle;
+        }
+
+        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rot)
+        {
+            return Vector3.Transform((point - pivot), rot) + pivot;
+        }
+
         /// <summary>
         /// Factor for converting radians to degrees.
         /// </summary>
@@ -79,31 +104,6 @@ namespace TruckLib
                 - 5f * p1 * t
                 + 4f * p2 * t
                 - p3 * t;
-        }
-
-        /// <summary>
-        /// Returns the angle between (b - a) and the Z axis as a quaternion.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Quaternion GetNodeRotation(Vector3 a, Vector3 b)
-        {
-            var angle = GetNodeAngle(a, b);
-            var rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0f, 0f);
-            return rotation;
-        }
-
-        public static double GetNodeAngle(Vector3 a, Vector3 b)
-        {
-            var direction = Vector3.Normalize(b - a);
-            var angle = AngleOffAroundAxis(direction, -Vector3.UnitZ, Vector3.UnitY, false);
-            return angle;
-        }
-
-        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rot)
-        {
-            return Vector3.Transform((point - pivot), rot) + pivot;
         }
 
     }

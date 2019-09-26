@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib
 {
-    public static class BitArrayExtensions
+    internal static class BitArrayExtensions
     {
         /// <summary>
         /// Converts a BitArray to uint.

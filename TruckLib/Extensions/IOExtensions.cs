@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib
 {
-    public static class IOExtensions
+    internal static class IOExtensions
     {
         private static readonly Encoding StringEncoding = Encoding.UTF8;
 
@@ -311,7 +311,6 @@ namespace TruckLib
                     WriteListValue(w, value);
                 }
             }
-
             else if(typeof(T) == typeof(Vector2) || typeof(T) == typeof(Vector3))
             {
                 foreach (var value in list)

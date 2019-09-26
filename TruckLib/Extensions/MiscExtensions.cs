@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib
 {
-    public static class MiscExtensions
+    internal static class MiscExtensions
     {
         /// <summary>
         /// Clones an object.

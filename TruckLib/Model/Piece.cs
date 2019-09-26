@@ -38,7 +38,6 @@ namespace TruckLib.Model
 
         private int skeletonOffset_temp;
 
-
         /// <summary>
         /// ! BE ADVISED ! <br />
         /// I usually prefer deserialization to be forward-only,

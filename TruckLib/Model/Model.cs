@@ -24,8 +24,6 @@ namespace TruckLib.Model
 
         public List<Variant> Variants { get; set; } = new List<Variant>();
 
-        public List<string> Materials { get; set; } = new List<string>();
-
         public Vector3 BoundingBoxCenter { get; set; }
 
         public float BoundingBoxDiagonalSize { get; set; }
@@ -80,7 +78,6 @@ namespace TruckLib.Model
             {
                 WritePmg(w);
             }
-
         }
 
         public void ReadPmd(BinaryReader r)
@@ -166,8 +163,14 @@ namespace TruckLib.Model
 
             // look material paths
             var materialsData = r.ReadBytes((int)materialBlockSize);
-            Materials = StringUtils.CStringBytesToList(materialsData);
-            // TODO: How to find out which materials belong to which look?
+            var materials = StringUtils.CStringBytesToList(materialsData);
+            for(int i = 0; i < Looks.Count; i++)
+            {
+                Looks[i].Materials.AddRange(
+                    materials.GetRange(i * (int)materialCount, (int)materialCount)
+                    );
+            }
+            
         }
 
         public void ReadPmg(BinaryReader r)
@@ -244,7 +247,7 @@ namespace TruckLib.Model
         {
             w.Write(PmdVersion);
 
-            w.Write(Materials.Count);
+            w.Write(Looks[0].Materials.Count);
             w.Write(Looks.Count);
             w.Write(Pieces.Count); // TODO: Why is the pmd piece count different from the pmg piece count?
             w.Write(Variants.Count);
@@ -301,9 +304,10 @@ namespace TruckLib.Model
             });
 
             // materials offsets
-            var materialOffsetsLength = Materials.Count * sizeof(int);
+            var materialOffsetsLength = Looks[0].Materials.Count * sizeof(int);
 
-            List<byte[]> materials = StringUtils.ListToCStringByteList(Materials);           
+            var materialStrs = Looks.Select(x => x.Materials).SelectMany(x => x).ToList();
+            var materials = StringUtils.ListToCStringByteList(materialStrs);
 
             w.Write(attribsValues.Length / Variants.Count);
             w.Write(materials.Sum(x => x.Length));

@@ -8,7 +8,7 @@ namespace TruckLib.Model
     {
         public Token Name { get; set; }
 
-        public List<string> Materials { get; set; }
+        public List<string> Materials { get; set; } = new List<string>();
 
         public Look()
         {
@@ -17,6 +17,11 @@ namespace TruckLib.Model
         public Look(Token name)
         {
             Name = name;
+        }
+
+        public override string ToString()
+        {
+            return Name.String;
         }
     }
 }

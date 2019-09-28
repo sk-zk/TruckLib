@@ -34,10 +34,6 @@ namespace TruckLib.Model
 
         public List<Part> Parts { get; set; } = new List<Part>();
 
-        public List<Locator> Locators { get; set; } = new List<Locator>();
-
-        public List<Piece> Pieces { get; set; } = new List<Piece>();
-
         private List<string> strings = new List<string>();
 
         public Model()
@@ -169,8 +165,7 @@ namespace TruckLib.Model
                 Looks[i].Materials.AddRange(
                     materials.GetRange(i * (int)materialCount, (int)materialCount)
                     );
-            }
-            
+            }       
         }
 
         public void ReadPmg(BinaryReader r)
@@ -213,28 +208,31 @@ namespace TruckLib.Model
 
             Skeleton = r.ReadObjectList<Bone>(boneCount);
 
+            // jump ahead and read all locators & pieces first
+            r.BaseStream.Position = locatorsOffset;
+            var locators = r.ReadObjectList<Locator>(locatorCount);  
+            var pieces = r.ReadObjectList<Piece>(pieceCount);
+
+            // then return to parts and assign the locators and pieces right away
+            r.BaseStream.Position = partsOffset;
             for (int i = 0; i < partCount; i++)
             {
-                var part = new Part()
-                {
-                    Name = r.ReadToken(),
-                    PieceCount = r.ReadUInt32(),
-                    PiecesIndex = r.ReadUInt32(),
-                    LocatorCount = r.ReadUInt32(),
-                    LocatorsIndex = r.ReadUInt32(),
-                };
+                var part = new Part();
+                part.Name = r.ReadToken();
+
+                var piecesCount = r.ReadUInt32();
+                var piecesIndex = r.ReadUInt32();
+                part.Pieces = pieces.GetRange((int)piecesIndex, (int)piecesCount);
+
+                var locatorsCount = r.ReadUInt32();
+                var locatorsIndex = r.ReadUInt32();
+                part.Locators = locators.GetRange((int)locatorsIndex, (int)locatorsCount);
+
                 Parts.Add(part);
             }
 
-            Locators = r.ReadObjectList<Locator>(locatorCount);
-
-            // ! BE ADVISED ! 
-            // I usually prefer deserialization to be forward-only,
-            // but with this particular file structure, the reader 
-            // has to jump back and forth a few times
-            Pieces = r.ReadObjectList<Piece>(pieceCount);
-
             // TODO: what is this?
+            r.BaseStream.Position = stringPoolOffset;
             if (stringPoolSize > 0)
             {
                 r.BaseStream.Position = stringPoolOffset;
@@ -249,7 +247,7 @@ namespace TruckLib.Model
 
             w.Write(Looks[0].Materials.Count);
             w.Write(Looks.Count);
-            w.Write(Pieces.Count); // TODO: Why is the pmd piece count different from the pmg piece count?
+            w.Write(Parts.Sum(x => x.Pieces.Count)); // TODO: Why is the pmd piece count different from the pmg piece count?
             w.Write(Variants.Count);
             w.Write(Parts.Count);
             w.Write(Parts.Count); // attribs count
@@ -359,11 +357,11 @@ namespace TruckLib.Model
 
             w.Write(Encoding.ASCII.GetBytes(PmgSignature).Reverse().ToArray());
 
-            w.Write(Pieces.Count);
+            w.Write(Parts.Sum(x => x.Pieces.Count));
             w.Write(Parts.Count);
             w.Write(Skeleton.Count);
             w.Write(0); // TODO: What is "weight width"?
-            w.Write(Locators.Count);
+            w.Write(Parts.Sum(x => x.Locators.Count));
             w.Write(Skeleton.Count == 0 ? 0UL : 0UL); // TODO: How is the "skeleton hash" calculated?
 
             w.Write(BoundingBoxCenter);
@@ -384,21 +382,29 @@ namespace TruckLib.Model
 
             byte[] parts = WriteToByteArray((_w) =>
             {
+                int pieceIndex = 0;
+                int locatorIndex = 0;
                 foreach (var part in Parts)
                 {
                     _w.Write(part.Name);
-                    _w.Write(part.PieceCount);
-                    _w.Write(part.PiecesIndex);
-                    _w.Write(part.LocatorCount);
-                    _w.Write(part.LocatorsIndex);
+                    _w.Write(part.Pieces.Count);
+                    _w.Write(pieceIndex);
+                    pieceIndex += part.Pieces.Count;
+                    _w.Write(part.Locators.Count);
+                    _w.Write(locatorIndex);
+                    locatorIndex += part.Locators.Count;
                 }
             });
 
-            byte[] locators = ListAsByteArray(Locators);
+            byte[] locators = ListAsByteArray(
+                Parts.Select(x => x.Locators).SelectMany(x => x).ToList()
+                );
+
+            var pieces = Parts.Select(x => x.Pieces).SelectMany(x => x).ToList();
 
             // index pool
             var piecesTris = new List<byte[]>();
-            foreach (var piece in Pieces)
+            foreach (var piece in pieces)
             {
                 piecesTris.Add(
                     WriteToByteArray((_w) =>
@@ -410,7 +416,7 @@ namespace TruckLib.Model
 
             // vert pool
             var piecesVerts = new List<byte[]>();
-            foreach (var piece in Pieces)
+            foreach (var piece in pieces)
             {
                 piecesVerts.Add(
                     WriteToByteArray((_w) =>
@@ -430,7 +436,7 @@ namespace TruckLib.Model
             var partsOffset = skeletonOffset + skeleton.Length;
             var locatorsOffset = partsOffset + parts.Length;
             var pieceHeaderOffset = locatorsOffset + locators.Length;
-            var stringStart = (int)(pieceHeaderOffset + GetLengthOfPieceIndex());
+            var stringStart = (int)(pieceHeaderOffset + GetLengthOfPieceIndex(pieces));
             var vertStart = stringStart + stringPool.Sum(x => x.Length);
             var trisStart = vertStart + piecesVerts.Sum(x => x.Length);
 
@@ -439,9 +445,9 @@ namespace TruckLib.Model
             {
                 var currVert = vertStart;
                 var currTris = trisStart;
-                for (int i = 0; i < Pieces.Count; i++)
+                for (int i = 0; i < pieces.Count; i++)
                 {
-                    Pieces[i].WriteHeaderPart(_w, currVert, currTris);
+                    pieces[i].WriteHeaderPart(_w, currVert, currTris);
                     currVert += piecesVerts[i].Length;
                     currTris += piecesTris[i].Length;
                 }
@@ -491,13 +497,13 @@ namespace TruckLib.Model
             return arr;
         }
 
-        private long GetLengthOfPieceIndex()
+        private long GetLengthOfPieceIndex(List<Piece> pieces)
         {
             long length = 0;
             using (var ms = new MemoryStream())
             using (var w2 = new BinaryWriter(ms))
             {
-                foreach (var piece in Pieces)
+                foreach (var piece in pieces)
                 {
                     piece.WriteHeaderPart(w2, 0, 0);
                 }

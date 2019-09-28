@@ -8,13 +8,19 @@ namespace TruckLib.Model
     {
         public Token Name { get; set; }
 
-        public uint PieceCount { get; set; }
+        public List<Piece> Pieces { get; set; } = new List<Piece>();
 
-        public uint PiecesIndex { get; set; }
+        public List<Locator> Locators { get; set; } = new List<Locator>();
 
-        public uint LocatorCount { get; set; }
+        public Part()
+        {
+            Name = "untitled";
+        }
 
-        public uint LocatorsIndex { get; set; }
+        public Part(Token name)
+        {
+            Name = name;
+        }
 
         public override string ToString()
         {

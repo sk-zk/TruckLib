@@ -60,6 +60,8 @@ namespace TruckLib
         public static ulong StringToToken(string input)
         {
             if (string.IsNullOrEmpty(input)) return 0;
+            if (!IsValidToken(input))
+                throw new ArgumentException($"Input is not a valid token.");
 
             ulong token = 0;
             for (var i = 0; i < input.Length; i++)
@@ -194,6 +196,9 @@ namespace TruckLib
 
         public static implicit operator Token(string s)
         {
+            if (!IsValidToken(s))
+                throw new InvalidCastException($"Input is not a valid token.");
+
             return new Token(s);
         }
     }

@@ -38,9 +38,11 @@ namespace TruckLib.Model
 
         public Model()
         {
+            Looks.Add(new Look("default"));
+            Variants.Add(new Variant("default"));
         }
 
-        public Model(string name)
+        public Model(string name) : this()
         {
             Name = name;
         }
@@ -76,7 +78,7 @@ namespace TruckLib.Model
             }
         }
 
-        public void ReadPmd(BinaryReader r)
+        private void ReadPmd(BinaryReader r)
         {
             var version = r.ReadUInt32();
             if (version != PmdVersion)
@@ -103,12 +105,14 @@ namespace TruckLib.Model
             var materialDataOffset = r.ReadUInt32();
 
             // look names
+            Looks.Clear();
             for (int i = 0; i < lookCount; i++)
             {
                 Looks.Add(new Look(r.ReadToken()));
             }
 
             // variant names
+            Variants.Clear();
             for (int i = 0; i < variantCount; i++)
             {
                 Variants.Add(new Variant(r.ReadToken()));
@@ -168,7 +172,7 @@ namespace TruckLib.Model
             }       
         }
 
-        public void ReadPmg(BinaryReader r)
+        private void ReadPmg(BinaryReader r)
         {
             var version = r.ReadByte();
             if(version != PmgVersion)
@@ -241,7 +245,7 @@ namespace TruckLib.Model
             }
         }
 
-        public void WritePmd(BinaryWriter w)
+        private void WritePmd(BinaryWriter w)
         {
             w.Write(PmdVersion);
 
@@ -351,7 +355,7 @@ namespace TruckLib.Model
             }
         }
 
-        public void WritePmg(BinaryWriter w)
+        private void WritePmg(BinaryWriter w)
         {
             w.Write(PmgVersion);
 

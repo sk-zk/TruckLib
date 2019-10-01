@@ -24,15 +24,32 @@ namespace TruckLib.Model
 
         public byte[] BoneWeights { get; set; }
 
+        private Vertex()
+        {
+        }
+
         public Vertex(Vector3 position)
         {
             Position = position;
         }
+
+        public Vertex(float x, float y, float z) : this(new Vector3(x, y, z)) { }
 
         public Vertex(Vector3 position, Vector3 normal)
         {
             Position = position;
             Normal = normal;
         }
+
+        public Vertex Clone()
+        {
+            var cloned = (Vertex)MemberwiseClone();
+            if (TextureCoordinates != null)
+            {
+                cloned.TextureCoordinates = new List<Vector2>(TextureCoordinates);
+            }
+            return cloned;
+        }
+
     }
 }

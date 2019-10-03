@@ -14,11 +14,11 @@ namespace TruckLib.Model
 
         public List<Triangle> Triangles { get; set; } = new List<Triangle>();
 
-        public Vector3 BoundingBoxCenter { get; set; }
+        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
+
+        public Vector3 BoundingBoxCenter { get; set; } = Vector3.Zero;
 
         public float BoundingBoxDiagonalSize { get; set; }
-
-        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
 
         public int TextureCoordinateWidth { get; set; } = 3;
 

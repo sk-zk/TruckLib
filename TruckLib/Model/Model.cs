@@ -24,11 +24,12 @@ namespace TruckLib.Model
 
         public List<Variant> Variants { get; set; } = new List<Variant>();
 
-        public Vector3 BoundingBoxCenter { get; set; }
+        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
+
+        public Vector3 BoundingBoxCenter { get; set; } = Vector3.Zero;
 
         public float BoundingBoxDiagonalSize { get; set; }
 
-        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
 
         public List<Bone> Skeleton { get; set; } = new List<Bone>();
 

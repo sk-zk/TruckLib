@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace TruckLib.Sii
 {
-
     /// <summary>
     /// Represents an SII file.
     /// </summary>
@@ -18,7 +17,7 @@ namespace TruckLib.Sii
         // https://modding.scssoft.com/wiki/Documentation/Engine/Units
 
         // TODO:
-        // Support fixed length arrays
+        // Support array indicies
         // Support placement type
         // Remove block comments
 

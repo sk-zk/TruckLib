@@ -51,5 +51,10 @@ namespace TruckLib.Model
             return cloned;
         }
 
+        public override string ToString()
+        {
+            return $"{Position.X:0.000} | {Position.Y:0.000} | {Position.Z:0.000}";
+        }
+
     }
 }

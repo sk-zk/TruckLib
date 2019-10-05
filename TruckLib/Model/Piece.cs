@@ -20,7 +20,7 @@ namespace TruckLib.Model
 
         public float BoundingBoxDiagonalSize { get; set; }
 
-        public int TextureCoordinateWidth { get; set; } = 3;
+        public int TextureCoordinateWidth { get; set; } = 1;
 
         public uint Material { get; set; }
 
@@ -36,7 +36,7 @@ namespace TruckLib.Model
 
         private const int Unused = -1;
 
-        private int skeletonOffset_temp;
+        private int skeletonOffset_temp = 36;
 
         /// <summary>
         /// ! BE ADVISED ! <br />
@@ -57,7 +57,10 @@ namespace TruckLib.Model
             BoundingBox = new AxisAlignedBox();
             BoundingBox.ReadFromStream(r);
 
-            skeletonOffset_temp = r.ReadInt32(); // TODO: What is this?
+            // TODO: Why does this even point to when the
+            // model has no bones??
+            // used values are 36, 44 and 52?
+            skeletonOffset_temp = r.ReadInt32(); 
             var vertPositionOffset = r.ReadInt32();
             var vertNormalOffset = r.ReadInt32();
             var vertTexcoordOffset = r.ReadInt32();

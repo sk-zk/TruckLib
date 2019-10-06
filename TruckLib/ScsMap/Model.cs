@@ -47,13 +47,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The color variant.
         /// </summary>
-        public byte ColorVariant
+        public Nibble ColorVariant
         {
-            get => (byte)Flags.GetBitString(colorVariantPos, colorVariantLength);
+            get => (Nibble)Flags.GetBitString(colorVariantPos, colorVariantLength);
             set
             {
-                if (value > 15) throw new ArgumentOutOfRangeException("ColorVariant must be between 0 and 15.");
-                Flags.SetBitString(value, colorVariantPos, colorVariantLength);
+                Flags.SetBitString((uint)value, colorVariantPos, colorVariantLength);
             }
         }
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents a rectangular city area.
+    /// A rectangular area which marks a city.
     /// </summary>
     public class CityArea : SingleNodeItem
     {

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace TruckLib.Sii
 {
+    /// <summary>
+    /// A .mat material file.
+    /// </summary>
     public class MatFile
     {
         /// <summary>

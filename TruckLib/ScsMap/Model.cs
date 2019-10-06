@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A scenery model.
+    /// A static model.
     /// </summary>
     public class Model : SingleNodeItem
     {

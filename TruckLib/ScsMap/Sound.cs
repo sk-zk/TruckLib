@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// A sound which is played when the player is in range.
+    /// </summary>
     public class Sound : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.Sound;

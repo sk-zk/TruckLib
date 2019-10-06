@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// A camera point, which defines the camera position of various cutscenes
+    /// and is also used to create random events.
+    /// </summary>
     public class CameraPoint : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.CameraPoint;

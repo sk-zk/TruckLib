@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Applies a traffic rule inside a polygonal area.
+    /// </summary>
     public class TrafficArea : PolygonItem
     {
         public override ItemType ItemType => ItemType.TrafficArea;

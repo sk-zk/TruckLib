@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Defines a plane behind which nothing will be rendered.
+    /// </summary>
     public class CutPlane : MapItem
     {
         public override ItemType ItemType => ItemType.CutPlane;

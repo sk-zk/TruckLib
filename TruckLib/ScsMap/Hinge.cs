@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// According to the wiki: "Currently unused. It defined object that could be placed 
+    /// on map and be swung by player truck e.g. swing doors."
+    /// </summary>
     public class Hinge : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.Hinge;

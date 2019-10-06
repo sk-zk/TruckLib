@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// A model with a static loop animation.
+    /// </summary>
     public class Mover : MapItem
     {
         public override ItemType ItemType => ItemType.Mover;

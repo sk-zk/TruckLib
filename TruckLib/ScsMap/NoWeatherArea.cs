@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Defines an area without weather effects.
+    /// </summary>
     public class NoWeatherArea : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.NoWeatherArea;

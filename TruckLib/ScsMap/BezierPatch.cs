@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// A piece of terrain created by a Bézier surface.
+    /// </summary>
     public class BezierPatch : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.BezierPatch;

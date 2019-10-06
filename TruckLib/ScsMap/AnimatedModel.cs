@@ -31,14 +31,6 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        /// <summary>
-        /// Adds an AnimatedModel to the map.
-        /// </summary>
-        /// <param name="map"></param>
-        /// <param name="tags"></param>
-        /// <param name="model"></param>
-        /// <param name="position"></param>
-        /// <returns></returns>
         public static AnimatedModel Add(IItemContainer map, Vector3 position, Token model, List<Token> tags)
         {
             var anim = Add<AnimatedModel>(map, position);

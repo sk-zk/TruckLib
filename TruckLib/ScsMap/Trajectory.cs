@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Used for Special Transport DLC. TODO: Figure out how this works
+    /// </summary>
     public class Trajectory : MapItem
     {
         public override ItemType ItemType => ItemType.Trajectory;

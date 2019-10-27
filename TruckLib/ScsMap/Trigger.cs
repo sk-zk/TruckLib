@@ -21,58 +21,52 @@ namespace TruckLib.ScsMap
 
         public List<TriggerAction> Actions { get; set; } = new List<TriggerAction>();
 
-        public float Range { get; set; } = 1f;
-
-        public float ResetDelay { get; set; }
-
-        public float ResetDistance { get; set; }
-
-        public float ActivationSpeedFrom { get; set; }
-
-        public float ActivationSpeedTo { get; set; }
-
-        private BitArray TriggerFlags = new BitArray(32);
-
         public byte DlcGuard
         {
             get => Flags.GetByte(1);
             set => Flags.SetByte(1, value);
         }
 
-        public bool SphereArea
-        {
-            get => TriggerFlags[1];
-            set => TriggerFlags[1] = value;
-        }
-
         public bool PartialActivation
         {
-            get => TriggerFlags[2];
-            set => TriggerFlags[2] = value;
+            get => Flags[0];
+            set => Flags[0] = value;
         }
 
-        public bool ManualActivation
+        public bool VehicleActivation
         {
-            get => TriggerFlags[0];
-            set => TriggerFlags[0] = value;
+            get => Flags[2];
+            set => Flags[2] = value;
         }
 
-        public bool SpeedActivation
+        public bool ConnectedTrailerActivation
         {
-            get => TriggerFlags[6];
-            set => TriggerFlags[6] = value;
-        }
-
-        public bool OneTimeActivation
+            get => Flags[3];
+            set => Flags[3] = value;
+        } 
+        public bool DisconnectedTrailerActivation
         {
-            get => TriggerFlags[3];
-            set => TriggerFlags[3] = value;
+            get => Flags[4];
+            set => Flags[4] = value;
         }
 
         public bool OrientedActivation
         {
-            get => TriggerFlags[5];
-            set => TriggerFlags[5] = value;
+            get => Flags[1];
+            set => Flags[1] = value;
+        }
+        
+        public bool InitDisabled
+        {
+            get => Flags[8];
+            set => Flags[8] = value;
+        }
+
+        public Trigger() : base()
+        {
+            PartialActivation = true;
+            VehicleActivation = true;
+            ConnectedTrailerActivation = true;
         }
 
         public static Trigger Add(IItemContainer map, Vector3[] nodePositions, List<TriggerAction> actions)
@@ -89,12 +83,6 @@ namespace TruckLib.ScsMap
             Tags = ReadObjectList<Token>(r);
             Nodes = ReadNodeRefList(r);
             Actions = ReadObjectList<TriggerAction>(r);
-            Range = r.ReadSingle();
-            ResetDelay = r.ReadSingle();
-            ResetDistance = r.ReadSingle();
-            ActivationSpeedFrom = r.ReadSingle() * 3.6f;
-            ActivationSpeedTo = r.ReadSingle() * 3.6f;
-            TriggerFlags = new BitArray(BitConverter.GetBytes(r.ReadUInt32()));
         }
 
         public override void WriteToStream(BinaryWriter w)
@@ -104,12 +92,6 @@ namespace TruckLib.ScsMap
             WriteObjectList(w, Tags);
             WriteNodeRefList(w, Nodes);
             WriteObjectList(w, Actions);
-            w.Write(Range);
-            w.Write(ResetDelay);
-            w.Write(ResetDistance);
-            w.Write(ActivationSpeedFrom / 3.6f);
-            w.Write(ActivationSpeedTo / 3.6f);
-            w.Write(TriggerFlags.ToUInt());
         }
     }
 }

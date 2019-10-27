@@ -13,6 +13,16 @@ namespace TruckLib
 
 
         /// <summary>
+        /// Factor for converting radians to degrees.
+        /// </summary>
+        public const double RadToDeg = 180.0 / Math.PI;
+
+        /// <summary>
+        /// Factor for converting degrees to radians.
+        /// </summary>
+        public const double DegToRad = Math.PI / 180.0;
+
+        /// <summary>
         /// Returns the angle between (b - a) and the Z axis as a quaternion.
         /// </summary>
         /// <param name="a"></param>
@@ -36,16 +46,6 @@ namespace TruckLib
         {
             return Vector3.Transform((point - pivot), rot) + pivot;
         }
-
-        /// <summary>
-        /// Factor for converting radians to degrees.
-        /// </summary>
-        public const double RadToDeg = 180.0 / Math.PI;
-
-        /// <summary>
-        /// Factor for converting degrees to radians.
-        /// </summary>
-        public const double DegToRad = Math.PI / 180.0;
 
         /// <summary>
         /// Calculates the angle between two vectors.

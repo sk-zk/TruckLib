@@ -45,6 +45,8 @@ namespace TruckLib.ScsMap
 
         public float NoDetailVegetationTo { get; set; }
 
+        public float UVRotation { get; set; }
+
         public TerrainSide()
         {
             const int vegetationCount = 3;

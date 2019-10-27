@@ -10,7 +10,7 @@ namespace TruckLib.Model
     {
         public Vector3 Position { get; set; }
 
-        public Vector3 Normal { get; set; }
+        public Vector3 Normal { get; set; } = Vector3.Zero;
 
         public Vector4? Tangent { get; set; }
 

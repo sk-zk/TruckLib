@@ -494,6 +494,8 @@ namespace TruckLib.ScsMap
                 corner.DetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
                 corner.DetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
 
+                corner.UVRotation = r.ReadSingle();
+
                 // Vegetation; 4 nodes with 2 veg. objects
                 foreach (var veg in corner.Vegetation)
                 {
@@ -583,6 +585,8 @@ namespace TruckLib.ScsMap
                 w.Write((ushort)(corner.DetailVegetationFrom * vegFromToFactor));
                 w.Write((ushort)(corner.DetailVegetationTo * vegFromToFactor));
 
+                w.Write(corner.UVRotation);
+
                 // Vegetation
                 foreach (var veg in corner.Vegetation)
                 {
@@ -612,6 +616,7 @@ namespace TruckLib.ScsMap
             {
                 corner.Terrain.QuadData.WriteToStream(w);
             }
+            
         }
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)

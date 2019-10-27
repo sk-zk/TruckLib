@@ -12,13 +12,15 @@ namespace TruckLib.ScsMap.Lookup
 
         // ETS2
         public static readonly byte East = 1;
-        public static readonly byte North = 2;
+        public static readonly byte Scandinavia = 2;
         public static readonly byte France = 3;
         public static readonly byte Italy = 4;
         public static readonly byte FranceAndItaly = 5;
         public static readonly byte Baltic = 6;
         public static readonly byte BalticAndEast = 7;
-        public static readonly byte BalticAndNorth = 8;
+        public static readonly byte BalticAndScandinavia = 8;
+        public static readonly byte BlackSea = 9;
+        public static readonly byte BlackSeaAndEast = 10;
 
         // ATS
         public static readonly byte Nevada = 1;

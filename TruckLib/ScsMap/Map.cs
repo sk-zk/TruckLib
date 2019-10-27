@@ -68,6 +68,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool EuropeMapUiCorrections { get; set; } = false;
 
+        public ulong EditorMapId { get; set; }
+
         // This value is used in both ETS2 and ATS.
         protected uint gameTag = 2998976734; //TODO: What is this?
 
@@ -88,6 +90,7 @@ namespace TruckLib.ScsMap
         public Map(string name)
         {
             Name = name;
+            EditorMapId = Utils.GenerateUuid();
         }
 
         /// <summary>
@@ -283,6 +286,8 @@ namespace TruckLib.ScsMap
                 var header = new Header();
                 header.ReadFromStream(r);
 
+                EditorMapId = r.ReadUInt64();
+
                 // start position
                 StartPlacementPosition = r.ReadVector3();
                 StartPlacementSectorOrSomething = r.ReadUInt32();
@@ -370,6 +375,8 @@ namespace TruckLib.ScsMap
             using (var w = new BinaryWriter(stream))
             {
                 header.WriteToStream(w);
+
+                w.Write(EditorMapId);
 
                 // start pos.
                 w.Write(StartPlacementPosition);

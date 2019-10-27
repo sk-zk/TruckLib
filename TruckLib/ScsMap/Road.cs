@@ -484,6 +484,9 @@ namespace TruckLib.ScsMap
             {
                 Right.AdditionalParts.Add(r.ReadToken());
             }
+
+            Right.UVRotation = r.ReadSingle();
+            Left.UVRotation = r.ReadSingle();
         }
 
         /// <summary>
@@ -688,6 +691,9 @@ namespace TruckLib.ScsMap
             {
                 w.Write(part);
             }
+
+            w.Write(Right.UVRotation);
+            w.Write(Left.UVRotation);
         }
 
     }

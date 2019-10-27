@@ -133,6 +133,18 @@ namespace TruckLib.ScsMap
             set => Flags[12] = value;
         }
 
+        public bool UniformItemPlacement
+        {
+            get => Flags[13];
+            set => Flags[13] = value;
+        }
+
+        public bool KeepOrientationOnBounce
+        {
+            get => Flags[14];
+            set => Flags[14] = value;
+        }
+
         public Mover() : base()
         {
             ActiveDuringDay = true;

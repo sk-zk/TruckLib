@@ -206,6 +206,7 @@ namespace TruckLib.ScsMap
             r.ReadSingle();
             r.ReadSingle();
             r.ReadSingle();
+
             r.ReadSingle();
             r.ReadSingle();
             r.ReadSingle();
@@ -266,6 +267,9 @@ namespace TruckLib.ScsMap
             Right.EdgeLook = r.ReadToken();
             Left.Edge = r.ReadToken();
             Left.EdgeLook = r.ReadToken();
+
+            Right.UVRotation = r.ReadSingle();
+            Left.UVRotation = r.ReadSingle();
         }
 
         public override void WriteToStream(BinaryWriter w)
@@ -393,6 +397,9 @@ namespace TruckLib.ScsMap
             w.Write(Right.EdgeLook);
             w.Write(Left.Edge);
             w.Write(Left.EdgeLook);
+
+            w.Write(Right.UVRotation);
+            w.Write(Left.UVRotation);
         }
 
     }

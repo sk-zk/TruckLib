@@ -124,6 +124,12 @@ namespace TruckLib.ScsMap
             set => Flags[10] = !value;
         }
 
+        public bool InnerVegetationSphereSpace
+        {
+            get => Flags[8];
+            set => Flags[8] = value;
+        }
+
         public BezierPatch() : base()
         {
             ControlPoints = new Vector3[ControlPointCols, ControlPointRows];

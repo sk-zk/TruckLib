@@ -40,6 +40,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Variant { get; set; }
 
+        public float UVRotation { get; set; }
+
         public PrefabCorner()
         {
            const int vegetationAmnt = 2;

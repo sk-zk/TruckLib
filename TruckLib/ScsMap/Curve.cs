@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
 
         public Token FirstPart { get; set; }
 
-        public Token CenterPart { get; set; }
+        public Token CenterPartVariation { get; set; }
 
         public Token LastPart { get; set; }
 
@@ -45,6 +45,8 @@ namespace TruckLib.ScsMap
         public float Stretch { get; set; } = 1f;
 
         public float FixedStep { get; set; } = 0f;
+
+        public float Scale { get; set; } = 1;
 
         public List<float> HeightOffsets { get; set; } = new List<float>();
 
@@ -173,7 +175,7 @@ namespace TruckLib.ScsMap
         {
             c.Flags = Flags;
             c.FirstPart = FirstPart;
-            c.CenterPart = CenterPart;
+            c.CenterPartVariation = CenterPartVariation;
             c.LastPart = LastPart;
             c.Look = Look;
             c.TerrainMaterial = TerrainMaterial;
@@ -199,6 +201,7 @@ namespace TruckLib.ScsMap
             RandomSeed = r.ReadUInt32();
 
             Stretch = r.ReadSingle();
+            Scale = r.ReadSingle();
             FixedStep = r.ReadSingle();
 
             TerrainMaterial = r.ReadToken();
@@ -206,7 +209,7 @@ namespace TruckLib.ScsMap
 
             FirstPart = r.ReadToken();
             LastPart = r.ReadToken();
-            CenterPart = r.ReadToken();
+            CenterPartVariation = r.ReadToken();
 
             Look = r.ReadToken();
 
@@ -227,6 +230,7 @@ namespace TruckLib.ScsMap
             w.Write(RandomSeed);
 
             w.Write(Stretch);
+            w.Write(Scale);
             w.Write(FixedStep);
 
             w.Write(TerrainMaterial);
@@ -234,7 +238,7 @@ namespace TruckLib.ScsMap
 
             w.Write(FirstPart);
             w.Write(LastPart);
-            w.Write(CenterPart);
+            w.Write(CenterPartVariation);
 
             w.Write(Look);
 

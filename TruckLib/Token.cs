@@ -83,7 +83,7 @@ namespace TruckLib
 
             // Determine length of string
             int length = 1;
-            while (PowUl(length) < token)
+            while (PowUl(length) - 1 < token)
             {
                 length++;
             }

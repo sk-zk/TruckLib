@@ -18,6 +18,14 @@ namespace TruckLib.Model
             C = c;
         }
 
+        /// <summary>
+        /// Inverts the order of vertices from CW to CCW or vice versa.
+        /// </summary>
+        public void InvertOrder()
+        {
+            (C, A) = (A, C);
+        }
+
         public override string ToString()
         {
             return $"({A} {B} {C})";
@@ -36,7 +44,6 @@ namespace TruckLib.Model
             w.Write(B);
             w.Write(C);
         }
-
 
     }
 }

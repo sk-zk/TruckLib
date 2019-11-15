@@ -133,8 +133,6 @@ namespace TruckLib.ScsMap
             {
                 side.Terrain.QuadData.BrushMaterials = new List<Token> { material };
                 side.Terrain.CalculateQuadGrid(StepSize, Length);
-                side.Terrain.QuadData.Quads = new TerrainQuad[side.Terrain.QuadData.Cols
-                    * side.Terrain.QuadData.Rows].Select(h => new TerrainQuad()).ToList();
             }
         }
 

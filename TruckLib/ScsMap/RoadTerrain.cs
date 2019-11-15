@@ -7,7 +7,14 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     public class RoadTerrain
-    {
+    {     
+        /// <summary>
+        /// Widths of terrain rows in meters. 
+        /// <para>After row 15, every row is 100 meters wide.</para>
+        /// </summary>
+        public static readonly int[] RowWidthSequence = new int[] { 1, 1, 1, 2, 6, 6, 10, 10, 10,
+                20, 40, 50, 50, 50, 100 };
+
         private float size;
         /// <summary>
         /// Terrain size in meters.
@@ -33,6 +40,15 @@ namespace TruckLib.ScsMap
 
         public TerrainQuadData QuadData { get; set; } = new TerrainQuadData();
 
+        public static int GetRowWidthAt(int index)
+        {
+            if(index < RowWidthSequence.Length)
+            {
+                return RowWidthSequence[index];
+            }
+            return RowWidthSequence[^1];
+        }
+
         /// <summary>
         /// Updates the amount of quad columns and rows of this terrain.
         /// </summary>
@@ -42,6 +58,7 @@ namespace TruckLib.ScsMap
         {
             QuadData.Cols = (ushort)CalculateQuadCols(stepSize, length);
             QuadData.Rows = (ushort)CalculateQuadRows(Size);
+            UpdateQuadAmount();
         }
 
         /// <summary>
@@ -70,7 +87,7 @@ namespace TruckLib.ScsMap
                     break;
             }
 
-            int cols = (int)(length / terrainSteps) + 1;
+            int cols = (int)(length / terrainSteps);
             return cols;
         }
 
@@ -83,6 +100,31 @@ namespace TruckLib.ScsMap
         {
             QuadData.Cols = (ushort)CalculateQuadCols(resolution, length);
             QuadData.Rows = (ushort)CalculateQuadRows(Size);
+            UpdateQuadAmount();
+        }
+
+        private void UpdateQuadAmount()
+        {
+            var amt = QuadData.Cols * QuadData.Rows;
+
+            if (amt == 0)
+            {
+                QuadData.Quads.Clear();
+                return;
+            }
+
+            if (amt == QuadData.Quads.Count) return;
+
+            if (QuadData.Quads.Count < amt)
+            {
+                var missing = amt - QuadData.Quads.Count;
+                QuadData.Quads.AddRange(new TerrainQuad[missing]
+                    .Select(x => new TerrainQuad()));
+            }
+            else
+            {
+                QuadData.Quads.RemoveAt(amt);
+            }
         }
 
         /// <summary>
@@ -91,7 +133,7 @@ namespace TruckLib.ScsMap
         /// <param name="resolution"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private static int CalculateQuadCols(RoadResolution resolution, float length)
+        private int CalculateQuadCols(RoadResolution resolution, float length)
         {
             int roadSteps;
             switch (resolution)
@@ -108,7 +150,7 @@ namespace TruckLib.ScsMap
                     break;
             }
 
-            int cols = (int)(length / roadSteps) + 1;
+            int cols = (int)(length / roadSteps);
             return cols;
         }
 
@@ -119,11 +161,6 @@ namespace TruckLib.ScsMap
         /// <returns>The amount of quad rows.</returns>
         private int CalculateQuadRows(float terrainSize)
         {
-            // rows
-            // width of each row in meters:
-            var rowWidthSequence = new int[] { 1, 1, 1, 2, 6, 6, 10, 10, 10,
-                20, 40, 50, 50, 50, 100 };
-
             // get the amt of rows by subtracting the sequence of widths
             // from the terrain size until it is 0 or negative.
             // TODO: Check if the game ever uses a width > 100.
@@ -131,13 +168,13 @@ namespace TruckLib.ScsMap
             var remainder = terrainSize;
             while (remainder > 0)
             {
-                if (rows < rowWidthSequence.Length)
+                if (rows < RowWidthSequence.Length)
                 {
-                    remainder -= rowWidthSequence[rows];
+                    remainder -= RowWidthSequence[rows];
                 }
                 else
                 {
-                    remainder -= rowWidthSequence[rowWidthSequence.Last()];
+                    remainder -= RowWidthSequence[RowWidthSequence.Last()];
                 }
                 rows++;
             }

@@ -55,7 +55,7 @@ namespace TruckLib.ScsMap
 
         // TODO: Change implementation of this data to be easier to work with
         /// <summary>
-        /// Offsets in terrain vertices created with the vertex tool.
+        /// Offsets of terrain vertices, created with the vertex tool.
         /// </summary>
         public List<VertexData> Offsets { get; set; } = new List<VertexData>();
 

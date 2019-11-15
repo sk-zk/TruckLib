@@ -259,9 +259,7 @@ namespace TruckLib.ScsMap
             foreach (var side in new[] { Left, Right })
             {
                 side.Terrain.QuadData.BrushMaterials = new List<Token> { "0" };
-                side.Terrain.CalculateQuadGrid(Resolution, Length);
-                side.Terrain.QuadData.Quads = new TerrainQuad[side.Terrain.QuadData.Cols
-                    * side.Terrain.QuadData.Rows].Select(h => new TerrainQuad()).ToList();
+                side.Terrain.CalculateQuadGrid(Resolution, Length);                
             }
         }
 

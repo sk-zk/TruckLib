@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// According to the wiki: "Currently unused. It defined object that could be placed 
     /// on map and be swung by player truck e.g. swing doors."
-    /// <p>Trying to use this item crashes the editor as of 1.36 Beta.</p>
+    /// <para>Trying to use this item crashes the editor as of 1.36.</para>
     /// </summary>
     public class Hinge : SingleNodeItem
     {

@@ -40,6 +40,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Model { get; set; }
 
+        public Token Look { get; set; }
+
+        public Token Variant { get; set; }
+
         private const int signBoardCount = 3;
         /// <summary>
         /// Sign text for legacy navigation signs (e.g. be-navigation/board straight left right b).
@@ -57,6 +61,24 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<SignOverride> SignOverrides { get; set; } 
             = new List<SignOverride>();
+
+        public bool FollowRoadDir
+        {
+            get => Flags[24];
+            set => Flags[24] = value;
+        }
+
+        public bool WaterReflection
+        {
+            get => Flags[26];
+            set => Flags[26] = value;
+        }
+
+        public bool IgnoreCutPlanes
+        {
+            get => Flags[27];
+            set => Flags[27] = value;
+        }
 
         /// <summary>
         /// Adds a sign to the map.
@@ -81,13 +103,20 @@ namespace TruckLib.ScsMap
             Model = r.ReadToken();
             Node = new UnresolvedNode(r.ReadUInt64());
 
+            Look = r.ReadToken();
+            Variant = r.ReadToken();
+
             // sign_boards
             // used for legacy signs.
-            for (int i = 0; i < SignBoards.Length; i++)
+            var boardCount = r.ReadByte();
+            if (boardCount > 0) // yes, this is correct
             {
-                SignBoards[i].Road = r.ReadToken();
-                SignBoards[i].City1 = r.ReadToken();
-                SignBoards[i].City2 = r.ReadToken();
+                for (int i = 0; i < SignBoards.Length; i++)
+                {
+                    SignBoards[i].Road = r.ReadToken();
+                    SignBoards[i].City1 = r.ReadToken();
+                    SignBoards[i].City2 = r.ReadToken();
+                }
             }
 
             // override_template
@@ -107,6 +136,10 @@ namespace TruckLib.ScsMap
             w.Write(Model);
             w.Write(Node.Uid);
 
+            w.Write(Look);
+            w.Write(Variant);
+
+            w.Write(SignBoards.Length);
             foreach (var board in SignBoards)
             {
                 w.Write(board.Road);
@@ -121,8 +154,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Sign text struct for legacy navigation signs, 
-        /// e.g. be-navigation->board straight left right b.
+        /// Sign text struct for legacy navigation signs,
+        /// e.g. "be-navigation/board straight left right b".
         /// </summary>
         public struct SignBoard
         {

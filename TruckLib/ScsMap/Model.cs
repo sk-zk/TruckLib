@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The unit name of the model.
         /// </summary>
-        public Token ModelName { get; set; }
+        public Token Name { get; set; }
 
         /// <summary>
         /// The model look.
@@ -162,7 +162,7 @@ namespace TruckLib.ScsMap
             var model = Add<Model>(map, position);
 
             model.Node.Rotation = rotation;
-            model.ModelName = name;
+            model.Name = name;
             model.Look = look;
             model.Variant = variant;
 
@@ -179,7 +179,7 @@ namespace TruckLib.ScsMap
         {
             base.ReadFromStream(r);
 
-            ModelName = r.ReadToken();
+            Name = r.ReadToken();
             Look = r.ReadToken();
             Variant = r.ReadToken();
 
@@ -197,7 +197,7 @@ namespace TruckLib.ScsMap
         {
             base.WriteToStream(w);
 
-            w.Write(ModelName);
+            w.Write(Name);
             w.Write(Look);
             w.Write(Variant);
 

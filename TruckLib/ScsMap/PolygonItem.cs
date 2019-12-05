@@ -67,6 +67,11 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
+        internal override IEnumerable<Node> GetItemNodes()
+        {
+            return new List<Node>(Nodes);
+        }
+
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             for (int i = 0; i < Nodes.Count; i++)

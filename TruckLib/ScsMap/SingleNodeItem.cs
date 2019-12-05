@@ -36,6 +36,11 @@ namespace TruckLib.ScsMap
             return newItem;
         }
 
+        internal override IEnumerable<Node> GetItemNodes()
+        {
+            return new[] { Node };
+        }
+
         /// <summary>
         /// Searches a list of all nodes for the node referenced by UID in this map item
         /// and adds a reference to it in the item's Node field.

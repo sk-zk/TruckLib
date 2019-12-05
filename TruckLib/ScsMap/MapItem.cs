@@ -99,6 +99,12 @@ namespace TruckLib.ScsMap
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
         public abstract void UpdateNodeReferences(Dictionary<ulong, Node> allNodes);
 
+        /// <summary>
+        /// Returns all external nodes this item references.
+        /// </summary>
+        /// <returns></returns>
+        internal abstract IEnumerable<Node> GetItemNodes();
+
         private const int viewDistanceFactor = 10;
 
         /// <summary>

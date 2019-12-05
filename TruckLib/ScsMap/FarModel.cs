@@ -65,6 +65,11 @@ namespace TruckLib.ScsMap
             return farModel;
         }
 
+        internal override IEnumerable<Node> GetItemNodes()
+        {
+            return Models.Select(x => x.PerspectiveNode).Prepend(Node);
+        }
+
         private const float sizeFactor = 2f;
 
         public override void ReadFromStream(BinaryReader r)

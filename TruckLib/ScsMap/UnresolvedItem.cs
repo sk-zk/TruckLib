@@ -21,6 +21,7 @@ namespace TruckLib.ScsMap
         public override ItemFile DefaultItemFile => throw new InvalidOperationException(exceptionMessage);
         protected override ushort DefaultViewDistance => throw new InvalidOperationException(exceptionMessage);
 
+
         public UnresolvedItem()
         {
         }
@@ -36,6 +37,11 @@ namespace TruckLib.ScsMap
         }
 
         public override void WriteToStream(BinaryWriter w)
+        {
+            throw new InvalidOperationException(exceptionMessage);
+        }
+
+        internal override IEnumerable<Node> GetItemNodes()
         {
             throw new InvalidOperationException(exceptionMessage);
         }

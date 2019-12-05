@@ -200,6 +200,11 @@ namespace TruckLib.ScsMap
             p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)new_p1_angle, 0, 0);
         }
 
+        internal override IEnumerable<Node> GetItemNodes()
+        {
+            return new[] { Node, ForwardNode };
+        }
+
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             if (allNodes.ContainsKey(ForwardNode.Uid))

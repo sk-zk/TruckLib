@@ -435,6 +435,11 @@ namespace TruckLib.ScsMap
             return Nodes.Intersect(p2.Nodes).Any();
         }
 
+        internal override IEnumerable<Node> GetItemNodes()
+        {
+            return new List<Node>(Nodes);
+        }
+
         private const float terrainSizeFactor = 10f;
         private const float vegFromToFactor = 10f;
 

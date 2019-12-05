@@ -87,6 +87,11 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
+        internal override IEnumerable<Node> GetItemNodes()
+        {
+            return new List<Node>(Nodes);
+        }
+
         public override void ReadFromStream(BinaryReader r)
         {
             base.ReadFromStream(r);

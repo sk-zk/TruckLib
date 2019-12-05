@@ -100,6 +100,8 @@ namespace TruckLib.ScsMap
             Uid = Utils.GenerateUuid();
         }
 
+        public bool IsOrphaned() => ForwardItem is null && BackwardItem is null;
+
         private const float positionFactor = 256f;
 
         /// <summary>

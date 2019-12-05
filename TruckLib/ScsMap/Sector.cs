@@ -65,9 +65,12 @@ namespace TruckLib.ScsMap
         /// </summary>
         private const ulong dataEof = ulong.MaxValue;
 
-        public Sector()
-        {
-        }
+        private const string BaseExtension = "base";
+        private const string DataExtension = "data";
+        private const string AuxExtenstion = "aux";
+        private const string DescExtension = "desc";
+
+        public Sector() { }
 
         /// <summary></summary>
         /// <param name="x">The X coordinate.</param>
@@ -89,14 +92,11 @@ namespace TruckLib.ScsMap
             GetSectorCoordsFromBasePath(basePath);
             Map = map;
         }
-        
+
         /// <summary>
         /// Reads the sector from the specified .base path.
         /// </summary>
-        public void Read()
-        {
-            Open(BasePath);
-        }
+        public void Read() => Open(BasePath);
 
         /// <summary>
         /// Reads the sector.
@@ -109,9 +109,9 @@ namespace TruckLib.ScsMap
             GetSectorCoordsFromBasePath(basePath);
 
             ReadBase(basePath);
-            ReadData(Path.ChangeExtension(basePath, ".data"));
-            ReadAux(Path.ChangeExtension(basePath, ".aux"));
-            ReadDesc(Path.ChangeExtension(basePath, ".desc"));
+            ReadData(Path.ChangeExtension(basePath, DataExtension));
+            ReadAux(Path.ChangeExtension(basePath, AuxExtenstion));
+            ReadDesc(Path.ChangeExtension(basePath, DescExtension));
         }
 
         internal void GetSectorCoordsFromBasePath(string basePath)
@@ -269,10 +269,10 @@ namespace TruckLib.ScsMap
         /// <param name="sectorDirectory">The sector directory.</param>
         public void Save(string sectorDirectory)
         {
-            WriteBase(GetFilename("base"), MapItems);
-            WriteData(GetFilename("data"), MapItems);
-            WriteAux(GetFilename("aux"), MapItems);
-            WriteDesc(GetFilename("desc"));
+            WriteBase(GetFilename(BaseExtension), MapItems);
+            WriteData(GetFilename(DataExtension), MapItems);
+            WriteAux(GetFilename(AuxExtenstion), MapItems);
+            WriteDesc(GetFilename(DescExtension));
 
             string GetFilename(string ext)
             {

@@ -14,8 +14,9 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Terrain : PolylineItem
     {
-        // TODO: Use the new KdopItem system
-        // not sure how to implement it while keeping Left/Right items
+        // TODO: Use the new KdopItem system.
+        // not sure how to implement it while keeping the flexibility
+        // of Left/Right objects, RoadTerrain class, Clone() methods etc.
         public override ItemType ItemType => ItemType.Terrain;
 
         public override ItemFile DefaultItemFile => ItemFile.Aux;
@@ -139,6 +140,7 @@ namespace TruckLib.ScsMap
         private const float modelOffsetFactor = 100f;
         private const float noDetVegFromToFactor = 10f;
         private const float terrainSizeFactor = noDetVegFromToFactor;
+        private const int distFactor = 10;
 
         public override void ReadFromStream(BinaryReader r)
         {
@@ -148,52 +150,38 @@ namespace TruckLib.ScsMap
             // KDOP
             BoundingBox.ReadFromStream(r);
 
-            // 1: Water Reflection; 2: Right vegetation collision;
-            // 3+4: Step size;
-            // 5+6 Right terrain transition;
-            // 7+8: Right terrain noise
-            var flags1 = r.ReadByte();
-            var bitArr1 = new BitArray(new byte[] { flags1 });
-            WaterReflection = bitArr1[8 - 1];
-            Right.VegetationCollision = bitArr1[8 - 2];
-            StepSize = (StepSize)((flags1 >> 4) & 0b11);
-            Right.Terrain.Transition = (TerrainTransition)((flags1 >> 2) & 0b11);
-            Right.Terrain.Noise = (TerrainNoise)(flags1 & 0b11);
+            var kflag1 = r.ReadByte();
+            var karr1 = new BitArray(new[] { kflag1 });
+            Right.Terrain.Noise = (TerrainNoise)(kflag1 & 0b11);
+            Right.Terrain.Transition = (TerrainTransition)((kflag1 >> 2) & 0b11);
+            StepSize = (StepSize)((kflag1 >> 4) & 0b11);
+            Right.VegetationCollision = karr1[6];
+            WaterReflection = karr1[7];
 
-            // 1: Unknown; 2: Ignore cut planes;
-            // 3: Low poly vegetation; 4: Stretch terrain;
-            // 5: Right no detail vegetation; 6: No boundary;
-            // 7: No collision; 8: Invert railing
-            var flags2 = r.ReadByte();
-            var bitArr2 = new BitArray(new byte[] { flags2 });
-            IgnoreCutPlanes = bitArr2[8 - 2];
-            LowPolyVegetation = bitArr2[8 - 3];
-            StretchTerrain = bitArr2[8 - 4];
-            Right.NoDetailVegetation = bitArr2[8 - 5];
-            NoBoundary = bitArr2[8 - 6];
-            NoCollision = bitArr2[8 - 7];
-            Railings.InvertRailing = bitArr2[8 - 8];
+            var kflag2 = r.ReadByte();
+            var karr2 = new BitArray(new[] { kflag2 });
+            Railings.InvertRailing = karr2[0];
+            NoCollision = karr2[1];
+            NoBoundary = karr2[2];
+            Right.NoDetailVegetation = karr2[3];
+            StretchTerrain = karr2[4];
+            LowPolyVegetation = karr2[5];
+            IgnoreCutPlanes = karr2[6];
 
-            // 6: Smooth detail veg.; 8: No terrain shadows
-            // rest unknown
-            var flags3 = r.ReadByte();
-            var bitArr3 = new BitArray(new byte[] { flags3 });
-            SmoothDetailVegetation = bitArr3[8 - 6];
-            NoTerrainShadows = bitArr3[8 - 8];
+            var kflag3 = r.ReadByte();
+            var karr3 = new BitArray(new[] { kflag3 });
+            NoTerrainShadows = karr3[0];
+            SmoothDetailVegetation = karr3[2];
 
-            // 1: Unknown; 2: Unknown;
-            // 3: Left vegetation collision; 4: Left no detail vegetation;
-            // 5+6 Left terrain transition;
-            // 7+8: Left terrain noise
-            var flags4 = r.ReadByte();
-            var bitArr4 = new BitArray(new byte[] { flags4 });
-            Left.VegetationCollision = bitArr4[8 - 3];
-            Left.NoDetailVegetation = bitArr4[8 - 4];
-            Left.Terrain.Transition = (TerrainTransition)((flags4 >> 2) & 0b11);
-            Left.Terrain.Noise = (TerrainNoise)(flags4 & 0b11);
+            var kflag4 = r.ReadByte();
+            var karr4 = new BitArray(new[] { kflag4 });
+            Left.Terrain.Noise = (TerrainNoise)(kflag4 & 0b11);
+            Left.Terrain.Transition = (TerrainTransition)((kflag4 >> 2) & 0b11);
+            Left.VegetationCollision = karr4[3];
+            Left.NoDetailVegetation = karr4[4];
 
             // View distance
-            ViewDistance = (ushort)((int)r.ReadByte() * 10);
+            ViewDistance = (ushort)(r.ReadByte() * distFactor);
 
             // nodes
             Node = new UnresolvedNode(r.ReadUInt64());
@@ -278,52 +266,38 @@ namespace TruckLib.ScsMap
             // KDOP
             BoundingBox.WriteToStream(w);
 
-            // 1: Water Reflection; 2: Right vegetation collision;
-            // 3+4: Step size;
-            // 5+6 Right terrain transition;
-            // 7+8: Right terrain noise
-            byte flags1 = 0;
-            flags1 |= (byte)(WaterReflection.ToByte() << 7);
-            flags1 |= (byte)(Right.VegetationCollision.ToByte() << 6);
-            flags1 |= (byte)((byte)StepSize << 4);
-            flags1 |= (byte)((byte)Right.Terrain.Transition << 2);
-            flags1 |= (byte)Right.Terrain.Noise;
-            w.Write(flags1);
+            byte kflag1 = 0;
+            kflag1 |= (byte)(WaterReflection.ToByte() << 7);
+            kflag1 |= (byte)(Right.VegetationCollision.ToByte() << 6);
+            kflag1 |= (byte)((byte)StepSize << 4);
+            kflag1 |= (byte)((byte)Right.Terrain.Transition << 2);
+            kflag1 |= (byte)Right.Terrain.Noise;
+            w.Write(kflag1);
 
-            // 1: Unknown; 2: Ignore cut planes;
-            // 3: Low poly vegetation; 4: Stretch terrain;
-            // 5: Right no detail vegetation; 6: No boundary;
-            // 7: No collision; 8: Invert railing
-            byte flags2 = 0;
-            flags2 |= (byte)(IgnoreCutPlanes.ToByte() << 6);
-            flags2 |= (byte)(LowPolyVegetation.ToByte() << 5);
-            flags2 |= (byte)(StretchTerrain.ToByte() << 4);
-            flags2 |= (byte)(Right.NoDetailVegetation.ToByte() << 3);
-            flags2 |= (byte)(NoBoundary.ToByte() << 2);
-            flags2 |= (byte)(NoCollision.ToByte() << 1);
-            flags2 |= Railings.InvertRailing.ToByte();
-            w.Write(flags2);
+            byte kflag2 = 0;
+            kflag2 |= (byte)(IgnoreCutPlanes.ToByte() << 6);
+            kflag2 |= (byte)(LowPolyVegetation.ToByte() << 5);
+            kflag2 |= (byte)(StretchTerrain.ToByte() << 4);
+            kflag2 |= (byte)(Right.NoDetailVegetation.ToByte() << 3);
+            kflag2 |= (byte)(NoBoundary.ToByte() << 2);
+            kflag2 |= (byte)(NoCollision.ToByte() << 1);
+            kflag2 |= Railings.InvertRailing.ToByte();
+            w.Write(kflag2);
 
-            // 6: Smooth detail veg.; 8: No terrain shadows
-            // rest unknown
-            byte flags3 = 0;
-            flags3 |= (byte)(SmoothDetailVegetation.ToByte() << 2);
-            flags3 |= NoTerrainShadows.ToByte();
-            w.Write(flags3);
+            byte kflag3 = 0;
+            kflag3 |= (byte)(SmoothDetailVegetation.ToByte() << 2);
+            kflag3 |= NoTerrainShadows.ToByte();
+            w.Write(kflag3);
 
-            // 1: Unknown; 2: Unknown;
-            // 3: Left vegetation collision; 4: Left no detail vegetation;
-            // 5+6 Left terrain transition;
-            // 7+8: Left terrain noise
-            byte flags4 = 0;
-            flags4 |= (byte)(Left.VegetationCollision.ToByte() << 5);
-            flags4 |= (byte)(Left.NoDetailVegetation.ToByte() << 4);
-            flags4 |= (byte)((byte)Left.Terrain.Transition << 2);
-            flags4 |= (byte)Left.Terrain.Noise;
-            w.Write(flags4);
+            byte kflag4 = 0;
+            kflag4 |= (byte)(Left.VegetationCollision.ToByte() << 5);
+            kflag4 |= (byte)(Left.NoDetailVegetation.ToByte() << 4);
+            kflag4 |= (byte)((byte)Left.Terrain.Transition << 2);
+            kflag4 |= (byte)Left.Terrain.Noise;
+            w.Write(kflag4);
 
             // View distance
-            w.Write((byte)(ViewDistance / 10));
+            w.Write((byte)(ViewDistance / distFactor));
 
             // nodes
             w.Write(Node.Uid);

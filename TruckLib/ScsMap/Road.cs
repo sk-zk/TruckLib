@@ -15,8 +15,9 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Road : PolylineItem, IDataPart
     {
-        // TODO: Use the new KdopItem system
-        // not sure how to implement it while keeping Left/Right items
+        // TODO: Use the new KdopItem system.
+        // not sure how to implement it while keeping the flexibility
+        // of Left/Right objects, RoadTerrain class, Clone() methods etc.
 
         public override ItemType ItemType => ItemType.Road;
 
@@ -78,9 +79,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The segment step size.
         /// </summary>
-        // set to HighPoly by default since you probably aren't creating non-template roads,
-        // so the road is HighPoly no matter what, but this setting is needed regardless to
-        // make the terrain match the road.
+        // set to HighPoly by default since you probably aren't creating
+        // non-template roads, so the road is HighPoly no matter what, 
+        // but this setting is needed to make the terrain match the road.
         public RoadResolution Resolution { get; set; } = RoadResolution.HighPoly;
 
         /// <summary>
@@ -144,10 +145,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection = false;
 
-        public Road()
-        {
-        }
-
+        public Road() { }
+        
         /// <summary>
         /// Adds a single road segment to the map.
         /// </summary>
@@ -271,7 +270,7 @@ namespace TruckLib.ScsMap
         private const float centerVegDensityFactor = 10f;
         private const float centerVegOffsetFactor = 10f;
         private const float vegFromToFactor = 10f;
-
+        private const int viewDistFactor = 10;
 
         /// <summary>
         /// Reads the .base component of this road.
@@ -282,100 +281,76 @@ namespace TruckLib.ScsMap
             Uid = r.ReadUInt64();
             BoundingBox.ReadFromStream(r);
 
-            // 1+2: Right terrain transition; 3+4 Left terrain transition
-            // 5+6: Right terrain noise; 7+8: Left terrain noise
-            var flags1 = r.ReadByte();
-            Right.Terrain.Transition = (TerrainTransition)((flags1 >> 6) & 0b11);
-            Left.Terrain.Transition = (TerrainTransition)((flags1 >> 4) & 0b11);
-            Right.Terrain.Noise = (TerrainNoise)((flags1 >> 2) & 0b11);
-            Left.Terrain.Noise = (TerrainNoise)(flags1 & 0b11);
+            // === kdop flags ===
+            var kflag1 = r.ReadByte();
+            Left.Terrain.Noise = (TerrainNoise)(kflag1 & 0b11);
+            Right.Terrain.Noise = (TerrainNoise)((kflag1 >> 2) & 0b11);
+            Left.Terrain.Transition = (TerrainTransition)((kflag1 >> 4) & 0b11);
+            Right.Terrain.Transition = (TerrainTransition)((kflag1 >> 6) & 0b11);
 
-            // 1: Left hand traffic; 2: Water reflection;
-            // 3: Left vegetation collision; 4: Right vegetation collision;
-            // 5+6: Right sidewalk size; 7+8: Left sidewalk size
-            var flags2 = r.ReadByte();
-            var bitArr2 = new BitArray(new byte[] { flags2 });
-            LeftHandTraffic = bitArr2[8 - 1];
-            WaterReflection = bitArr2[8 - 2];
-            Left.VegetationCollision = bitArr2[8 - 3];
-            Right.VegetationCollision = bitArr2[8 - 4];
-            Right.Sidewalk.Size = (SidewalkSize)((flags2 >> 2) & 0b11);
-            Left.Sidewalk.Size = (SidewalkSize)(flags2 & 0b11);
+            var kflag2 = r.ReadByte();
+            var karr2 = new BitArray(new[] { kflag2 });
+            Left.Sidewalk.Size = (SidewalkSize)(kflag2 & 0b11);
+            Right.Sidewalk.Size = (SidewalkSize)((kflag2 >> 2) & 0b11);
+            Right.VegetationCollision = karr2[4];
+            Left.VegetationCollision = karr2[5];
+            WaterReflection = karr2[6];
+            LeftHandTraffic = karr2[7];
 
-            // 1: Unknown; 2: No AI Vehicles;
-            // 3: Left Model1 Shift; 4: Right Model1 Shift;
-            // 5: Is City Road; 6: Left Invert Railing;
-            // 7: Right Invert Railing; 8: Unknown
-            var flags3 = r.ReadByte();
-            var bitArr3 = new BitArray(new byte[] { flags3 });
-            NoAiVehicles = bitArr3[8 - 2];
-            Left.Models[0].Shift = bitArr3[8 - 3];
-            Right.Models[0].Shift = bitArr3[8 - 4];
-            IsCityRoad = bitArr3[8 - 5];
-            Left.Railings.InvertRailing = bitArr3[8 - 6];
-            Right.Railings.InvertRailing = bitArr3[8 - 7];
+            var kflag3 = r.ReadByte();
+            var karr3 = new BitArray(new[] { kflag3 });
+            Right.Railings.InvertRailing = karr3[1];
+            Left.Railings.InvertRailing = karr3[2];
+            IsCityRoad = karr3[3];
+            Right.Models[0].Shift = karr3[4];
+            Left.Models[0].Shift = karr3[5];
+            NoAiVehicles = karr3[6];
 
-            // 1: Unknown; 2: Stretch terrain; 
-            // 3: Left No detail vegetation; 4: Right no detail vegetation;
-            // 5: No boundary; 6: No collision;
-            // 7: Hide in UI map; 8: High-poly road
-            var flags4 = r.ReadByte();
-            var bitArr4 = new BitArray(new byte[] { flags4 });
-            StretchTerrain = bitArr4[8 - 2];
-            Left.NoDetailVegetation = bitArr4[8 - 3];
-            Right.NoDetailVegetation = bitArr4[8 - 4];
-            NoBoundary = bitArr4[8 - 5];
-            NoCollision = bitArr4[8 - 6];
-            HideInUiMap = bitArr4[8 - 7];
-            var highPolyRoad = bitArr4[8 - 8];
-            if (highPolyRoad) Resolution = RoadResolution.HighPoly;
+            var kflag4 = r.ReadByte();
+            var karr4 = new BitArray(new[] { kflag4 });
+            var highPolyRoad = karr4[0];
+            Resolution = highPolyRoad ? RoadResolution.HighPoly : RoadResolution.Normal;
+            HideInUiMap = karr4[1];
+            NoCollision = karr4[2];
+            NoBoundary = karr4[3];
+            Right.NoDetailVegetation = karr4[4];
+            Left.NoDetailVegetation = karr4[5];
+            StretchTerrain = karr4[6];
 
             // View distance
-            ViewDistance = (ushort)((int)r.ReadByte() * 10);
+            ViewDistance = (ushort)(r.ReadByte() * viewDistFactor);
 
             // === road_flags ===
-            // 1: No terrain shadows; 2: Left Model2 Shift; 
-            // 3: Right Model2 Shift; 4: Unknown;
-            // 5: Unknown; 6: Ignore cut planes;
-            // 7: Superfine; 8: Low-poly vegetation
-            var flags5 = r.ReadByte();
-            var bitArr5 = new BitArray(new byte[] { flags5 });
-            NoTerrainShadows = bitArr5[8 - 1];
-            Left.Models[1].Shift = bitArr5[8 - 2];
-            Right.Models[1].Shift = bitArr5[8 - 3];
-            IgnoreCutPlanes = bitArr5[8 - 6];
-            var superfine = bitArr5[8 - 7];
+            var rflag1 = r.ReadByte();
+            var rarr1 = new BitArray(new[] { rflag1 });
+            LowPolyVegetation = rarr1[0];
+            var superfine = rarr1[1];
             if (superfine) Resolution = RoadResolution.Superfine;
-            LowPolyVegetation = bitArr5[8 - 8];
+            IgnoreCutPlanes = rarr1[2];
+            Right.Models[1].Shift = rarr1[5];
+            Left.Models[1].Shift = rarr1[6];
+            NoTerrainShadows = rarr1[7];
 
             // DLC guard
             DlcGuard = r.ReadByte();
 
-            // 1: Right shoulder blocked; 2: Left shoulder blocked;
-            // 3: Left Model2 Flip; 4: Left Model1 Flip;
-            // 5: Right Model2 Flip; 6: Right Model1 Flip;
-            // 7: Smooth detail vegetation; 8: Unknown
-            var flags6 = r.ReadByte();
-            var bitArr6 = new BitArray(new byte[] { flags6 });
-            Right.ShoulderBlocked = bitArr6[8 - 1];
-            Left.ShoulderBlocked = bitArr6[8 - 2];
-            Left.Models[1].Flip = bitArr6[8 - 3];
-            Left.Models[0].Flip = bitArr6[8 - 4];
-            Right.Models[1].Flip = bitArr6[8 - 5];
-            Right.Models[0].Flip = bitArr6[8 - 6];
-            SmoothDetailVegetation = bitArr6[8 - 7];
+            var rflag3 = r.ReadByte();
+            var rarr3 = new BitArray(new[] { rflag3 });
+            SmoothDetailVegetation = rarr3[1];
+            Right.Models[0].Flip = rarr3[2];
+            Right.Models[1].Flip = rarr3[3];
+            Left.Models[0].Flip = rarr3[4];
+            Left.Models[1].Flip = rarr3[5];
+            Left.ShoulderBlocked = rarr3[6];
+            Right.ShoulderBlocked = rarr3[7];
 
-            // 1: Unknown; 2: Unknown;
-            // 3: Unknown; 4: GPS Avoid;
-            // 5: Right railing Center part only; 6: Left railing Center part only;
-            // 7: Right railing Double sided; 8: Left railing Double sided
-            var flags7 = r.ReadByte();
-            var bitArr7 = new BitArray(new byte[] { flags7 });
-            GpsAvoid = bitArr7[8 - 4];
-            Right.Railings.CenterPartOnly = bitArr7[8 - 5];
-            Left.Railings.CenterPartOnly = bitArr7[8 - 6];
-            Right.Railings.DoubleSided = bitArr7[8 - 7];
-            Left.Railings.DoubleSided = bitArr7[8 - 8];
+            var rflag4 = r.ReadByte();
+            var rarr4 = new BitArray(new[] { rflag4 });
+            Left.Railings.DoubleSided = rarr4[0];
+            Right.Railings.DoubleSided = rarr4[1];
+            Left.Railings.CenterPartOnly = rarr4[2];
+            Right.Railings.CenterPartOnly = rarr4[3];
+            GpsAvoid = rarr4[4];
 
             RoadType = r.ReadToken();
 
@@ -496,98 +471,75 @@ namespace TruckLib.ScsMap
             w.Write(Uid);
             BoundingBox.WriteToStream(w);
 
-            // 1+2: Right terrain transition; 3+4 Left terrain transition
-            // 5+6: Right terrain noise; 7+8: Left terrain noise
-            byte flags1 = 0;
-            flags1 |= (byte)((byte)Right.Terrain.Transition << 6);
-            flags1 |= (byte)((byte)Left.Terrain.Transition << 4);
-            flags1 |= (byte)((byte)Right.Terrain.Noise << 2);
-            flags1 |= (byte)Left.Terrain.Noise;
-            w.Write(flags1);
+            // === kdop flags ===
+            byte kflag1 = 0;
+            kflag1 |= (byte)Left.Terrain.Noise;
+            kflag1 |= (byte)((byte)Right.Terrain.Noise << 2);
+            kflag1 |= (byte)((byte)Left.Terrain.Transition << 4);
+            kflag1 |= (byte)((byte)Right.Terrain.Transition << 6);
+            w.Write(kflag1);
 
-            // 1: Left hand traffic; 2: Water reflection;
-            // 3: Left vegetation collision; 4: Right vegetation collision;
-            // 5+6: Right sidewalk size; 7+8: Left sidewalk size
-            byte flags2 = 0;
-            flags2 |= (byte)(LeftHandTraffic.ToByte() << 7);
-            flags2 |= (byte)(WaterReflection.ToByte() << 6);
-            flags2 |= (byte)(Left.VegetationCollision.ToByte() << 5);
-            flags2 |= (byte)(Right.VegetationCollision.ToByte() << 4);
-            flags2 |= (byte)((byte)Right.Sidewalk.Size << 2);
-            flags2 |= (byte)Left.Sidewalk.Size;
-            w.Write(flags2);
+            byte kflag2 = 0;
+            kflag2 |= (byte)Left.Sidewalk.Size;
+            kflag2 |= (byte)((byte)Right.Sidewalk.Size << 2);
+            kflag2 |= (byte)(Right.VegetationCollision.ToByte() << 4);
+            kflag2 |= (byte)(Left.VegetationCollision.ToByte() << 5);
+            kflag2 |= (byte)(WaterReflection.ToByte() << 6);
+            kflag2 |= (byte)(LeftHandTraffic.ToByte() << 7);
+            w.Write(kflag2);
 
-            // 1: Unknown; 2: No AI Vehicles;
-            // 3: Left Model1 Shift; 4: Right Model1 Shift;
-            // 5: Is City Road; 6: Left Invert Railing;
-            // 7: Right Invert Railing; 8: Unknown
-            byte flags3 = 0;
-            flags3 |= (byte)(NoAiVehicles.ToByte() << 6);
-            flags3 |= (byte)(Left.Models[0].Shift.ToByte() << 5);
-            flags3 |= (byte)(Right.Models[0].Shift.ToByte() << 4);
-            flags3 |= (byte)(IsCityRoad.ToByte() << 3);
-            flags3 |= (byte)(Left.Railings.InvertRailing.ToByte() << 2);
-            flags3 |= (byte)(Right.Railings.InvertRailing.ToByte() << 1);
-            w.Write(flags3);
+            byte kflag3 = 0;
+            kflag3 |= (byte)(Right.Railings.InvertRailing.ToByte() << 1);
+            kflag3 |= (byte)(Left.Railings.InvertRailing.ToByte() << 2);
+            kflag3 |= (byte)(IsCityRoad.ToByte() << 3);
+            kflag3 |= (byte)(Right.Models[0].Shift.ToByte() << 4);
+            kflag3 |= (byte)(Left.Models[0].Shift.ToByte() << 5);
+            kflag3 |= (byte)(NoAiVehicles.ToByte() << 6);
+            w.Write(kflag3);
 
-            // 1: Unknown; 2: Stretch terrain; 
-            // 3: Left No detail vegetation; 4: Right no detail vegetation;
-            // 5: No boundary; 6: No collision;
-            // 7: Hide in UI map; 8: High-poly road
-            byte flags4 = 0;
-            flags4 |= (byte)(StretchTerrain.ToByte() << 6);
-            flags4 |= (byte)(Left.NoDetailVegetation.ToByte() << 5);
-            flags4 |= (byte)(Right.NoDetailVegetation.ToByte() << 4);
-            flags4 |= (byte)(NoBoundary.ToByte() << 3);
-            flags4 |= (byte)(NoCollision.ToByte() << 2);
-            flags4 |= (byte)(HideInUiMap.ToByte() << 1);
-            flags4 |= (Resolution == RoadResolution.HighPoly).ToByte();
-            w.Write(flags4);
+            byte kflag4 = 0;
+            kflag4 |= (Resolution == RoadResolution.HighPoly).ToByte();
+            kflag4 |= (byte)(HideInUiMap.ToByte() << 1);
+            kflag4 |= (byte)(NoCollision.ToByte() << 2);
+            kflag4 |= (byte)(NoBoundary.ToByte() << 3);
+            kflag4 |= (byte)(Right.NoDetailVegetation.ToByte() << 4);
+            kflag4 |= (byte)(Left.NoDetailVegetation.ToByte() << 5);
+            kflag4 |= (byte)(StretchTerrain.ToByte() << 6);
+            w.Write(kflag4);
 
             // View distance
-            w.Write((byte)(ViewDistance / 10));
+            w.Write((byte)(ViewDistance / viewDistFactor));
 
-            // 1: No terrain shadows; 2: Left Model2 Shift; 
-            // 3: Right Model2 Shift; 4: Unknown;
-            // 5: Unknown; 6: Ignore cut planes;
-            // 7: Superfine; 8: Low-poly vegetation
-            byte flags5 = 0;
-            flags5 |= (byte)(NoTerrainShadows.ToByte() << 7);
-            flags5 |= (byte)(Left.Models[1].Shift.ToByte() << 6);
-            flags5 |= (byte)(Right.Models[1].Shift.ToByte() << 5);
-            flags5 |= (byte)(IgnoreCutPlanes.ToByte() << 2);
-            flags5 |= (byte)((Resolution == RoadResolution.Superfine).ToByte() << 1);
-            flags5 |= LowPolyVegetation.ToByte();
-            w.Write(flags5);
+            // === road_flags ===
+            byte rflag1 = 0;
+            rflag1 |= LowPolyVegetation.ToByte();
+            rflag1 |= (byte)((Resolution == RoadResolution.Superfine).ToByte() << 1);
+            rflag1 |= (byte)(IgnoreCutPlanes.ToByte() << 2);
+            rflag1 |= (byte)(Right.Models[1].Shift.ToByte() << 5);
+            rflag1 |= (byte)(Left.Models[1].Shift.ToByte() << 6);
+            rflag1 |= (byte)(NoTerrainShadows.ToByte() << 7);
+            w.Write(rflag1);
 
             // DLC guard
-            w.Write((byte)DlcGuard);
+            w.Write(DlcGuard);
 
-            // 1: Right shoulder blocked; 2: Left shoulder blocked;
-            // 3: Left Model2 Flip; 4: Left Model1 Flip;
-            // 5: Right Model2 Flip; 6: Right Model1 Flip;
-            // 7: Smooth detail vegetation; 8: Unknown
-            byte flags6 = 0;
-            flags6 |= (byte)(Right.ShoulderBlocked.ToByte() << 7);
-            flags6 |= (byte)(Left.ShoulderBlocked.ToByte() << 6);
-            flags6 |= (byte)(Left.Models[1].Flip.ToByte() << 5);
-            flags6 |= (byte)(Left.Models[0].Flip.ToByte() << 4);
-            flags6 |= (byte)(Right.Models[1].Flip.ToByte() << 3);
-            flags6 |= (byte)(Right.Models[0].Flip.ToByte() << 2);
-            flags6 |= (byte)(SmoothDetailVegetation.ToByte() << 1);
-            w.Write(flags6);
+            byte rflag3 = 0;
+            rflag3 |= (byte)(SmoothDetailVegetation.ToByte() << 1);
+            rflag3 |= (byte)(Right.Models[0].Flip.ToByte() << 2);
+            rflag3 |= (byte)(Right.Models[1].Flip.ToByte() << 3);
+            rflag3 |= (byte)(Left.Models[0].Flip.ToByte() << 4);
+            rflag3 |= (byte)(Left.Models[1].Flip.ToByte() << 5);
+            rflag3 |= (byte)(Left.ShoulderBlocked.ToByte() << 6);
+            rflag3 |= (byte)(Right.ShoulderBlocked.ToByte() << 7);
+            w.Write(rflag3);
 
-            // 1: Unknown; 2: Unknown;
-            // 3: Unknown but I've seen it in use; 4: GPS Avoid;
-            // 5: Right railing Center part only; 6: Left railing Center part only;
-            // 7: Right railing Double sided; 8: Left railing Double sided
-            byte flags7 = 0;
-            flags7 |= (byte)(GpsAvoid.ToByte() << 4);
-            flags7 |= (byte)(Right.Railings.CenterPartOnly.ToByte() << 3);
-            flags7 |= (byte)(Left.Railings.CenterPartOnly.ToByte() << 2);
-            flags7 |= (byte)(Right.Railings.DoubleSided.ToByte() << 1);
-            flags7 |= Left.Railings.DoubleSided.ToByte();
-            w.Write(flags7);
+            byte rflag4 = 0;
+            rflag4 |= Left.Railings.DoubleSided.ToByte();
+            rflag4 |= (byte)(Right.Railings.DoubleSided.ToByte() << 1);
+            rflag4 |= (byte)(Left.Railings.CenterPartOnly.ToByte() << 2);
+            rflag4 |= (byte)(Right.Railings.CenterPartOnly.ToByte() << 3);
+            rflag4 |= (byte)(GpsAvoid.ToByte() << 4);
+            w.Write(rflag4);
 
             w.Write(RoadType);
 
@@ -695,5 +647,4 @@ namespace TruckLib.ScsMap
         }
 
     }
-
 }

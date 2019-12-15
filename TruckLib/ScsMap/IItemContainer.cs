@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,9 +22,9 @@ namespace TruckLib.ScsMap
 
         Dictionary<ulong, Node> GetAllNodes();
 
-        Node AddNode(System.Numerics.Vector3 position, bool isRed);
+        Node AddNode(Vector3 position, bool isRed);
 
-        Node AddNode(System.Numerics.Vector3 position);
+        Node AddNode(Vector3 position);
 
         /// <summary>
         /// Adds an item to the map. This is the final step in the Add() method of an item
@@ -32,6 +33,10 @@ namespace TruckLib.ScsMap
         /// <param name="item">The item.</param>
         /// <param name="mainNode">The main node of the item. This will determine which sector
         /// contains the item.</param>
-        void AddItem(MapItem item, Node mainNode);
+        internal void AddItem(MapItem item, Node mainNode);
+
+        void Delete(MapItem item);
+
+        void Delete(Node node);
     }
 }

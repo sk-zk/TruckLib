@@ -276,6 +276,75 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Deletes an item. Nodes that are only used by this item 
+        /// will also be deleted.
+        /// </summary>
+        /// <param name="item"></param>
+        public void Delete(MapItem item)
+        {
+            // delete item from all sectors
+            foreach(var sectorKvp in Sectors)
+            {
+                if(sectorKvp.Value.MapItems.ContainsKey(item.Uid))
+                {
+                    sectorKvp.Value.MapItems.Remove(item.Uid);
+                }
+            }
+           
+            // remove item from its nodes, 
+            // and delete them if they're orphaned now
+            foreach(var node in item.GetItemNodes())
+            {
+                if (node.ForwardItem == item)
+                {
+                    node.ForwardItem = null;
+                    node.IsRed = false;
+                }
+                if (node.BackwardItem == item)
+                {
+                    node.BackwardItem = null;
+                }
+                if (node.IsOrphaned())
+                {
+                    Delete(node);
+                }
+            }
+
+            // delete dependent items
+            if(item is Prefab pf)
+            {
+                foreach(var s in pf.SlaveItems)
+                {
+                    Delete(s);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deletes a node and the items attached to it.
+        /// </summary>
+        /// <param name="node"></param>
+        public void Delete(Node node)
+        {
+            if (Nodes.ContainsKey(node.Uid))
+            {
+                Nodes.Remove(node.Uid);
+            }
+
+            if (node.ForwardItem is MapItem fw)
+            {
+                node.ForwardItem = null;
+                Delete(fw);
+            }
+
+            if (node.BackwardItem is MapItem bw)
+            {
+                node.BackwardItem = null;
+                Delete(bw);
+            }
+        }
+
+        /// <summary>
         /// Reads the .mbd of a map.
         /// </summary>
         /// <param name="mbdPath">The path to the .mbd file.</param>

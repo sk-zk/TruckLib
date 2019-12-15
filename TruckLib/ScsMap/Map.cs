@@ -261,16 +261,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
         /// <returns>All items of this type in the entire map.</returns>
-        public List<T> GetAllItems<T>() where T : MapItem
+        public Dictionary<ulong, T> GetAllItems<T>() where T : MapItem
         {
-            var allItems = new List<T>();
+            var allItems = new Dictionary<ulong, T>();
             foreach (var sectorKvp in Sectors)
             {
-                var items = sectorKvp.Value.MapItems.Where(x => x.Value is T);
-                foreach(var item in items)
-                {
-                    allItems.Add((T)item.Value);
-                }
+                var items = sectorKvp.Value.MapItems.Where(x => x.Value is T).ToDictionary(x => x.Key, x => (T)x.Value);
+                allItems.Union(items);
             }
             return allItems;
         }

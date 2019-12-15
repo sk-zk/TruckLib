@@ -105,17 +105,9 @@ namespace TruckLib.ScsMap
             return CompoundItems;
         }
 
-        public List<T> GetAllItems<T>() where T : MapItem
+        public Dictionary<ulong, T> GetAllItems<T>() where T : MapItem
         {
-            var allItems = new List<T>();
-            foreach (var item in CompoundItems)
-            {
-                if (item is T)
-                {
-                    allItems.Add((T)item.Value);
-                }
-            }       
-            return allItems;
+            return CompoundItems.Where(x => x.Value is T).ToDictionary(x => x.Key, x => (T)x.Value);
         }
 
         public Dictionary<ulong, Node> GetAllNodes()

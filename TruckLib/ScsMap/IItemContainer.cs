@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap
 
         Dictionary<ulong, MapItem> GetAllItems();
 
-        List<T> GetAllItems<T>() where T : MapItem;
+        Dictionary<ulong, T> GetAllItems<T>() where T : MapItem;
 
         Dictionary<ulong, Node> GetAllNodes();
 

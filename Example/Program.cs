@@ -15,16 +15,16 @@ namespace Example
             // Add a road segment:
             // Use the [Item Type].Add method to add a new item to the map.
             var r = Road.Add(map,
-                new Vector3(19, 0, 19.5f), // position of backward node
-                new Vector3(65, 0, 23),    // position of forward node
+                new Vector3(19, 0, 19.5f), // position of backward (red) node
+                new Vector3(65, 0, 23),    // position of forward (green) node
                 "ger1",  // unit name of the road
                 80, 80   // terrain size on the left and right side
                 );
 
             // Road properties:
-            // For roads that don't consist of two seperate roads
-            // (highways etc.), various values introduced with the template
-            // system are set on the right side of the road, but apply to both
+            // For roads that don't consist of two seperate roadways,
+            // various properties introduced with the template system
+            // are set for the right side of the road but apply to both
             // sides, and the values on the left side are ignored.
             r.Right.Look = "ger_1";
             r.Right.Variant = "broken_de";
@@ -33,8 +33,8 @@ namespace Example
 
             // Terrain properties:
             // Define what the terrain will look like.
-            // We'll set all of these values on the right side only
-            // and then clone it for the left side.
+            // We'll set all of the following properties on the right side only
+            // and then clone them to the left side.
             r.Right.Terrain.QuadData.Material = "34"; // "grass_ger_main"
             r.Right.Terrain.Profile = "profile12"; // "hills2"
             r.Right.Terrain.Noise = TerrainNoise.Percent0;
@@ -65,19 +65,19 @@ namespace Example
             // Finally, let's place two models:
             Model.Add(map,
                 new Vector3(103.75f, -0.3f, 31.73f), // position 
-                -2.99f, // Y rotation in radians
+                -2.99f,       // Y rotation in radians
                 "dlc_no_471", // unit name of "house_01_sc"
-                "brick", // variant
-                "default" // look
+                "brick",      // variant
+                "default"     // look
                 );
-            Model.Add(map, new Vector3(159.64f, -0.1f, 36.91f), (float)Math.PI / 2,
-                "378", "default", "default"); // wood_heap1
+            Model.Add(map, new Vector3(159.64f, -0.1f, 36.91f), 
+                (float)Math.PI / 2, "378", "default", "default"); // "wood_heap1"
 
             // Save the map
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var gameFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod");
+            var modFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod");
             var modName = "example";
-            map.Save(Path.Combine(gameFolder, modName, "map"), true);
+            map.Save(Path.Combine(modFolder, modName, "map"), true);
 
             // Don't forget to hit F8 after loading it in the editor for the first time.
         }

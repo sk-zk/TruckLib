@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
         /// </summary>
-        public Vector3[,] ControlPoints = new Vector3[ControlPointCols, ControlPointRows];
+        public Vector3[,] ControlPoints { get; set; } = new Vector3[ControlPointCols, ControlPointRows];
 
         public ushort XTesselation { get; set; } = 4;
 

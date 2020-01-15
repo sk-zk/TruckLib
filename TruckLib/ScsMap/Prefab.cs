@@ -15,8 +15,6 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Prefab : MapItem, IDataPart, IItemReferences
     {
-        // TODO: Use the new KdopItem system
-
         public override ItemType ItemType => ItemType.Prefab;
 
         public override ItemFile DefaultItemFile => ItemFile.Base;

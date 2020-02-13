@@ -499,6 +499,7 @@ namespace TruckLib.ScsMap
             w.Write(kflag2);
 
             byte kflag3 = 0;
+            // bit 0: obsolete Terrain Only flag
             kflag3 |= (byte)(Right.Railings.InvertRailing.ToByte() << 1);
             kflag3 |= (byte)(Left.Railings.InvertRailing.ToByte() << 2);
             kflag3 |= (byte)(IsCityRoad.ToByte() << 3);

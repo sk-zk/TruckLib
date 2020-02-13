@@ -20,6 +20,10 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        public float MinLength => 0f;
+
+        public float MaxLength => 1000;
+
         public new ushort ViewDistance
         {
             get => base.ViewDistance;

@@ -1,7 +1,7 @@
 **TruckLib** is an attempt at writing a C# library for working with the map format of Euro Truck Simulator 2
 and American Truck Simulator. Currently, the library supports map version 876 (game version 1.36.1).
 
-(The code is rather hacky and not "production ready" by any means, so expect plenty of bugs, missing features,
+(The code is 💩💩💩 and not "production ready" by any means, so expect plenty of bugs, missing features,
 sudden API changes, and inconsistent naming - you know, all that fun stuff that is exactly what you want from a library.)
 
 You can find a short usage sample in the Example folder. Proper documentation will follow eventually™.

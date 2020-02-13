@@ -22,6 +22,8 @@ namespace TruckLib
             'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '_'
         };
 
+        private static readonly int CharsetLength = CharacterSet.Length; // =38
+
         public static readonly int MaxLength = 12;
 
         public ulong Value { get; set; }
@@ -63,10 +65,12 @@ namespace TruckLib
             if (!IsValidToken(input))
                 throw new ArgumentException($"Input is not a valid token.");
 
-            ulong token = 0;
+            var token = 0UL;
+            input = input.ToLower();
             for (var i = 0; i < input.Length; i++)
             {
-                token += PowUl(i) * (ulong)GetCharIndex(input.ToLower()[i]);
+                token += (ulong)Math.Pow(CharsetLength, i) * 
+                    (ulong)GetCharIndex(input[i]);
             }
             return token;
         }
@@ -83,7 +87,7 @@ namespace TruckLib
 
             // Determine length of string
             int length = 1;
-            while (PowUl(length) - 1 < token)
+            while (Math.Pow(CharsetLength, length) - 1 < token)
             {
                 length++;
             }
@@ -94,34 +98,16 @@ namespace TruckLib
             {
                 // find the last character of the input
                 // by dividing by 38^len and ignoring the remainder
-                var powUl = PowUl(i - 1);
-                var character = token / powUl;
+                var pow = (ulong)Math.Pow(CharsetLength, i - 1);
+                var character = token / pow;
                 input[i - 1] += CharacterSet[character];
 
                 // subtract that part from the token
-                token -= (character * powUl);
+                token -= character * pow;
             }
 
             var inputStr = new string(input);
             return inputStr;
-        }
-
-        /// <summary>
-        /// Calculates Math.Pow(Letters.Length, num), except num is capped at
-        /// the largest possible exponent for which the result won't overflow
-        /// a ulong. So with 38 letters, the method will cap at 38^12 even
-        /// if num is greater than 12.
-        /// </summary>
-        /// <param name="num">The exponent.</param>
-        /// <returns>The result.</returns>
-        static ulong PowUl(int num)
-        {
-            ulong res = 1;
-            for (var i = 0; num > i; i++)
-            {
-                res *= (ulong)CharacterSet.Length;
-            }
-            return res;
         }
 
         /// <summary>
@@ -179,20 +165,14 @@ namespace TruckLib
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode();
-        }
+        public override int GetHashCode() 
+            => Value.GetHashCode();
 
-        public static bool operator ==(Token token, object obj)
-        {
-            return token.Equals(obj);
-        }
+        public static bool operator ==(Token token, object obj) 
+            => token.Equals(obj);
 
-        public static bool operator !=(Token token, object obj)
-        {
-            return !token.Equals(obj);
-        }
+        public static bool operator !=(Token token, object obj) 
+            => !token.Equals(obj);
 
         public static implicit operator Token(string s)
         {

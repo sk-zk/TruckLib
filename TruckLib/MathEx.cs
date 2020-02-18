@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib
 {
-    public static class MathEx
+    internal static class MathEx
     {
         // Don't look too closely at this file
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib
 {
-    internal static class MathEx
+    public static class MathEx
     {
         // Don't look too closely at this file
 
@@ -74,36 +74,6 @@ namespace TruckLib
                 forward = Vector3.Cross(right, axis);
             }
             return Math.Atan2(Vector3.Dot(v, right), Vector3.Dot(v, forward));
-        }
-
-        public static Vector3 CatmullRomPosition(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
-        {
-            // via https://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines/
-
-            // The coefficients of the cubic polynomial (except the 0.5f * which I added later for performance)
-            Vector3 a = 2f * p1;
-            Vector3 b = p2 - p0;
-            Vector3 c = 2f * p0 - 5f * p1 + 4f * p2 - p3;
-            Vector3 d = -p0 + 3f * p1 - 3f * p2 + p3;
-
-            // The cubic polynomial: a + b * t + c * t^2 + d * t^3
-            Vector3 pos = 0.5f * (a + (b * t) + (c * t*t) + (d * t*t*t));
-
-            return pos;
-        }
-
-        public static Vector3 CatmullRomDerivative(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
-        {
-            return -0.5f * p0
-                + 0.5f * p2
-                - 1.5f * t * t * p0
-                + 4.5f * t * t * p1
-                - 4.5f * t * t * p2
-                + 1.5f * t * t * p3
-                + 2f * p0 * t
-                - 5f * p1 * t
-                + 4f * p2 * t
-                - p3 * t;
         }
 
     }

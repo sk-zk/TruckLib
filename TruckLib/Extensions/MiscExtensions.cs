@@ -55,21 +55,37 @@ namespace TruckLib
         /// <returns>Euler angles in radians.</returns>
         public static Vector3 ToEuler(this Quaternion q)
         {
-            double qw = q.W;
-            double qx = q.X;
-            double qy = q.Y;
-            double qz = q.Z;
+            // via https://stackoverflow.com/a/56055813
 
-            var sqw = qw * qw;
-            var sqx = qx * qx;
-            var sqy = qy * qy;
-            var sqz = qz * qz;
+            double x, y, z;
 
-            var eX = Math.Atan2(-2.0 * (qy * qz - qw * qx), sqw - sqx - sqy + sqz);
-            var eY = Math.Asin(2.0 * (qx * qz + qw * qy));
-            var eZ = Math.Atan2(-2.0 * (qx * qy - qw * qz), sqw + sqx - sqy - sqz);
+            // if the input quaternion is normalized, this is exactly one. 
+            // Otherwise, this acts as a correction factor for the quaternion's not-normalizedness
+            float unit = (q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z) + (q.W * q.W);
 
-            return new Vector3((float)eX, (float)eY, (float)eZ);
+            // this will have a magnitude of 0.5 or greater if and only if this is a singularity case
+            float test = q.X * q.W - q.Y * q.Z;
+
+            if (test > 0.4995f * unit) // singularity at north pole
+            {
+                x = Math.PI / 2;
+                y = 2f * Math.Atan2(q.Y, q.X);
+                z = 0;
+            }
+            else if (test < -0.4995f * unit) // singularity at south pole
+            {
+                x = -Math.PI / 2;
+                y = -2f * Math.Atan2(q.Y, q.X);
+                z = 0;
+            }
+            else // no singularity - this is the majority of cases
+            {
+                x = Math.Asin(2f * (q.W * q.X - q.Y * q.Z));
+                y = Math.Atan2(2f * q.W * q.Y + 2f *  q.Z * q.X, 1 - 2f * (q.X * q.X + q.Y * q.Y));
+                z = Math.Atan2(2f * q.W * q.Z + 2f *  q.X * q.Y, 1 - 2f * (q.Z * q.Z + q.X * q.X));
+            }
+   
+            return new Vector3((float)x, (float)y, (float)z);
         }
 
         /// <summary>

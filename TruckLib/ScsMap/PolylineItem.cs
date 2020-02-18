@@ -86,57 +86,66 @@ namespace TruckLib.ScsMap
         internal T Append<T>(Vector3 position) where T : PolylineItem, new()
         {
             /* for readability:
-             * p2 = the new node that is being created
-             * p1 = the current forward node
-             * p0 = the current backward node (= Node)
+             * p3 = the new node that is being created
+             * p2 = the current forward node
+             * p1 = the current backward node (= Node)
              *
              *  x--------------x------------x
-             *  p0             p1           p2  <- we're adding this node
+             *  p1             p2           p3  <- we're adding this node
              *  Node        ForwardNode     new node
              *
              */
-            var p1 = ForwardNode;
-            var p0 = Node;
+            var p2 = ForwardNode;
+            var p1 = Node;
 
             if (ForwardItem != null) // there's already an item attached
             {
                 throw new ArgumentOutOfRangeException("Can't append item: ForwardItem is not null");
             }
 
-            var p2 = p1.Sectors[0].Map.AddNode(position, false);
+            var p3 = p2.Sectors[0].Map.AddNode(position, false);
             var newItem = new T
             {
-                Node = p1,
-                ForwardNode = p2
+                Node = p2,
+                ForwardNode = p3
             };
-            p1.ForwardItem = newItem;
-            p2.BackwardItem = newItem;
+            p2.ForwardItem = newItem;
+            p3.BackwardItem = newItem;
 
-            // Rotation:
-            // =========
-            //
-            // for every item that is added to the chain,
-            // 1) the rotation of p2 is calculated the same way as in Add.
-            //    the rotation of the nodes is the angle formed by
-            //    p2-p1 and the Z axis.
-            // 2) the rotation of the node p1
-            //      a) is set to (rot0 + rot2)/2 if there are only 
-            //         3 nodes in the chain;
-            //      b) is set to god knows what otherwise.
-            //         it must be the derivative of the spline at that point, but 
-            //         I don't even know which spline function the game uses.
-            //
-            // basically, this code is just wrong but it'll have to do for now.
-            //
-            // TL;DR: O MAN i don't know how to math pls to halp
+            // set rotation
+            if(p1.BackwardItem == null) // exactly 3 items in the chain
+            {
+                var dir = Vector3.Normalize(
+                    Vector3.Normalize(p2.Position - p1.Position) +
+                    Vector3.Normalize(p3.Position - p2.Position));
+                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
+                p2.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
 
-            SetRotation(p0, p1, p2);
+                p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
+            }
+            else // 4 or more items in the chain
+            {
+                var p0 = (p1.BackwardItem as PolylineItem).Node;
 
-            p1.IsRed = true;
-            p1.Sectors[0].MapItems.Add(newItem.Uid, newItem);          
+                var dir = Vector3.Normalize(
+                        HermiteSpline.Derivative(
+                            p1.Position,
+                            p1.Rotation.ToEuler(),
+                            p2.Position,
+                            p3.Position - p2.Position, // TODO: How is this tangent calculated?
+                            1f));
+                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
+                p2.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
+
+                p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position); 
+            }
+
+            p2.IsRed = true;
+            p2.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
             return newItem;
         }
+
         internal T Prepend<T>(Vector3 position) where T : PolylineItem, new()
         {
             /* for readability:
@@ -149,7 +158,6 @@ namespace TruckLib.ScsMap
              *  new node      Node       ForwardNode
              *  ^ we're adding this one
              */
-
             var p1 = Node;
             var p2 = ForwardNode;
 
@@ -167,37 +175,37 @@ namespace TruckLib.ScsMap
             p0.ForwardItem = newItem;
             p1.BackwardItem = newItem;
 
-            SetRotation(p2, p0, p1);
+            // set rotation
+            if(p2.ForwardItem == null) // exactly three items in the chain
+            {
+                var dir = Vector3.Normalize(
+                    Vector3.Normalize(p2.Position - p1.Position) +
+                    Vector3.Normalize(p1.Position - p0.Position));
+                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
+                p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
+
+                p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
+            }
+            else // 4 or more items in the chain
+            {
+                var p3 = (p2.ForwardItem as PolylineItem).Node;
+
+                var dir = Vector3.Normalize(
+                        HermiteSpline.Derivative(
+                            p0.Position,
+                            p1.Position, // TODO: How is this tangent calculated?
+                            p2.Position,
+                            p2.Rotation.ToEuler(),
+                            0f));
+                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
+                p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
+
+                p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
+            }
 
             p0.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
             return newItem;
-        }
-
-        internal static void SetRotation(Node p0, Node p1, Node p2)
-        {
-            var p2_direction = Vector3.Normalize((p2.Position - p1.Position) / 2f);
-            p2.Rotation = MathEx.GetNodeRotation(p1.Position, p2.Position);
-
-            var p0_direction = Vector3.Transform(-Vector3.UnitZ, p0.Rotation);
-            var old_p1_direction = Vector3.Transform(-Vector3.UnitZ, p1.Rotation);
-            Vector3 new_p1_direction;
-            double new_p1_angle;
-
-            if (p0.BackwardItem is null) // exactly three items in the chain
-            {
-                new_p1_direction = (p2_direction + p0_direction) / 2f;
-            }
-            else // more than 3 items in the chain
-            {
-                // ?????????
-                new_p1_direction = Vector3.Normalize(
-                    MathEx.CatmullRomDerivative(0, p0.Position, p1.Position, p2.Position, p2.Position + p2_direction)
-                );
-            }
-
-            new_p1_angle = MathEx.AngleOffAroundAxis(new_p1_direction, -Vector3.UnitZ, Vector3.UnitY, false);
-            p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)new_p1_angle, 0, 0);
         }
 
         internal override IEnumerable<Node> GetItemNodes()

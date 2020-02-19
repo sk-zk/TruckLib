@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Additional data for service prefabs (gas stations, etc).
+    /// Additional data for service prefabs (gas stations, weigh stations etc).
     /// </summary>
     public class Service : PrefabSlaveItem
     {

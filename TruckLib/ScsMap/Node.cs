@@ -102,6 +102,29 @@ namespace TruckLib.ScsMap
 
         public bool IsOrphaned() => ForwardItem is null && BackwardItem is null;
 
+        public void Move(Vector3 newPos)
+        {
+            // if the node isn't attached to a sector,
+            // just move it
+            if(Sectors is null || Sectors.Count == 0)
+            {
+                Position = newPos;
+                return;
+            }
+
+            var map = Sectors[0].Map;
+            // check if the new position is still inside 
+            // one of the node's sectors.
+            // if not, set Sectors to the new sector.
+            var newSector = Map.GetSectorOfCoordinate(newPos);
+            if(!Sectors.Any(s => s.X == newSector.X && s.Z == newSector.Z))
+            {
+                map.AddSector(newSector); // just in case
+                Sectors = new List<Sector> { map.Sectors[newSector] };
+            }
+            Position = newPos;
+        }
+
         private const float positionFactor = 256f;
 
         /// <summary>

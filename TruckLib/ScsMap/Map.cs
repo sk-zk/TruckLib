@@ -125,8 +125,9 @@ namespace TruckLib.ScsMap
         {
             if (Sectors.ContainsKey((x, z)))
             {
-                throw new ArgumentOutOfRangeException($"Sector {x}, {z} already exists.");
+                return Sectors[(x, z)];
             }
+
             var sector = new Sector(x, z, this);
             Sectors.Add((x, z), sector);
             return sector;
@@ -222,7 +223,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="c">The coordinate to check.</param>
         /// <returns>The index of the sector the coordinate is in.</returns>
-        public static (int, int) GetSectorOfCoordinate(Vector3 c)
+        public static (int X, int Z) GetSectorOfCoordinate(Vector3 c)
         {
             return (
                 (int)Math.Floor(c.X / SectorSize), 

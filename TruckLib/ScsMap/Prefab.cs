@@ -77,8 +77,7 @@ namespace TruckLib.ScsMap
 
         public uint RandomSeed { get; set; }
 
-        public List<PrefabSlaveItem> SlaveItems { get; set; }
-            = new List<PrefabSlaveItem>();
+        public List<MapItem> SlaveItems { get; set; } = new List<MapItem>();
 
         public List<VegetationPart> VegetationParts { get; set; } 
             = new List<VegetationPart>();
@@ -460,7 +459,7 @@ namespace TruckLib.ScsMap
 
             // Slave uids
             // (link to service items)
-            SlaveItems = ReadItemRefList(r).Cast<PrefabSlaveItem>().ToList();
+            SlaveItems = ReadItemRefList(r);
 
             // Ferry link
             var ferryLinkUid = r.ReadUInt64();
@@ -548,7 +547,7 @@ namespace TruckLib.ScsMap
             WriteNodeRefList(w, Nodes);
 
             // Slave nodes
-            WriteItemRefList(w, SlaveItems.Cast<MapItem>().ToList());
+            WriteItemRefList(w, SlaveItems);
 
             // Ferry link
             if (FerryLink is null)
@@ -643,9 +642,9 @@ namespace TruckLib.ScsMap
 
             for (int i = 0; i < SlaveItems.Count; i++)
             {
-                if (allItems.ContainsKey(SlaveItems[i].Uid))
+                if (SlaveItems[i] is UnresolvedItem && allItems.ContainsKey(SlaveItems[i].Uid))
                 {
-                    SlaveItems[i] = (PrefabSlaveItem)allItems[SlaveItems[i].Uid];
+                    SlaveItems[i] = allItems[SlaveItems[i].Uid];
                 }
             }
         }

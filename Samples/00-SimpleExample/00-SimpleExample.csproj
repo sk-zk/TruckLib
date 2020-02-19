@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TruckLib\TruckLib.csproj" />
+    <ProjectReference Include="..\..\TruckLib\TruckLib.csproj" />
   </ItemGroup>
 
 </Project>

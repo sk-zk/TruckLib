@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,16 @@ namespace TruckLib.ScsMap
         public uint BuyMode { get; set; }
 
         public List<Node> Nodes { get; set; } = new List<Node>();
+
+        internal override void MoveRel(Vector3 translation)
+        {
+            base.MoveRel(translation);
+
+            foreach (var node in Nodes)
+            {
+                node.Move(node.Position + translation);
+            }
+        }
 
         public override void ReadFromStream(BinaryReader r)
         {

@@ -50,6 +50,20 @@ namespace TruckLib.ScsMap
             return company;
         }
 
+        internal override void MoveRel(Vector3 translation)
+        {
+            base.MoveRel(translation);
+
+            var allNodes = UnloadPointsEasy.Concat(UnloadPointsMedium)
+                .Concat(UnloadPointsHard).Concat(TrailerSpawnPoints)
+                .Concat(Unknown1).Concat(Unknown2);
+
+            foreach (var node in allNodes)
+            {
+                node.Move(node.Position + translation);
+            }
+        }
+
         public override void ReadFromStream(BinaryReader r)
         {
             base.ReadFromStream(r);

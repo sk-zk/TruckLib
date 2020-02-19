@@ -433,6 +433,34 @@ namespace TruckLib.ScsMap
             return Nodes.Intersect(p2.Nodes).Any();
         }
 
+        /// <summary>
+        /// Moves the prefab to a different location.
+        /// </summary>
+        /// <param name="newPos">The new absolute position
+        /// of the origin node.</param>
+        public void Move(Vector3 newPos)
+        {
+            var translation = newPos - Nodes[Origin].Position;
+            MoveRel(translation);
+        }
+
+        /// <summary>
+        /// Moves the prefab to a different location.
+        /// </summary>
+        /// <param name="translation">The translation vector.</param>
+        public void MoveRel(Vector3 translation)
+        {
+            foreach (var node in Nodes)
+            {
+                node.Move(node.Position + translation);
+            }
+
+            foreach (var si in SlaveItems)
+            {
+                (si as PrefabSlaveItem).MoveRel(translation);
+            }
+        }
+
         internal override IEnumerable<Node> GetItemNodes()
         {
             return new List<Node>(Nodes);

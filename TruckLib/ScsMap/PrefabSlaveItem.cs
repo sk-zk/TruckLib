@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,11 @@ namespace TruckLib.ScsMap
         public PrefabSlaveItem()
         {
             Flags[31] = true; // always set to true, no idea what it means though
+        }
+
+        internal virtual void MoveRel(Vector3 translation)
+        {
+            Node.Move(Node.Position + translation);
         }
 
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)

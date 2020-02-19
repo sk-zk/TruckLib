@@ -76,7 +76,7 @@ namespace TruckLib.HashFs
         /// <param name="path"></param>
         /// <param name="absolute"></param>
         /// <returns></returns>
-        public List<string> GetDirectoryListing(string path, bool absolute = true)
+        public List<string> GetDirectoryListing(string path, bool absolute = true, bool filesOnly = false)
         {
             path = RemoveTrailingSlash(path);
 
@@ -99,6 +99,8 @@ namespace TruckLib.HashFs
                 // is directory
                 if (files[i].StartsWith(dirMarker))
                 {
+                    if (filesOnly) continue;
+
                     subPath = files[i].Substring(1) + "/";
                 }
                 // is file

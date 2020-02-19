@@ -87,6 +87,29 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
+        /// <summary>
+        /// Moves the item to a different location, where Nodes[0] 
+        /// will be set to the given position.
+        /// </summary>
+        /// <param name="newPos"></param>
+        public void Move(Vector3 newPos)
+        {
+            var translation = newPos - Nodes[0].Position;
+            MoveRel(translation);
+        }
+
+        /// <summary>
+        /// Translates the item to a different location.
+        /// </summary>
+        /// <param name="translation"></param>
+        public void MoveRel(Vector3 translation)
+        {
+            foreach (var node in Nodes)
+            {
+                node.Move(node.Position + translation);
+            }
+        }
+
         internal override IEnumerable<Node> GetItemNodes()
         {
             return new List<Node>(Nodes);

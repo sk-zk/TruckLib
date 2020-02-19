@@ -445,7 +445,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Moves the prefab to a different location.
+        /// Translates the prefab to a different location.
         /// </summary>
         /// <param name="translation">The translation vector.</param>
         public void MoveRel(Vector3 translation)

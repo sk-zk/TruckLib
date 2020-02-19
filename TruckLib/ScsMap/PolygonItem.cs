@@ -82,6 +82,10 @@ namespace TruckLib.ScsMap
             MoveRel(translation);
         }
 
+        /// <summary>
+        /// Translates the item to a different location.
+        /// </summary>
+        /// <param name="translation"></param>
         public void MoveRel(Vector3 translation)
         {
             for (int i = 0; i < Nodes.Count; i++)

@@ -41,6 +41,28 @@ namespace TruckLib.ScsMap
             return anim;
         }
 
+        /// <summary>
+        /// Moves the item to a different location.
+        /// </summary>
+        /// <param name="newPos"></param>
+        public void Move(Vector3 newPos)
+        {
+            var translation = newPos - Nodes[0].Position;
+            MoveRel(translation);
+        }
+
+        /// <summary>
+        /// Translates the item to a different location.
+        /// </summary>
+        /// <param name="translation"></param>
+        public void MoveRel(Vector3 translation)
+        {
+            foreach (var node in Nodes)
+            {
+                node.Move(node.Position + translation);
+            }
+        }
+
         public override void ReadFromStream(BinaryReader r)
         {
             base.ReadFromStream(r);

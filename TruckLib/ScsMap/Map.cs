@@ -266,8 +266,13 @@ namespace TruckLib.ScsMap
             var allItems = new Dictionary<ulong, T>();
             foreach (var sectorKvp in Sectors)
             {
-                var items = sectorKvp.Value.MapItems.Where(x => x.Value is T).ToDictionary(x => x.Key, x => (T)x.Value);
-                allItems.Union(items);
+                foreach(var itemKvp in sectorKvp.Value.MapItems)
+                {
+                    if(itemKvp.Value is T)
+                    {
+                        allItems.Add(itemKvp.Key, (T)itemKvp.Value);
+                    }
+                }
             }
             return allItems;
         }

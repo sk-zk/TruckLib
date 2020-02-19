@@ -67,6 +67,30 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
+        /// <summary>
+        /// Moves the item, with the given parameter as the new position
+        /// of the Nth node.
+        /// </summary>
+        /// <param name="newPos"></param>
+        /// <param name="n"></param>
+        public void Move(Vector3 newPos, int n = 0)
+        {
+            if (n < 0 || n >= Nodes.Count) 
+                throw new ArgumentOutOfRangeException();
+
+            var translation = newPos - Nodes[n].Position;
+            MoveRel(translation);
+        }
+
+        public void MoveRel(Vector3 translation)
+        {
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                Node node = Nodes[i];
+                node.Move(node.Position + translation);
+            }
+        }
+
         internal override IEnumerable<Node> GetItemNodes()
         {
             return new List<Node>(Nodes);

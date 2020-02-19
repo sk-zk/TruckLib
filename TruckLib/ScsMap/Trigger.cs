@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Defines a trigger area. 
+    /// <para>If only two nodes are used, the area is a sphere, 
+    /// its radius being distance between the two nodes.</para>
+    /// </summary>
     public class Trigger : PolygonItem
     {
         public override ItemType ItemType => ItemType.Trigger;

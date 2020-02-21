@@ -42,7 +42,13 @@ namespace TruckLib.ScsMap
             Name = r.ReadToken();
 
             // num params
-            var numParamCount = r.ReadUInt32(); 
+            var numParamCount = r.ReadUInt32();
+
+            // if there are no custom params of any kind, 
+            // this value is 0xFFFFFFFF.
+            if (numParamCount == uint.MaxValue)
+                return;
+
             for (int i = 0; i < numParamCount; i++)
             {
                 NumParams.Add(r.ReadSingle());
@@ -64,6 +70,7 @@ namespace TruckLib.ScsMap
             {
                 TargetTags.Add(r.ReadToken());
             }
+
 
             TargetRange = r.ReadSingle();
             actionFlags = new BitArray(r.ReadBytes(4));
@@ -97,7 +104,6 @@ namespace TruckLib.ScsMap
             w.Write(TargetRange);
             w.Write(actionFlags.ToUInt());
         }
-
     }
 
     public enum ActionType

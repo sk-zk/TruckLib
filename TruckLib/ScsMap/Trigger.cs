@@ -26,6 +26,11 @@ namespace TruckLib.ScsMap
 
         public List<TriggerAction> Actions { get; set; } = new List<TriggerAction>();
 
+        /// <summary>
+        /// Legacy parameter. Do not use.
+        /// </summary>
+        public float Range { get; set; }
+
         public byte DlcGuard
         {
             get => Flags.GetByte(1);
@@ -88,6 +93,11 @@ namespace TruckLib.ScsMap
             Tags = ReadObjectList<Token>(r);
             Nodes = ReadNodeRefList(r);
             Actions = ReadObjectList<TriggerAction>(r);
+            if (Nodes.Count == 1)
+            {
+                Range = r.ReadSingle();
+            }
+
         }
 
         public override void WriteToStream(BinaryWriter w)
@@ -97,6 +107,10 @@ namespace TruckLib.ScsMap
             WriteObjectList(w, Tags);
             WriteNodeRefList(w, Nodes);
             WriteObjectList(w, Actions);
+            if(Nodes.Count == 1)
+            {
+                w.Write(Range);
+            }
         }
     }
 }

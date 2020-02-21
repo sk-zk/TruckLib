@@ -97,7 +97,8 @@ namespace TruckLib.ScsMap
         /// Opens a map.
         /// </summary>
         /// <param name="mbdPath">The mbd file of the map.</param>
-        public static Map Open(string mbdPath)
+        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        public static Map Open(string mbdPath, string[] sectors = null)
         {
             Trace.WriteLine("Loading map " + mbdPath);
             var name = Path.GetFileNameWithoutExtension(mbdPath);
@@ -107,7 +108,7 @@ namespace TruckLib.ScsMap
             var map = new Map(name);
             map.ReadMbd(mbdPath);
             Trace.WriteLine("Parsing sectors");
-            map.ReadSectors(sectorDirectory);
+            map.ReadSectors(sectorDirectory, sectors);
 
             Trace.WriteLine("Updating references");
             map.UpdateReferences();
@@ -386,7 +387,8 @@ namespace TruckLib.ScsMap
         /// Reads the sectors of this map.
         /// </summary>
         /// <param name="mapDirectory">The main map directory.</param>
-        private void ReadSectors(string mapDirectory)
+        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        private void ReadSectors(string mapDirectory, string[] sectors = null)
         {
             var baseFiles = Directory.GetFiles(mapDirectory, "*.base");
 
@@ -396,6 +398,9 @@ namespace TruckLib.ScsMap
             // nodes from other sectors
             foreach(var baseFile in baseFiles)
             {
+                if (!SectorShouldBeLoaded(baseFile))
+                    continue;
+
                 var sector = new Sector(baseFile, this)
                 {
                     Map = this
@@ -409,7 +414,14 @@ namespace TruckLib.ScsMap
                 Trace.WriteLine($"Reading sector {sectorKvp.Value.ToString()}");
                 sectorKvp.Value.Read();
             }
+
+            bool SectorShouldBeLoaded(string baseFile)
+            {
+                return sectors == null || sectors.Contains(Path.GetFileName(baseFile));
+            }
         }
+
+ 
 
         /// <summary>
         /// Saves the map in binary format.

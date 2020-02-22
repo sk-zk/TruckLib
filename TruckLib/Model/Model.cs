@@ -48,20 +48,23 @@ namespace TruckLib.Model
             Name = name;
         }
 
-        public void Open(string pmdPath)
+        public static Model Open(string pmdPath)
         {
-            Name = Path.GetFileNameWithoutExtension(pmdPath);
+            var name = Path.GetFileNameWithoutExtension(pmdPath);
+            var model = new Model(name);
 
             using (var r = new BinaryReader(new FileStream(pmdPath, FileMode.Open)))
             {
-                ReadPmd(r);
+                model.ReadPmd(r);
             }
 
             var pmgPath = Path.ChangeExtension(pmdPath, PmgExtension);
             using (var r = new BinaryReader(new FileStream(pmgPath, FileMode.Open)))
             {
-                ReadPmg(r);
+                model.ReadPmg(r);
             }
+
+            return model;
         }
 
         public void Save(string directory)
@@ -81,6 +84,16 @@ namespace TruckLib.Model
 
         private void ReadPmd(BinaryReader r)
         {
+            // specifically check if the user passed in a 
+            // pmg file by accident
+            r.BaseStream.Position = 1;
+            var pmgSigCheck = ReadPmgSignature(r);
+            if(pmgSigCheck == PmgSignature)
+            {
+                throw new ArgumentException("Pass a pmd file, not a pmg file.");
+            }
+            r.BaseStream.Position = 0;
+
             var version = r.ReadUInt32();
             if (version != PmdVersion)
             {
@@ -176,12 +189,12 @@ namespace TruckLib.Model
         private void ReadPmg(BinaryReader r)
         {
             var version = r.ReadByte();
-            if(version != PmgVersion)
+            if (version != PmgVersion)
             {
                 throw new NotSupportedException($"pmg version {version} is not supported.");
             }
 
-            var signature = Encoding.ASCII.GetString(r.ReadBytes(3).Reverse().ToArray());
+            var signature = ReadPmgSignature(r);
             if (signature != PmgSignature)
             {
                 throw new InvalidDataException($"Not a pmg file? Expected '{PmgSignature}', got '{signature}'");
@@ -215,7 +228,7 @@ namespace TruckLib.Model
 
             // jump ahead and read all locators & pieces first
             r.BaseStream.Position = locatorsOffset;
-            var locators = r.ReadObjectList<Locator>(locatorCount);  
+            var locators = r.ReadObjectList<Locator>(locatorCount);
             var pieces = r.ReadObjectList<Piece>(pieceCount);
 
             // then return to parts and assign the locators and pieces right away
@@ -244,6 +257,11 @@ namespace TruckLib.Model
                 var stringsBytes = r.ReadBytes((int)stringPoolSize);
                 strings = StringUtils.CStringBytesToList(stringsBytes);
             }
+        }
+
+        private static string ReadPmgSignature(BinaryReader r)
+        {
+            return Encoding.ASCII.GetString(r.ReadBytes(3).Reverse().ToArray());
         }
 
         private void WritePmd(BinaryWriter w)

@@ -142,26 +142,36 @@ namespace TruckLib
             w.Write(Value);
         }
 
+        public static implicit operator Token(string s)
+        {
+            if (!IsValidToken(s))
+                throw new InvalidCastException($"Input is not a valid token.");
+
+            return new Token(s);
+        }
+
+        public static implicit operator string(Token t)
+        {
+            return t.ToString();
+        }
+
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj is null) return false;
+            if (ReferenceEquals(this, obj)) 
+                return true;
+
+            if (obj is null) 
+                return false;
 
             if (obj is Token token2)
-            {
                 return this.Value == token2.Value;
-            }
 
             if (obj is ulong val)
-            {
                 return this.Value == val;
-            }
-
+            
             if (obj is string str)
-            {
                 return this.String == str;
-            }
-
+            
             return false;
         }
 
@@ -173,13 +183,5 @@ namespace TruckLib
 
         public static bool operator !=(Token token, object obj) 
             => !token.Equals(obj);
-
-        public static implicit operator Token(string s)
-        {
-            if (!IsValidToken(s))
-                throw new InvalidCastException($"Input is not a valid token.");
-
-            return new Token(s);
-        }
     }
 }

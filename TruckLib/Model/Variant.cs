@@ -17,7 +17,7 @@ namespace TruckLib.Model
 
         public override string ToString()
         {
-            return Name.String;
+            return Name;
         }
     }
 }

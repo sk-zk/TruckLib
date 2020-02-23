@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The unit name of the city.
         /// </summary>
-        public Token CityName { get; set; }
+        public Token Name { get; set; }
 
         public float Width { get; set; } = 100f;
 
@@ -63,7 +63,7 @@ namespace TruckLib.ScsMap
         {
             var city = Add<CityArea>(map, position);
 
-            city.CityName = name;
+            city.Name = name;
             city.Width = width;
             city.Height = height;
 
@@ -74,7 +74,7 @@ namespace TruckLib.ScsMap
         {
             base.ReadFromStream(r);
 
-            CityName = r.ReadToken();
+            Name = r.ReadToken();
             Width = r.ReadSingle();
             Height = r.ReadSingle();
             Node = new UnresolvedNode(r.ReadUInt64());
@@ -84,7 +84,7 @@ namespace TruckLib.ScsMap
         {
             base.WriteToStream(w);
 
-            w.Write(CityName);
+            w.Write(Name);
             w.Write(Width);
             w.Write(Height);
             w.Write(Node.Uid);

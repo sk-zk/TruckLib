@@ -20,7 +20,7 @@ namespace TruckLib.Model
 
         public override string ToString()
         {
-            return Name;
+            return Name.String;
         }
 
         public void ReadFromStream(BinaryReader r)

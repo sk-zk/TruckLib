@@ -150,11 +150,6 @@ namespace TruckLib
             return new Token(s);
         }
 
-        public static implicit operator string(Token t)
-        {
-            return t.ToString();
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) 

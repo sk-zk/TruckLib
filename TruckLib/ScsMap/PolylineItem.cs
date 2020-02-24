@@ -113,7 +113,10 @@ namespace TruckLib.ScsMap
             p3.BackwardItem = newItem;
 
             // set rotation
-            if(p1.BackwardItem == null) // exactly 3 items in the chain
+            // ============
+            //
+            // exactly 3 items in the chain or the 4th item is a prefab and therefore useless
+            if (p1.BackwardItem == null || p1.BackwardItem is Prefab) 
             {
                 var dir = Vector3.Normalize(
                     Vector3.Normalize(p2.Position - p1.Position) +
@@ -125,7 +128,15 @@ namespace TruckLib.ScsMap
             }
             else // 4 or more items in the chain
             {
-                var p0 = (p1.BackwardItem as PolylineItem).Node;
+                Node p0;
+                if(p1.BackwardItem is PolylineItem poly)
+                {
+                    p0 = poly.Node;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
 
                 var dir = Vector3.Normalize(
                         HermiteSpline.Derivative(
@@ -176,7 +187,10 @@ namespace TruckLib.ScsMap
             p1.BackwardItem = newItem;
 
             // set rotation
-            if(p2.ForwardItem == null) // exactly three items in the chain
+            // ============
+            //
+            // exactly three items in the chain or the 4th item is a prefab and therefore useless
+            if (p2.ForwardItem == null || p2.ForwardItem is Prefab) 
             {
                 var dir = Vector3.Normalize(
                     Vector3.Normalize(p2.Position - p1.Position) +
@@ -188,12 +202,20 @@ namespace TruckLib.ScsMap
             }
             else // 4 or more items in the chain
             {
-                var p3 = (p2.ForwardItem as PolylineItem).Node;
+                Node p3;
+                if (p2.ForwardItem is PolylineItem poly)
+                {
+                    p3 = poly.Node;
+                } 
+                else
+                {
+                    throw new NotImplementedException();
+                }
 
                 var dir = Vector3.Normalize(
                         HermiteSpline.Derivative(
                             p0.Position,
-                            p1.Position, // TODO: How is this tangent calculated?
+                            p2.Position - p1.Position, // TODO: How is this tangent calculated?
                             p2.Position,
                             p2.Rotation.ToEuler(),
                             0f));

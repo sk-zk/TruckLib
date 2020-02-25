@@ -22,6 +22,9 @@ Mostly complete parser for .sii and .mat files.
 For working with binary model files (.pm\*). Functions well enough to create or modify simple static models,
 but that's about it at the moment.
 
+**TruckLib.HashFs**:
+Simple reader for HashFS (.scs) files.
+
 ## Known issues and limitations
 * The library does not calculate the bounding box of items, so you'll need to recalculate the map (F8) on load.
 * All nodes of Road, Terrain, Building and Curve items created or modified with this library have slightly to _very_ wrong

@@ -22,7 +22,7 @@ Mostly complete parser for .sii and .mat files.
 For working with binary model files (.pm\*). Functions well enough to create or modify simple static models,
 but that's about it at the moment.
 
-**TruckLib.HashFs**:
+**TruckLib.HashFs**:  
 Simple reader for HashFS (.scs) files.
 
 ## Known issues and limitations

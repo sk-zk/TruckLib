@@ -26,8 +26,8 @@ namespace TruckLib.ScsMap
             set => base.ViewDistance = value;
         }
 
-        static readonly int ControlPointCols = 4;
-        static readonly int ControlPointRows = 4;
+        protected static readonly int ControlPointCols = 4;
+        protected static readonly int ControlPointRows = 4;
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
         /// </summary>

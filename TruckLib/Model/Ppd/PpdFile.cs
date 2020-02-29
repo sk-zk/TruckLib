@@ -13,7 +13,9 @@ namespace TruckLib.Model.Ppd
     /// </summary>
     public class PpdFile : IBinarySerializable
     {
-        private uint Version = 0x16;
+        private uint SupportedVersion = 0x16;
+
+        private uint Version;
 
         public List<ControlNode> Nodes { get; set; } = new List<ControlNode>();
 
@@ -50,6 +52,8 @@ namespace TruckLib.Model.Ppd
         public void ReadFromStream(BinaryReader r)
         {
             Version = r.ReadUInt32();
+            if (Version != SupportedVersion)
+                throw new NotSupportedException();
 
             var nodeCount = r.ReadUInt32();
             var navCurveCount = r.ReadUInt32();

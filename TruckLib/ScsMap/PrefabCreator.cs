@@ -36,7 +36,12 @@ namespace TruckLib.ScsMap
             {
                 CreateCompany();
             }
-            // TODO: BusStop, FuelPump, Garage, Service
+            if (HasBusStop())
+            {
+                CreateBusStop();
+            }
+
+            // TODO: FuelPump, Garage, Service
 
             map.AddItem(prefab, prefab.Nodes[0]);
             return prefab;
@@ -51,7 +56,7 @@ namespace TruckLib.ScsMap
 
             // create company item
             var companyPoint = ppd.SpawnPoints.First(x => x.Type == SpawnPointType.CompanyPoint);
-            Vector3 companyMapPos = GetAbsolutePosition(companyPoint.Position, node0Pos);
+            var companyMapPos = GetAbsolutePosition(companyPoint.Position, node0Pos);
 
             var company = Company.Add(map, prefab, companyMapPos);
             company.Node.Rotation = companyPoint.Rotation;
@@ -64,6 +69,18 @@ namespace TruckLib.ScsMap
 
             // set trailer spawn points
             company.TrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.Trailer, node0Pos);
+        }
+
+        private void CreateBusStop()
+        {
+            var node0Pos = ppd.Nodes[0].Position;
+
+            var busStopPoint = ppd.SpawnPoints.First(x => x.Type == SpawnPointType.BusStation);
+            var busStopPos = GetAbsolutePosition(busStopPoint.Position, node0Pos);
+
+            var busStop = BusStop.Add(map, prefab, busStopPos);
+            busStop.Node.Rotation = busStopPoint.Rotation;
+            busStop.Node.ForwardItem = busStop;
         }
 
         /// <summary>
@@ -146,6 +163,8 @@ namespace TruckLib.ScsMap
         }
 
         private bool IsCompany() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.CompanyPoint);
+        
+        private bool HasBusStop() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.BusStation);
 
     }
 }

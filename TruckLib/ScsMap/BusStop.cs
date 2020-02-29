@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,14 @@ namespace TruckLib.ScsMap
         public override ItemType ItemType => ItemType.BusStop;
 
         public Token CityName { get; set; }
+
+        public static BusStop Add(IItemContainer map, Prefab parent, Vector3 position)
+        {
+            var busStop = Add<BusStop>(map, position);
+            busStop.PrefabLink = parent;
+            parent.SlaveItems.Add(busStop);
+            return busStop;
+        }
 
         public override void ReadFromStream(BinaryReader r)
         {

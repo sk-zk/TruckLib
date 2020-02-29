@@ -200,7 +200,7 @@ namespace TruckLib.ScsMap
 
     public enum ServiceType
     {
-        Gas = 0,
+        GasStation = 0,
         ServiceStation = 1,
         TruckDealer = 2,
         Parking = 4,

@@ -41,12 +41,14 @@ namespace TruckLib.Model.Ppd
 
         public List<uint[]> Unknown { get; set; } = new List<uint[]>();
 
-        public void Open(string path)
+        public static PpdFile Open(string path)
         {
+            var ppd = new PpdFile();
             using(var r = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
-                ReadFromStream(r);
+                ppd.ReadFromStream(r);
             }
+            return ppd;
         }
 
         public void ReadFromStream(BinaryReader r)

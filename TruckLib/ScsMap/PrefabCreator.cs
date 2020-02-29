@@ -31,25 +31,38 @@ namespace TruckLib.ScsMap
             // create map nodes from ppd
             CreateMapNodes();
 
-            // create slave items
+            if (ppd.SpawnPoints.Count > 0)
+            {
+                CreateSlaveItems();
+            }
+
+            map.AddItem(prefab, prefab.Nodes[0]);
+            return prefab;
+        }
+
+        private void CreateSlaveItems()
+        {
+            // check for certain types of prefabs first;
+            // if it's none of them, do the spawnpoints individually
             if (IsCompany())
             {
                 CreateCompany();
             }
-            if (HasBusStop())
-            {
-                CreateBusStop();
-            }
-            if (HasGarage())
+            else if (IsGarage())
             {
                 CreateGarage();
             }
-
-
-            // TODO: FuelPump, Garage, Service
-
-            map.AddItem(prefab, prefab.Nodes[0]);
-            return prefab;
+            else if (IsRecruitment())
+            {
+                CreateRecruitment();
+            }
+            else
+            {
+                if (HasBusStop())
+                {
+                    CreateBusStop();
+                }
+            }
         }
 
         /// <summary>
@@ -88,6 +101,12 @@ namespace TruckLib.ScsMap
             buy.BuyMode = 1;
 
             CreateSlaveItem<FuelPump>(SpawnPointType.GasStation);
+        }
+
+        private void CreateRecruitment()
+        {
+            var service = CreateSlaveItem<Service>(SpawnPointType.Recruitment);
+            service.ServiceType = ServiceType.Recruitment;
         }
 
         private T CreateSlaveItem<T>(SpawnPointType type)
@@ -188,7 +207,10 @@ namespace TruckLib.ScsMap
         
         private bool HasBusStop() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.BusStation);
 
-        private bool HasGarage() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.GaragePoint);
+        private bool IsGarage() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.GaragePoint);
+
+        private bool IsRecruitment() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.Recruitment);
+
 
     }
 }

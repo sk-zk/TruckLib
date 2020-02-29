@@ -17,6 +17,11 @@ namespace TruckLib.ScsMap
 
         public List<Node> Nodes { get; set; } = new List<Node>();
 
+        public static Service Add(IItemContainer map, Prefab parent, Vector3 position)
+        {
+            return PrefabSlaveItem.Add<Service>(map, parent, position);
+        }
+
         internal override void MoveRel(Vector3 translation)
         {
             base.MoveRel(translation);

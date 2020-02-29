@@ -16,10 +16,7 @@ namespace TruckLib.ScsMap
 
         public static BusStop Add(IItemContainer map, Prefab parent, Vector3 position)
         {
-            var busStop = Add<BusStop>(map, position);
-            busStop.PrefabLink = parent;
-            parent.SlaveItems.Add(busStop);
-            return busStop;
+            return PrefabSlaveItem.Add<BusStop>(map, parent, position);
         }
 
         public override void ReadFromStream(BinaryReader r)

@@ -18,17 +18,22 @@ namespace TruckLib.ScsMap
         public Token CityName { get; set; }
 
         /// <summary>
-        /// TODO: What is this?
+        /// Sets if the point is the buy point of the garage (1) or not (0).
         /// </summary>
         public uint BuyMode { get; set; }
 
-        public List<Node> Nodes { get; set; } = new List<Node>();
+        public List<Node> TrailerSpawnPoints { get; set; } = new List<Node>();
+
+        public static Garage Add(IItemContainer map, Prefab parent, Vector3 position)
+        {
+            return PrefabSlaveItem.Add<Garage>(map, parent, position);
+        }
 
         internal override void MoveRel(Vector3 translation)
         {
             base.MoveRel(translation);
 
-            foreach (var node in Nodes)
+            foreach (var node in TrailerSpawnPoints)
             {
                 node.Move(node.Position + translation);
             }
@@ -44,7 +49,7 @@ namespace TruckLib.ScsMap
             Node = new UnresolvedNode(r.ReadUInt64());
             PrefabLink = new UnresolvedItem(r.ReadUInt64());
 
-            Nodes = ReadNodeRefList(r);
+            TrailerSpawnPoints = ReadNodeRefList(r);
         }
 
         public override void WriteToStream(BinaryWriter w)
@@ -57,18 +62,19 @@ namespace TruckLib.ScsMap
             w.Write(Node.Uid);
             w.Write(PrefabLink.Uid);
 
-            WriteNodeRefList(w, Nodes);
+            WriteNodeRefList(w, TrailerSpawnPoints);
         }
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
 
-            for (int i = 0; i < Nodes.Count; i++)
+            for (int i = 0; i < TrailerSpawnPoints.Count; i++)
             {
-                if (Nodes[i] is UnresolvedNode && allNodes.ContainsKey(Nodes[i].Uid))
+                if (TrailerSpawnPoints[i] is UnresolvedNode 
+                    && allNodes.ContainsKey(TrailerSpawnPoints[i].Uid))
                 {
-                    Nodes[i] = allNodes[Nodes[i].Uid];
+                    TrailerSpawnPoints[i] = allNodes[TrailerSpawnPoints[i].Uid];
                 }
             }
         }

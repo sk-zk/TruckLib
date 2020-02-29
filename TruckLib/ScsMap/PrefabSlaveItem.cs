@@ -30,6 +30,15 @@ namespace TruckLib.ScsMap
             Flags[31] = true; // always set to true, no idea what it means though
         }
 
+        public static new T Add<T>(IItemContainer map, Prefab parent, Vector3 position)
+            where T : PrefabSlaveItem, new()
+        {
+            var item = Add<T>(map, position);
+            item.PrefabLink = parent;
+            parent.SlaveItems.Add(item);
+            return item;
+        }
+
         internal virtual void MoveRel(Vector3 translation)
         {
             Node.Move(Node.Position + translation);

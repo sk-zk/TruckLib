@@ -30,6 +30,9 @@ namespace TruckLib.Model.Ppd
     public enum SpawnPointType
     {
         BusStation = 18,
+        /// <summary>
+        /// The point where a garage can be bought.
+        /// </summary>
         BuyPoint = 15,
         CameraPoint = 17,
         CompanyPoint = 13,
@@ -46,6 +49,9 @@ namespace TruckLib.Model.Ppd
         ServiceStation = 4,
         Task = 11,
         Trailer = 1,
+        /// <summary>
+        ///  The point where an owned trailer is spawned at a garage.
+        /// </summary>
         TrailerSpawn = 24,
         TruckDealer = 7,
         TruckStop = 5,

@@ -40,6 +40,11 @@ namespace TruckLib.ScsMap
             {
                 CreateBusStop();
             }
+            if (HasGarage())
+            {
+                CreateGarage();
+            }
+
 
             // TODO: FuelPump, Garage, Service
 
@@ -55,12 +60,7 @@ namespace TruckLib.ScsMap
             var node0Pos = ppd.Nodes[0].Position;
 
             // create company item
-            var companyPoint = ppd.SpawnPoints.First(x => x.Type == SpawnPointType.CompanyPoint);
-            var companyMapPos = GetAbsolutePosition(companyPoint.Position, node0Pos);
-
-            var company = Company.Add(map, prefab, companyMapPos);
-            company.Node.Rotation = companyPoint.Rotation;
-            company.Node.ForwardItem = company;
+            var company = CreateSlaveItem<Company>(SpawnPointType.CompanyPoint);
 
             // set unloading points
             company.UnloadPointsEasy = CreateSpawnPointNodes(company, SpawnPointType.UnloadEasy, node0Pos);
@@ -73,24 +73,46 @@ namespace TruckLib.ScsMap
 
         private void CreateBusStop()
         {
+            CreateSlaveItem<BusStop>(SpawnPointType.BusStation);
+        }
+
+        private void CreateGarage()
+        {
             var node0Pos = ppd.Nodes[0].Position;
 
-            var busStopPoint = ppd.SpawnPoints.First(x => x.Type == SpawnPointType.BusStation);
-            var busStopPos = GetAbsolutePosition(busStopPoint.Position, node0Pos);
+            var garage = CreateSlaveItem<Garage>(SpawnPointType.GaragePoint);
+            garage.BuyMode = 0;
+            garage.TrailerSpawnPoints = CreateSpawnPointNodes(garage, SpawnPointType.TrailerSpawn, node0Pos);
 
-            var busStop = BusStop.Add(map, prefab, busStopPos);
-            busStop.Node.Rotation = busStopPoint.Rotation;
-            busStop.Node.ForwardItem = busStop;
+            var buy = CreateSlaveItem<Garage>(SpawnPointType.BuyPoint);
+            buy.BuyMode = 1;
+
+            CreateSlaveItem<FuelPump>(SpawnPointType.GasStation);
+        }
+
+        private T CreateSlaveItem<T>(SpawnPointType type)
+            where T : PrefabSlaveItem, new()
+        {
+            var node0Pos = ppd.Nodes[0].Position;
+
+            var spawnPoint = ppd.SpawnPoints.First(x => x.Type == type);
+            var pos = GetAbsolutePosition(spawnPoint.Position, node0Pos);
+
+            var item = PrefabSlaveItem.Add<T>(map, prefab, pos);
+            item.Node.Rotation = spawnPoint.Rotation;
+            item.Node.ForwardItem = item;
+
+            return item;
         }
 
         /// <summary>
         /// Creates map nodes for all spawn points of the given type.
         /// </summary>
-        /// <param name="company">The company item.</param>
+        /// <param name="item">The company item.</param>
         /// <param name="spawnPointType">The spawn point type.</param>
         /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
         /// <returns>A list of map nodes.</returns>
-        private List<Node> CreateSpawnPointNodes(Company company, SpawnPointType spawnPointType, Vector3 node0Pos)
+        private List<Node> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType, Vector3 node0Pos)
         {
             var list = new List<Node>();
             foreach (var spawnPoint in ppd.SpawnPoints.Where(x => x.Type == spawnPointType))
@@ -98,7 +120,7 @@ namespace TruckLib.ScsMap
                 var spawnPos = GetAbsolutePosition(spawnPoint.Position, node0Pos);
                 var spawnNode = map.AddNode(spawnPos, false);
                 spawnNode.Rotation = spawnPoint.Rotation;
-                spawnNode.ForwardItem = company;
+                spawnNode.ForwardItem = item;
                 list.Add(spawnNode);
             }
             return list;
@@ -165,6 +187,8 @@ namespace TruckLib.ScsMap
         private bool IsCompany() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.CompanyPoint);
         
         private bool HasBusStop() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.BusStation);
+
+        private bool HasGarage() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.GaragePoint);
 
     }
 }

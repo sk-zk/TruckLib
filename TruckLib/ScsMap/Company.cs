@@ -44,10 +44,7 @@ namespace TruckLib.ScsMap
 
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
         {
-            var company = Add<Company>(map, position);
-            company.PrefabLink = parent;
-            parent.SlaveItems.Add(company);
-            return company;
+            return PrefabSlaveItem.Add<Company>(map, parent, position);
         }
 
         internal override void MoveRel(Vector3 translation)

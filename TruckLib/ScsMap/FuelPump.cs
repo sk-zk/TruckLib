@@ -8,53 +8,13 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
-    public class FuelPump : PrefabSlaveItem
+    public class FuelPump : Service
     {
         public override ItemType ItemType => ItemType.FuelPump;
 
-        public List<Node> Nodes { get; set; } = new List<Node>();
-
-        internal override void MoveRel(Vector3 translation)
+        public static FuelPump Add(IItemContainer map, Prefab parent, Vector3 position)
         {
-            base.MoveRel(translation);
-
-            foreach (var node in Nodes)
-            {
-                node.Move(node.Position + translation);
-            }
-        }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-            PrefabLink = new UnresolvedItem(r.ReadUInt64());
-
-            Nodes = ReadNodeRefList(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Node.Uid);
-            w.Write(PrefabLink.Uid);
-
-            WriteNodeRefList(w, Nodes);
-        }
-
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            base.UpdateNodeReferences(allNodes);
-
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode && allNodes.ContainsKey(Nodes[i].Uid))
-                {
-                    Nodes[i] = allNodes[Nodes[i].Uid];
-                }
-            }
+            return PrefabSlaveItem.Add<FuelPump>(map, parent, position);
         }
     }
 }

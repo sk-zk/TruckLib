@@ -70,6 +70,10 @@ namespace TruckLib.ScsMap
                 {
                     CreateGasStation();
                 }
+                if (HasWeighStation())
+                {
+                    CreateWeighStation();
+                }
             }
         }
 
@@ -132,6 +136,15 @@ namespace TruckLib.ScsMap
             {
                 var item = CreateSlaveItem<Service>(gas);
                 item.ServiceType = ServiceType.GasStation;
+            }
+        }
+
+        private void CreateWeighStation()
+        {
+            foreach (var weigh in ppd.SpawnPoints.Where(x => x.Type == SpawnPointType.WeightStation))
+            {
+                var item = CreateSlaveItem<Service>(weigh);
+                item.ServiceType = ServiceType.WeighStation;
             }
         }
 
@@ -257,6 +270,8 @@ namespace TruckLib.ScsMap
         private bool HasParking() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.Parking);
 
         private bool HasGasStation() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.GasStation);
+
+        private bool HasWeighStation() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.WeightStation);
 
 
     }

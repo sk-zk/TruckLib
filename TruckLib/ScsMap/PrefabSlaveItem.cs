@@ -14,15 +14,6 @@ namespace TruckLib.ScsMap
 
         public MapItem PrefabLink { get; set; }
 
-        /// <summary>
-        /// TEMP FIELD
-        /// <para>TODO: Figure out the kdop flags for these items</para>
-        /// </summary>
-        public new BitArray Flags
-        {
-            get => base.Flags;
-        }
-
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         public PrefabSlaveItem()
@@ -30,7 +21,7 @@ namespace TruckLib.ScsMap
             Flags[31] = true; // always set to true, no idea what it means though
         }
 
-        public static new T Add<T>(IItemContainer map, Prefab parent, Vector3 position)
+        public static T Add<T>(IItemContainer map, Prefab parent, Vector3 position)
             where T : PrefabSlaveItem, new()
         {
             var item = Add<T>(map, position);

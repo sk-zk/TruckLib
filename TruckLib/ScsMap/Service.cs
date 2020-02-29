@@ -17,6 +17,12 @@ namespace TruckLib.ScsMap
 
         public List<Node> Nodes { get; set; } = new List<Node>();
 
+        public ServiceType ServiceType
+        {
+            get => (ServiceType)Flags.GetByte(0);
+            set => Flags.SetByte(0, value);
+        }
+
         public static Service Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<Service>(map, parent, position);

@@ -198,4 +198,14 @@ namespace TruckLib.ScsMap
         Green = 3
     }
 
+    public enum ServiceType
+    {
+        Gas = 0,
+        ServiceStation = 1,
+        TruckDealer = 2,
+        Parking = 4,
+        Recruitment = 5,
+        WeighStation = 7
+    }
+
 }

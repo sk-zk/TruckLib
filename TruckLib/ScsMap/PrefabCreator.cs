@@ -14,6 +14,7 @@ namespace TruckLib.ScsMap
         private IItemContainer map;
         private Vector3 prefabPos;
         private Prefab prefab;
+        private List<SpawnPoint> clonedPoints;
 
         public Prefab FromPpd(IItemContainer map, string unitName, string variant, string look,
             PpdFile ppd, Vector3 prefabPos)
@@ -42,39 +43,58 @@ namespace TruckLib.ScsMap
 
         private void CreateSlaveItems()
         {
-            // check for certain types of prefabs first;
-            // if it's none of them, do the spawnpoints individually
-            if (IsCompany())
+            clonedPoints = new List<SpawnPoint>(ppd.SpawnPoints);
+
+            if (Has(SpawnPointType.CompanyPoint))
             {
                 CreateCompany();
             }
-            else if (IsGarage())
+            if (Has(SpawnPointType.GaragePoint))
             {
                 CreateGarage();
             }
-            else
+            if (Has(SpawnPointType.TruckDealer))
             {
-                if (HasBusStop())
-                {
-                    CreateBusStop();
-                }
-                if (HasRecruitment())
-                {
-                    CreateRecruitment();
-                }
-                if (HasParking())
-                {
-                    CreateParking();
-                }
-                if (HasGasStation())
-                {
-                    CreateGasStation();
-                }
-                if (HasWeighStation())
-                {
-                    CreateWeighStation();
-                }
+                CreateTruckDealer();
             }
+
+            //////
+
+            if (Has(SpawnPointType.BusStation))
+            {
+                CreateSlaveItem<BusStop>(SpawnPointType.BusStation);
+            }
+            if (Has(SpawnPointType.GasStation))
+            {
+                CreateServiceItemsOfType(SpawnPointType.GasStation,
+                    ServiceType.GasStation);
+            }
+            if (Has(SpawnPointType.Parking))
+            {
+                CreateServiceItemsOfType(SpawnPointType.Parking,
+                    ServiceType.Parking);
+            }
+            if (Has(SpawnPointType.Recruitment))
+            {
+                CreateServiceItemsOfType(SpawnPointType.Recruitment,
+                    ServiceType.Recruitment);
+            }
+            if (Has(SpawnPointType.ServiceStation))
+            {
+                CreateServiceItemsOfType(SpawnPointType.ServiceStation,
+                    ServiceType.ServiceStation);
+            }
+            if (Has(SpawnPointType.WeightStation))
+            {
+                CreateServiceItemsOfType(SpawnPointType.WeightStation,
+                    ServiceType.WeighStation);
+            }
+            if (Has(SpawnPointType.WeightStationCat))
+            {
+                CreateServiceItemsOfType(SpawnPointType.WeightStationCat, 
+                    ServiceType.WeighStationCat);
+            }
+
         }
 
         /// <summary>
@@ -96,11 +116,6 @@ namespace TruckLib.ScsMap
             company.TrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.Trailer, node0Pos);
         }
 
-        private void CreateBusStop()
-        {
-            CreateSlaveItem<BusStop>(SpawnPointType.BusStation);
-        }
-
         private void CreateGarage()
         {
             var node0Pos = ppd.Nodes[0].Position;
@@ -115,37 +130,30 @@ namespace TruckLib.ScsMap
             CreateSlaveItem<FuelPump>(SpawnPointType.GasStation);
         }
 
-        private void CreateRecruitment()
+        private void CreateTruckDealer()
         {
-            var service = CreateSlaveItem<Service>(SpawnPointType.Recruitment);
-            service.ServiceType = ServiceType.Recruitment;
+            var node0Pos = ppd.Nodes[0].Position;
+            var dealer = CreateSlaveItem<Service>(SpawnPointType.TruckDealer);
+            dealer.ServiceType = ServiceType.TruckDealer;
+            dealer.Nodes = CreateSpawnPointNodes(dealer, SpawnPointType.TrailerSpawn, node0Pos);
+
+            CreateServiceStation();
         }
 
-        private void CreateParking()
+        private void CreateServiceStation()
         {
-            foreach(var parking in ppd.SpawnPoints.Where(x => x.Type == SpawnPointType.Parking))
-            {
-                var item = CreateSlaveItem<Service>(parking);
-                item.ServiceType = ServiceType.Parking;
-            }
+            var service = CreateSlaveItem<Service>(SpawnPointType.ServiceStation);
+            service.ServiceType = ServiceType.ServiceStation;
         }
 
-        private void CreateGasStation()
+        private void CreateServiceItemsOfType(SpawnPointType type, ServiceType serviceType)
         {
-            foreach (var gas in ppd.SpawnPoints.Where(x => x.Type == SpawnPointType.GasStation))
+            foreach (var point in clonedPoints.Where(x => x.Type == type))
             {
-                var item = CreateSlaveItem<Service>(gas);
-                item.ServiceType = ServiceType.GasStation;
+                var item = CreateSlaveItem<Service>(point);
+                item.ServiceType = serviceType;
             }
-        }
-
-        private void CreateWeighStation()
-        {
-            foreach (var weigh in ppd.SpawnPoints.Where(x => x.Type == SpawnPointType.WeightStation))
-            {
-                var item = CreateSlaveItem<Service>(weigh);
-                item.ServiceType = ServiceType.WeighStation;
-            }
+            clonedPoints.RemoveAll(x => x.Type == type);
         }
 
         /// <summary>
@@ -177,7 +185,10 @@ namespace TruckLib.ScsMap
         private T CreateSlaveItem<T>(SpawnPointType type)
             where T : PrefabSlaveItem, new()
         {
-            return CreateSlaveItem<T>(ppd.SpawnPoints.First(x => x.Type == type));
+            var first = clonedPoints.First(x => x.Type == type);
+            var item = CreateSlaveItem<T>(first);
+            clonedPoints.Remove(first);
+            return item;
         }
 
         /// <summary>
@@ -190,13 +201,18 @@ namespace TruckLib.ScsMap
         private List<Node> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType, Vector3 node0Pos)
         {
             var list = new List<Node>();
-            foreach (var spawnPoint in ppd.SpawnPoints.Where(x => x.Type == spawnPointType))
+            var selected = clonedPoints.Where(x => x.Type == spawnPointType).ToList();
+            foreach (var spawnPoint in selected)
             {
                 var spawnPos = GetAbsolutePosition(spawnPoint.Position, node0Pos);
                 var spawnNode = map.AddNode(spawnPos, false);
                 spawnNode.Rotation = spawnPoint.Rotation;
                 spawnNode.ForwardItem = item;
                 list.Add(spawnNode);
+            }
+            for (int i = 0; i < selected.Count; i++)
+            {
+                clonedPoints.Remove(selected[i]);
             }
             return list;
         }
@@ -259,20 +275,8 @@ namespace TruckLib.ScsMap
             return ppdPointPos;
         }
 
-        private bool IsCompany() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.CompanyPoint);
-        
-        private bool HasBusStop() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.BusStation);
-
-        private bool IsGarage() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.GaragePoint);
-
-        private bool HasRecruitment() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.Recruitment);
-
-        private bool HasParking() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.Parking);
-
-        private bool HasGasStation() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.GasStation);
-
-        private bool HasWeighStation() => ppd.SpawnPoints.Any(x => x.Type == SpawnPointType.WeightStation);
-
+        private bool Has(SpawnPointType type) 
+            => clonedPoints.Any(x => x.Type == type);
 
     }
 }

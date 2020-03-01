@@ -205,7 +205,8 @@ namespace TruckLib.ScsMap
         TruckDealer = 2,
         Parking = 4,
         Recruitment = 5,
-        WeighStation = 7
+        WeighStation = 7,
+        WeighStationCat = 8,
     }
 
 }

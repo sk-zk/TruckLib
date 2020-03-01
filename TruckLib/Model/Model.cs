@@ -30,7 +30,6 @@ namespace TruckLib.Model
 
         public float BoundingBoxDiagonalSize { get; set; }
 
-
         public List<Bone> Skeleton { get; set; } = new List<Bone>();
 
         public List<Part> Parts { get; set; } = new List<Part>();

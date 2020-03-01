@@ -5,12 +5,14 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace TruckLib.ScsMap
 {
     internal class PrefabCreator
     {
         private PpdFile ppd;
+        private Vector3 node0Pos => ppd.Nodes[0].Position;
         private IItemContainer map;
         private Vector3 prefabPos;
         private Prefab prefab;
@@ -94,6 +96,11 @@ namespace TruckLib.ScsMap
                 CreateServiceItemsOfType(SpawnPointType.WeightStationCat, 
                     ServiceType.WeighStationCat);
             }
+
+            if(clonedPoints.Count > 0)
+            {
+                Trace.WriteLine($"Unhandled spawn points in {prefab.Model.String}");
+            }
         }
 
         /// <summary>
@@ -101,28 +108,24 @@ namespace TruckLib.ScsMap
         /// </summary>
         private void CreateCompany()
         {
-            var node0Pos = ppd.Nodes[0].Position;
-
             // create company item
             var company = CreateSlaveItem<Company>(SpawnPointType.CompanyPoint);
 
             // set unloading points
-            company.UnloadPointsEasy = CreateSpawnPointNodes(company, SpawnPointType.UnloadEasy, node0Pos);
-            company.UnloadPointsMedium = CreateSpawnPointNodes(company, SpawnPointType.UnloadMedium, node0Pos);
-            company.UnloadPointsHard = CreateSpawnPointNodes(company, SpawnPointType.UnloadHard, node0Pos);
+            company.UnloadPointsEasy = CreateSpawnPointNodes(company, SpawnPointType.UnloadEasy);
+            company.UnloadPointsMedium = CreateSpawnPointNodes(company, SpawnPointType.UnloadMedium);
+            company.UnloadPointsHard = CreateSpawnPointNodes(company, SpawnPointType.UnloadHard);
 
             // set trailer spawn points
-            company.TrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.Trailer, node0Pos);
-            company.LongTrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.LongTrailer, node0Pos);
+            company.TrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.Trailer);
+            company.LongTrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.LongTrailer);
         }
 
         private void CreateGarage()
         {
-            var node0Pos = ppd.Nodes[0].Position;
-
             var garage = CreateSlaveItem<Garage>(SpawnPointType.GaragePoint);
             garage.BuyMode = 0;
-            garage.TrailerSpawnPoints = CreateSpawnPointNodes(garage, SpawnPointType.TrailerSpawn, node0Pos);
+            garage.TrailerSpawnPoints = CreateSpawnPointNodes(garage, SpawnPointType.TrailerSpawn);
 
             var buy = CreateSlaveItem<Garage>(SpawnPointType.BuyPoint);
             buy.BuyMode = 1;
@@ -132,18 +135,12 @@ namespace TruckLib.ScsMap
 
         private void CreateTruckDealer()
         {
-            var node0Pos = ppd.Nodes[0].Position;
             var dealer = CreateSlaveItem<Service>(SpawnPointType.TruckDealer);
             dealer.ServiceType = ServiceType.TruckDealer;
-            dealer.Nodes = CreateSpawnPointNodes(dealer, SpawnPointType.TrailerSpawn, node0Pos);
+            dealer.Nodes = CreateSpawnPointNodes(dealer, SpawnPointType.TrailerSpawn);
 
-            CreateServiceStation();
-        }
-
-        private void CreateServiceStation()
-        {
-            var service = CreateSlaveItem<Service>(SpawnPointType.ServiceStation);
-            service.ServiceType = ServiceType.ServiceStation;
+            CreateServiceItemsOfType(SpawnPointType.ServiceStation,
+                ServiceType.ServiceStation);
         }
 
         private void CreateServiceItemsOfType(SpawnPointType type, ServiceType serviceType)
@@ -165,9 +162,7 @@ namespace TruckLib.ScsMap
         private T CreateSlaveItem<T>(SpawnPoint spawnPoint)
             where T : PrefabSlaveItem, new()
         {
-            var node0Pos = ppd.Nodes[0].Position;
-
-            var pos = GetAbsolutePosition(spawnPoint.Position, node0Pos);
+            var pos = GetAbsolutePosition(spawnPoint.Position);
 
             var item = PrefabSlaveItem.Add<T>(map, prefab, pos);
             item.Node.Rotation = spawnPoint.Rotation;
@@ -198,13 +193,13 @@ namespace TruckLib.ScsMap
         /// <param name="spawnPointType">The spawn point type.</param>
         /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
         /// <returns>A list of map nodes.</returns>
-        private List<Node> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType, Vector3 node0Pos)
+        private List<Node> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType)
         {
             var list = new List<Node>();
             var selected = clonedPoints.Where(x => x.Type == spawnPointType).ToList();
             foreach (var spawnPoint in selected)
             {
-                var spawnPos = GetAbsolutePosition(spawnPoint.Position, node0Pos);
+                var spawnPos = GetAbsolutePosition(spawnPoint.Position);
                 var spawnNode = map.AddNode(spawnPos, false);
                 spawnNode.Rotation = spawnPoint.Rotation;
                 spawnNode.ForwardItem = item;
@@ -223,7 +218,7 @@ namespace TruckLib.ScsMap
         /// <param name="ppdPointPos">The ppd point to convert.</param>
         /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
         /// <returns>The position of the point in the map.</returns>
-        private Vector3 GetAbsolutePosition(Vector3 ppdPointPos, Vector3 node0Pos)
+        private Vector3 GetAbsolutePosition(Vector3 ppdPointPos)
         {
             return prefabPos + (ppdPointPos - node0Pos);
         }
@@ -233,11 +228,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         private void CreateMapNodes()
         {
-            var node0Pos = ppd.Nodes[0].Position;
             for (int i = 0; i < ppd.Nodes.Count; i++)
             {
                 var ppdNode = ppd.Nodes[i];
-
                 var ppdNodePos = ppdNode.Position;
 
                 // set map node position
@@ -248,7 +241,7 @@ namespace TruckLib.ScsMap
                 }
                 else
                 {
-                    nodePos = GetAbsolutePosition(ppdNodePos, node0Pos);
+                    nodePos = GetAbsolutePosition(ppdNodePos);
                 }
                 var mapNode = map.AddNode(nodePos, i == 0);
 
@@ -268,7 +261,7 @@ namespace TruckLib.ScsMap
         /// <param name="ppdPointPos">The ppd point to rotate.</param>
         /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
         /// <returns>The rotated point.</returns>
-        private Vector3 RotateNode(Vector3 ppdPointPos, Vector3 node0Pos, float angle)
+        private Vector3 RotateNode(Vector3 ppdPointPos, float angle)
         {
             var rot = Quaternion.CreateFromYawPitchRoll(angle, 0, 0);
             ppdPointPos = MathEx.RotatePointAroundPivot(ppdPointPos, node0Pos, rot);

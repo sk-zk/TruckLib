@@ -40,7 +40,8 @@ namespace TruckLib.ScsMap
         public List<Node> TrailerSpawnPoints { get; set; } = new List<Node>();
 
         public List<Node> Unknown1 { get; set; } = new List<Node>();
-        public List<Node> Unknown2 { get; set; } = new List<Node>();
+
+        public List<Node> LongTrailerSpawnPoints { get; set; } = new List<Node>();
 
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
         {
@@ -53,7 +54,7 @@ namespace TruckLib.ScsMap
 
             var allNodes = UnloadPointsEasy.Concat(UnloadPointsMedium)
                 .Concat(UnloadPointsHard).Concat(TrailerSpawnPoints)
-                .Concat(Unknown1).Concat(Unknown2);
+                .Concat(Unknown1).Concat(LongTrailerSpawnPoints);
 
             foreach (var node in allNodes)
             {
@@ -77,10 +78,8 @@ namespace TruckLib.ScsMap
             UnloadPointsMedium = ReadNodeRefList(r);
             UnloadPointsHard = ReadNodeRefList(r);
             TrailerSpawnPoints = ReadNodeRefList(r);
-
-            // unknown
             Unknown1 = ReadNodeRefList(r);
-            Unknown2 = ReadNodeRefList(r);
+            LongTrailerSpawnPoints = ReadNodeRefList(r);
         }
 
         public override void WriteToStream(BinaryWriter w)
@@ -98,9 +97,8 @@ namespace TruckLib.ScsMap
             WriteNodeRefList(w, UnloadPointsMedium);
             WriteNodeRefList(w, UnloadPointsHard);
             WriteNodeRefList(w, TrailerSpawnPoints);
-
             WriteNodeRefList(w, Unknown1);
-            WriteNodeRefList(w, Unknown2);
+            WriteNodeRefList(w, LongTrailerSpawnPoints);
         }
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
@@ -112,7 +110,7 @@ namespace TruckLib.ScsMap
             UpdateNodeList(UnloadPointsHard, allNodes);
             UpdateNodeList(TrailerSpawnPoints, allNodes);
             UpdateNodeList(Unknown1, allNodes);
-            UpdateNodeList(Unknown2, allNodes);
+            UpdateNodeList(LongTrailerSpawnPoints, allNodes);
         }
 
         private static void UpdateNodeList(List<Node> nodeList, Dictionary<ulong, Node> allNodes)

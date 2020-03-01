@@ -94,7 +94,6 @@ namespace TruckLib.ScsMap
                 CreateServiceItemsOfType(SpawnPointType.WeightStationCat, 
                     ServiceType.WeighStationCat);
             }
-
         }
 
         /// <summary>
@@ -114,6 +113,7 @@ namespace TruckLib.ScsMap
 
             // set trailer spawn points
             company.TrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.Trailer, node0Pos);
+            company.LongTrailerSpawnPoints = CreateSpawnPointNodes(company, SpawnPointType.LongTrailer, node0Pos);
         }
 
         private void CreateGarage()

@@ -59,8 +59,8 @@ namespace TruckLib.Model.Ppd
         UnloadHard = 20,
         UnloadMedium = 19,
         UnloadRigid = 21,
-        WeightStationCat = 22,
-        WeightStation = 6,
+        WeighStationCat = 22,
+        WeighStation = 6,
     }
 
     /// <summary>

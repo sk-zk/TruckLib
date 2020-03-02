@@ -86,14 +86,14 @@ namespace TruckLib.ScsMap
                 CreateServiceItemsOfType(SpawnPointType.ServiceStation,
                     ServiceType.ServiceStation);
             }
-            if (Has(SpawnPointType.WeightStation))
+            if (Has(SpawnPointType.WeighStation))
             {
-                CreateServiceItemsOfType(SpawnPointType.WeightStation,
+                CreateServiceItemsOfType(SpawnPointType.WeighStation,
                     ServiceType.WeighStation);
             }
-            if (Has(SpawnPointType.WeightStationCat))
+            if (Has(SpawnPointType.WeighStationCat))
             {
-                CreateServiceItemsOfType(SpawnPointType.WeightStationCat, 
+                CreateServiceItemsOfType(SpawnPointType.WeighStationCat, 
                     ServiceType.WeighStationCat);
             }
 

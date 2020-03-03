@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap
         // 1.33 & 1.34: 0x35A (858)
         // 1.35:        0x365 (869)
         // 1.36:        0x36B (875)
-        // 1.36.1 beta: 0x36C (876)
+        // 1.36.1:      0x36C (876)
         public uint CoreMapVersion { get; set; } = supportedVer;
 
         /// <summary>
@@ -33,10 +33,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint GameMapVersion { get; set; } = 3;
 
-        /// <summary>
-        /// Reads the header.
-        /// </summary>
-        /// <param name="r">The reader.</param>
         public virtual void ReadFromStream(BinaryReader r)
         {
             // Map format version
@@ -45,14 +41,9 @@ namespace TruckLib.ScsMap
             // Game ID token. "euro2" for ETS2/ATS
             GameId = r.ReadToken();
 
-            // Game map version
             GameMapVersion = r.ReadUInt32();
         }
 
-        /// <summary>
-        /// Writes the header to a map file in binary format.
-        /// </summary>
-        /// <param name="w">The writer.</param>
         public void WriteToStream(BinaryWriter w)
         {
             w.Write(CoreMapVersion);

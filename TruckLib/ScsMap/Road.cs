@@ -282,10 +282,6 @@ namespace TruckLib.ScsMap
         private const float vegFromToFactor = 10f;
         private const int viewDistFactor = 10;
 
-        /// <summary>
-        /// Reads the .base component of this road.
-        /// </summary>
-        /// <param name="r">The reader.</param>
         public override void ReadFromStream(BinaryReader r)
         {
             Uid = r.ReadUInt64();
@@ -327,7 +323,6 @@ namespace TruckLib.ScsMap
             Left.NoDetailVegetation = karr4[5];
             StretchTerrain = karr4[6];
 
-            // View distance
             ViewDistance = (ushort)(r.ReadByte() * viewDistFactor);
 
             // === road_flags ===
@@ -341,7 +336,6 @@ namespace TruckLib.ScsMap
             Left.Models[1].Shift = rarr1[6];
             NoTerrainShadows = rarr1[7];
 
-            // DLC guard
             DlcGuard = r.ReadByte();
 
             var rflag3 = r.ReadByte();
@@ -400,10 +394,6 @@ namespace TruckLib.ScsMap
             Length = r.ReadSingle();
         }
 
-        /// <summary>
-        /// Reads the .data component of this road.
-        /// </summary>
-        /// <param name="r">The reader.</param>
         public void ReadDataPart(BinaryReader r)
         {
             // Overlay Scheme
@@ -412,7 +402,6 @@ namespace TruckLib.ScsMap
 
             foreach (var side in new[] { Right, Left }) // repeated for both sides of the road
             {
-                // Model data
                 foreach (var model in side.Models)
                 {
                     model.Name = r.ReadToken();
@@ -422,7 +411,6 @@ namespace TruckLib.ScsMap
 
                 side.Terrain.Size = r.ReadUInt16() / terrainSizeFactor;
 
-                // Vegetation
                 foreach (var veg in side.Vegetation)
                 {
                     veg.ReadFromStream(r);
@@ -446,7 +434,6 @@ namespace TruckLib.ScsMap
             Left.NoDetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
             Right.NoDetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
 
-            // veg. spheres
             var vegSphereCount = r.ReadUInt32();
             for (int i = 0; i < vegSphereCount; i++)
             {
@@ -455,7 +442,6 @@ namespace TruckLib.ScsMap
                 VegetationSpheres.Add(sphere);
             }
 
-            // Additional parts
             var leftAdditionalPartsCount = r.ReadUInt32();
             for (int i = 0; i < leftAdditionalPartsCount; i++)
             {
@@ -472,10 +458,6 @@ namespace TruckLib.ScsMap
             Left.UVRotation = r.ReadSingle();
         }
 
-        /// <summary>
-        /// Writes the .base part of this road.
-        /// </summary>
-        /// <param name="w"></param>
         public override void WriteToStream(BinaryWriter w)
         {
             w.Write(Uid);
@@ -518,7 +500,6 @@ namespace TruckLib.ScsMap
             kflag4 |= (byte)(StretchTerrain.ToByte() << 6);
             w.Write(kflag4);
 
-            // View distance
             w.Write((byte)(ViewDistance / viewDistFactor));
 
             // === road_flags ===
@@ -531,7 +512,6 @@ namespace TruckLib.ScsMap
             rflag1 |= (byte)(NoTerrainShadows.ToByte() << 7);
             w.Write(rflag1);
 
-            // DLC guard
             w.Write(DlcGuard);
 
             byte rflag3 = 0;
@@ -590,10 +570,6 @@ namespace TruckLib.ScsMap
             w.Write(Length);
         }
 
-        /// <summary>
-        /// Writes the .data part of this road.
-        /// </summary>
-        /// <param name="w"></param>
         public void WriteDataPart(BinaryWriter w)
         {
             // overlay scheme
@@ -601,7 +577,6 @@ namespace TruckLib.ScsMap
 
             foreach (var side in new[] { Right, Left }) // repeated for both sides of the road
             {
-                // Model data
                 foreach (var model in side.Models)
                 {
                     w.Write(model.Name);
@@ -611,7 +586,6 @@ namespace TruckLib.ScsMap
 
                 w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
 
-                // Vegetation
                 foreach (var veg in side.Vegetation)
                 {
                     veg.WriteToStream(w);
@@ -634,14 +608,12 @@ namespace TruckLib.ScsMap
             w.Write((ushort)(Left.NoDetailVegetationTo * vegFromToFactor));
             w.Write((ushort)(Right.NoDetailVegetationTo * vegFromToFactor));
 
-            // veg. spheres
             w.Write(VegetationSpheres.Count);
             foreach (var sphere in VegetationSpheres)
             {
                 sphere.WriteToStream(w);
             }
 
-            // additional parts
             w.Write(Left.AdditionalParts.Count);
             foreach (var part in Left.AdditionalParts)
             {

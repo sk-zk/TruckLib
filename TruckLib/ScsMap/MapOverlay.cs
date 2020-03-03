@@ -23,7 +23,6 @@ namespace TruckLib.ScsMap
         {
             get => Flags.GetByteAsBools(0);
             // TODO: Allow setting values.
-            // Indexer class?
             set => throw new NotImplementedException();
         }
 

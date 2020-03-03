@@ -50,7 +50,8 @@ namespace TruckLib.ScsMap
         public TerrainSide()
         {
             const int vegetationCount = 3;
-            Vegetation = (new RoadVegetation[vegetationCount]).Select(h => new RoadVegetation()).ToArray();
+            Vegetation = (new RoadVegetation[vegetationCount])
+                .Select(h => new RoadVegetation()).ToArray();
         }
     }
 }

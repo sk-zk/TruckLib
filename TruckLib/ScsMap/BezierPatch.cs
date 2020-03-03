@@ -188,7 +188,6 @@ namespace TruckLib.ScsMap
         {
             base.ReadFromStream(r);
 
-            // control points
             for(int x = 0; x < ControlPointCols; x++)
             {
                 for (int z = 0; z < ControlPointRows; z++)
@@ -198,20 +197,15 @@ namespace TruckLib.ScsMap
             }
             ControlPoints = Utils.MirrorX(ControlPoints);
 
-            // tesselation
             XTesselation = r.ReadUInt16();
             ZTesselation = r.ReadUInt16();
 
-            // UV rotation
             UVRotation = r.ReadSingle();
 
-            // node
             Node = new UnresolvedNode(r.ReadUInt64());
 
-            // seed
             RandomSeed = r.ReadUInt32();
 
-            // vegetation
             for (int i = 0; i < Vegetation.Length; i++)
             {
                 Vegetation[i].Name = r.ReadToken();
@@ -219,10 +213,8 @@ namespace TruckLib.ScsMap
                 Vegetation[i].Scale = (VegetationScale)r.ReadByte();
             }
 
-            // vegetation spheres
             VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
-            // quads
             QuadData.ReadFromStream(r);
         }
 
@@ -230,7 +222,6 @@ namespace TruckLib.ScsMap
         {
             base.WriteToStream(w);
 
-            // control points
             var points = Utils.MirrorX(ControlPoints);
             for (int x = 0; x < ControlPointCols; x++)
             {
@@ -240,20 +231,15 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            // tesselation
             w.Write(XTesselation);
             w.Write(ZTesselation);
 
-            // UV rotation
             w.Write(UVRotation);
 
-            // node
             w.Write(Node.Uid);
 
-            // seed
             w.Write(RandomSeed);
 
-            // vegetation
             foreach(var veg in Vegetation)
             {
                 w.Write(veg.Name);
@@ -261,10 +247,8 @@ namespace TruckLib.ScsMap
                 w.Write((byte)veg.Scale);
             }
 
-            // vegetation spheres
             WriteObjectList(w, VegetationSpheres);
 
-            // quads
             QuadData.WriteToStream(w);
         }
 

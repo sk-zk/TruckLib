@@ -371,10 +371,9 @@ namespace TruckLib.ScsMap
                 StartPlacementRotation.Y = r.ReadSingle();
                 StartPlacementRotation.Z = r.ReadSingle();
 
-                // game tag - TODO: What is this?
+                // TODO: What is this?
                 gameTag = r.ReadUInt32();
 
-                // scale
                 NormalScale = r.ReadSingle();
                 CityScale = r.ReadSingle();
 
@@ -472,10 +471,8 @@ namespace TruckLib.ScsMap
                 w.Write(StartPlacementRotation.Y);
                 w.Write(StartPlacementRotation.Z);
 
-                // game tag
                 w.Write(gameTag);
 
-                // scale
                 w.Write(NormalScale);
                 w.Write(CityScale);
 

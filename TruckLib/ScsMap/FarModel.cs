@@ -79,7 +79,6 @@ namespace TruckLib.ScsMap
             Width = r.ReadSingle() * sizeFactor;
             Height = r.ReadSingle() * sizeFactor;
 
-            // model & scale
             var modelCount = r.ReadUInt32();
             for(int i = 0; i < modelCount; i++)
             {
@@ -104,7 +103,6 @@ namespace TruckLib.ScsMap
             w.Write(Width / sizeFactor);
             w.Write(Height / sizeFactor);
 
-            // models
             var notNullModels = Models.Where(x => x.Model != null);
             w.Write(notNullModels.Count());
             foreach (var model in notNullModels)
@@ -113,7 +111,6 @@ namespace TruckLib.ScsMap
                 w.Write(model.Scale);
             }
 
-            // nodes
             w.Write(notNullModels.Count() + 1);
             w.Write(Node.Uid);
             foreach (var model in notNullModels)

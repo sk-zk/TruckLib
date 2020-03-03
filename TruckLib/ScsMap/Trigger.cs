@@ -97,7 +97,6 @@ namespace TruckLib.ScsMap
             {
                 Range = r.ReadSingle();
             }
-
         }
 
         public override void WriteToStream(BinaryWriter w)

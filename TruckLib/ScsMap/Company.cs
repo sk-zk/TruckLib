@@ -71,7 +71,6 @@ namespace TruckLib.ScsMap
 
             PrefabLink = new UnresolvedItem(r.ReadUInt64());
 
-            // company node
             Node = new UnresolvedNode(r.ReadUInt64());
 
             UnloadPointsEasy = ReadNodeRefList(r);

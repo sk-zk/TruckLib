@@ -156,10 +156,8 @@ namespace TruckLib.ScsMap
 
         public override void ReadFromStream(BinaryReader r)
         {
-            // Uid
             Uid = r.ReadUInt64();
 
-            // KDOP
             BoundingBox.ReadFromStream(r);
 
             var kflag1 = r.ReadByte();
@@ -192,10 +190,8 @@ namespace TruckLib.ScsMap
             Left.VegetationCollision = karr4[3];
             Left.NoDetailVegetation = karr4[4];
 
-            // View distance
             ViewDistance = (ushort)(r.ReadByte() * distFactor);
 
-            // nodes
             Node = new UnresolvedNode(r.ReadUInt64());
             ForwardNode = new UnresolvedNode(r.ReadUInt64());
 
@@ -212,7 +208,6 @@ namespace TruckLib.ScsMap
             // road length
             Length = r.ReadSingle();
 
-            // seed
             RandomSeed = r.ReadUInt32();
 
             // railings
@@ -225,13 +220,8 @@ namespace TruckLib.ScsMap
             // some terrain & veg stuff for each side
             foreach (var side in new[] { Right, Left })
             {
-                // terrain size
                 side.Terrain.Size = r.ReadUInt16() / terrainSizeFactor;
-
-                // profile
                 side.Terrain.Profile = r.ReadToken();
-
-                // coefficient
                 side.Terrain.Coefficient = r.ReadSingle();
 
                 // prev_profile
@@ -242,25 +232,20 @@ namespace TruckLib.ScsMap
                 // TODO: What is this?
                 r.ReadSingle();
 
-                // vegetation
                 foreach (var veg in side.Vegetation)
                 {
                     veg.ReadFromStream(r);
                 }
 
-                // no det veg.
                 side.NoDetailVegetationFrom = r.ReadUInt16() / noDetVegFromToFactor;
                 side.NoDetailVegetationTo = r.ReadUInt16() / noDetVegFromToFactor;
             }
 
-            // veg. spheres
             VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
-            // terrain quad data
             Right.Terrain.QuadData.ReadFromStream(r);
             Left.Terrain.QuadData.ReadFromStream(r);
 
-            // edges
             Right.Edge = r.ReadToken();
             Right.EdgeLook = r.ReadToken();
             Left.Edge = r.ReadToken();
@@ -272,10 +257,8 @@ namespace TruckLib.ScsMap
 
         public override void WriteToStream(BinaryWriter w)
         {
-            // Uid
             w.Write(Uid);
 
-            // KDOP
             BoundingBox.WriteToStream(w);
 
             byte kflag1 = 0;
@@ -308,10 +291,8 @@ namespace TruckLib.ScsMap
             kflag4 |= (byte)Left.Terrain.Noise;
             w.Write(kflag4);
 
-            // View distance
             w.Write((byte)(ViewDistance / distFactor));
 
-            // nodes
             w.Write(Node.Uid);
             w.Write(ForwardNode.Uid);
 
@@ -323,33 +304,20 @@ namespace TruckLib.ScsMap
             w.Write(0f);
             w.Write(0f);
 
-            // length
             w.Write(Length);
 
-            // random seed
             w.Write(RandomSeed);
 
-            // railings
-            // 3 railings per side
             foreach (var railing in Railings.Models)
             {
-                // Model
                 w.Write(railing.Model);
-
-                // Offset
                 w.Write((short)(railing.Offset * modelOffsetFactor));
             }
 
-            // some terrain & veg stuff for each side
             foreach (var side in new[] { Right, Left })
             {
-                // Terrain size
                 w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
-
-                // terrain profile
                 w.Write(side.Terrain.Profile);
-
-                // terrain coefficient
                 w.Write(side.Terrain.Coefficient);
 
                 // prev_profile
@@ -358,25 +326,20 @@ namespace TruckLib.ScsMap
                 // prev_profile_coefficient
                 w.Write(1f);
 
-                // vegetation
                 foreach (var veg in side.Vegetation)
                 {
                     veg.WriteToStream(w);
                 }
 
-                // no det. veg.
                 w.Write((ushort)(side.NoDetailVegetationFrom * noDetVegFromToFactor));
                 w.Write((ushort)(side.NoDetailVegetationTo * noDetVegFromToFactor));
             }
 
-            // veg. spheres
             WriteObjectList(w, VegetationSpheres);
 
-            // terrain quads
             Right.Terrain.QuadData.WriteToStream(w);
             Left.Terrain.QuadData.WriteToStream(w);
 
-            // edges
             w.Write(Right.Edge);
             w.Write(Right.EdgeLook);
             w.Write(Left.Edge);
@@ -385,6 +348,6 @@ namespace TruckLib.ScsMap
             w.Write(Right.UVRotation);
             w.Write(Left.UVRotation);
         }
-
     }
+
 }

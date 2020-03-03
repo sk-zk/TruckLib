@@ -114,16 +114,9 @@ namespace TruckLib.ScsMap
         /// <param name="r">The reader.</param>
         public virtual void ReadFromStream(BinaryReader r)
         {
-            // UID
             KdopItem.Uid = r.ReadUInt64();
-
-            // kDOP bounding box
             KdopItem.BoundingBox.ReadFromStream(r);
-
-            // Flags
             KdopItem.Flags = new BitArray(r.ReadBytes(4));
-
-            // View distance
             KdopItem.ViewDistance = (ushort)((int)r.ReadByte() * viewDistanceFactor);
         }
 
@@ -133,16 +126,9 @@ namespace TruckLib.ScsMap
         /// <param name="w">The writer.</param>
         public virtual void WriteToStream(BinaryWriter w)
         {
-            // UID
             w.Write(KdopItem.Uid);
-
-            // kDOP bounding box
             KdopItem.BoundingBox.WriteToStream(w);
-
-            // Flags
             w.Write(KdopItem.Flags.ToUInt());
-
-            // View distance
             w.Write((byte)(KdopItem.ViewDistance / viewDistanceFactor));
         }
 

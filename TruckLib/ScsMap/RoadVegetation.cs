@@ -59,6 +59,6 @@ namespace TruckLib.ScsMap
             w.Write((ushort)(From * fromToFactor));
             w.Write((ushort)(To * fromToFactor));
         }
-
     }
+
 }

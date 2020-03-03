@@ -51,9 +51,7 @@ namespace TruckLib.ScsMap
         public const ushort ViewDistanceMiddle = 950;
         public const ushort ViewDistanceFar = 1400;
 
-        public KdopItem()
-        {
-        }
+        public KdopItem() { }
 
         public KdopItem(ulong uid)
         {

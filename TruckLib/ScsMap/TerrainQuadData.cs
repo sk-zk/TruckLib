@@ -139,7 +139,6 @@ namespace TruckLib.ScsMap
             // the uids of the material brushes used on this terrain.
             // first one is the main mat.
             // Quad Erase is 0xB823.
-            // also, erased quads are always No Veg. as well.
             foreach(var brush in BrushMaterials)
             {
                 w.Write(brush);

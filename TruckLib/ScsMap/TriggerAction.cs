@@ -38,12 +38,9 @@ namespace TruckLib.ScsMap
 
         public void ReadFromStream(BinaryReader r)
         {
-            // name
             Name = r.ReadToken();
 
-            // num params
             var numParamCount = r.ReadUInt32();
-
             // if there are no custom params of any kind, 
             // this value is 0xFFFFFFFF.
             if (numParamCount == uint.MaxValue)
@@ -54,9 +51,8 @@ namespace TruckLib.ScsMap
                 NumParams.Add(r.ReadSingle());
             }
 
-            // string params
-            var strParamCount = r.ReadUInt32();
-            for (int i = 0; i < strParamCount; i++)
+            var stringParamCount = r.ReadUInt32();
+            for (int i = 0; i < stringParamCount; i++)
             {
                 var strLen = (int)r.ReadUInt64();
                 var strBytes = r.ReadBytes(strLen);
@@ -64,7 +60,6 @@ namespace TruckLib.ScsMap
                 StringParams.Add(str);
             }
 
-            // target tags
             var targetTagsCount = r.ReadUInt32();
             for (int i = 0; i < targetTagsCount; i++)
             {
@@ -78,7 +73,6 @@ namespace TruckLib.ScsMap
 
         public void WriteToStream(BinaryWriter w)
         {
-            // name
             w.Write(Name);
 
             w.Write(NumParams.Count);
@@ -94,7 +88,6 @@ namespace TruckLib.ScsMap
                 w.Write(Encoding.Default.GetBytes(param));
             }
 
-            // target tags
             w.Write(TargetTags.Count);
             foreach (var tag in TargetTags)
             {

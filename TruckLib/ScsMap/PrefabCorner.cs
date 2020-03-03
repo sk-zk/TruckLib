@@ -45,7 +45,8 @@ namespace TruckLib.ScsMap
         public PrefabCorner()
         {
            const int vegetationAmnt = 2;
-           Vegetation = new RoadVegetation[vegetationAmnt].Select(h => new RoadVegetation()).ToArray();
+           Vegetation = new RoadVegetation[vegetationAmnt]
+                .Select(h => new RoadVegetation()).ToArray();
         }
     }
 }

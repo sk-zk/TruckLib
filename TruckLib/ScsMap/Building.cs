@@ -178,10 +178,7 @@ namespace TruckLib.ScsMap
             return building;
         }
 
-        /// <summary>
-        /// Reads the building.
-        /// </summary>
-        /// <param name="r">The reader.</param>
+
         public override void ReadFromStream(BinaryReader r)
         {
             base.ReadFromStream(r);
@@ -198,10 +195,6 @@ namespace TruckLib.ScsMap
             HeightOffsets = ReadObjectList<float>(r);
         }
 
-        /// <summary>
-        /// Writes the building.
-        /// </summary>
-        /// <param name="w">The writer.</param>
         public override void WriteToStream(BinaryWriter w)
         {
             base.WriteToStream(w);

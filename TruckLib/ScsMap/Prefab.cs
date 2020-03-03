@@ -473,77 +473,59 @@ namespace TruckLib.ScsMap
         {
             base.ReadFromStream(r);
 
-            // Model
             Model = r.ReadToken();
-
-            // Variant
             Variant = r.ReadToken();
 
-            // Additional parts, e.g. lines on an intersection
             AdditionalParts = ReadObjectList<Token>(r);
 
-            // Node uids
             Nodes = ReadNodeRefList(r);
 
             // Slave uids
             // (link to service items)
             SlaveItems = ReadItemRefList(r);
 
-            // Ferry link
             var ferryLinkUid = r.ReadUInt64();
             if (ferryLinkUid != 0)
             {
                 FerryLink = new UnresolvedItem(ferryLinkUid);
             }
 
-            // Origin node
             Origin = r.ReadUInt16();
 
-            // Terrain data
             for (int i = 0; i < Nodes.Count; i++)
             {
                 Corners[i].Terrain.Profile = r.ReadToken();
                 Corners[i].Terrain.Coefficient = r.ReadSingle();
             }
 
-            // semaphore profile
             SemaphoreProfile = r.ReadToken();
         }
 
         public void ReadDataPart(BinaryReader r)
         {
-            // Prefab look
             Look = r.ReadToken();
 
-            // 4 node corners
             foreach (var corner in Corners)
             {
-                // Terrain size
                 corner.Terrain.Size = r.ReadUInt16() / terrainSizeFactor;
 
-                // Detail vegetation sliders
                 corner.DetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
                 corner.DetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
 
                 corner.UVRotation = r.ReadSingle();
 
-                // Vegetation; 4 nodes with 2 veg. objects
                 foreach (var veg in corner.Vegetation)
                 {
                     veg.ReadFromStream(r);
                 }
             }
 
-            // vegetation parts
             VegetationParts = ReadObjectList<VegetationPart>(r);
 
-            // seed
             RandomSeed = r.ReadUInt32();
 
-            // vegetation spheres
             VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
-            // Corner models
             foreach (var corner in Corners)
             {
                 corner.Model = r.ReadToken();
@@ -551,7 +533,6 @@ namespace TruckLib.ScsMap
                 corner.Look = r.ReadToken();
             }
 
-            // Terrain
             foreach(var corner in Corners)
             {
                 corner.Terrain.QuadData.ReadFromStream(r);
@@ -562,22 +543,15 @@ namespace TruckLib.ScsMap
         {
             base.WriteToStream(w);
 
-            // Model
             w.Write(Model);
-
-            // Variant
             w.Write(Variant);
 
-            // Additional parts
             WriteObjectList(w, AdditionalParts);
 
-            // Nodes
             WriteNodeRefList(w, Nodes);
 
-            // Slave nodes
             WriteItemRefList(w, SlaveItems);
 
-            // Ferry link
             if (FerryLink is null)
             {
                 w.Write(0UL);
@@ -587,54 +561,42 @@ namespace TruckLib.ScsMap
                 w.Write(FerryLink.Uid);
             }
 
-            // Origin
             w.Write(Origin);
 
-            // Terrain data
             for (int i = 0; i < Nodes.Count; i++)
             {
                 w.Write(Corners[i].Terrain.Profile);
                 w.Write(Corners[i].Terrain.Coefficient);
             }
 
-            // Semaphore profile
             w.Write(SemaphoreProfile);
         }
 
         public void WriteDataPart(BinaryWriter w)
         {
-            // Prefab look
             w.Write(Look);
 
-            // Corner veg.
             foreach (var corner in Corners)
             {
-                // Terrain size
                 w.Write((ushort)(corner.Terrain.Size * terrainSizeFactor));
 
-                // Detail vegetation sliders
                 w.Write((ushort)(corner.DetailVegetationFrom * vegFromToFactor));
                 w.Write((ushort)(corner.DetailVegetationTo * vegFromToFactor));
 
                 w.Write(corner.UVRotation);
 
-                // Vegetation
                 foreach (var veg in corner.Vegetation)
                 {
                     veg.WriteToStream(w);
                 }
             }
 
-            // vegetation parts
             WriteObjectList(w, VegetationParts);
 
-            // seed
             w.Write(RandomSeed);
 
-            // veg. spheres
             WriteObjectList(w, VegetationSpheres);
 
-            // corner models
             foreach (var corner in Corners)
             {
                 w.Write(corner.Model);
@@ -642,12 +604,10 @@ namespace TruckLib.ScsMap
                 w.Write(corner.Look);
             }
 
-            // Terrain
             foreach (var corner in Corners)
             {
                 corner.Terrain.QuadData.WriteToStream(w);
-            }
-            
+            }            
         }
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)

@@ -21,10 +21,7 @@ namespace TruckLib.ScsMap
         public override ItemFile DefaultItemFile => throw new InvalidOperationException(exceptionMessage);
         protected override ushort DefaultViewDistance => throw new InvalidOperationException(exceptionMessage);
 
-
-        public UnresolvedItem()
-        {
-        }
+        public UnresolvedItem() { }
 
         public UnresolvedItem(ulong uid)
         {
@@ -50,6 +47,5 @@ namespace TruckLib.ScsMap
         {
             throw new InvalidOperationException(exceptionMessage);
         }
-
     }
 }

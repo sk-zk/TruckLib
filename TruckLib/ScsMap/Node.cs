@@ -190,7 +190,6 @@ namespace TruckLib.ScsMap
 
         public override string ToString()
         {
-            //return $"{Uid:X16} (B: {BackwardUid:X16}; F: {ForwardUid:X16})";
             return $"{Uid:X16} ({Position.X}|{Position.Y}|{Position.Z})";
         }
 

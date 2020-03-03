@@ -112,44 +112,8 @@ namespace TruckLib.ScsMap
             p2.ForwardItem = newItem;
             p3.BackwardItem = newItem;
 
-            // set rotation
-            // ============
-            //
-            // exactly 3 items in the chain or the 4th item is a prefab and therefore useless
-            if (p1.BackwardItem == null || p1.BackwardItem is Prefab) 
-            {
-                var dir = Vector3.Normalize(
-                    Vector3.Normalize(p2.Position - p1.Position) +
-                    Vector3.Normalize(p3.Position - p2.Position));
-                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
-                p2.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
-
-                p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
-            }
-            else // 4 or more items in the chain
-            {
-                Node p0;
-                if(p1.BackwardItem is PolylineItem poly)
-                {
-                    p0 = poly.Node;
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-
-                var dir = Vector3.Normalize(
-                        HermiteSpline.Derivative(
-                            p1.Position,
-                            p1.Rotation.ToEuler(),
-                            p2.Position,
-                            p3.Position - p2.Position, // TODO: How is this tangent calculated?
-                            1f));
-                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
-                p2.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
-
-                p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position); 
-            }
+            p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
+            SetMiddleRotation(p1, p2, p3);
 
             p2.IsRed = true;
             p2.Sectors[0].MapItems.Add(newItem.Uid, newItem);
@@ -186,48 +150,27 @@ namespace TruckLib.ScsMap
             p0.ForwardItem = newItem;
             p1.BackwardItem = newItem;
 
-            // set rotation
-            // ============
-            //
-            // exactly three items in the chain or the 4th item is a prefab and therefore useless
-            if (p2.ForwardItem == null || p2.ForwardItem is Prefab) 
-            {
-                var dir = Vector3.Normalize(
-                    Vector3.Normalize(p2.Position - p1.Position) +
-                    Vector3.Normalize(p1.Position - p0.Position));
-                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
-                p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
-
-                p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
-            }
-            else // 4 or more items in the chain
-            {
-                Node p3;
-                if (p2.ForwardItem is PolylineItem poly)
-                {
-                    p3 = poly.Node;
-                } 
-                else
-                {
-                    throw new NotImplementedException();
-                }
-
-                var dir = Vector3.Normalize(
-                        HermiteSpline.Derivative(
-                            p0.Position,
-                            p2.Position - p1.Position, // TODO: How is this tangent calculated?
-                            p2.Position,
-                            p2.Rotation.ToEuler(),
-                            0f));
-                var yaw = MathEx.AngleOffAroundAxis(dir, -Vector3.UnitZ, -Vector3.UnitY, true);
-                p1.Rotation = Quaternion.CreateFromYawPitchRoll((float)yaw, 0, 0);
-
-                p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
-            }
+            p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
+            SetMiddleRotation(p2, p1, p0, true);
 
             p0.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
             return newItem;
+        }
+
+        private static void SetMiddleRotation(Node pBackw, Node pMiddle, Node pNew,
+            bool isPrepend = false)
+        {
+            var pNew_yaw = pNew.Rotation.ToEuler().Y;
+
+            var backMiddle_dir = Vector3.Normalize(pMiddle.Position - pBackw.Position);
+            if (isPrepend) backMiddle_dir *= -1;
+
+            var backMiddle_dir_yaw = MathEx.AngleOffAroundAxis(backMiddle_dir,
+                -Vector3.UnitZ, -Vector3.UnitY, true);
+
+            var middle_yaw = (pNew_yaw + backMiddle_dir_yaw) / 2;
+            pMiddle.Rotation = Quaternion.CreateFromYawPitchRoll((float)middle_yaw, 0, 0);
         }
 
         internal override IEnumerable<Node> GetItemNodes()

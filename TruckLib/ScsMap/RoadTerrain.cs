@@ -135,22 +135,25 @@ namespace TruckLib.ScsMap
         /// <returns></returns>
         private int CalculateQuadCols(RoadResolution resolution, float length)
         {
-            int roadSteps;
+            int interval;
+            int colsPerInterval;
             switch (resolution)
             {
                 case RoadResolution.Superfine:
-                    roadSteps = 1;
+                    interval = 1;
+                    colsPerInterval = 1;
                     break;
                 case RoadResolution.HighPoly:
-                    roadSteps = 5;
+                    interval = 15;
+                    colsPerInterval = 3;
                     break;
                 case RoadResolution.Normal:
                 default:
-                    roadSteps = 15;
+                    interval = 15;
+                    colsPerInterval = 1;
                     break;
             }
-
-            int cols = (int)(length / roadSteps);
+            var cols = ((int)(length / interval) + 1) * colsPerInterval; 
             return cols;
         }
 

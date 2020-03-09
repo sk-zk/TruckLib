@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
-    /// <summary>
-    /// Buildings on steroids. TODO: Write actual description.
-    /// </summary>
+    // TODO: Write xmldoc.
     public class Curve : PolylineItem
     {
         public override ItemType ItemType => ItemType.Curve;

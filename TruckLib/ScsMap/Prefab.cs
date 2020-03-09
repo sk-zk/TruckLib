@@ -376,6 +376,7 @@ namespace TruckLib.ScsMap
             }
 
             Attach(item, closestItemNode, (ushort)Nodes.IndexOf(closestPrefabNode));
+            item.Recalculate();
         }
 
         /// <summary>

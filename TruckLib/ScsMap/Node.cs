@@ -24,25 +24,66 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<Sector> Sectors { get; set; } = new List<Sector>();
 
+        private Vector3 position = Vector3.Zero;
         /// <summary>
         /// Position of the node. Note that this will be converted to fixed length floats.
         /// </summary>
-        public Vector3 Position { get; set; } = new Vector3();
+        public Vector3 Position
+        {
+            get => position;
+            set
+            {
+                var recalc = position != value;
+                position = value;
+                if (recalc) RecalculateItems();
+            }
+        }
 
+        private Quaternion rotation = new Quaternion(0f, 0f, 0f, 1f);
         /// <summary>
         /// Rotation of the node.
         /// </summary>
-        public Quaternion Rotation { get; set; } = new Quaternion(0f, 0f, 0f, 1f);
+        public Quaternion Rotation
+        {
+            get => rotation;
+            set
+            {
+                var recalc = rotation != value;
+                rotation = value;
+                if (recalc) RecalculateItems();
+            }
+        }
+
+        private IMapObject backwardItem;
 
         /// <summary>
         /// The backward item belonging to this node. 
         /// </summary>
-        public IMapObject BackwardItem { get; set; }
+        public IMapObject BackwardItem
+        {
+            get => backwardItem;
+            set
+            {
+                var recalc = backwardItem != value;
+                backwardItem = value;
+                if (recalc) RecalculateItems();
+            }
+        }
 
+        private IMapObject forwardItem;
         /// <summary>
         /// The forward item belonging to this node. 
         /// </summary>
-        public IMapObject ForwardItem { get; set; }
+        public IMapObject ForwardItem 
+        { 
+            get => forwardItem;
+            set
+            {
+                var recalc = forwardItem != value;
+                forwardItem = value;
+                if (recalc) RecalculateItems();
+            }
+        }
 
         protected BitArray Flags { get; set; } = new BitArray(32);
 
@@ -106,34 +147,46 @@ namespace TruckLib.ScsMap
         {
             // if the node isn't attached to a sector,
             // just move it
-            if(Sectors is null || Sectors.Count == 0)
+            if (Sectors is null || Sectors.Count == 0)
             {
                 Position = newPos;
-                return;
+            }
+            else
+            {
+
+                var map = Sectors[0].Map;
+                // check if the new position is still inside 
+                // one of the node's sectors.
+                // if not, set Sectors to the new sector.
+                var newSector = Map.GetSectorOfCoordinate(newPos);
+                if (!Sectors.Any(s => s.X == newSector.X && s.Z == newSector.Z))
+                {
+                    map.AddSector(newSector); // just in case
+                    Sectors = new List<Sector> { map.Sectors[newSector] };
+                }
+                Position = newPos;
             }
 
-            var map = Sectors[0].Map;
-            // check if the new position is still inside 
-            // one of the node's sectors.
-            // if not, set Sectors to the new sector.
-            var newSector = Map.GetSectorOfCoordinate(newPos);
-            if(!Sectors.Any(s => s.X == newSector.X && s.Z == newSector.Z))
-            {
-                map.AddSector(newSector); // just in case
-                Sectors = new List<Sector> { map.Sectors[newSector] };
-            }
-            Position = newPos;
+            // if one or both of the items are polyline items,
+            // their length has to be recalculated
+            // and terrain has to be adjusted
+            RecalculateItems();
+        }
+
+        private void RecalculateItems()
+        {
+            if (BackwardItem is IRecalculatable bw) bw.Recalculate();
+            if (ForwardItem is IRecalculatable fw) fw.Recalculate();
         }
 
         private const float positionFactor = 256f;
-
         /// <summary>
         /// Reads the node from a BinaryReader.
         /// </summary>
         /// <param name="sector">The sector the node was in.</param>
         /// <param name="r"></param>
         public void ReadFromStream(Sector sector, BinaryReader r)
-        {            
+        {
             Uid = r.ReadUInt64();
 
             Position = new Vector3(
@@ -141,7 +194,7 @@ namespace TruckLib.ScsMap
                 r.ReadInt32() / positionFactor,
                 r.ReadInt32() / positionFactor
             );
- 
+
             /* TODO: Figure out why I needed this code to begin with,
              * if I ever needed it at all
             // Sector

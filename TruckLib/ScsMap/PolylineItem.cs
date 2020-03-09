@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <para>Parent class for map items which form a polyline with other 
     /// items, like roads and buildings.</para>
     /// </summary>
-    public abstract class PolylineItem : MapItem
+    public abstract class PolylineItem : MapItem, IRecalculatable
     {
         /// <summary>
         /// The item attached to this item in backward direction.
@@ -171,6 +171,18 @@ namespace TruckLib.ScsMap
 
             var middle_yaw = (pNew_yaw + backMiddle_dir_yaw) / 2;
             pMiddle.Rotation = Quaternion.CreateFromYawPitchRoll((float)middle_yaw, 0, 0);
+        }
+
+        /// <summary>
+        /// Recalculates this item's length and adjusts properties based on it.
+        /// </summary>
+        public virtual void Recalculate()
+        {
+            if (Node is null) return;
+
+            HermiteSpline.ApproximateLength(
+                Node.Position, Node.Rotation.ToEuler(), 
+                ForwardNode.Position, ForwardNode.Rotation.ToEuler());
         }
 
         internal override IEnumerable<Node> GetItemNodes()

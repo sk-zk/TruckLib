@@ -268,8 +268,15 @@ namespace TruckLib.ScsMap
             foreach (var side in new[] { Left, Right })
             {
                 side.Terrain.QuadData.BrushMaterials = new List<Token> { "0" };
-                side.Terrain.CalculateQuadGrid(Resolution, Length);                
+                side.Terrain.CalculateQuadGrid(Resolution, Length);
             }
+        }
+
+        public override void Recalculate()
+        {
+            base.Recalculate();
+            Left.Terrain.CalculateQuadGrid(Resolution, Length);
+            Right.Terrain.CalculateQuadGrid(Resolution, Length);
         }
 
         private const float railingOffsetFactor = 100f;
@@ -592,6 +599,7 @@ namespace TruckLib.ScsMap
                 }
 
                 w.Write(side.Sidewalk.Material);
+
                 side.Terrain.QuadData.WriteToStream(w);
             }
 

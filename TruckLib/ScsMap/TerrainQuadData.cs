@@ -159,7 +159,7 @@ namespace TruckLib.ScsMap
             w.Write(Cols);
 
             // terrain quad data; 4 bytes per quad.
-            w.Write(Rows * Cols);
+            w.Write((uint)(Rows * Cols));
             foreach (var quad in Quads)
             {
                 quad.WriteToStream(w);

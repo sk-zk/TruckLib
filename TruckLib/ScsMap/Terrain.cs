@@ -136,7 +136,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Initializes a terrain which has been created via Add or Append.
         /// </summary>
-        private void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token material,
+        internal void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token material,
             float leftSize, float rightSize)
         {
             Length = Vector3.Distance(backwardPos, forwardPos);
@@ -147,6 +147,13 @@ namespace TruckLib.ScsMap
                 side.Terrain.QuadData.BrushMaterials = new List<Token> { material };
                 side.Terrain.CalculateQuadGrid(StepSize, Length);
             }
+        }
+
+        public override void Recalculate()
+        {
+            base.Recalculate();
+            Left.Terrain.CalculateQuadGrid(StepSize, Length);
+            Right.Terrain.CalculateQuadGrid(StepSize, Length);
         }
 
         private const float modelOffsetFactor = 100f;

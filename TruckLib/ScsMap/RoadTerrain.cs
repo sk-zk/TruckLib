@@ -123,7 +123,7 @@ namespace TruckLib.ScsMap
             }
             else
             {
-                QuadData.Quads.RemoveAt(amt);
+                QuadData.Quads.RemoveRange(amt, QuadData.Quads.Count - amt);
             }
         }
 

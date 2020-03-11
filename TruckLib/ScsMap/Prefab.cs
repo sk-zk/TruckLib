@@ -279,36 +279,35 @@ namespace TruckLib.ScsMap
                 forwardNode = map.AddNode(forwardPos);
             }
 
-            var r = new Road
+            var road = new Road
             {
                 Node = backwardNode,
                 ForwardNode = forwardNode
             };
-            r.Node.ForwardItem = r;
-            r.ForwardNode.BackwardItem = r;
-            r.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type);
-            map.AddItem(r, r.Node);
+            road.Node.ForwardItem = road;
+            road.ForwardNode.BackwardItem = road;
+            road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type);
+            map.AddItem(road, road.Node);
 
             // nodes of a prefab that have nothing attached to it
             // always have the prefab as ForwardItem, but they will be
             // set to BackwardItem when you attach a road going outward
             if (!prepend) backwardNode.BackwardItem = this;
-
+                
             if (prepend)
             {
                 backwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
             }
             else
             {
-                var eulerRot = backwardNode.Rotation.ToEuler();
-                eulerRot.Y -= (float)Math.PI;
-                backwardNode.Rotation = Quaternion.CreateFromYawPitchRoll(eulerRot.Y, eulerRot.X, eulerRot.Z);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
             }
 
+            road.Recalculate();
+
             backwardNode.IsRed = true;
 
-            return r;
+            return road;
         }
 
         /// <summary>

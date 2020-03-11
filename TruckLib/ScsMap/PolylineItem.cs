@@ -163,14 +163,11 @@ namespace TruckLib.ScsMap
         {
             var pNew_yaw = pNew.Rotation.ToEuler().Y;
 
-            var backMiddle_dir = Vector3.Normalize(pMiddle.Position - pBackw.Position);
-            if (isPrepend) backMiddle_dir *= -1;
-
-            var backMiddle_dir_yaw = MathEx.AngleOffAroundAxis(backMiddle_dir,
-                -Vector3.UnitZ, -Vector3.UnitY, true);
+            var backMiddle_dir_yaw = MathEx.GetNodeRotation(
+                pBackw.Position, pMiddle.Position).ToEuler().Y;
 
             var middle_yaw = (pNew_yaw + backMiddle_dir_yaw) / 2;
-            pMiddle.Rotation = Quaternion.CreateFromYawPitchRoll((float)middle_yaw, 0, 0);
+            pMiddle.Rotation = Quaternion.CreateFromYawPitchRoll(middle_yaw, 0, 0);
         }
 
         /// <summary>

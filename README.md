@@ -1,19 +1,22 @@
 # TruckLib
 
-**TruckLib** is an attempt at writing a C# library for working with the map format of Euro Truck Simulator 2
-and American Truck Simulator. Currently, the library supports map version 876 (game version 1.36.1).
+**TruckLib** is an attempt at writing a C# library for working with the map format of 
+Euro Truck Simulator 2 / American Truck Simulator (and various other formats used in the games).
 
-(The code is 💩💩💩 and not "production ready" by any means, so expect plenty of bugs, missing features,
-sudden API changes, and inconsistent naming - you know, all that fun stuff that is exactly what you want from a library.)
+The library currently supports map version 876 (game version 1.36.1 and up).
 
-You can find some sample code in the Samples folder. (Proper documentation will follow eventually™.)
+(The code is 💩💩💩 and not particularly "production ready", so expect bugs, missing features,
+sudden API changes, inconsistent naming - you know, all that fun stuff that is exactly 
+what you want from a library.)
+
+You can find some sample code in the Samples folder. (Proper documentation will follow eventually™.)  
 You can also take a look at my project [DlcCheck](https://github.com/sk-zk/DlcCheck). 
 
 TruckLib is not affiliated with SCS Software.
 
 ## What's in the box?
 **TruckLib.ScsMap**:  
-What you're here for. Create or modify maps for ETS2 and ATS.
+Create or modify maps for ETS2 and ATS.
 
 **TruckLib.Sii**:  
 Mostly complete parser for .sii and .mat files.
@@ -27,6 +30,8 @@ Simple reader for HashFS (.scs) files.
 
 ## Known issues and limitations
 * The library does not calculate the bounding box of items, so you'll need to recalculate the map (F8) on load.
+* The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
+ fixed by recalculating.
 
 ## License
 TruckLib is licensed under GPL v2 except for `CityHash.cs`.

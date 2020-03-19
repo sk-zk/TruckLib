@@ -115,7 +115,6 @@ namespace TruckLib.ScsMap
         Percent100to140 = 3
     }
 
-    // Some prefab setting. TODO: Find out what this does
     public enum StaticLod
     {
         Default = 0,

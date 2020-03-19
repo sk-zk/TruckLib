@@ -35,12 +35,8 @@ namespace TruckLib.ScsMap
 
         public virtual void ReadFromStream(BinaryReader r)
         {
-            // Map format version
             CoreMapVersion = r.ReadUInt32();
-
-            // Game ID token. "euro2" for ETS2/ATS
             GameId = r.ReadToken();
-
             GameMapVersion = r.ReadUInt32();
         }
 

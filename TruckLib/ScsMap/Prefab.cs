@@ -204,6 +204,12 @@ namespace TruckLib.ScsMap
             set => Flags[24] = value;
         }
 
+        public bool Collision
+        {
+            get => !Flags[2];
+            set => Flags[2] = !value;
+        }
+
         public Prefab()
         {
             const int cornerAmnt = 4;

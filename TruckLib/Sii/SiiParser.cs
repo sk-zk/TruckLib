@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -273,7 +274,8 @@ namespace TruckLib.Sii
             {
                 if (typeof(T) == typeof(float))
                 {
-                    arr[i] = (T)(object)float.Parse(tupleVals[i]);
+                    arr[i] = (T)(object)float.Parse(tupleVals[i], 
+                        NumberStyles.Float, CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -295,15 +297,18 @@ namespace TruckLib.Sii
             }
             else
             {
-                if (int.TryParse(valueStr, out int intResult))
+                if (int.TryParse(valueStr, NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out int intResult))
                 {
                     return intResult;
                 }
-                if (long.TryParse(valueStr, out long longResult))
+                if (long.TryParse(valueStr, NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out long longResult))
                 {
                     return longResult;
                 }
-                if (ulong.TryParse(valueStr, out ulong ulongResult))
+                if (ulong.TryParse(valueStr, NumberStyles.Integer,
+                    CultureInfo.InvariantCulture, out ulong ulongResult))
                 {
                     return ulongResult;
                 }
@@ -383,9 +388,21 @@ namespace TruckLib.Sii
             {
                 sb.Append($"\"{attribValue}\"");
             }
+            else if(attribValue is Array arr)
+            {
+                sb.Append(TupleAttribOpen);
+                IList list = arr;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    sb.Append(Convert.ToString(list[i], CultureInfo.InvariantCulture));
+                    if (i != list.Count - 1)
+                        sb.Append(TupleSeperator);
+                }
+                sb.Append(TupleAttribClose);
+            }
             else
             {
-                sb.Append(attribValue);
+                sb.Append(Convert.ToString(attribValue, CultureInfo.InvariantCulture));
             }
         }
 

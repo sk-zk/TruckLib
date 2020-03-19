@@ -69,6 +69,10 @@ namespace TruckLib.ScsMap
         public List<VegetationSphere> VegetationSpheres { get; set; } 
             = new List<VegetationSphere>();
 
+        public Vector3 NodeOffset { get; set; } = Vector3.Zero;
+
+        public Vector3 ForwardNodeOffset { get; set; } = Vector3.Zero;
+
         /// <summary>
         /// Determines if the item is reflected in water.
         /// </summary>
@@ -202,15 +206,9 @@ namespace TruckLib.ScsMap
             Node = new UnresolvedNode(r.ReadUInt64());
             ForwardNode = new UnresolvedNode(r.ReadUInt64());
 
-            // float3 node0_offset / float3 node1_offset
             // TODO: What is this?
-            r.ReadSingle();
-            r.ReadSingle();
-            r.ReadSingle();
-
-            r.ReadSingle();
-            r.ReadSingle();
-            r.ReadSingle();
+            NodeOffset = r.ReadVector3();
+            ForwardNodeOffset = r.ReadVector3();
 
             // road length
             Length = r.ReadSingle();
@@ -304,12 +302,8 @@ namespace TruckLib.ScsMap
             w.Write(ForwardNode.Uid);
 
             // node offsets
-            w.Write(0f);
-            w.Write(0f);
-            w.Write(0f);
-            w.Write(0f);
-            w.Write(0f);
-            w.Write(0f);
+            w.Write(NodeOffset);
+            w.Write(ForwardNodeOffset);
 
             w.Write(Length);
 

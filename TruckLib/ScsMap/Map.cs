@@ -191,36 +191,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Fills in the Node and Forward/BackwardItem fields in map item and node objects
-        /// by searching the Node or Item list for the Uid references.
-        /// </summary>
-        private void UpdateReferences()
-        {
-            var allNodes = GetAllNodes();
-            var allItems = GetAllItems();
-
-            // first of all, find map items referenced in nodes
-            Trace.WriteLine("Updating item references in nodes");
-            foreach(var kvp in allNodes)
-            {
-                kvp.Value.UpdateItemReferences(allItems);
-            }
-
-            // then find nodes referenced in map items
-            // and map items referenced in map items
-            Trace.WriteLine("Updating node & item references in items");
-            foreach (var item in allItems)
-            {
-                item.Value.UpdateNodeReferences(allNodes);
-                if(item.Value is IItemReferences hasItemRef)
-                {
-                    hasItemRef.UpdateItemReferences(allItems);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns the index of the sector a coordinate is in.
+        /// Returns the index of the sector the given coordinate falls into.
         /// </summary>
         /// <param name="c">The coordinate to check.</param>
         /// <returns>The index of the sector the coordinate is in.</returns>
@@ -277,6 +248,36 @@ namespace TruckLib.ScsMap
                 }
             }
             return allItems;
+        }
+
+        /// <summary>
+        /// Checks if the map contains an item with the given UID.
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <returns></returns>
+        public bool HasItem(ulong uid)
+        {
+            foreach (var sectorKvp in Sectors)
+            {
+                if (sectorKvp.Value.MapItems.ContainsKey(uid))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the item with the given UID.
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <returns></returns>
+        public MapItem GetItem(ulong uid)
+        {
+            foreach (var sectorKvp in Sectors)
+            {
+                if (sectorKvp.Value.MapItems.ContainsKey(uid))
+                    return sectorKvp.Value.MapItems[uid];
+            }
+            return null;
         }
 
         /// <summary>
@@ -420,7 +421,34 @@ namespace TruckLib.ScsMap
             }
         }
 
- 
+        /// <summary>
+        /// Fills in the Node and Forward/BackwardItem fields in map item and node objects
+        /// by searching the Node or Item list for the Uid references.
+        /// </summary>
+        private void UpdateReferences()
+        {
+            var allNodes = GetAllNodes();
+            var allItems = GetAllItems();
+
+            // first of all, find map items referenced in nodes
+            Trace.WriteLine("Updating item references in nodes");
+            foreach (var kvp in allNodes)
+            {
+                kvp.Value.UpdateItemReferences(allItems);
+            }
+
+            // then find nodes referenced in map items
+            // and map items referenced in map items
+            Trace.WriteLine("Updating node & item references in items");
+            foreach (var item in allItems)
+            {
+                item.Value.UpdateNodeReferences(allNodes);
+                if (item.Value is IItemReferences hasItemRef)
+                {
+                    hasItemRef.UpdateItemReferences(allItems);
+                }
+            }
+        }
 
         /// <summary>
         /// Saves the map in binary format.

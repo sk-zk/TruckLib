@@ -30,5 +30,15 @@ namespace TruckLib.Sii
             return MatParser.DeserializeFromFile(path);
         }
 
+        public string Serialize()
+        {
+            return MatParser.Serialize(this);
+        }
+
+        public void Serialize(string path)
+        {
+            MatParser.Serialize(this, path);
+        }
+
     }
 }

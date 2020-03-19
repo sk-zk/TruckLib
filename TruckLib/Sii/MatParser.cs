@@ -26,6 +26,29 @@ namespace TruckLib.Sii
             return DeserializeFromString(str);
         }
 
+        public static string Serialize(MatFile mat)
+        {
+            var siiParser = new SiiParser();
+            siiParser.TupleAttribOpen = "{";
+            siiParser.TupleAttribClose = "}";
+
+            var siiFile = new SiiFile();
+            siiFile.GlobalScope = false;
+            var unit = new Unit();
+            siiFile.Units.Add(unit);
+            unit.Class = "material";
+            unit.Name = $"\"{mat.Effect}\"";
+            unit.Attributes = mat.Attributes;
+
+            return siiParser.Serialize(siiFile);
+        }
+
+        public static void Serialize(MatFile mat, string path)
+        {
+            var str = Serialize(mat);
+            File.WriteAllText(path, str);
+        }
+
     }
     
 }

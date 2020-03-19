@@ -72,6 +72,10 @@ namespace TruckLib.ScsMap
 
         private int staticLodPos = 4;
         private int staticLodLength = 2;
+        /// <summary>
+        /// Forces the game to display a lower LOD of the model, 
+        /// no matter where the camera is.
+        /// </summary>
         public StaticLod StaticLod
         {
             get => (StaticLod)Flags.GetBitString(staticLodPos, staticLodLength);

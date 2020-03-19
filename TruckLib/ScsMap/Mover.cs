@@ -31,6 +31,9 @@ namespace TruckLib.ScsMap
 
         public float Speed { get; set; } = 1;
 
+        /// <summary>
+        /// Sets for how long objects pause at the end of the path, in seconds.
+        /// </summary>
         public float DelayAtEnd { get; set; } = 0;
 
         public float Width { get; set; } = 0;

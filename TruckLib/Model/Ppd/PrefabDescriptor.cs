@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace TruckLib.Model.Ppd
 {
     /// <summary>
-    /// Prism Prefab Descriptor.
+    /// Prism Prefab Descriptor (ppd).
     /// </summary>
-    public class PpdFile : IBinarySerializable
+    public class PrefabDescriptor : IBinarySerializable
     {
         private uint SupportedVersion = 0x16;
 
@@ -41,9 +41,9 @@ namespace TruckLib.Model.Ppd
 
         public List<uint[]> Unknown { get; set; } = new List<uint[]>();
 
-        public static PpdFile Open(string path)
+        public static PrefabDescriptor Open(string path)
         {
-            var ppd = new PpdFile();
+            var ppd = new PrefabDescriptor();
             using(var r = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
                 ppd.ReadFromStream(r);

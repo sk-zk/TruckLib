@@ -224,7 +224,7 @@ namespace TruckLib.ScsMap
         /// <param name="unitName">The unit name of the prefab.</param>
         /// <param name="position">The position of control node 0.</param>
         /// <returns></returns>
-        public static Prefab Add(IItemContainer map, string unitName, string variant, string look, PpdFile ppd, Vector3 position)
+        public static Prefab Add(IItemContainer map, string unitName, string variant, string look, PrefabDescriptor ppd, Vector3 position)
         {
             return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position);
         }

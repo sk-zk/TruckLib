@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
 {
     internal class PrefabCreator
     {
-        private PpdFile ppd;
+        private PrefabDescriptor ppd;
         private Vector3 node0Pos => ppd.Nodes[0].Position;
         private IItemContainer map;
         private Vector3 prefabPos;
@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap
         private List<SpawnPoint> clonedPoints;
 
         public Prefab FromPpd(IItemContainer map, string unitName, string variant, string look,
-            PpdFile ppd, Vector3 prefabPos)
+            PrefabDescriptor ppd, Vector3 prefabPos)
         {
             this.map = map;
             this.ppd = ppd;

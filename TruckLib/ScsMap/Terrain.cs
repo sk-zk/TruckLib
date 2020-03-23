@@ -198,8 +198,8 @@ namespace TruckLib.ScsMap
             var karr4 = new BitArray(new[] { kflag4 });
             Left.Terrain.Noise = (TerrainNoise)(kflag4 & 0b11);
             Left.Terrain.Transition = (TerrainTransition)((kflag4 >> 2) & 0b11);
-            Left.VegetationCollision = karr4[3];
             Left.NoDetailVegetation = karr4[4];
+            Left.VegetationCollision = karr4[5];
 
             ViewDistance = (ushort)(r.ReadByte() * distFactor);
 

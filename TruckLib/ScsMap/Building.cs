@@ -43,6 +43,12 @@ namespace TruckLib.ScsMap
             set => Flags.SetByte(1, value);
         }
 
+        public byte ColorVariant
+        {
+            get => Flags.GetByte(2);
+            set => Flags.SetByte(2, value);
+        }
+
         /// <summary>
         /// The seed for this building.
         /// </summary>

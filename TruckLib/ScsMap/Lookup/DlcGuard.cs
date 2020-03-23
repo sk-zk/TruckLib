@@ -29,5 +29,7 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte Oregon = 4;
         public static readonly byte Washington = 5;
         public static readonly byte OregonAndWashington = 6;
+        public static readonly byte Utah = 7;
+        public static readonly byte NewMexicoAndUtah = 8;
     }
 }

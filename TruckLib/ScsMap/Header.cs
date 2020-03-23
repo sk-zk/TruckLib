@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap
         // 1.33 & 1.34: 0x35A (858)
         // 1.35:        0x365 (869)
         // 1.36:        0x36B (875)
-        // 1.36.1:      0x36C (876)
+        // 1.36.1+:      0x36C (876)
         public uint CoreMapVersion { get; set; } = supportedVer;
 
         /// <summary>

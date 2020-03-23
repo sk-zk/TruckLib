@@ -255,7 +255,7 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Writes a string in the format used by SCS.
+        /// Writes a string.
         /// </summary>
         /// <param name="w"></param>
         /// <param name="str"></param>

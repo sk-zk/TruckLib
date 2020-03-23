@@ -121,7 +121,7 @@ namespace TruckLib
         {
             if (encoding is null) encoding = Encoding.ASCII;
 
-            List<byte[]> bytes = new List<byte[]>();
+            var bytes = new List<byte[]>();
             foreach (var str in strings)
             {
                 bytes.Add(encoding.GetBytes(str + '\0'));

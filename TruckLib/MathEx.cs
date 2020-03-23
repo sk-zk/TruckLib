@@ -9,9 +9,6 @@ namespace TruckLib
 {
     internal static class MathEx
     {
-        // Don't look too closely at this file
-
-
         /// <summary>
         /// Factor for converting radians to degrees.
         /// </summary>

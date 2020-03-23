@@ -11,11 +11,11 @@ namespace TruckLib
         private byte value;
         private byte Value
         {
-            get => this.value;
+            get => value;
             set
             {
-                ValueInRange(value);
-                this.value = value;
+                this.value = (byte)Utils.SetIfInRange(
+                    (int)value, MinValue, MaxValue);
             }
         }
 
@@ -23,12 +23,6 @@ namespace TruckLib
         {
             this.value = 0;
             Value = value;
-        }
-
-        private static void ValueInRange(byte value)
-        {
-            if (value < MinValue || value > MaxValue)
-                throw new ArgumentOutOfRangeException();
         }
 
         private static Nibble Add(int a, int b)

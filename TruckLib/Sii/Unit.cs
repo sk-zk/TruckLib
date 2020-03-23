@@ -12,7 +12,7 @@ namespace TruckLib.Sii
     public class Unit
     {
         /// <summary>
-        /// Name of the class type of this unit.
+        /// Class name of this unit.
         /// </summary>
         public string Class { get; set; }
 
@@ -28,15 +28,13 @@ namespace TruckLib.Sii
             = new Dictionary<string, object>();
 
         /// <summary>
-        /// Includes in this unit.
+        /// Includes of this unit.
         /// </summary>
         public List<string> Includes { get; set; } = new List<string>();
 
-        public override string ToString() => $"{Class}: {Name}";
+        public override string ToString() => $"{Class} : {Name}";
 
-        public Unit()
-        {
-        }
+        public Unit() { }
 
         public Unit(string className, string name)
         {

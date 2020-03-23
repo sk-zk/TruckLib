@@ -60,6 +60,11 @@ namespace TruckLib
             return new Vector3((float)x, (float)y, (float)z);
         }
 
+        /// <param name="p0">Point 0</param>
+        /// <param name="m0">Tangent 0</param>
+        /// <param name="p1">Point 1</param>
+        /// <param name="m1">Tangent 1</param>
+        /// <returns></returns>
         public static float ApproximateLength(Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1)
         {
             Vector3 prev = Vector3.Zero;

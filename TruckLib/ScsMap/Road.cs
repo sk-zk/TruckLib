@@ -96,7 +96,8 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// [Legacy roads only] 
-        /// Determines if this road is a city road and can therefore have a sidewalk.
+        /// <para>Determines if this road is a city road and can therefore have a sidewalk.
+        /// </para>
         /// </summary>
         public bool IsCityRoad = false;
 
@@ -110,7 +111,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Determines if this road is displayed in the UI map.
         /// </summary>
-        public bool HideInUiMap = false;
+        public bool ShowInUiMap = true;
 
         /// <summary>
         /// Determines if this item will render behind a cut plane.
@@ -132,19 +133,19 @@ namespace TruckLib.ScsMap
         /// <para>If not, AI vehicles will choose a different route.
         /// If there isn't one, they will despawn instead.</para>
         /// </summary>
-        public bool NoAiVehicles = false;
+        public bool AiVehicles = true;
 
         /// <summary>
         /// Determines if the road has invisible walls on both sides of it.
         /// </summary>
-        public bool NoBoundary = false;
+        public bool Boundary = true;
 
         /// <summary>
         /// Determines if the player can collide with this item.
         /// </summary>
-        public bool NoCollision = false;
+        public bool Collision = true;
 
-        public bool NoTerrainShadows = false;
+        public bool TerrainShadows = true;
 
         public bool SmoothDetailVegetation = true;
 
@@ -209,15 +210,15 @@ namespace TruckLib.ScsMap
             r.ViewDistance = ViewDistance;
 
             r.GpsAvoid = GpsAvoid;
-            r.HideInUiMap = HideInUiMap;
+            r.ShowInUiMap = ShowInUiMap;
             r.IgnoreCutPlanes = IgnoreCutPlanes;
             r.IsCityRoad = IsCityRoad;
             r.LeftHandTraffic = LeftHandTraffic;
             r.LowPolyVegetation = LowPolyVegetation;
-            r.NoAiVehicles = NoAiVehicles;
-            r.NoBoundary = NoBoundary;
-            r.NoCollision = NoCollision;
-            r.NoTerrainShadows = NoTerrainShadows;
+            r.AiVehicles = AiVehicles;
+            r.Boundary = Boundary;
+            r.Collision = Collision;
+            r.TerrainShadows = TerrainShadows;
             r.SmoothDetailVegetation = SmoothDetailVegetation;
             r.StretchTerrain = StretchTerrain;
             r.WaterReflection = WaterReflection;
@@ -317,17 +318,17 @@ namespace TruckLib.ScsMap
             IsCityRoad = karr3[3];
             Right.Models[0].Shift = karr3[4];
             Left.Models[0].Shift = karr3[5];
-            NoAiVehicles = karr3[6];
+            AiVehicles = !karr3[6];
 
             var kflag4 = r.ReadByte();
             var karr4 = new BitArray(new[] { kflag4 });
             var highPolyRoad = karr4[0];
             Resolution = highPolyRoad ? RoadResolution.HighPoly : RoadResolution.Normal;
-            HideInUiMap = karr4[1];
-            NoCollision = karr4[2];
-            NoBoundary = karr4[3];
-            Right.NoDetailVegetation = karr4[4];
-            Left.NoDetailVegetation = karr4[5];
+            ShowInUiMap = !karr4[1];
+            Collision = !karr4[2];
+            Boundary = !karr4[3];
+            Right.DetailVegetation = !karr4[4];
+            Left.DetailVegetation = !karr4[5];
             StretchTerrain = karr4[6];
 
             ViewDistance = (ushort)(r.ReadByte() * viewDistFactor);
@@ -341,7 +342,7 @@ namespace TruckLib.ScsMap
             IgnoreCutPlanes = rarr1[2];
             Right.Models[1].Shift = rarr1[5];
             Left.Models[1].Shift = rarr1[6];
-            NoTerrainShadows = rarr1[7];
+            TerrainShadows = !rarr1[7];
 
             DlcGuard = r.ReadByte();
 
@@ -494,16 +495,16 @@ namespace TruckLib.ScsMap
             kflag3 |= (byte)(IsCityRoad.ToByte() << 3);
             kflag3 |= (byte)(Right.Models[0].Shift.ToByte() << 4);
             kflag3 |= (byte)(Left.Models[0].Shift.ToByte() << 5);
-            kflag3 |= (byte)(NoAiVehicles.ToByte() << 6);
+            kflag3 |= (byte)((!AiVehicles).ToByte() << 6);
             w.Write(kflag3);
 
             byte kflag4 = 0;
             kflag4 |= (Resolution == RoadResolution.HighPoly).ToByte();
-            kflag4 |= (byte)(HideInUiMap.ToByte() << 1);
-            kflag4 |= (byte)(NoCollision.ToByte() << 2);
-            kflag4 |= (byte)(NoBoundary.ToByte() << 3);
-            kflag4 |= (byte)(Right.NoDetailVegetation.ToByte() << 4);
-            kflag4 |= (byte)(Left.NoDetailVegetation.ToByte() << 5);
+            kflag4 |= (byte)((!ShowInUiMap).ToByte() << 1);
+            kflag4 |= (byte)((!Collision).ToByte() << 2);
+            kflag4 |= (byte)((!Boundary).ToByte() << 3);
+            kflag4 |= (byte)((!Right.DetailVegetation).ToByte() << 4);
+            kflag4 |= (byte)((!Left.DetailVegetation).ToByte() << 5);
             kflag4 |= (byte)(StretchTerrain.ToByte() << 6);
             w.Write(kflag4);
 
@@ -516,7 +517,7 @@ namespace TruckLib.ScsMap
             rflag1 |= (byte)(IgnoreCutPlanes.ToByte() << 2);
             rflag1 |= (byte)(Right.Models[1].Shift.ToByte() << 5);
             rflag1 |= (byte)(Left.Models[1].Shift.ToByte() << 6);
-            rflag1 |= (byte)(NoTerrainShadows.ToByte() << 7);
+            rflag1 |= (byte)((!TerrainShadows).ToByte() << 7);
             w.Write(rflag1);
 
             w.Write(DlcGuard);

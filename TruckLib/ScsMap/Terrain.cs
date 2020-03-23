@@ -93,14 +93,14 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Determines if the terrain has invisible walls on both sides of it.
         /// </summary>
-        public bool NoBoundary = false;
+        public bool Boundary = true;
 
         /// <summary>
         /// Determines if the player can collide with this item.
         /// </summary>
-        public bool NoCollision = false;
+        public bool Collision = true;
 
-        public bool NoTerrainShadows = false;
+        public bool TerrainShadows = true;
 
         public bool SmoothDetailVegetation = false;
   
@@ -182,23 +182,23 @@ namespace TruckLib.ScsMap
             var kflag2 = r.ReadByte();
             var karr2 = new BitArray(new[] { kflag2 });
             Railings.InvertRailing = karr2[0];
-            NoCollision = karr2[1];
-            NoBoundary = karr2[2];
-            Right.NoDetailVegetation = karr2[3];
+            Collision = !karr2[1];
+            Boundary = !karr2[2];
+            Right.DetailVegetation = !karr2[3];
             StretchTerrain = karr2[4];
             LowPolyVegetation = karr2[5];
             IgnoreCutPlanes = karr2[6];
 
             var kflag3 = r.ReadByte();
             var karr3 = new BitArray(new[] { kflag3 });
-            NoTerrainShadows = karr3[0];
+            TerrainShadows = !karr3[0];
             SmoothDetailVegetation = karr3[2];
 
             var kflag4 = r.ReadByte();
             var karr4 = new BitArray(new[] { kflag4 });
             Left.Terrain.Noise = (TerrainNoise)(kflag4 & 0b11);
             Left.Terrain.Transition = (TerrainTransition)((kflag4 >> 2) & 0b11);
-            Left.NoDetailVegetation = karr4[4];
+            Left.DetailVegetation = !karr4[4];
             Left.VegetationCollision = karr4[5];
 
             ViewDistance = (ushort)(r.ReadByte() * distFactor);
@@ -278,20 +278,20 @@ namespace TruckLib.ScsMap
             kflag2 |= (byte)(IgnoreCutPlanes.ToByte() << 6);
             kflag2 |= (byte)(LowPolyVegetation.ToByte() << 5);
             kflag2 |= (byte)(StretchTerrain.ToByte() << 4);
-            kflag2 |= (byte)(Right.NoDetailVegetation.ToByte() << 3);
-            kflag2 |= (byte)(NoBoundary.ToByte() << 2);
-            kflag2 |= (byte)(NoCollision.ToByte() << 1);
+            kflag2 |= (byte)((!Right.DetailVegetation).ToByte() << 3);
+            kflag2 |= (byte)((!Boundary).ToByte() << 2);
+            kflag2 |= (byte)((!Collision).ToByte() << 1);
             kflag2 |= Railings.InvertRailing.ToByte();
             w.Write(kflag2);
 
             byte kflag3 = 0;
             kflag3 |= (byte)(SmoothDetailVegetation.ToByte() << 2);
-            kflag3 |= NoTerrainShadows.ToByte();
+            kflag3 |= (!TerrainShadows).ToByte();
             w.Write(kflag3);
 
             byte kflag4 = 0;
             kflag4 |= (byte)(Left.VegetationCollision.ToByte() << 5);
-            kflag4 |= (byte)(Left.NoDetailVegetation.ToByte() << 4);
+            kflag4 |= (byte)((!Left.DetailVegetation).ToByte() << 4);
             kflag4 |= (byte)((byte)Left.Terrain.Transition << 2);
             kflag4 |= (byte)Left.Terrain.Noise;
             w.Write(kflag4);

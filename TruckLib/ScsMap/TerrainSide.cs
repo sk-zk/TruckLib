@@ -39,7 +39,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
         /// </summary>
-        public bool NoDetailVegetation = false;
+        public bool DetailVegetation = true;
 
         public float NoDetailVegetationFrom { get; set; }
 

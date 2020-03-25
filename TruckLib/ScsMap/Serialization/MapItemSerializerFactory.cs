@@ -15,6 +15,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.BezierPatch => new BezierPatchSerializer(),
                 ItemType.Building => new BuildingSerializer(),
                 ItemType.BusStop => new BusStopSerializer(),
+                ItemType.CameraPoint => new CameraPointSerializer(),
                 ItemType.CityArea => new CityAreaSerializer(),
                 ItemType.Company => new CompanySerializer(),
                 ItemType.Compound => new CompoundSerializer(),

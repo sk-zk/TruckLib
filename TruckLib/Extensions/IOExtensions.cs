@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TruckLib.ScsMap;
 
 namespace TruckLib
 {
@@ -177,6 +178,15 @@ namespace TruckLib
                     var vector = r.ReadVector3();
                     var Tvector = (T)Convert.ChangeType(vector, typeof(T));
                     list.Add(Tvector);
+                }
+            }
+            else if(typeof(T) == typeof(UnresolvedItem))
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var item = new UnresolvedItem(r.ReadUInt64());
+                    var Titem = (T)Convert.ChangeType(item, typeof(T));
+                    list.Add(Titem);
                 }
             }
             else

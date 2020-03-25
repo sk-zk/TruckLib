@@ -55,7 +55,7 @@ namespace TruckLib.ScsMap.Serialization
                 w.Write((int)itemType);
                 var serializer = MapItemSerializerFactory
                     .Get(itemType);
-                serializer.Serialize(w, item);
+                serializer.Serialize(w, compItem.Value);
             }
 
             w.Write(comp.CompoundNodes.Count);

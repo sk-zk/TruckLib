@@ -45,7 +45,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(fm.Width / sizeFactor);
             w.Write(fm.Height / sizeFactor);
 
-            var notNullModels = fm.Models.Where(x => x.Model != null);
+            var notNullModels = fm.Models.Where(x => x.Model != 0);
             w.Write(notNullModels.Count());
             foreach (var model in notNullModels)
             {

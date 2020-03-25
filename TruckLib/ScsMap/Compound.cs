@@ -28,14 +28,14 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Contains all map items owned by this compound.
         /// </summary>
-        public Dictionary<ulong, MapItem> CompoundItems { get; set; } 
-            = new Dictionary<ulong, MapItem>();
+        public List<MapItem> CompoundItems { get; set; } 
+            = new List<MapItem>();
 
         /// <summary>
         /// Contains all nodes owned by this compound.
         /// </summary>
-        public Dictionary<ulong, Node> CompoundNodes { get; set; } 
-            = new Dictionary<ulong, Node>();
+        public List<Node> CompoundNodes { get; set; } 
+            = new List<Node>();
 
         /// <summary>
         /// Determines if the compounded items are reflected in water.
@@ -74,7 +74,7 @@ namespace TruckLib.ScsMap
                 Position = position,
                 IsRed = isRed
             };
-            CompoundNodes.Add(node.Uid, node);
+            CompoundNodes.Add(node);
             return node;
         }
 
@@ -97,22 +97,27 @@ namespace TruckLib.ScsMap
                 // The game will crash without logging an error message if you try to do that.
                 throw new InvalidOperationException("A compound can only contain .aux items.");
             }
-            CompoundItems.Add(item.Uid, item);
+            CompoundItems.Add(item);
+        }
+
+        public IEnumerable<T> GetAllItems<T>() where T : MapItem
+        {
+            return CompoundItems.Where(x => x is T).Cast<T>();
         }
 
         public Dictionary<ulong, MapItem> GetAllItems()
         {
-            return CompoundItems;
+            return CompoundItems.ToDictionary(k => k.Uid, v => v);
         }
 
-        public Dictionary<ulong, T> GetAllItems<T>() where T : MapItem
+        Dictionary<ulong, T> IItemContainer.GetAllItems<T>()
         {
-            return CompoundItems.Where(x => x.Value is T).ToDictionary(x => x.Key, x => (T)x.Value);
+            return GetAllItems<T>().ToDictionary(k => k.Uid, v => v);
         }
 
         public Dictionary<ulong, Node> GetAllNodes()
         {
-            return CompoundNodes;
+            return CompoundNodes.ToDictionary(k => k.Uid, v => v);
         }
 
         /// <summary>
@@ -123,9 +128,9 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item from compound
-            if (CompoundItems.ContainsKey(item.Uid))
+            if (CompoundItems.Contains(item))
             {
-                CompoundItems.Remove(item.Uid);
+                CompoundItems.Remove(item);
             }
 
             // remove item from its nodes, 
@@ -154,9 +159,9 @@ namespace TruckLib.ScsMap
         /// <param name="node"></param>
         public void Delete(Node node)
         {
-            if (CompoundNodes.ContainsKey(node.Uid))
+            if (CompoundNodes.Contains(node))
             {
-                CompoundNodes.Remove(node.Uid);
+                CompoundNodes.Remove(node);
             }
 
             if (node.ForwardItem is MapItem fw)
@@ -174,20 +179,23 @@ namespace TruckLib.ScsMap
 
         internal void UpdateInternalNodeReferences()
         {
+            var itemsDict = GetAllItems();
+            var nodesDict = GetAllNodes();
+
             // first of all, find map items referenced in nodes
-            foreach (var kvp in CompoundNodes)
+            foreach (var node in CompoundNodes)
             {
-                kvp.Value.UpdateItemReferences(CompoundItems);
+                node.UpdateItemReferences(itemsDict);
             }
 
             // then find nodes referenced in map items
             // and map items referenced in map items
             foreach (var item in CompoundItems)
             {
-                item.Value.UpdateNodeReferences(CompoundNodes);
-                if (item.Value is IItemReferences hasItemRef)
+                item.UpdateNodeReferences(nodesDict);
+                if (item is IItemReferences hasItemRef)
                 {
-                    hasItemRef.UpdateItemReferences(CompoundItems);
+                    hasItemRef.UpdateItemReferences(itemsDict);
                 }
             }
         }

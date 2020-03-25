@@ -161,8 +161,11 @@ namespace TruckLib
             if (obj is Token token2)
                 return this.Value == token2.Value;
 
-            if (obj is ulong val)
-                return this.Value == val;
+            if (obj is ulong ul)
+                return this.Value == ul;
+
+            if (obj is int i)
+                return this.Value == (ulong)i;
             
             if (obj is string str)
                 return this.String == str;

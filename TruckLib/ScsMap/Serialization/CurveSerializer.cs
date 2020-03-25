@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var curve = new Curve();
-            ReadKdop(r, curve);
+            ReadKdopItem(r, curve);
 
             curve.Model = r.ReadToken();
  
@@ -42,7 +42,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var curve = item as Curve;
-            WriteKdop(w, curve);
+            WriteKdopItem(w, curve);
 
             w.Write(curve.Model);
  

@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var plane = new CutPlane();
-            ReadKdop(r, plane);
+            ReadKdopItem(r, plane);
 
             plane.Nodes = ReadNodeRefList(r);
 
@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var plane = item as CutPlane;
-            WriteKdop(w, plane);
+            WriteKdopItem(w, plane);
 
             WriteNodeRefList(w, plane.Nodes);
         }

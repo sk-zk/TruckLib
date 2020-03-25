@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var trigger = new Trigger();
-            ReadKdop(r, trigger);
+            ReadKdopItem(r, trigger);
 
             trigger.Tags = ReadObjectList<Token>(r);
             trigger.Nodes = ReadNodeRefList(r);
@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var trigger = item as Trigger;
-            WriteKdop(w, trigger);
+            WriteKdopItem(w, trigger);
 
             WriteObjectList(w, trigger.Tags);
             WriteNodeRefList(w, trigger.Nodes);

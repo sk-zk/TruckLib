@@ -16,20 +16,44 @@ namespace TruckLib.ScsMap.Serialization
 
         private const int viewDistanceFactor = 10;
 
-        public static void ReadKdop(BinaryReader r, MapItem item)
+        public static void ReadKdopItem(BinaryReader r, MapItem item)
         {
             item.KdopItem.Uid = r.ReadUInt64();
-            item.KdopItem.BoundingBox.Deserialize(r);
+            ReadKdopBounds(r, item);
             item.KdopItem.Flags = new BitArray(r.ReadBytes(4));
             item.KdopItem.ViewDistance = (ushort)((int)r.ReadByte() * viewDistanceFactor);
         }
 
-        public static void WriteKdop(BinaryWriter w, MapItem item)
+        public static void ReadKdopBounds(BinaryReader r, MapItem item)
+        {
+            foreach (var arr in new float[][] {
+                item.KdopItem.Minimums, item.KdopItem.Maximums })
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    arr[i] = r.ReadSingle();
+                }
+            }
+        }
+
+        public static void WriteKdopItem(BinaryWriter w, MapItem item)
         {
             w.Write(item.KdopItem.Uid);
-            item.KdopItem.BoundingBox.Serialize(w);
+            WriteKdopBounds(w, item);
             w.Write(item.KdopItem.Flags.ToUInt());
             w.Write((byte)(item.KdopItem.ViewDistance / viewDistanceFactor));
+        }
+
+        public static void WriteKdopBounds(BinaryWriter w, MapItem item)
+        {
+            foreach (var arr in new float[][] {
+                item.KdopItem.Minimums, item.KdopItem.Maximums })
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    w.Write(arr[i]);
+                }
+            }
         }
 
         /// <summary>

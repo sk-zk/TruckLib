@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var city = new CityArea();
-            ReadKdop(r, city);
+            ReadKdopItem(r, city);
 
             city.Name = r.ReadToken();
             city.Width = r.ReadSingle();
@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var city = item as CityArea;
-            WriteKdop(w, city);
+            WriteKdopItem(w, city);
             w.Write(city.Name);
             w.Write(city.Width);
             w.Write(city.Height);

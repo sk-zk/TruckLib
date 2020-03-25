@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var garage = new Garage();
-            ReadKdop(r, garage);
+            ReadKdopItem(r, garage);
 
             garage.CityName = r.ReadToken();
             garage.BuyMode = r.ReadUInt32();
@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var garage = item as Garage;
-            WriteKdop(w, garage);
+            WriteKdopItem(w, garage);
 
             w.Write(garage.CityName);
             w.Write(garage.BuyMode);

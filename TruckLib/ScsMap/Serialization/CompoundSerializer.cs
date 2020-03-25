@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var comp = new Compound();
-            ReadKdop(r, comp);
+            ReadKdopItem(r, comp);
 
             comp.Node = new UnresolvedNode(r.ReadUInt64());
 
@@ -44,7 +44,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var comp = item as Compound;
-            WriteKdop(w, comp);
+            WriteKdopItem(w, comp);
 
             w.Write(comp.Node.Uid);
 

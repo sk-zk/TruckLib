@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var ta = new TrafficArea();
-            ReadKdop(r, ta);
+            ReadKdopItem(r, ta);
 
             ta.Tags = ReadObjectList<Token>(r);
             ta.Nodes = ReadNodeRefList(r);
@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var ta = item as TrafficArea;
-            WriteKdop(w, ta);
+            WriteKdopItem(w, ta);
             WriteObjectList(w, ta.Tags);
             WriteNodeRefList(w, ta.Nodes);
             w.Write(ta.Rule);

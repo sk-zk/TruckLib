@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var hinge = new Hinge();
-            ReadKdop(r, hinge);
+            ReadKdopItem(r, hinge);
 
             hinge.Model = r.ReadToken();
             hinge.Variant = r.ReadToken();
@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var hinge = item as Hinge;
-            WriteKdop(w, hinge);
+            WriteKdopItem(w, hinge);
             w.Write(hinge.Model);
             w.Write(hinge.Variant);
             w.Write(hinge.Node.Uid);

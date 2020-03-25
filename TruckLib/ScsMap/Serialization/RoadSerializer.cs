@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap.Serialization
             var road = new Road();
 
             road.Uid = r.ReadUInt64();
-            road.BoundingBox.Deserialize(r);
+            ReadKdopBounds(r, road);
 
             // === kdop flags ===
             var kflag1 = r.ReadByte();
@@ -138,7 +138,7 @@ namespace TruckLib.ScsMap.Serialization
         {
             var road = item as Road;
             w.Write(road.Uid);
-            road.BoundingBox.Serialize(w);
+            WriteKdopBounds(w, road);
 
             // === kdop flags ===
             byte kflag1 = 0;

@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var ferry = new Ferry();
-            ReadKdop(r, ferry);
+            ReadKdopItem(r, ferry);
 
             ferry.Port = r.ReadToken();
             ferry.PrefabLink = new UnresolvedItem(r.ReadUInt64());
@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var ferry = item as Ferry;
-            WriteKdop(w, ferry);
+            WriteKdopItem(w, ferry);
             w.Write(ferry.Port);
             w.Write(ferry.PrefabLink.Uid);
             w.Write(ferry.Node.Uid);

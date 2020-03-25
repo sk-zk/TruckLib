@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var point = new CameraPoint();
-            ReadKdop(r, point);
+            ReadKdopItem(r, point);
 
             point.Tags = ReadObjectList<Token>(r);
             point.Node = new UnresolvedNode(r.ReadUInt64());
@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var point = item as CameraPoint;
-            WriteKdop(w, point);
+            WriteKdopItem(w, point);
             WriteObjectList(w, point.Tags);
             w.Write(point.Node.Uid);
         }

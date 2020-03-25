@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var bs = new BusStop();
-            ReadKdop(r, bs);
+            ReadKdopItem(r, bs);
 
             bs.CityName = r.ReadToken();
             bs.PrefabLink = new UnresolvedItem(r.ReadUInt64());
@@ -22,7 +22,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var bs = item as BusStop;
-            WriteKdop(w, bs);
+            WriteKdopItem(w, bs);
             w.Write(bs.CityName);
             w.Write(bs.PrefabLink.Uid);
             w.Write(bs.Node.Uid);

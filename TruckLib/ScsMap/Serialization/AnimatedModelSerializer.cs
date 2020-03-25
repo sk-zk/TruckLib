@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var am = new AnimatedModel();
-            ReadKdop(r, am);
+            ReadKdopItem(r, am);
             am.Tags = ReadObjectList<Token>(r);
             am.Model = r.ReadToken();
             am.Node = new UnresolvedNode(r.ReadUInt64());
@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var am = item as AnimatedModel;
-            WriteKdop(w, am);
+            WriteKdopItem(w, am);
             WriteObjectList(w, am.Tags);
             w.Write(am.Model);
             w.Write(am.Node.Uid);

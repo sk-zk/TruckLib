@@ -53,15 +53,16 @@ namespace TruckLib.ScsMap
             set => KdopItem.Uid = value;
         }
 
-        /// <summary>
-        /// The k-DOP bounding box which is used for rendering and collision detection.
-        /// <para>Note that recomputing these values is out of scope for this library, so if you
-        /// create or modify an object, don't forget to recompute the map in the editor.</para>
-        /// </summary>
-        public KdopBounds BoundingBox
+        public float[] KdopMimimums
         {
-            get => KdopItem.BoundingBox;
-            set => KdopItem.BoundingBox = value;
+            get => KdopItem.Minimums;
+            set => KdopItem.Minimums = value;
+        }
+
+        public float[] KdopMaximums
+        {
+            get => KdopItem.Maximums;
+            set => KdopItem.Maximums = value;
         }
 
         protected BitArray Flags

@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var sound = new Sound();
-            ReadKdop(r, sound);
+            ReadKdopItem(r, sound);
 
             sound.Name = r.ReadToken();
             sound.FullIntensityDistance = r.ReadSingle();
@@ -25,7 +25,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var sound = item as Sound;
-            WriteKdop(w, sound);
+            WriteKdopItem(w, sound);
             w.Write(sound.Name);
             w.Write(sound.FullIntensityDistance);
             w.Write(sound.ActivationDistance);

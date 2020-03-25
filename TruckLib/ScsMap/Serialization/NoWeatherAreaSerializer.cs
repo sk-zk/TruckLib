@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var nwa = new NoWeatherArea();
-            ReadKdop(r, nwa);
+            ReadKdopItem(r, nwa);
 
             nwa.Width = r.ReadSingle() * sizeFactor;
             nwa.Height = r.ReadSingle() * sizeFactor;
@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var nwa = item as NoWeatherArea;
-            WriteKdop(w, nwa);
+            WriteKdopItem(w, nwa);
             w.Write(nwa.Width / sizeFactor);
             w.Write(nwa.Height / sizeFactor);
             w.Write(nwa.Node.Uid);

@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var trj = new Trajectory();
-            ReadKdop(r, trj);
+            ReadKdopItem(r, trj);
 
             trj.Nodes = ReadNodeRefList(r);
             trj.NavigationFlags = new BitArray(r.ReadBytes(4));
@@ -38,7 +38,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var trj = item as Trajectory;
-            WriteKdop(w, trj);
+            WriteKdopItem(w, trj);
 
             WriteNodeRefList(w, trj.Nodes);
             w.Write(trj.NavigationFlags.ToUInt());

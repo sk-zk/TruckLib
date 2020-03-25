@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var fm = new FarModel();
-            ReadKdop(r, fm);
+            ReadKdopItem(r, fm);
 
             fm.Width = r.ReadSingle() * sizeFactor;
             fm.Height = r.ReadSingle() * sizeFactor;
@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var fm = item as FarModel;
-            WriteKdop(w, fm);
+            WriteKdopItem(w, fm);
 
             w.Write(fm.Width / sizeFactor);
             w.Write(fm.Height / sizeFactor);

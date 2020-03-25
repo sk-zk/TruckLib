@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap.Serialization
             var t = new Terrain();
             t.Uid = r.ReadUInt64();
 
-            t.BoundingBox.Deserialize(r);
+            ReadKdopBounds(r, t);
 
             var kflag1 = r.ReadByte();
             var karr1 = new BitArray(new[] { kflag1 });
@@ -116,7 +116,7 @@ namespace TruckLib.ScsMap.Serialization
             var t = item as Terrain;
             w.Write(t.Uid);
 
-            t.BoundingBox.Serialize(w);
+            WriteKdopBounds(w, t);
 
             byte kflag1 = 0;
             kflag1 |= (byte)(t.WaterReflection.ToByte() << 7);

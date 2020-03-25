@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var bp = new BezierPatch();
-            ReadKdop(r, bp);
+            ReadKdopItem(r, bp);
 
             for (int x = 0; x < BezierPatch.ControlPointCols; x++)
             {
@@ -48,7 +48,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var bp = item as BezierPatch;
-            WriteKdop(w, bp);
+            WriteKdopItem(w, bp);
 
             var points = Utils.MirrorX(bp.ControlPoints);
             for (int x = 0; x < BezierPatch.ControlPointCols; x++)

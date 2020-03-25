@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var overlay = new MapOverlay();
-            ReadKdop(r, overlay);
+            ReadKdopItem(r, overlay);
 
             overlay.Look = r.ReadToken();
             overlay.Node = new UnresolvedNode(r.ReadUInt64());
@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var overlay = item as MapOverlay;
-            WriteKdop(w, overlay); 
+            WriteKdopItem(w, overlay); 
             w.Write(overlay.Look);
             w.Write(overlay.Node.Uid);
         }

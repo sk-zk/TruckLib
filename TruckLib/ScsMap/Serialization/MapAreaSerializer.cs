@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var area = new MapArea();
-            ReadKdop(r, area);
+            ReadKdopItem(r, area);
 
             area.Nodes = ReadNodeRefList(r);
             area.Color = (MapAreaColor)r.ReadUInt32();
@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var area = item as MapArea;
-            WriteKdop(w, area);
+            WriteKdopItem(w, area);
 
             WriteNodeRefList(w, area.Nodes);
             w.Write((uint)area.Color);

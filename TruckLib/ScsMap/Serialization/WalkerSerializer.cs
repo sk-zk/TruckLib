@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var walker = new Walker();
-            ReadKdop(r, walker);
+            ReadKdopItem(r, walker);
 
             walker.NamePrefix = r.ReadToken();
             walker.Speed = r.ReadSingle();
@@ -27,7 +27,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var walker = item as Walker;
-            WriteKdop(w, walker);
+            WriteKdopItem(w, walker);
 
             w.Write(walker.NamePrefix);
             w.Write(walker.Speed);

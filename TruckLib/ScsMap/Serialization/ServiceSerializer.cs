@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var service = new Service();
-            ReadKdop(r, service);
+            ReadKdopItem(r, service);
 
             service.Node = new UnresolvedNode(r.ReadUInt64());
             service.PrefabLink = new UnresolvedItem(r.ReadUInt64());
@@ -22,7 +22,7 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var service = item as Service;
-            WriteKdop(w, service);
+            WriteKdopItem(w, service);
             w.Write(service.Node.Uid);
             w.Write(service.PrefabLink.Uid);
             WriteNodeRefList(w, service.Nodes);

@@ -132,7 +132,7 @@ namespace TruckLib.ScsMap
             {
                 header = new Header();
                 header.ReadFromStream(r);
-                ReadMapItems(r, ItemFile.Base);
+                ReadItems(r, ItemFile.Base);
                 ReadNodes(r);
             }
         }
@@ -147,7 +147,7 @@ namespace TruckLib.ScsMap
             {
                 var auxHeader = new Header();
                 auxHeader.ReadFromStream(r);
-                ReadMapItems(r, ItemFile.Aux);
+                ReadItems(r, ItemFile.Aux);
                 ReadNodes(r);
             }
         }
@@ -225,14 +225,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="r">The reader.</param>
         /// <param name="file">The file which is being read.</param>
-        private void ReadMapItems(BinaryReader r, ItemFile file)
+        private void ReadItems(BinaryReader r, ItemFile file)
         {
             var itemCount = r.ReadUInt32();
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();
 
-                var serializer = Serialization.MapItemSerializerFactory.Get(itemType);
+                var serializer = MapItemSerializerFactory.Get(itemType);
                 var item = serializer.Deserialize(r);
 
                 // deal with signs which can be in aux *and* base
@@ -416,7 +416,7 @@ namespace TruckLib.ScsMap
             foreach (var item in items)
             {
                 w.Write((int)item.Value.ItemType);
-                var serializer = Serialization.MapItemSerializerFactory
+                var serializer = MapItemSerializerFactory
                     .Get(item.Value.ItemType);
                 serializer.Serialize(w, item.Value);
             }

@@ -15,13 +15,13 @@ namespace TruckLib.ScsMap.Serialization
             comp.Node = new UnresolvedNode(r.ReadUInt64());
 
             var itemCount = r.ReadUInt32();
-            /*
+            
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();
 
-                var item = MapItemFactory.Create(itemType);
-                item.ReadFromStream(r);
+                var serializer = MapItemSerializerFactory.Get(itemType);
+                var item = serializer.Deserialize(r);
                 comp.CompoundItems.Add(item.Uid, item);
             }
 
@@ -35,7 +35,6 @@ namespace TruckLib.ScsMap.Serialization
                     comp.CompoundNodes.Add(node.Uid, node);
                 }
             }
-            */ // TODO
 
             comp.UpdateInternalNodeReferences();
 
@@ -52,9 +51,11 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(comp.CompoundItems.Count);
             foreach (var compItem in comp.CompoundItems)
             {
-                var itemType = (int)compItem.Value.ItemType;
-                w.Write(itemType);
-                // TODO item.Value.WriteToStream(w);
+                var itemType = compItem.Value.ItemType;
+                w.Write((int)itemType);
+                var serializer = MapItemSerializerFactory
+                    .Get(itemType);
+                serializer.Serialize(w, item);
             }
 
             w.Write(comp.CompoundNodes.Count);

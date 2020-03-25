@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib
 {
@@ -20,38 +21,52 @@ namespace TruckLib
         /// <returns></returns>
         public static T Clone<T>(this T obj) where T : IBinarySerializable, new()
         {
-            return default(T);
-
-            // TODO
-            /*
             T cloned = new T();
             using (var stream = new MemoryStream())
             using (var writer = new BinaryWriter(stream))
             {
                 obj.WriteToStream(writer);
-                if (obj is IDataPayload) (obj as IDataPayload).WriteDataPart(writer);
                 stream.Position = 0;
 
                 using (var reader = new BinaryReader(stream))
                 {
                     cloned.ReadFromStream(reader);
-                    if (obj is IDataPayload) (obj as IDataPayload).ReadDataPart(reader);
+                }
+            }
+
+            return cloned;   
+        }
+
+        public static T CloneItem<T>(this T item) where T : MapItem, new()
+        {
+            T cloned;
+
+            var serializer = MapItemSerializerFactory.Get(item.ItemType);
+
+            using (var stream = new MemoryStream())
+            using (var writer = new BinaryWriter(stream))
+            {
+                serializer.Serialize(writer, item);
+                if (serializer is IDataPayload)
+                {
+                    (serializer as IDataPayload).WriteDataPart(writer, item);
+                }
+                stream.Position = 0;
+
+                using (var reader = new BinaryReader(stream))
+                {
+                    cloned = (T)serializer.Deserialize(reader);
+                    if (serializer is IDataPayload)
+                    {
+                        (serializer as IDataPayload).ReadDataPart(reader, item);
+                    }
                 }
             }
 
             // don't allow duplicate uids
-            if(cloned is IMapObject mapObject)
-            {
-                mapObject.Uid = Utils.GenerateUuid();
-            }
-
-            // TODO: also deepclone certain referenced
-            // items such as nodes
-            // TODO: then add the cloned item to the map
+             item.Uid = Utils.GenerateUuid();
 
             return cloned;
-            */
-
         }
 
         /// <summary>

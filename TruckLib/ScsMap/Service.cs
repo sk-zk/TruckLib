@@ -38,26 +38,6 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-            PrefabLink = new UnresolvedItem(r.ReadUInt64());
-
-            Nodes = ReadNodeRefList(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Node.Uid);
-            w.Write(PrefabLink.Uid);
-
-            WriteNodeRefList(w, Nodes);
-        }
-
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             base.UpdateNodeReferences(allNodes);

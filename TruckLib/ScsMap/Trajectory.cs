@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; } = new List<Token>();
 
-        private BitArray NavigationFlags = new BitArray(32);
+        internal BitArray NavigationFlags = new BitArray(32);
 
         public bool ForceThisWay
         {
@@ -95,49 +95,6 @@ namespace TruckLib.ScsMap
             {
                 node.Move(node.Position + translation);
             }
-        }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Nodes = ReadNodeRefList(r);
-            NavigationFlags = new BitArray(r.ReadBytes(4));
-            AccessRule = r.ReadToken();
-            Rules = ReadObjectList<TrajectoryRule>(r);
-
-            // checkpoints
-            var checkpointCount = r.ReadUInt32();
-            for (int i = 0; i < checkpointCount; i++)
-            {
-                var checkpoint = new TrajectoryCheckpoint
-                {
-                    Route = r.ReadToken(),
-                    Checkpoint = r.ReadToken()
-                };
-                Checkpoints.Add(checkpoint);
-            }
-
-            Tags = ReadObjectList<Token>(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            WriteNodeRefList(w, Nodes);
-            w.Write(NavigationFlags.ToUInt());
-            w.Write(AccessRule);
-            WriteObjectList(w, Rules);
-
-            w.Write(Checkpoints.Count);
-            foreach(var checkpoint in Checkpoints)
-            {
-                w.Write(checkpoint.Route);
-                w.Write(checkpoint.Checkpoint);
-            }
-
-            WriteObjectList(w, Tags);
         }
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)

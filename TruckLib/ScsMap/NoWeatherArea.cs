@@ -40,25 +40,5 @@ namespace TruckLib.ScsMap
 
             return nwa;
         }
-
-        private const float sizeFactor = 2f;
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Width = r.ReadSingle() * sizeFactor;
-            Height = r.ReadSingle() * sizeFactor;
-            Node = new UnresolvedNode(r.ReadUInt64());
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Width / sizeFactor);
-            w.Write(Height / sizeFactor);
-            w.Write(Node.Uid);
-        }
     }
 }

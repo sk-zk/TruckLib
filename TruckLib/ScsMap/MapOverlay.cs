@@ -49,21 +49,5 @@ namespace TruckLib.ScsMap
 
             return overlay;
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Look = r.ReadToken();
-            Node = new UnresolvedNode(r.ReadUInt64());
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Look);
-            w.Write(Node.Uid);
-        }
     }
 }

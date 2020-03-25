@@ -13,11 +13,13 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Represents a prefab.
     /// </summary>
-    public class Prefab : MapItem, IDataPart, IItemReferences
+    public class Prefab : MapItem, IItemReferences
     {
         public override ItemType ItemType => ItemType.Prefab;
 
         public override ItemFile DefaultItemFile => ItemFile.Base;
+
+        internal override bool HasDataPayload => true;
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
@@ -470,150 +472,6 @@ namespace TruckLib.ScsMap
         internal override IEnumerable<Node> GetItemNodes()
         {
             return new List<Node>(Nodes);
-        }
-
-        private const float terrainSizeFactor = 10f;
-        private const float vegFromToFactor = 10f;
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Model = r.ReadToken();
-            Variant = r.ReadToken();
-
-            AdditionalParts = ReadObjectList<Token>(r);
-
-            Nodes = ReadNodeRefList(r);
-
-            // Slave uids
-            // (link to service items)
-            SlaveItems = ReadItemRefList(r);
-
-            var ferryLinkUid = r.ReadUInt64();
-            if (ferryLinkUid != 0)
-            {
-                FerryLink = new UnresolvedItem(ferryLinkUid);
-            }
-
-            Origin = r.ReadUInt16();
-
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                Corners[i].Terrain.Profile = r.ReadToken();
-                Corners[i].Terrain.Coefficient = r.ReadSingle();
-            }
-
-            SemaphoreProfile = r.ReadToken();
-        }
-
-        public void ReadDataPart(BinaryReader r)
-        {
-            Look = r.ReadToken();
-
-            foreach (var corner in Corners)
-            {
-                corner.Terrain.Size = r.ReadUInt16() / terrainSizeFactor;
-
-                corner.DetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
-                corner.DetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
-
-                corner.UVRotation = r.ReadSingle();
-
-                foreach (var veg in corner.Vegetation)
-                {
-                    veg.ReadFromStream(r);
-                }
-            }
-
-            VegetationParts = ReadObjectList<VegetationPart>(r);
-
-            RandomSeed = r.ReadUInt32();
-
-            VegetationSpheres = ReadObjectList<VegetationSphere>(r);
-
-            foreach (var corner in Corners)
-            {
-                corner.Model = r.ReadToken();
-                corner.Variant = r.ReadToken();
-                corner.Look = r.ReadToken();
-            }
-
-            foreach(var corner in Corners)
-            {
-                corner.Terrain.QuadData.ReadFromStream(r);
-            }
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Model);
-            w.Write(Variant);
-
-            WriteObjectList(w, AdditionalParts);
-
-            WriteNodeRefList(w, Nodes);
-
-            WriteItemRefList(w, SlaveItems);
-
-            if (FerryLink is null)
-            {
-                w.Write(0UL);
-            }
-            else
-            {
-                w.Write(FerryLink.Uid);
-            }
-
-            w.Write(Origin);
-
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                w.Write(Corners[i].Terrain.Profile);
-                w.Write(Corners[i].Terrain.Coefficient);
-            }
-
-            w.Write(SemaphoreProfile);
-        }
-
-        public void WriteDataPart(BinaryWriter w)
-        {
-            w.Write(Look);
-
-            foreach (var corner in Corners)
-            {
-                w.Write((ushort)(corner.Terrain.Size * terrainSizeFactor));
-
-                w.Write((ushort)(corner.DetailVegetationFrom * vegFromToFactor));
-                w.Write((ushort)(corner.DetailVegetationTo * vegFromToFactor));
-
-                w.Write(corner.UVRotation);
-
-                foreach (var veg in corner.Vegetation)
-                {
-                    veg.WriteToStream(w);
-                }
-            }
-
-            WriteObjectList(w, VegetationParts);
-
-            w.Write(RandomSeed);
-
-            WriteObjectList(w, VegetationSpheres);
-
-            foreach (var corner in Corners)
-            {
-                w.Write(corner.Model);
-                w.Write(corner.Variant);
-                w.Write(corner.Look);
-            }
-
-            foreach (var corner in Corners)
-            {
-                corner.Terrain.QuadData.WriteToStream(w);
-            }            
         }
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)

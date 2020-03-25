@@ -39,26 +39,6 @@ namespace TruckLib.ScsMap
             return ferry;
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-           base.ReadFromStream(r);
-
-            Port = r.ReadToken();
-            PrefabLink = new UnresolvedItem(r.ReadUInt64());
-            Node = new UnresolvedNode(r.ReadUInt64());
-            UnloadOffset = r.ReadVector3();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Port);
-            w.Write(PrefabLink.Uid);
-            w.Write(Node.Uid);
-            w.Write(UnloadOffset);
-        }
-
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             if (PrefabLink is UnresolvedItem && allItems.ContainsKey(PrefabLink.Uid))

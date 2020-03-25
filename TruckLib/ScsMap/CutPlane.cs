@@ -115,20 +115,6 @@ namespace TruckLib.ScsMap
             return new List<Node>(Nodes);
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Nodes = ReadNodeRefList(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            WriteNodeRefList(w, Nodes);
-        }
-
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             for (int i = 0; i < Nodes.Count; i++)

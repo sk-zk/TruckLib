@@ -85,31 +85,5 @@ namespace TruckLib.ScsMap
             trigger.Actions = actions;
             return trigger;
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Tags = ReadObjectList<Token>(r);
-            Nodes = ReadNodeRefList(r);
-            Actions = ReadObjectList<TriggerAction>(r);
-            if (Nodes.Count == 1)
-            {
-                Range = r.ReadSingle();
-            }
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            WriteObjectList(w, Tags);
-            WriteNodeRefList(w, Nodes);
-            WriteObjectList(w, Actions);
-            if(Nodes.Count == 1)
-            {
-                w.Write(Range);
-            }
-        }
     }
 }

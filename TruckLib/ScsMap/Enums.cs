@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap
         CutPlane = 0x08,
         Mover = 0x09,
         NoWeatherArea = 0x0B,
-        City = 0x0C,
+        CityArea = 0x0C,
         Hinge = 0x0D,
         AnimatedModel = 0x0F,
         MapOverlay = 0x12,

@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap
 
         public float ActivationDistance { get; set; }
 
-        private BitArray SoundFlags { get; set; } = new BitArray(32);
+        internal BitArray SoundFlags { get; set; } = new BitArray(32);
 
         public bool Stream
         {
@@ -61,32 +61,6 @@ namespace TruckLib.ScsMap
             sound.ActivationDistance = activationDistance;
 
             return sound;
-        }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Name = r.ReadToken();
-            FullIntensityDistance = r.ReadSingle();
-            ActivationDistance = r.ReadSingle();
-
-            SoundFlags = new BitArray(r.ReadBytes(4));
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Name);
-            w.Write(FullIntensityDistance);
-            w.Write(ActivationDistance);
-
-            w.Write(SoundFlags.ToUInt());
-
-            w.Write(Node.Uid);
         }
     }
 }

@@ -66,7 +66,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The vegetation spheres on this terrain.
         /// </summary>
-        public List<VegetationSphere> VegetationSpheres { get; set; } 
+        public List<VegetationSphere> VegetationSpheres { get; set; }
             = new List<VegetationSphere>();
 
         public Vector3 NodeOffset { get; set; } = Vector3.Zero;
@@ -103,7 +103,7 @@ namespace TruckLib.ScsMap
         public bool TerrainShadows = true;
 
         public bool SmoothDetailVegetation = false;
-  
+
         /// <summary>
         /// Adds a single terrain segment to the map.
         /// </summary>
@@ -114,7 +114,7 @@ namespace TruckLib.ScsMap
         /// <param name="leftSize">The terrain size on the left side.</param>        
         /// <param name="rightSize">The terrain size on the right side.</param>
         /// <returns>A new terrain.</returns>
-        public static Terrain Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token material, 
+        public static Terrain Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token material,
             float leftSize, float rightSize)
         {
             var terrain = Add<Terrain>(map, backwardPos, forwardPos);
@@ -146,7 +146,7 @@ namespace TruckLib.ScsMap
             Length = Vector3.Distance(backwardPos, forwardPos);
             Left.Terrain.Size = leftSize;
             Right.Terrain.Size = rightSize;
-            foreach(var side in new[]{ Left, Right })
+            foreach (var side in new[] { Left, Right })
             {
                 side.Terrain.QuadData.BrushMaterials = new List<Token> { material };
                 side.Terrain.CalculateQuadGrid(StepSize, Length);
@@ -159,196 +159,5 @@ namespace TruckLib.ScsMap
             Left.Terrain.CalculateQuadGrid(StepSize, Length);
             Right.Terrain.CalculateQuadGrid(StepSize, Length);
         }
-
-        private const float modelOffsetFactor = 100f;
-        private const float noDetVegFromToFactor = 10f;
-        private const float terrainSizeFactor = noDetVegFromToFactor;
-        private const int distFactor = 10;
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            Uid = r.ReadUInt64();
-
-            BoundingBox.ReadFromStream(r);
-
-            var kflag1 = r.ReadByte();
-            var karr1 = new BitArray(new[] { kflag1 });
-            Right.Terrain.Noise = (TerrainNoise)(kflag1 & 0b11);
-            Right.Terrain.Transition = (TerrainTransition)((kflag1 >> 2) & 0b11);
-            StepSize = (StepSize)((kflag1 >> 4) & 0b11);
-            Right.VegetationCollision = karr1[6];
-            WaterReflection = karr1[7];
-
-            var kflag2 = r.ReadByte();
-            var karr2 = new BitArray(new[] { kflag2 });
-            Railings.InvertRailing = karr2[0];
-            Collision = !karr2[1];
-            Boundary = !karr2[2];
-            Right.DetailVegetation = !karr2[3];
-            StretchTerrain = karr2[4];
-            LowPolyVegetation = karr2[5];
-            IgnoreCutPlanes = karr2[6];
-
-            var kflag3 = r.ReadByte();
-            var karr3 = new BitArray(new[] { kflag3 });
-            TerrainShadows = !karr3[0];
-            SmoothDetailVegetation = karr3[2];
-
-            var kflag4 = r.ReadByte();
-            var karr4 = new BitArray(new[] { kflag4 });
-            Left.Terrain.Noise = (TerrainNoise)(kflag4 & 0b11);
-            Left.Terrain.Transition = (TerrainTransition)((kflag4 >> 2) & 0b11);
-            Left.DetailVegetation = !karr4[4];
-            Left.VegetationCollision = karr4[5];
-
-            ViewDistance = (ushort)(r.ReadByte() * distFactor);
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-            ForwardNode = new UnresolvedNode(r.ReadUInt64());
-
-            // TODO: What is this?
-            NodeOffset = r.ReadVector3();
-            ForwardNodeOffset = r.ReadVector3();
-
-            // road length
-            Length = r.ReadSingle();
-
-            RandomSeed = r.ReadUInt32();
-
-            // railings
-            for (int i = 0; i < Railings.Models.Length; i++)
-            {
-                Railings.Models[i].Model = r.ReadToken();
-                Railings.Models[i].Offset = r.ReadInt16() / modelOffsetFactor;
-            }
-
-            // some terrain & veg stuff for each side
-            foreach (var side in new[] { Right, Left })
-            {
-                side.Terrain.Size = r.ReadUInt16() / terrainSizeFactor;
-                side.Terrain.Profile = r.ReadToken();
-                side.Terrain.Coefficient = r.ReadSingle();
-
-                // prev_profile
-                // TODO: What is this?
-                r.ReadToken();
-
-                // prev_profile_coef
-                // TODO: What is this?
-                r.ReadSingle();
-
-                foreach (var veg in side.Vegetation)
-                {
-                    veg.ReadFromStream(r);
-                }
-
-                side.NoDetailVegetationFrom = r.ReadUInt16() / noDetVegFromToFactor;
-                side.NoDetailVegetationTo = r.ReadUInt16() / noDetVegFromToFactor;
-            }
-
-            VegetationSpheres = ReadObjectList<VegetationSphere>(r);
-
-            Right.Terrain.QuadData.ReadFromStream(r);
-            Left.Terrain.QuadData.ReadFromStream(r);
-
-            Right.Edge = r.ReadToken();
-            Right.EdgeLook = r.ReadToken();
-            Left.Edge = r.ReadToken();
-            Left.EdgeLook = r.ReadToken();
-
-            Right.UVRotation = r.ReadSingle();
-            Left.UVRotation = r.ReadSingle();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            w.Write(Uid);
-
-            BoundingBox.WriteToStream(w);
-
-            byte kflag1 = 0;
-            kflag1 |= (byte)(WaterReflection.ToByte() << 7);
-            kflag1 |= (byte)(Right.VegetationCollision.ToByte() << 6);
-            kflag1 |= (byte)((byte)StepSize << 4);
-            kflag1 |= (byte)((byte)Right.Terrain.Transition << 2);
-            kflag1 |= (byte)Right.Terrain.Noise;
-            w.Write(kflag1);
-
-            byte kflag2 = 0;
-            kflag2 |= (byte)(IgnoreCutPlanes.ToByte() << 6);
-            kflag2 |= (byte)(LowPolyVegetation.ToByte() << 5);
-            kflag2 |= (byte)(StretchTerrain.ToByte() << 4);
-            kflag2 |= (byte)((!Right.DetailVegetation).ToByte() << 3);
-            kflag2 |= (byte)((!Boundary).ToByte() << 2);
-            kflag2 |= (byte)((!Collision).ToByte() << 1);
-            kflag2 |= Railings.InvertRailing.ToByte();
-            w.Write(kflag2);
-
-            byte kflag3 = 0;
-            kflag3 |= (byte)(SmoothDetailVegetation.ToByte() << 2);
-            kflag3 |= (!TerrainShadows).ToByte();
-            w.Write(kflag3);
-
-            byte kflag4 = 0;
-            kflag4 |= (byte)(Left.VegetationCollision.ToByte() << 5);
-            kflag4 |= (byte)((!Left.DetailVegetation).ToByte() << 4);
-            kflag4 |= (byte)((byte)Left.Terrain.Transition << 2);
-            kflag4 |= (byte)Left.Terrain.Noise;
-            w.Write(kflag4);
-
-            w.Write((byte)(ViewDistance / distFactor));
-
-            w.Write(Node.Uid);
-            w.Write(ForwardNode.Uid);
-
-            // node offsets
-            w.Write(NodeOffset);
-            w.Write(ForwardNodeOffset);
-
-            w.Write(Length);
-
-            w.Write(RandomSeed);
-
-            foreach (var railing in Railings.Models)
-            {
-                w.Write(railing.Model);
-                w.Write((short)(railing.Offset * modelOffsetFactor));
-            }
-
-            foreach (var side in new[] { Right, Left })
-            {
-                w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
-                w.Write(side.Terrain.Profile);
-                w.Write(side.Terrain.Coefficient);
-
-                // prev_profile
-                w.Write(0L);
-
-                // prev_profile_coefficient
-                w.Write(1f);
-
-                foreach (var veg in side.Vegetation)
-                {
-                    veg.WriteToStream(w);
-                }
-
-                w.Write((ushort)(side.NoDetailVegetationFrom * noDetVegFromToFactor));
-                w.Write((ushort)(side.NoDetailVegetationTo * noDetVegFromToFactor));
-            }
-
-            WriteObjectList(w, VegetationSpheres);
-
-            Right.Terrain.QuadData.WriteToStream(w);
-            Left.Terrain.QuadData.WriteToStream(w);
-
-            w.Write(Right.Edge);
-            w.Write(Right.EdgeLook);
-            w.Write(Left.Edge);
-            w.Write(Left.EdgeLook);
-
-            w.Write(Right.UVRotation);
-            w.Write(Left.UVRotation);
-        }
     }
-
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.ScsMap
 {
@@ -168,8 +169,15 @@ namespace TruckLib.ScsMap
                 {
                     var uid = r.ReadUInt64();
                     if (uid == dataEof) break;
-                    var item = (MapItems.First(x => x.Value.Uid == uid).Value as IDataPart);
-                    item.ReadDataPart(r);
+
+                    if (!MapItems.ContainsKey(uid))
+                    {
+                        throw new KeyNotFoundException($"{this.ToString()}.data contains " + 
+                            $"unknown UID {uid} - can't continue.");
+                    }
+                    var item = MapItems[uid];
+                    var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
+                    serializer.ReadDataPart(r, item);
                 }
             }
         }
@@ -224,8 +232,8 @@ namespace TruckLib.ScsMap
             {
                 var itemType = (ItemType)r.ReadInt32();
 
-                var item = MapItemFactory.Create(itemType);
-                item.ReadFromStream(r);
+                var serializer = Serialization.MapItemSerializerFactory.Get(itemType);
+                var item = serializer.Deserialize(r);
 
                 // deal with signs which can be in aux *and* base
                 if(item is Sign sign && file != sign.DefaultItemFile)
@@ -324,11 +332,12 @@ namespace TruckLib.ScsMap
             {
                 header.WriteToStream(w);
 
-                foreach(var itemKvp in allItems.Where(x => x.Value is IDataPart))
+                foreach(var itemKvp in allItems.Where(x => x.Value.HasDataPayload))
                 {
-                    var item = (IDataPart)itemKvp.Value;
+                    var item = itemKvp.Value;
                     w.Write((item as MapItem).Uid);
-                    item.WriteDataPart(w);
+                    var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
+                    serializer.WriteDataPart(w, item);
                 }
 
                 w.Write(dataEof);
@@ -372,11 +381,15 @@ namespace TruckLib.ScsMap
             foreach (var kvp in Map.Nodes.Where(x => x.Value.Sectors.Contains(this)))
             {
                 var node = kvp.Value;
-                if (!(node.ForwardItem is UnresolvedItem) && node.ForwardItem is MapItem fwItem && fwItem.ItemFile == file)
+                if (!(node.ForwardItem is UnresolvedItem) 
+                    && node.ForwardItem is MapItem fwItem 
+                    && fwItem.ItemFile == file)
                 {
                     nodes.Add(node);
                 }
-                else if (!(node.BackwardItem is UnresolvedItem) && node.BackwardItem is MapItem bwItem && bwItem.ItemFile == file)
+                else if (!(node.BackwardItem is UnresolvedItem) 
+                    && node.BackwardItem is MapItem bwItem 
+                    && bwItem.ItemFile == file)
                 {
                     nodes.Add(node);
                 }
@@ -402,9 +415,10 @@ namespace TruckLib.ScsMap
             w.Write(items.Count());
             foreach (var item in items)
             {
-                var itemType = (int)item.Value.ItemType;
-                w.Write(itemType);
-                item.Value.WriteToStream(w);
+                w.Write((int)item.Value.ItemType);
+                var serializer = Serialization.MapItemSerializerFactory
+                    .Get(item.Value.ItemType);
+                serializer.Serialize(w, item.Value);
             }
         }
 

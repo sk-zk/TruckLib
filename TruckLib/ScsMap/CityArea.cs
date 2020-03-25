@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class CityArea : SingleNodeItem
     {
-        public override ItemType ItemType => ItemType.City;
+        public override ItemType ItemType => ItemType.CityArea;
 
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
@@ -68,26 +68,6 @@ namespace TruckLib.ScsMap
             city.Height = height;
 
             return city;
-        }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Name = r.ReadToken();
-            Width = r.ReadSingle();
-            Height = r.ReadSingle();
-            Node = new UnresolvedNode(r.ReadUInt64());
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Name);
-            w.Write(Width);
-            w.Write(Height);
-            w.Write(Node.Uid);
         }
 
     }

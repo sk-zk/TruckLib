@@ -28,16 +28,6 @@ namespace TruckLib.ScsMap
             Uid = uid;
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-            Uid = r.ReadUInt64();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            throw new InvalidOperationException(exceptionMessage);
-        }
-
         internal override IEnumerable<Node> GetItemNodes()
         {
             throw new InvalidOperationException(exceptionMessage);

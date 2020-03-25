@@ -28,21 +28,5 @@ namespace TruckLib.ScsMap
             point.Tags = tags;
             return point;
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Tags = ReadObjectList<Token>(r);
-            Node = new UnresolvedNode(r.ReadUInt64());
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            WriteObjectList(w, Tags);
-            w.Write(Node.Uid);
-        }
     }
 }

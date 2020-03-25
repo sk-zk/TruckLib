@@ -70,55 +70,6 @@ namespace TruckLib.ScsMap
             return Models.Select(x => x.PerspectiveNode).Prepend(Node);
         }
 
-        private const float sizeFactor = 2f;
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Width = r.ReadSingle() * sizeFactor;
-            Height = r.ReadSingle() * sizeFactor;
-
-            var modelCount = r.ReadUInt32();
-            for(int i = 0; i < modelCount; i++)
-            {
-                Models[i].Model = r.ReadToken();
-                Models[i].Scale = r.ReadVector3();
-            }
-
-            // nodes
-            // first node is the object node, the other nodes are the perspective nodes
-            var nodeCount = r.ReadUInt32();
-            Node = new UnresolvedNode(r.ReadUInt64());
-            for(int i = 1; i < nodeCount; i++)
-            {
-                Models[i-1].PerspectiveNode = new UnresolvedNode(r.ReadUInt64());
-            }
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Width / sizeFactor);
-            w.Write(Height / sizeFactor);
-
-            var notNullModels = Models.Where(x => x.Model != null);
-            w.Write(notNullModels.Count());
-            foreach (var model in notNullModels)
-            {
-                w.Write(model.Model);
-                w.Write(model.Scale);
-            }
-
-            w.Write(notNullModels.Count() + 1);
-            w.Write(Node.Uid);
-            foreach (var model in notNullModels)
-            {
-                w.Write(model.PerspectiveNode.Uid);
-            }
-        }
-
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             if (Node is UnresolvedNode && allNodes.ContainsKey(Node.Uid))

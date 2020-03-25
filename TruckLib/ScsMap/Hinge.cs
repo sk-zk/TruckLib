@@ -46,27 +46,5 @@ namespace TruckLib.ScsMap
 
             return hinge;
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Model = r.ReadToken();
-            Variant = r.ReadToken();
-            Node = new UnresolvedNode(r.ReadUInt64());
-            MinRotation = r.ReadSingle();
-            MaxRotation = r.ReadSingle();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Model);
-            w.Write(Variant);
-            w.Write(Node.Uid);
-            w.Write(MinRotation);
-            w.Write(MaxRotation);
-        }
     }
 }

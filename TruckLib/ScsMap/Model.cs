@@ -172,48 +172,12 @@ namespace TruckLib.ScsMap
 
             return model;
         }
+
         public static Model Add(IItemContainer map, Vector3 position, float yRotation,
             Token name, Token variant, Token look)
         {
             var rotation = Quaternion.CreateFromYawPitchRoll(yRotation, 0, 0);
             return Add(map, position, rotation, name, variant, look);
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Name = r.ReadToken();
-            Look = r.ReadToken();
-            Variant = r.ReadToken();
-
-            AdditionalParts = ReadObjectList<Token>(r);
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-
-            Scale = r.ReadVector3();
-
-            TerrainMaterial = r.ReadToken();
-            TerrainColor = r.ReadColor();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Name);
-            w.Write(Look);
-            w.Write(Variant);
-
-            WriteObjectList(w, AdditionalParts);
-
-            w.Write(Node.Uid);
-
-            w.Write(Scale);
-
-            w.Write(TerrainMaterial);
-            w.Write(TerrainColor);
-        }
-
     }
 }

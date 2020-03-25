@@ -39,32 +39,6 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            CityName = r.ReadToken();
-            BuyMode = r.ReadUInt32();
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-            PrefabLink = new UnresolvedItem(r.ReadUInt64());
-
-            TrailerSpawnPoints = ReadNodeRefList(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(CityName);
-            w.Write(BuyMode);
-
-            w.Write(Node.Uid);
-            w.Write(PrefabLink.Uid);
-
-            WriteNodeRefList(w, TrailerSpawnPoints);
-        }
-
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             base.UpdateNodeReferences(allNodes);

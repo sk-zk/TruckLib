@@ -183,38 +183,5 @@ namespace TruckLib.ScsMap
             building.InitFromAddOrAppend(name, look, ForwardNode.Position, position);
             return building;
         }
-
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Name = r.ReadToken();
-            Look = r.ReadToken();
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-            ForwardNode = new UnresolvedNode(r.ReadUInt64());
-
-            Length = r.ReadSingle();
-            RandomSeed = r.ReadUInt32();
-            Stretch = r.ReadSingle();
-            HeightOffsets = ReadObjectList<float>(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Name);
-            w.Write(Look);
-
-            w.Write(Node.Uid);
-            w.Write(ForwardNode.Uid);
-
-            w.Write(Length);
-            w.Write(RandomSeed);
-            w.Write(Stretch);
-            WriteObjectList(w, HeightOffsets);
-        }
     }
 }

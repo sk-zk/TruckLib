@@ -20,18 +20,22 @@ namespace TruckLib
         /// <returns></returns>
         public static T Clone<T>(this T obj) where T : IBinarySerializable, new()
         {
+            return default(T);
+
+            // TODO
+            /*
             T cloned = new T();
             using (var stream = new MemoryStream())
             using (var writer = new BinaryWriter(stream))
             {
                 obj.WriteToStream(writer);
-                if (obj is IDataPart) (obj as IDataPart).WriteDataPart(writer);
+                if (obj is IDataPayload) (obj as IDataPayload).WriteDataPart(writer);
                 stream.Position = 0;
 
                 using (var reader = new BinaryReader(stream))
                 {
                     cloned.ReadFromStream(reader);
-                    if (obj is IDataPart) (obj as IDataPart).ReadDataPart(reader);
+                    if (obj is IDataPayload) (obj as IDataPayload).ReadDataPart(reader);
                 }
             }
 
@@ -44,8 +48,10 @@ namespace TruckLib
             // TODO: also deepclone certain referenced
             // items such as nodes
             // TODO: then add the cloned item to the map
-          
+
             return cloned;
+            */
+
         }
 
         /// <summary>

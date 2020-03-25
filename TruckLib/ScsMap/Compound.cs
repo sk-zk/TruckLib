@@ -172,58 +172,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-
-            var itemCount = r.ReadUInt32();
-            for(int i = 0; i < itemCount; i++)
-            {
-                var itemType = (ItemType)r.ReadInt32();
-
-                var item = MapItemFactory.Create(itemType);
-                item.ReadFromStream(r);
-                CompoundItems.Add(item.Uid, item);
-            }
-
-            var nodeCount = r.ReadUInt32();
-            for (int i = 0; i < nodeCount; i++)
-            {
-                var node = new Node();
-                node.ReadFromStream(null, r);
-                if (!CompoundNodes.ContainsKey(node.Uid))
-                {
-                    CompoundNodes.Add(node.Uid, node);
-                }
-            }
-
-            UpdateInternalNodeReferences();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Node.Uid);
-
-            w.Write(CompoundItems.Count);
-            foreach(var item in CompoundItems)
-            {
-                var itemType = (int)item.Value.ItemType;
-                w.Write(itemType);
-                item.Value.WriteToStream(w);
-            }
-
-            w.Write(CompoundNodes.Count);
-            foreach(var nodeKvp in CompoundNodes)
-            {
-                nodeKvp.Value.WriteToStream(w);
-            }
-        }
-
-        private void UpdateInternalNodeReferences()
+        internal void UpdateInternalNodeReferences()
         {
             // first of all, find map items referenced in nodes
             foreach (var kvp in CompoundNodes)

@@ -44,25 +44,5 @@ namespace TruckLib.ScsMap
             ta.Rule = rule;
             return ta;
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Tags = ReadObjectList<Token>(r);
-            Nodes = ReadNodeRefList(r);
-            Rule = r.ReadToken();
-            Range = r.ReadSingle();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            WriteObjectList(w, Tags);
-            WriteNodeRefList(w, Nodes);
-            w.Write(Rule);
-            w.Write(Range);
-        }
     }
 }

@@ -55,21 +55,5 @@ namespace TruckLib.ScsMap
             ma.Type = type;
             return ma;
         }
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Nodes = ReadNodeRefList(r);
-            Color = (MapAreaColor)r.ReadUInt32();
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            WriteNodeRefList(w, Nodes);
-            w.Write((uint)Color);
-        }
     }
 }

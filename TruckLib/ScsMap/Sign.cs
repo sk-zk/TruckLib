@@ -96,63 +96,6 @@ namespace TruckLib.ScsMap
             return sign;
         }
 
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            Model = r.ReadToken();
-            Node = new UnresolvedNode(r.ReadUInt64());
-
-            Look = r.ReadToken();
-            Variant = r.ReadToken();
-
-            // sign_boards
-            // used for legacy signs.
-            var boardCount = r.ReadByte();
-            if (boardCount > 0) // yes, this is correct
-            {
-                for (int i = 0; i < SignBoards.Length; i++)
-                {
-                    SignBoards[i].Road = r.ReadToken();
-                    SignBoards[i].City1 = r.ReadToken();
-                    SignBoards[i].City2 = r.ReadToken();
-                }
-            }
-
-            // override_template
-            SignTemplate = r.ReadPascalString();
-            // if override_template is an empty string,
-            // the file does not contain the sign override array
-            if (SignTemplate == "") return;
-
-            // sign_override
-            SignOverrides = ReadObjectList<SignOverride>(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            w.Write(Model);
-            w.Write(Node.Uid);
-
-            w.Write(Look);
-            w.Write(Variant);
-
-            w.Write(SignBoards.Length);
-            foreach (var board in SignBoards)
-            {
-                w.Write(board.Road);
-                w.Write(board.City1);
-                w.Write(board.City2);
-            }
-
-            w.WritePascalString(SignTemplate);
-            if (SignTemplate == "") return;
-
-            WriteObjectList(w, SignOverrides);
-        }
-
         /// <summary>
         /// Sign text struct for legacy navigation signs,
         /// e.g. "be-navigation/board straight left right b".

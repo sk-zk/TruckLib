@@ -26,8 +26,8 @@ namespace TruckLib.ScsMap
             set => base.ViewDistance = value;
         }
 
-        protected static readonly int ControlPointCols = 4;
-        protected static readonly int ControlPointRows = 4;
+        internal static readonly int ControlPointCols = 4;
+        internal static readonly int ControlPointRows = 4;
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
         /// </summary>
@@ -181,76 +181,5 @@ namespace TruckLib.ScsMap
 
             return Add(map, position, points);
         }
-
-        private const float vegDensityFactor = 10f;
-
-        public override void ReadFromStream(BinaryReader r)
-        {
-            base.ReadFromStream(r);
-
-            for(int x = 0; x < ControlPointCols; x++)
-            {
-                for (int z = 0; z < ControlPointRows; z++)
-                {
-                    ControlPoints[x,z] = r.ReadVector3();
-                }
-            }
-            ControlPoints = Utils.MirrorX(ControlPoints);
-
-            XTesselation = r.ReadUInt16();
-            ZTesselation = r.ReadUInt16();
-
-            UVRotation = r.ReadSingle();
-
-            Node = new UnresolvedNode(r.ReadUInt64());
-
-            RandomSeed = r.ReadUInt32();
-
-            for (int i = 0; i < Vegetation.Length; i++)
-            {
-                Vegetation[i].Name = r.ReadToken();
-                Vegetation[i].Density = r.ReadUInt16() / vegDensityFactor;
-                Vegetation[i].Scale = (VegetationScale)r.ReadByte();
-            }
-
-            VegetationSpheres = ReadObjectList<VegetationSphere>(r);
-
-            QuadData.ReadFromStream(r);
-        }
-
-        public override void WriteToStream(BinaryWriter w)
-        {
-            base.WriteToStream(w);
-
-            var points = Utils.MirrorX(ControlPoints);
-            for (int x = 0; x < ControlPointCols; x++)
-            {
-                for (int z = 0; z < ControlPointRows; z++)
-                {
-                    w.Write(points[x, z]);
-                }
-            }
-
-            w.Write(XTesselation);
-            w.Write(ZTesselation);
-
-            w.Write(UVRotation);
-
-            w.Write(Node.Uid);
-
-            w.Write(RandomSeed);
-
-            foreach(var veg in Vegetation)
-            {
-                w.Write(veg.Name);
-                w.Write((ushort)(veg.Density * vegDensityFactor));
-                w.Write((byte)veg.Scale);
-            }
-
-            WriteObjectList(w, VegetationSpheres);
-
-            QuadData.WriteToStream(w);
-        }
-
     }
 }

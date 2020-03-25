@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Base class for all map items.
     /// </summary>
-    public abstract class MapItem : IMapObject, IBinarySerializable
+    public abstract class MapItem : IMapObject
     {
         /// <summary>
         /// The item_type used as identifier in the map format.
@@ -40,7 +40,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         public abstract ItemFile DefaultItemFile { get; }
 
-        private KdopItem KdopItem { get; set; }
+        internal virtual bool HasDataPayload => false;
+
+        internal KdopItem KdopItem { get; set; }
 
         /// <summary>
         /// The UID of this item. 
@@ -104,108 +106,5 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <returns></returns>
         internal abstract IEnumerable<Node> GetItemNodes();
-
-        private const int viewDistanceFactor = 10;
-
-        /// <summary>
-        /// Reads the item from a stream of a .base or .aux file
-        /// whose position is at the start of the item.
-        /// </summary>
-        /// <param name="r">The reader.</param>
-        public virtual void ReadFromStream(BinaryReader r)
-        {
-            KdopItem.Uid = r.ReadUInt64();
-            KdopItem.BoundingBox.ReadFromStream(r);
-            KdopItem.Flags = new BitArray(r.ReadBytes(4));
-            KdopItem.ViewDistance = (ushort)((int)r.ReadByte() * viewDistanceFactor);
-        }
-
-        /// <summary>
-        /// Writes the item to a stream.
-        /// </summary>
-        /// <param name="w">The writer.</param>
-        public virtual void WriteToStream(BinaryWriter w)
-        {
-            w.Write(KdopItem.Uid);
-            KdopItem.BoundingBox.WriteToStream(w);
-            w.Write(KdopItem.Flags.ToUInt());
-            w.Write((byte)(KdopItem.ViewDistance / viewDistanceFactor));
-        }
-
-        /// <summary>
-        /// Reads a list of IBinarySerializable objects or numerical types.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        protected List<T> ReadObjectList<T>(BinaryReader r) where T : new()
-        {
-            var count = r.ReadUInt32();
-            return r.ReadObjectList<T>(count);
-        }
-
-        /// <summary>
-        /// Writes a list of IBinarySerializable objects or numerical primitives.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="w"></param>
-        /// <param name="list"></param>
-        protected void WriteObjectList<T>(BinaryWriter w, List<T> list)
-        {
-            if(list is null)
-            {
-                w.Write(0);
-                return;
-            }
-
-            w.Write((uint)list.Count);
-            w.WriteObjectList<T>(list);
-        }
-
-        protected List<Node> ReadNodeRefList(BinaryReader r)
-        {
-            var list = new List<Node>();
-            var count = r.ReadUInt32();
-            for (int i = 0; i < count; i++)
-            {
-                list.Add(new UnresolvedNode(r.ReadUInt64()));
-            }
-            return list;
-        }
-
-        protected List<MapItem> ReadItemRefList(BinaryReader r)
-        {
-            return ReadObjectList<UnresolvedItem>(r).Cast<MapItem>().ToList();
-        }
-
-        protected void WriteNodeRefList(BinaryWriter w, List<Node> nodeList)
-        {
-            if (nodeList is null)
-            {
-                w.Write(0);
-                return;
-            }
-
-            w.Write(nodeList.Count);
-            foreach (var node in nodeList)
-            {
-                w.Write(node.Uid);
-            }
-        }
-
-        protected void WriteItemRefList(BinaryWriter w, List<MapItem> itemList)
-        {
-            if (itemList is null)
-            {
-                w.Write(0);
-                return;
-            }
-
-            w.Write(itemList.Count);
-            foreach (var item in itemList)
-            {
-                w.Write(item.Uid);
-            }
-        }
     }
 }

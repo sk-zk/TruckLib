@@ -46,12 +46,12 @@ namespace TruckLib.Model.Ppd
             var ppd = new PrefabDescriptor();
             using(var r = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
-                ppd.ReadFromStream(r);
+                ppd.Deserialize(r);
             }
             return ppd;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Version = r.ReadUInt32();
 
@@ -104,7 +104,7 @@ namespace TruckLib.Model.Ppd
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }

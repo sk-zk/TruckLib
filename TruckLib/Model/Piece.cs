@@ -45,7 +45,7 @@ namespace TruckLib.Model
         /// has to jump back and forth a few times.
         /// </summary>
         /// <param name="r"></param>
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             var edges = r.ReadUInt32();
             var verts = r.ReadUInt32();
@@ -55,7 +55,7 @@ namespace TruckLib.Model
             BoundingBoxCenter = r.ReadVector3();
             BoundingBoxDiagonalSize = r.ReadSingle();
             BoundingBox = new AxisAlignedBox();
-            BoundingBox.ReadFromStream(r);
+            BoundingBox.Deserialize(r);
 
             // TODO: Why does this even point to when the
             // model has no bones??
@@ -113,7 +113,7 @@ namespace TruckLib.Model
             for (int i = 0; i < edges / 3; i++)
             {
                 var t = new Triangle();
-                t.ReadFromStream(r);
+                t.Deserialize(r);
                 Triangles.Add(t);
             }
 
@@ -134,7 +134,7 @@ namespace TruckLib.Model
 
             w.Write(BoundingBoxCenter);
             w.Write(BoundingBoxDiagonalSize);
-            BoundingBox.WriteToStream(w);
+            BoundingBox.Serialize(w);
 
             w.Write(skeletonOffset_temp); // TODO: Skeleton offset
 
@@ -260,7 +260,7 @@ namespace TruckLib.Model
             w.WriteObjectList(Triangles);
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException("Use the other Write* methods instead; see PmgFile");
         }

@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap.Serialization
             }
             bp.VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
-            bp.QuadData.ReadFromStream(r);
+            bp.QuadData.Deserialize(r);
 
             return bp;
         }
@@ -77,7 +77,7 @@ namespace TruckLib.ScsMap.Serialization
 
             WriteObjectList(w, bp.VegetationSpheres);
 
-            bp.QuadData.WriteToStream(w);
+            bp.QuadData.Serialize(w);
         }
     }
 }

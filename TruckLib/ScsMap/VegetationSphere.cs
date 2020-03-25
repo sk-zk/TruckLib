@@ -36,14 +36,14 @@ namespace TruckLib.ScsMap
         public VegetationSphereType Type { get; set; } 
             = VegetationSphereType.NoVegetation;
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Position = r.ReadVector3();
             Radius = r.ReadSingle();
             Type = (VegetationSphereType)r.ReadUInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Position);
             w.Write(Radius);

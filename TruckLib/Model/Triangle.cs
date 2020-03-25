@@ -31,14 +31,14 @@ namespace TruckLib.Model
             return $"({A} {B} {C})";
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             A = r.ReadUInt16();
             B = r.ReadUInt16();
             C = r.ReadUInt16();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(A);
             w.Write(B);

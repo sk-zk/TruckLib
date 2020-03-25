@@ -32,7 +32,7 @@ namespace TruckLib.Model.Ppd
 
         public int[] OutputLines { get; set; } = new int[8];
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             TerrainPointIdx = r.ReadUInt32();
             TerrainPointCount = r.ReadUInt32();
@@ -54,7 +54,7 @@ namespace TruckLib.Model.Ppd
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }

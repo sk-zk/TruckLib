@@ -65,7 +65,7 @@ namespace TruckLib.Model
 
             using var fs = new FileStream(tobjPath, FileMode.Open);
             using var r = new BinaryReader(fs);
-            tobj.ReadFromStream(r);
+            tobj.Deserialize(r);
 
             return tobj;
         }
@@ -74,10 +74,10 @@ namespace TruckLib.Model
         {
             using var fs = new FileStream(tobjPath, FileMode.Create);
             using var w = new BinaryWriter(fs);
-            WriteToStream(w);
+            Serialize(w);
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Version = r.ReadUInt32();
             if (Version != SupportedVersion)
@@ -114,7 +114,7 @@ namespace TruckLib.Model
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Version);
 

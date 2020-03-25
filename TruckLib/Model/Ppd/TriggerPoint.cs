@@ -81,7 +81,7 @@ namespace TruckLib.Model.Ppd
             set => Flags[3] = value;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             TriggerId = r.ReadUInt32();
             Action = r.ReadToken();
@@ -96,7 +96,7 @@ namespace TruckLib.Model.Ppd
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }

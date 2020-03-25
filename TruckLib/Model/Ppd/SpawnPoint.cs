@@ -19,14 +19,14 @@ namespace TruckLib.Model.Ppd
 
         public SpawnPointType Type { get; set; }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Position = r.ReadVector3();
             Rotation = r.ReadQuaternion();
             Type = (SpawnPointType)r.ReadUInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Position);
             w.Write(Rotation);

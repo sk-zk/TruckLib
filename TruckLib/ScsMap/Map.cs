@@ -358,7 +358,7 @@ namespace TruckLib.ScsMap
             using (var r = new BinaryReader(new FileStream(mbdPath, FileMode.Open)))
             {
                 var header = new Header();
-                header.ReadFromStream(r);
+                header.Deserialize(r);
 
                 EditorMapId = r.ReadUInt64();
 
@@ -485,7 +485,7 @@ namespace TruckLib.ScsMap
             var stream = new FileStream(mbdPath, FileMode.Create);
             using (var w = new BinaryWriter(stream))
             {
-                header.WriteToStream(w);
+                header.Serialize(w);
 
                 w.Write(EditorMapId);
 

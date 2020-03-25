@@ -209,7 +209,7 @@ namespace TruckLib.Model
             BoundingBoxCenter = r.ReadVector3();
             BoundingBoxDiagonalSize = r.ReadSingle();
             BoundingBox = new AxisAlignedBox();
-            BoundingBox.ReadFromStream(r);
+            BoundingBox.Deserialize(r);
 
             var skeletonOffset = r.ReadUInt32();
             var partsOffset = r.ReadUInt32();
@@ -388,7 +388,7 @@ namespace TruckLib.Model
 
             w.Write(BoundingBoxCenter);
             w.Write(BoundingBoxDiagonalSize);
-            BoundingBox.WriteToStream(w);
+            BoundingBox.Serialize(w);
 
             // from this point onward we need to deal with offset vals
             // which pretty much breaks my workflow but I can't be bothered

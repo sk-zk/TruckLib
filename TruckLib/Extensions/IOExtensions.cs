@@ -147,7 +147,7 @@ namespace TruckLib
                 for (int i = 0; i < count; i++)
                 {
                     var obj = new T() as IBinarySerializable;
-                    obj.ReadFromStream(r);
+                    obj.Deserialize(r);
                     list.Add((T)obj);
                 }
             }
@@ -301,7 +301,7 @@ namespace TruckLib
             {
                 foreach (var obj in list)
                 {
-                    (obj as IBinarySerializable).WriteToStream(w);
+                    (obj as IBinarySerializable).Serialize(w);
                 }
             }
             else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.

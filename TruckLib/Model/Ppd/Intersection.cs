@@ -20,7 +20,7 @@ namespace TruckLib.Model.Ppd
 
         public BitArray Flags  = new BitArray(32);
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             CurveId = r.ReadUInt32();
             Position = r.ReadSingle();
@@ -28,7 +28,7 @@ namespace TruckLib.Model.Ppd
             Flags = new BitArray(r.ReadBytes(4));
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(CurveId);
             w.Write(Position);

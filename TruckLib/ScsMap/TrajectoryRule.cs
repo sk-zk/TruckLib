@@ -17,7 +17,7 @@ namespace TruckLib.ScsMap
             return $"[{NodeIndex}] {Rule}";
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             NodeIndex = r.ReadUInt32();
             Rule = r.ReadToken();
@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(NodeIndex);
             w.Write(Rule);

@@ -53,7 +53,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public QuadVegetation Vegetation;
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             const int n1Mask = 0x0F;
             const int n2Mask = 0xF0;
@@ -83,7 +83,7 @@ namespace TruckLib.ScsMap
             Vegetation = (QuadVegetation)((byte4 & n2Mask) >> 4);
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             byte byte1 = 0;
             byte1 |= (byte)MainMaterial;

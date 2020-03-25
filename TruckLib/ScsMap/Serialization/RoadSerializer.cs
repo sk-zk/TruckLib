@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap.Serialization
             var road = new Road();
 
             road.Uid = r.ReadUInt64();
-            road.BoundingBox.ReadFromStream(r);
+            road.BoundingBox.Deserialize(r);
 
             // === kdop flags ===
             var kflag1 = r.ReadByte();
@@ -138,7 +138,7 @@ namespace TruckLib.ScsMap.Serialization
         {
             var road = item as Road;
             w.Write(road.Uid);
-            road.BoundingBox.WriteToStream(w);
+            road.BoundingBox.Serialize(w);
 
             // === kdop flags ===
             byte kflag1 = 0;
@@ -247,7 +247,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(road.Length);
         }
 
-        public void ReadDataPart(BinaryReader r, MapItem item)
+        public void DeserializeDataPayload(BinaryReader r, MapItem item)
         {
             var road = item as Road;
 
@@ -268,11 +268,11 @@ namespace TruckLib.ScsMap.Serialization
 
                 foreach (var veg in side.Vegetation)
                 {
-                    veg.ReadFromStream(r);
+                    veg.Deserialize(r);
                 }
 
                 side.Sidewalk.Material = r.ReadToken();
-                side.Terrain.QuadData.ReadFromStream(r);
+                side.Terrain.QuadData.Deserialize(r);
             }
 
             road.CenterMaterial = r.ReadToken();
@@ -292,7 +292,7 @@ namespace TruckLib.ScsMap.Serialization
             for (int i = 0; i < vegSphereCount; i++)
             {
                 var sphere = new VegetationSphere();
-                sphere.ReadFromStream(r);
+                sphere.Deserialize(r);
                 road.VegetationSpheres.Add(sphere);
             }
 
@@ -312,7 +312,7 @@ namespace TruckLib.ScsMap.Serialization
             road.Left.UVRotation = r.ReadSingle();
         }
 
-        public void WriteDataPart(BinaryWriter w, MapItem item)
+        public void SerializeDataPayload(BinaryWriter w, MapItem item)
         {
             var road = item as Road;
 
@@ -332,12 +332,12 @@ namespace TruckLib.ScsMap.Serialization
 
                 foreach (var veg in side.Vegetation)
                 {
-                    veg.WriteToStream(w);
+                    veg.Serialize(w);
                 }
 
                 w.Write(side.Sidewalk.Material);
 
-                side.Terrain.QuadData.WriteToStream(w);
+                side.Terrain.QuadData.Serialize(w);
             }
 
             w.Write(road.CenterMaterial);
@@ -356,7 +356,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(road.VegetationSpheres.Count);
             foreach (var sphere in road.VegetationSpheres)
             {
-                sphere.WriteToStream(w);
+                sphere.Serialize(w);
             }
 
             w.Write(road.Left.AdditionalParts.Count);

@@ -33,14 +33,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint GameMapVersion { get; set; } = 3;
 
-        public virtual void ReadFromStream(BinaryReader r)
+        public virtual void Deserialize(BinaryReader r)
         {
             CoreMapVersion = r.ReadUInt32();
             GameId = r.ReadToken();
             GameMapVersion = r.ReadUInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(CoreMapVersion);
             w.Write(GameId);

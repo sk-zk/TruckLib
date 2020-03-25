@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap.Serialization
         public static void ReadKdop(BinaryReader r, MapItem item)
         {
             item.KdopItem.Uid = r.ReadUInt64();
-            item.KdopItem.BoundingBox.ReadFromStream(r);
+            item.KdopItem.BoundingBox.Deserialize(r);
             item.KdopItem.Flags = new BitArray(r.ReadBytes(4));
             item.KdopItem.ViewDistance = (ushort)((int)r.ReadByte() * viewDistanceFactor);
         }
@@ -27,7 +27,7 @@ namespace TruckLib.ScsMap.Serialization
         public static void WriteKdop(BinaryWriter w, MapItem item)
         {
             w.Write(item.KdopItem.Uid);
-            item.KdopItem.BoundingBox.WriteToStream(w);
+            item.KdopItem.BoundingBox.Serialize(w);
             w.Write(item.KdopItem.Flags.ToUInt());
             w.Write((byte)(item.KdopItem.ViewDistance / viewDistanceFactor));
         }

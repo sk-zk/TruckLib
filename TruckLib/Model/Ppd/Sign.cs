@@ -23,7 +23,7 @@ namespace TruckLib.Model.Ppd
 
         public Token Part { get; set; }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
             Position = r.ReadVector3();
@@ -32,7 +32,7 @@ namespace TruckLib.Model.Ppd
             Part = r.ReadToken();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }

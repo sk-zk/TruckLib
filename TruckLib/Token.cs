@@ -132,12 +132,12 @@ namespace TruckLib
             return true;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Value = r.ReadUInt64();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Value);
         }

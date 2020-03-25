@@ -36,7 +36,7 @@ namespace TruckLib.ScsMap
 
         private BitArray actionFlags = new BitArray(32);
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
 
@@ -71,7 +71,7 @@ namespace TruckLib.ScsMap
             actionFlags = new BitArray(r.ReadBytes(4));
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Name);
 

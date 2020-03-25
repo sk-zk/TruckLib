@@ -23,7 +23,7 @@ namespace TruckLib.Model
             return Name.String;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
             Position = r.ReadVector3();
@@ -32,7 +32,7 @@ namespace TruckLib.Model
             HookupOffset = r.ReadInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Name);
             w.Write(Position);

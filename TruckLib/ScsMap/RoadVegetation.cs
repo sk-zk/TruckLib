@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap
         private const float densityFactor = 10f;
         private const float fromToFactor = 10f;
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
             Density = r.ReadUInt16() / densityFactor;
@@ -50,7 +50,7 @@ namespace TruckLib.ScsMap
             To = r.ReadUInt16() / fromToFactor;
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Name);
             w.Write((ushort)(Density * densityFactor));

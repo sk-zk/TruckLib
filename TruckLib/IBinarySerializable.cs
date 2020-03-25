@@ -16,11 +16,11 @@ namespace TruckLib
         /// Reads the object from a BinaryReader
         /// whose position is at the start of the object.
         /// </summary>
-        void ReadFromStream(BinaryReader r);
+        void Deserialize(BinaryReader r);
 
         /// <summary>
         /// Writes the object to a BinaryWriter.
         /// </summary>
-        void WriteToStream(BinaryWriter w);
+        void Serialize(BinaryWriter w);
     }
 }

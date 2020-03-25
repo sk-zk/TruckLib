@@ -100,7 +100,7 @@ namespace TruckLib.Model.Ppd
             set => VisFlags[22] = !value;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             VisFlags = new BitArray(r.ReadBytes(4));
             NavFlags = new BitArray(r.ReadBytes(4));
@@ -115,7 +115,7 @@ namespace TruckLib.Model.Ppd
             var neighbourCount = r.ReadUInt32(); 
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(VisFlags.ToUInt());
             w.Write(NavFlags.ToUInt());

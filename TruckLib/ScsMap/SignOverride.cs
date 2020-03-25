@@ -28,7 +28,7 @@ namespace TruckLib.ScsMap
         public List<ISignOverrideAttribute> Attributes { get; set; } 
             = new List<ISignOverrideAttribute>();
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             // id
             Id = r.ReadUInt32();
@@ -84,7 +84,7 @@ namespace TruckLib.ScsMap
 
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Id);
             w.Write(AreaName);

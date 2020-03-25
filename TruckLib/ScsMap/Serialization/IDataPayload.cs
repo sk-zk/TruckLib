@@ -7,7 +7,7 @@ namespace TruckLib.ScsMap.Serialization
 {
     interface IDataPayload
     {
-        void ReadDataPart(BinaryReader r, MapItem item);
-        void WriteDataPart(BinaryWriter w, MapItem item);
+        void DeserializeDataPayload(BinaryReader r, MapItem item);
+        void SerializeDataPayload(BinaryWriter w, MapItem item);
     }
 }

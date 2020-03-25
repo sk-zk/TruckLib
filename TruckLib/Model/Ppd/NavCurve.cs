@@ -122,7 +122,7 @@ namespace TruckLib.Model.Ppd
             set => Flags[16] = value;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
             Flags = new BitArray(r.ReadBytes(4));
@@ -160,7 +160,7 @@ namespace TruckLib.Model.Ppd
             NewData1Id = r.ReadUInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }

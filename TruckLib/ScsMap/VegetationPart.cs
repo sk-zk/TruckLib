@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap
             Vegetation = (new Vegetation[vegetationCount]).Select(x => new Vegetation()).ToArray();
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             PartName = r.ReadToken();
             for (int i = 0; i < Vegetation.Length; i++)
@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(PartName);
             for (int i = 0; i < Vegetation.Length; i++)

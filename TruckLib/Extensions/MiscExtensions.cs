@@ -25,12 +25,12 @@ namespace TruckLib
             using (var stream = new MemoryStream())
             using (var writer = new BinaryWriter(stream))
             {
-                obj.WriteToStream(writer);
+                obj.Serialize(writer);
                 stream.Position = 0;
 
                 using (var reader = new BinaryReader(stream))
                 {
-                    cloned.ReadFromStream(reader);
+                    cloned.Deserialize(reader);
                 }
             }
 
@@ -49,7 +49,8 @@ namespace TruckLib
                 serializer.Serialize(writer, item);
                 if (serializer is IDataPayload)
                 {
-                    (serializer as IDataPayload).WriteDataPart(writer, item);
+                    (serializer as IDataPayload)
+                        .SerializeDataPayload(writer, item);
                 }
                 stream.Position = 0;
 
@@ -58,7 +59,8 @@ namespace TruckLib
                     cloned = (T)serializer.Deserialize(reader);
                     if (serializer is IDataPayload)
                     {
-                        (serializer as IDataPayload).ReadDataPart(reader, item);
+                        (serializer as IDataPayload)
+                            .DeserializeDataPayload(reader, item);
                     }
                 }
             }

@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
             Maximums[2] = 2;
         }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             foreach(var arr in new float[][] { Minimums, Maximums })
             {
@@ -42,7 +42,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             foreach (var arr in new float[][] { Minimums, Maximums })
             {

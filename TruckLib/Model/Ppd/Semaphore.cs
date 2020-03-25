@@ -37,7 +37,7 @@ namespace TruckLib.Model.Ppd
 
         private uint Unknown1;
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Position = r.ReadVector3();
             Rotation = r.ReadQuaternion();
@@ -49,7 +49,7 @@ namespace TruckLib.Model.Ppd
             Unknown1 = r.ReadUInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }

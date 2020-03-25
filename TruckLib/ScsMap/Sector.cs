@@ -131,7 +131,7 @@ namespace TruckLib.ScsMap
             using (var r = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
                 header = new Header();
-                header.ReadFromStream(r);
+                header.Deserialize(r);
                 ReadItems(r, ItemFile.Base);
                 ReadNodes(r);
             }
@@ -146,7 +146,7 @@ namespace TruckLib.ScsMap
             using (var r = new BinaryReader(new FileStream(path, FileMode.Open)))
             {
                 var auxHeader = new Header();
-                auxHeader.ReadFromStream(r);
+                auxHeader.Deserialize(r);
                 ReadItems(r, ItemFile.Aux);
                 ReadNodes(r);
             }
@@ -162,7 +162,7 @@ namespace TruckLib.ScsMap
             {
                 // Read the header
                 var dataHeader = new Header();
-                dataHeader.ReadFromStream(r);
+                dataHeader.Deserialize(r);
 
                 // Read the items
                 while (r.BaseStream.Position < r.BaseStream.Length)
@@ -177,7 +177,7 @@ namespace TruckLib.ScsMap
                     }
                     var item = MapItems[uid];
                     var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
-                    serializer.ReadDataPart(r, item);
+                    serializer.DeserializeDataPayload(r, item);
                 }
             }
         }
@@ -298,7 +298,7 @@ namespace TruckLib.ScsMap
             var stream = new FileStream(baseFilename, FileMode.Create);
             using (var w = new BinaryWriter(stream))
             {
-                header.WriteToStream(w);
+                header.Serialize(w);
                 WriteItems(allItems, ItemFile.Base, w);
                 WriteNodes(w, ItemFile.Base);
             }
@@ -314,7 +314,7 @@ namespace TruckLib.ScsMap
             var stream = new FileStream(auxFilename, FileMode.Create);
             using (var w = new BinaryWriter(stream))
             {
-                header.WriteToStream(w);
+                header.Serialize(w);
                 WriteItems(allItems, ItemFile.Aux, w);
                 WriteNodes(w, ItemFile.Aux);
             }
@@ -330,14 +330,14 @@ namespace TruckLib.ScsMap
             var stream = new FileStream(dataFilename, FileMode.Create);
             using (var w = new BinaryWriter(stream))
             {
-                header.WriteToStream(w);
+                header.Serialize(w);
 
                 foreach(var itemKvp in allItems.Where(x => x.Value.HasDataPayload))
                 {
                     var item = itemKvp.Value;
                     w.Write((item as MapItem).Uid);
                     var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
-                    serializer.WriteDataPart(w, item);
+                    serializer.SerializeDataPayload(w, item);
                 }
 
                 w.Write(dataEof);

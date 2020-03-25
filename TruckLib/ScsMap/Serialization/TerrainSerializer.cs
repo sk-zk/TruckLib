@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap.Serialization
             var t = new Terrain();
             t.Uid = r.ReadUInt64();
 
-            t.BoundingBox.ReadFromStream(r);
+            t.BoundingBox.Deserialize(r);
 
             var kflag1 = r.ReadByte();
             var karr1 = new BitArray(new[] { kflag1 });
@@ -88,7 +88,7 @@ namespace TruckLib.ScsMap.Serialization
 
                 foreach (var veg in side.Vegetation)
                 {
-                    veg.ReadFromStream(r);
+                    veg.Deserialize(r);
                 }
 
                 side.NoDetailVegetationFrom = r.ReadUInt16() / noDetVegFromToFactor;
@@ -97,8 +97,8 @@ namespace TruckLib.ScsMap.Serialization
 
             t.VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
-            t.Right.Terrain.QuadData.ReadFromStream(r);
-            t.Left.Terrain.QuadData.ReadFromStream(r);
+            t.Right.Terrain.QuadData.Deserialize(r);
+            t.Left.Terrain.QuadData.Deserialize(r);
 
             t.Right.Edge = r.ReadToken();
             t.Right.EdgeLook = r.ReadToken();
@@ -116,7 +116,7 @@ namespace TruckLib.ScsMap.Serialization
             var t = item as Terrain;
             w.Write(t.Uid);
 
-            t.BoundingBox.WriteToStream(w);
+            t.BoundingBox.Serialize(w);
 
             byte kflag1 = 0;
             kflag1 |= (byte)(t.WaterReflection.ToByte() << 7);
@@ -181,7 +181,7 @@ namespace TruckLib.ScsMap.Serialization
 
                 foreach (var veg in side.Vegetation)
                 {
-                    veg.WriteToStream(w);
+                    veg.Serialize(w);
                 }
 
                 w.Write((ushort)(side.NoDetailVegetationFrom * noDetVegFromToFactor));
@@ -190,8 +190,8 @@ namespace TruckLib.ScsMap.Serialization
 
             WriteObjectList(w, t.VegetationSpheres);
 
-            t.Right.Terrain.QuadData.WriteToStream(w);
-            t.Left.Terrain.QuadData.WriteToStream(w);
+            t.Right.Terrain.QuadData.Serialize(w);
+            t.Left.Terrain.QuadData.Serialize(w);
 
             w.Write(t.Right.Edge);
             w.Write(t.Right.EdgeLook);

@@ -13,13 +13,13 @@ namespace TruckLib.Model.Ppd
 
         public uint Attach1 { get; set; }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Attach0 = r.ReadUInt32();
             Attach1 = r.ReadUInt32();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Attach0);
             w.Write(Attach1);

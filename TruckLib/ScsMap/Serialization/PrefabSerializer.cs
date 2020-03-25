@@ -45,7 +45,7 @@ namespace TruckLib.ScsMap.Serialization
             return pf;
         }
 
-        public void ReadDataPart(BinaryReader r, MapItem item)
+        public void DeserializeDataPayload(BinaryReader r, MapItem item)
         {
             var pf = item as Prefab;
             pf.Look = r.ReadToken();
@@ -61,7 +61,7 @@ namespace TruckLib.ScsMap.Serialization
 
                 foreach (var veg in corner.Vegetation)
                 {
-                    veg.ReadFromStream(r);
+                    veg.Deserialize(r);
                 }
             }
 
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap.Serialization
 
             foreach (var corner in pf.Corners)
             {
-                corner.Terrain.QuadData.ReadFromStream(r);
+                corner.Terrain.QuadData.Deserialize(r);
             }
         }
 
@@ -118,7 +118,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(pf.SemaphoreProfile);
         }
 
-        public void WriteDataPart(BinaryWriter w, MapItem item)
+        public void SerializeDataPayload(BinaryWriter w, MapItem item)
         {
             var pf = item as Prefab;
             w.Write(pf.Look);
@@ -134,7 +134,7 @@ namespace TruckLib.ScsMap.Serialization
 
                 foreach (var veg in corner.Vegetation)
                 {
-                    veg.WriteToStream(w);
+                    veg.Serialize(w);
                 }
             }
 
@@ -153,7 +153,7 @@ namespace TruckLib.ScsMap.Serialization
 
             foreach (var corner in pf.Corners)
             {
-                corner.Terrain.QuadData.WriteToStream(w);
+                corner.Terrain.QuadData.Serialize(w);
             }
         }
     }

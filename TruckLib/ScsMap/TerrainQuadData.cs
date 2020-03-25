@@ -64,7 +64,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<VertexData> Normals { get; set; } = new List<VertexData>();
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             // the uids of the material brushes used on this terrain.
             // first one is the main mat.
@@ -99,7 +99,7 @@ namespace TruckLib.ScsMap
             for (int i = 0; i < terrainQuadCount; i++)
             {
                 var quad = new TerrainQuad();
-                quad.ReadFromStream(r);           
+                quad.Deserialize(r);           
                 Quads.Add(quad);
             }
 
@@ -131,7 +131,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {           
             // amount of materials used on this terrain
             w.Write((ushort)BrushMaterials.Count);
@@ -162,7 +162,7 @@ namespace TruckLib.ScsMap
             w.Write((uint)(Rows * Cols));
             foreach (var quad in Quads)
             {
-                quad.WriteToStream(w);
+                quad.Serialize(w);
             }
 
             // offset

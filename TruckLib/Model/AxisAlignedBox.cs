@@ -15,13 +15,13 @@ namespace TruckLib.Model
 
         public Vector3 End { get; set; }
 
-        public void ReadFromStream(BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Start = r.ReadVector3();
             End = r.ReadVector3();
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Start);
             w.Write(End);

@@ -42,7 +42,7 @@ namespace TruckLib.Model.Ppd
 
         public uint NewData1Id { get; set; }
 
-        protected BitArray Flags = new BitArray(32);
+        protected FlagField Flags = new FlagField();
 
         // TODO: Check if these flags are correct
 
@@ -125,7 +125,7 @@ namespace TruckLib.Model.Ppd
         public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
-            Flags = new BitArray(r.ReadBytes(4));
+            Flags = new FlagField(r.ReadUInt32());
 
             LeadsToNodes.EndNode = r.ReadByte();
             LeadsToNodes.EndLane = r.ReadByte();

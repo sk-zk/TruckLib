@@ -59,7 +59,7 @@ namespace TruckLib.ScsMap
 
         public Vector2 MaxBoundary { get; set; } = new Vector2(4000, 4000);
 
-        private BitArray Flags = new BitArray(32);
+        private FlagField Flags = new FlagField();
 
         /// <summary>
         /// EOF marker of a .data file.
@@ -213,7 +213,7 @@ namespace TruckLib.ScsMap
                     );
 
                 // flags - unknown
-                Flags = new BitArray(r.ReadBytes(4));
+                Flags = new FlagField(r.ReadUInt32());
 
                 // climate profile
                 Climate = r.ReadToken();
@@ -364,7 +364,7 @@ namespace TruckLib.ScsMap
                 w.Write((int)(MaxBoundary.Y * boundaryFactor));
 
                 // flags - always 0?
-                w.Write(Flags.ToUInt());
+                w.Write(Flags.Bits);
 
                 // climate profile
                 w.Write(Climate);

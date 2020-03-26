@@ -196,7 +196,7 @@ namespace TruckLib.HashFs
                 var entry = new Entry();
                 entry.Hash = reader.ReadUInt64();
                 entry.Offset = reader.ReadUInt64();
-                entry.Flags = new BitArray(reader.ReadBytes(4));
+                entry.Flags = new FlagField(reader.ReadUInt32());
                 entry.Crc = reader.ReadUInt32();
                 entry.Size = reader.ReadUInt32();
                 entry.CompressedSize = reader.ReadUInt32();

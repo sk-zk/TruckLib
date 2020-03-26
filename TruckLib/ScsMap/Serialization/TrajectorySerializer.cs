@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, trj);
 
             trj.Nodes = ReadNodeRefList(r);
-            trj.NavigationFlags = new BitArray(r.ReadBytes(4));
+            trj.NavigationFlags = new FlagField(r.ReadUInt32());
             trj.AccessRule = r.ReadToken();
             trj.Rules = ReadObjectList<TrajectoryRule>(r);
             
@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap.Serialization
             WriteKdopItem(w, trj);
 
             WriteNodeRefList(w, trj.Nodes);
-            w.Write(trj.NavigationFlags.ToUInt());
+            w.Write(trj.NavigationFlags.Bits);
             w.Write(trj.AccessRule);
             WriteObjectList(w, trj.Rules);
 

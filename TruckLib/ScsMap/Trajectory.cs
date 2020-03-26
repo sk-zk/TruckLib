@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; } = new List<Token>();
 
-        internal BitArray NavigationFlags = new BitArray(32);
+        internal FlagField NavigationFlags = new FlagField();
 
         public bool ForceThisWay
         {

@@ -41,7 +41,7 @@ namespace TruckLib.Model.Ppd
 
         public int[] Neighbours { get; set; } = new int[2];
 
-        protected BitArray Flags = new BitArray(32);
+        protected FlagField Flags = new FlagField();
 
         /// <summary>
         /// Determines if the player has to activate the trigger action manually.
@@ -88,7 +88,7 @@ namespace TruckLib.Model.Ppd
             Range = r.ReadSingle();
             ResetDelay = r.ReadSingle();
             ResetDistance = r.ReadSingle();
-            Flags = new BitArray(r.ReadBytes(4));
+            Flags = new FlagField(r.ReadUInt32());
             Position = r.ReadVector3();
             for (int i = 0; i < Neighbours.Length; i++)
             {

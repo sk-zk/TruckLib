@@ -134,23 +134,5 @@ namespace TruckLib
         {
             return b ? (byte)1 : (byte)0;
         }
-
-        /// <summary>
-        /// Converts a bool array with length 8 to byte.
-        /// </summary>
-        /// <param name="bools"></param>
-        /// <returns></returns>
-        public static byte ToByte(this bool[] bools)
-        {
-            if (bools.Length < 8)
-            {
-                throw new InvalidCastException("Can't convert a bool[] of this length to a single byte.");
-            }
-            var arr = new BitArray(bools);
-            var bytes = new byte[1];
-            arr.CopyTo(bytes, 0);
-            return bytes[0];
-        }
-
     }
 }

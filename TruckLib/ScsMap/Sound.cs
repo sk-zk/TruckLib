@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap
 
         public float ActivationDistance { get; set; }
 
-        internal BitArray SoundFlags { get; set; } = new BitArray(32);
+        internal FlagField SoundFlags = new FlagField();
 
         public bool Stream
         {

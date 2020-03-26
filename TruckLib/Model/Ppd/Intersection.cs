@@ -18,14 +18,14 @@ namespace TruckLib.Model.Ppd
 
         public float Radius { get; set; }
 
-        public BitArray Flags  = new BitArray(32);
+        public FlagField Flags;
 
         public void Deserialize(BinaryReader r)
         {
             CurveId = r.ReadUInt32();
             Position = r.ReadSingle();
             Radius = r.ReadSingle();
-            Flags = new BitArray(r.ReadBytes(4));
+            Flags = new FlagField(r.ReadUInt32());
         }
 
         public void Serialize(BinaryWriter w)
@@ -33,7 +33,7 @@ namespace TruckLib.Model.Ppd
             w.Write(CurveId);
             w.Write(Position);
             w.Write(Radius);
-            w.Write(Flags.ToUInt());
+            w.Write(Flags.Bits);
         }
     }
 }

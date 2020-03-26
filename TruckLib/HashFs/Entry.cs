@@ -9,7 +9,7 @@ namespace TruckLib.HashFs
     {
         public ulong Hash;
         public ulong Offset;
-        public BitArray Flags;
+        public FlagField Flags;
         public uint Crc;
         public uint Size;
         public uint CompressedSize;

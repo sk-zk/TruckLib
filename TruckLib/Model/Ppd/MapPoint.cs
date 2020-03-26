@@ -19,10 +19,10 @@ namespace TruckLib.Model.Ppd
 
         public int[] Neighbours { get; set; } = new int[6];
 
-        protected BitArray VisFlags = new BitArray(32);
+        protected FlagField VisFlags = new FlagField();
 
         // TODO: Figure out nav flags
-        public BitArray NavFlags = new BitArray(32);
+        public FlagField NavFlags = new FlagField();
 
         /// <summary>
         /// The type of road this map point should visualize. 
@@ -102,8 +102,8 @@ namespace TruckLib.Model.Ppd
 
         public void Deserialize(BinaryReader r)
         {
-            VisFlags = new BitArray(r.ReadBytes(4));
-            NavFlags = new BitArray(r.ReadBytes(4));
+            VisFlags = new FlagField(r.ReadUInt32());
+            NavFlags = new FlagField(r.ReadUInt32());
 
             Position = r.ReadVector3();
             for (int i = 0; i < Neighbours.Length; i++)
@@ -117,8 +117,8 @@ namespace TruckLib.Model.Ppd
 
         public void Serialize(BinaryWriter w)
         {
-            w.Write(VisFlags.ToUInt());
-            w.Write(NavFlags.ToUInt());
+            w.Write(VisFlags.Bits);
+            w.Write(NavFlags.Bits);
             w.Write(Position);
 
             foreach(var neighbour in Neighbours)

@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        private BitArray actionFlags = new BitArray(32);
+        private FlagField actionFlags = new FlagField();
 
         public void Deserialize(BinaryReader r)
         {
@@ -68,7 +68,7 @@ namespace TruckLib.ScsMap
 
 
             TargetRange = r.ReadSingle();
-            actionFlags = new BitArray(r.ReadBytes(4));
+            actionFlags = new FlagField(r.ReadUInt32());
         }
 
         public void Serialize(BinaryWriter w)
@@ -95,7 +95,7 @@ namespace TruckLib.ScsMap
             }
 
             w.Write(TargetRange);
-            w.Write(actionFlags.ToUInt());
+            w.Write(actionFlags.Bits);
         }
     }
 

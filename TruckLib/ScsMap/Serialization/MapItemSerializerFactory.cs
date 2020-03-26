@@ -7,7 +7,26 @@ namespace TruckLib.ScsMap.Serialization
 {
     internal class MapItemSerializerFactory
     {
+        // don't create a new object every single time
+        // because it's not necessary
+        private static Dictionary<ItemType, MapItemSerializer> cached 
+            = new Dictionary<ItemType, MapItemSerializer>();
+
         public static MapItemSerializer Get(ItemType type)
+        {
+            if (cached.ContainsKey(type))
+            {
+                return cached[type];
+            }
+            else
+            {
+                var serializer = Create(type);
+                cached.Add(type, serializer);
+                return serializer;
+            }
+        }
+
+        private static MapItemSerializer Create(ItemType type)
         {
             return type switch
             {

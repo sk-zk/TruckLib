@@ -175,7 +175,7 @@ namespace TruckLib.ScsMap
             RecalculateItems();
         }
 
-        private void RecalculateItems()
+        protected virtual void RecalculateItems()
         {
             if (BackwardItem is IRecalculatable bw) bw.Recalculate();
             if (ForwardItem is IRecalculatable fw) fw.Recalculate();
@@ -257,13 +257,15 @@ namespace TruckLib.ScsMap
 
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (ForwardItem is UnresolvedItem && allItems.ContainsKey(ForwardItem.Uid))
+            // uses the field instead of the property to not trigger recalc,
+            // which we don't want while loading an existing map
+            if (forwardItem is UnresolvedItem && allItems.ContainsKey(forwardItem.Uid))
             {
-                ForwardItem = allItems[ForwardItem.Uid];
+                forwardItem = allItems[forwardItem.Uid];
             }
-            if (BackwardItem is UnresolvedItem && allItems.ContainsKey(BackwardItem.Uid))
+            if (backwardItem is UnresolvedItem && allItems.ContainsKey(backwardItem.Uid))
             {
-                BackwardItem = allItems[BackwardItem.Uid];
+                backwardItem = allItems[backwardItem.Uid];
             }
         }
 

@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap
 
         public PrefabSlaveItem()
         {
-            Flags[31] = true; // always set to true, no idea what it means though
+            Kdop.Flags[31] = true; // always set to true, no idea what it means though
         }
 
         public static T Add<T>(IItemContainer map, Prefab parent, Vector3 position)

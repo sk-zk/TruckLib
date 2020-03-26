@@ -61,8 +61,8 @@ namespace TruckLib.ScsMap
 
         public byte DlcGuard
         {
-            get => Flags.GetByte(1);
-            set => Flags.SetByte(1, value);
+            get => Kdop.Flags.GetByte(1);
+            set => Kdop.Flags.SetByte(1, value);
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IsTunnel
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool DetailVegetation
         {
-            get => !Flags[23];
-            set => Flags[23] = !value;
+            get => !Kdop.Flags[23];
+            set => Kdop.Flags[23] = !value;
         }
 
         /// <summary>
@@ -111,14 +111,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool LeftHandTraffic
         {
-            get => Flags[22];
-            set => Flags[22] = value;
+            get => Kdop.Flags[22];
+            set => Kdop.Flags[22] = value;
         }
 
         public bool Activation
         {
-            get => !Flags[21];
-            set => Flags[21] = !value;
+            get => !Kdop.Flags[21];
+            set => Kdop.Flags[21] = !value;
         }
 
         /// <summary>
@@ -128,8 +128,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool CustomSemaphores
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         /// <summary>
@@ -137,8 +137,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IsStateBorder
         {
-            get => Flags[18];
-            set => Flags[18] = value;
+            get => Kdop.Flags[18];
+            set => Kdop.Flags[18] = value;
         }
 
         /// <summary>
@@ -146,20 +146,20 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool ShowInUiMap
         {
-            get => !Flags[17];
-            set => Flags[17] = !value;
+            get => !Kdop.Flags[17];
+            set => Kdop.Flags[17] = !value;
         }
 
         public bool Boundary
         {
-            get => !Flags[16];
-            set => Flags[16] = !value;
+            get => !Kdop.Flags[16];
+            set => Kdop.Flags[16] = !value;
         }
 
         public bool TerrainShadows
         {
-            get => !Flags[30];
-            set => Flags[30] = !value;
+            get => !Kdop.Flags[30];
+            set => Kdop.Flags[30] = !value;
         }
 
         /// <summary>
@@ -167,8 +167,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool LowPolyVegetation
         {
-            get => Flags[29];
-            set => Flags[29] = value;
+            get => Kdop.Flags[29];
+            set => Kdop.Flags[29] = value;
         }
 
         /// <summary>
@@ -178,8 +178,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool AiVehicles
         {
-            get => !Flags[27];
-            set => Flags[27] = !value;
+            get => !Kdop.Flags[27];
+            set => Kdop.Flags[27] = !value;
         }
 
         /// <summary>
@@ -187,14 +187,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IgnoreCutPlanes
         {
-            get => Flags[26];
-            set => Flags[26] = value;
+            get => Kdop.Flags[26];
+            set => Kdop.Flags[26] = value;
         }
 
         public bool IsFerryEntrance
         {
-            get => Flags[25];
-            set => Flags[25] = value;
+            get => Kdop.Flags[25];
+            set => Kdop.Flags[25] = value;
         }
 
         /// <summary>
@@ -202,14 +202,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection
         {
-            get => Flags[24];
-            set => Flags[24] = value;
+            get => Kdop.Flags[24];
+            set => Kdop.Flags[24] = value;
         }
 
         public bool Collision
         {
-            get => !Flags[2];
-            set => Flags[2] = !value;
+            get => !Kdop.Flags[2];
+            set => Kdop.Flags[2] = !value;
         }
 
         public Prefab()

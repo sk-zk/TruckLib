@@ -28,8 +28,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool TrainTransport
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         public static Ferry Add(IItemContainer map, Vector3 position, Token port)

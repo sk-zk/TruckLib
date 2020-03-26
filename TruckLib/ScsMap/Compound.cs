@@ -42,8 +42,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IgnoreCutPlanes
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         /// <summary>

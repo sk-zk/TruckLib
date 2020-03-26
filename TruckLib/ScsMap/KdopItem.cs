@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         /// A flag field which is part of the kdop_item but is actually used for item flags 
         /// rather than flags relating to the bounding box.
         /// </summary>
-        public BitArray Flags { get; set; } = new BitArray(32);
+        internal FlagField Flags;
 
         private static ushort MinDistance = 10;
         private static ushort MaxDistance = 1500;

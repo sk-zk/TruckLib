@@ -33,43 +33,43 @@ namespace TruckLib.ScsMap
 
         public byte DlcGuard
         {
-            get => Flags.GetByte(1);
-            set => Flags.SetByte(1, value);
+            get => Kdop.Flags.GetByte(1);
+            set => Kdop.Flags.SetByte(1, value);
         }
 
         public bool PartialActivation
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         public bool VehicleActivation
         {
-            get => Flags[2];
-            set => Flags[2] = value;
+            get => Kdop.Flags[2];
+            set => Kdop.Flags[2] = value;
         }
 
         public bool ConnectedTrailerActivation
         {
-            get => Flags[3];
-            set => Flags[3] = value;
+            get => Kdop.Flags[3];
+            set => Kdop.Flags[3] = value;
         } 
         public bool DisconnectedTrailerActivation
         {
-            get => Flags[4];
-            set => Flags[4] = value;
+            get => Kdop.Flags[4];
+            set => Kdop.Flags[4] = value;
         }
 
         public bool OrientedActivation
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
         
         public bool InitDisabled
         {
-            get => Flags[8];
-            set => Flags[8] = value;
+            get => Kdop.Flags[8];
+            set => Kdop.Flags[8] = value;
         }
 
         public Trigger() : base()

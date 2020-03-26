@@ -32,7 +32,7 @@ namespace TruckLib.Model.Ppd
         public RoadSize RoadSize
         {
             get => (RoadSize)VisFlags.GetBitString(8, 4);
-            set => VisFlags.SetBitString((uint)value, 8, 4);
+            set => VisFlags.SetBitString(8, 4, (uint)value);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TruckLib.Model.Ppd
         public RoadOffset RoadOffset
         {
             get => (RoadOffset)VisFlags.GetBitString(12, 3);
-            set => VisFlags.SetBitString((uint)value, 12, 3);
+            set => VisFlags.SetBitString(12, 3, (uint)value);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace TruckLib.Model.Ppd
         public CustomColor Color
         {
             get => (CustomColor)VisFlags.GetBitString(17, 4);
-            set => VisFlags.SetBitString((uint)value, 17, 4);
+            set => VisFlags.SetBitString(17, 4, (uint)value);
         }
 
         /// <summary>

@@ -31,8 +31,8 @@ namespace TruckLib.ScsMap
 
         public bool TriggerVisit
         {
-            get => !Flags[1];
-            set => Flags[1] = !value;
+            get => !Kdop.Flags[1];
+            set => Kdop.Flags[1] = !value;
         }
 
         /// <summary>
@@ -40,8 +40,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool ShowInUi
         {
-            get => !Flags[0];
-            set => Flags[0] = !value;
+            get => !Kdop.Flags[0];
+            set => Kdop.Flags[0] = !value;
         }
      
         public CityArea() : base()

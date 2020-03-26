@@ -22,8 +22,8 @@ namespace TruckLib.ScsMap
 
         public MapAreaType Type
         {
-            get => Flags[3] ? MapAreaType.Navigation : MapAreaType.Visual;
-            set => Flags[3] = (Type == MapAreaType.Navigation);
+            get => Kdop.Flags[3] ? MapAreaType.Navigation : MapAreaType.Visual;
+            set => Kdop.Flags[3] = (Type == MapAreaType.Navigation);
         }
 
         /// <summary>
@@ -33,20 +33,20 @@ namespace TruckLib.ScsMap
 
         public byte DlcGuard
         {
-            get => (Flags.GetByte(1));
-            set => Flags.SetByte(1, value);
+            get => (Kdop.Flags.GetByte(1));
+            set => Kdop.Flags.SetByte(1, value);
         }
 
         public bool DrawOutline
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         public bool DrawOver
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         public static MapArea Add(IItemContainer map, Vector3[] nodePositions, MapAreaType type)

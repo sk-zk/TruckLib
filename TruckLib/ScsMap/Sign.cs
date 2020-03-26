@@ -64,20 +64,20 @@ namespace TruckLib.ScsMap
 
         public bool FollowRoadDir
         {
-            get => Flags[24];
-            set => Flags[24] = value;
+            get => Kdop.Flags[24];
+            set => Kdop.Flags[24] = value;
         }
 
         public bool WaterReflection
         {
-            get => Flags[26];
-            set => Flags[26] = value;
+            get => Kdop.Flags[26];
+            set => Kdop.Flags[26] = value;
         }
 
         public bool IgnoreCutPlanes
         {
-            get => Flags[27];
-            set => Flags[27] = value;
+            get => Kdop.Flags[27];
+            set => Kdop.Flags[27] = value;
         }
 
         /// <summary>

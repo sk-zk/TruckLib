@@ -87,7 +87,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        protected BitArray Flags { get; set; } = new BitArray(32);
+        protected FlagField Flags;
 
         /// <summary>
         /// Determines if this node is red or green.
@@ -231,7 +231,7 @@ namespace TruckLib.ScsMap
             var fwItemUid = r.ReadUInt64();
             ForwardItem = fwItemUid == 0 ? null : new UnresolvedItem(fwItemUid);
 
-            Flags = new BitArray(r.ReadBytes(4));
+            Flags = new FlagField(r.ReadUInt32());
         }
 
         public void WriteToStream(BinaryWriter w)
@@ -247,7 +247,7 @@ namespace TruckLib.ScsMap
             w.Write(BackwardItem is null ? 0UL : BackwardItem.Uid);
             w.Write(ForwardItem is null ? 0UL : ForwardItem.Uid);
 
-            w.Write(Flags.ToUInt());
+            w.Write(Flags.Bits);
         }
 
         public override string ToString()

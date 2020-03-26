@@ -19,8 +19,8 @@ namespace TruckLib.ScsMap
 
         public ServiceType ServiceType
         {
-            get => (ServiceType)Flags.GetByte(0);
-            set => Flags.SetByte(0, (byte)value);
+            get => (ServiceType)Kdop.Flags.GetByte(0);
+            set => Kdop.Flags.SetByte(0, (byte)value);
         }
 
         public static Service Add(IItemContainer map, Prefab parent, Vector3 position)

@@ -49,10 +49,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Nibble ColorVariant
         {
-            get => (Nibble)Flags.GetBitString(colorVariantPos, colorVariantLength);
+            get => (Nibble)Kdop.Flags.GetBitString(colorVariantPos, colorVariantLength);
             set
             {
-                Flags.SetBitString((uint)value, colorVariantPos, colorVariantLength);
+                Kdop.Flags.SetBitString(colorVariantPos, colorVariantLength, (uint)value);
             }
         }
 
@@ -78,14 +78,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public StaticLod StaticLod
         {
-            get => (StaticLod)Flags.GetBitString(staticLodPos, staticLodLength);
-            set => Flags.SetBitString((uint)value, staticLodPos, staticLodLength);
+            get => (StaticLod)Kdop.Flags.GetBitString(staticLodPos, staticLodLength);
+            set => Kdop.Flags.SetBitString(staticLodPos, staticLodLength, (uint)value);
         }
 
         public bool ModelHookups
         {
-            get => !Flags[3];
-            set => Flags[3] = !value;
+            get => !Kdop.Flags[3];
+            set => Kdop.Flags[3] = !value;
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IgnoreCutPlanes
         {
-            get => Flags[2];
-            set => Flags[2] = value;
+            get => Kdop.Flags[2];
+            set => Kdop.Flags[2] = value;
         }
 
         /// <summary>
@@ -102,8 +102,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool LeftHandTraffic
         { 
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         /// <summary>
@@ -120,8 +120,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool DetailVegetation
         {
-            get => Flags[12];
-            set => Flags[12] = value;
+            get => Kdop.Flags[12];
+            set => Kdop.Flags[12] = value;
         }
 
         /// <summary>
@@ -129,8 +129,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Collision
         {
-            get => !Flags[13];
-            set => Flags[13] = !value;
+            get => !Kdop.Flags[13];
+            set => Kdop.Flags[13] = !value;
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Shadows
         {
-            get => !Flags[14];
-            set => Flags[14] = !value;
+            get => !Kdop.Flags[14];
+            set => Kdop.Flags[14] = !value;
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool MirrorReflection
         {
-            get => !Flags[15];
-            set => Flags[15] = !value;
+            get => !Kdop.Flags[15];
+            set => Kdop.Flags[15] = !value;
         }
 
         /// <summary>

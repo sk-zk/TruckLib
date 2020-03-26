@@ -48,26 +48,26 @@ namespace TruckLib.ScsMap
 
         public bool ActiveDuringDay
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         public bool ActiveDuringNight
         {
-            get => Flags[2];
-            set => Flags[2] = value;
+            get => Kdop.Flags[2];
+            set => Kdop.Flags[2] = value;
         }
 
         public bool BounceAtEnd
         {
-            get => Flags[3];
-            set => Flags[3] = value;
+            get => Kdop.Flags[3];
+            set => Kdop.Flags[3] = value;
         }
 
         public bool FollowDir
         {
-            get => Flags[4];
-            set => Flags[4] = value;
+            get => Kdop.Flags[4];
+            set => Kdop.Flags[4] = value;
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool UseCurvedPath
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         /// <summary>
@@ -85,8 +85,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection
         {
-            get => Flags[5];
-            set => Flags[5] = value;
+            get => Kdop.Flags[5];
+            set => Kdop.Flags[5] = value;
         }
 
         /* This property has apparently been removed
@@ -100,8 +100,8 @@ namespace TruckLib.ScsMap
 
         public bool UseSound
         {
-            get => !Flags[9];
-            set => Flags[9] = !value;
+            get => !Kdop.Flags[9];
+            set => Kdop.Flags[9] = !value;
         }
 
         /// <summary>
@@ -109,44 +109,44 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IgnoreCutPlanes
         {
-            get => Flags[6];
-            set => Flags[6] = value;
+            get => Kdop.Flags[6];
+            set => Kdop.Flags[6] = value;
         }
 
         public bool IgnoreBoundingVolume
         {
-            get => Flags[7];
-            set => Flags[7] = value;
+            get => Kdop.Flags[7];
+            set => Kdop.Flags[7] = value;
         }
 
         public bool ActiveDuringBadWeather
         {
-            get => Flags[11];
-            set => Flags[11] = value;
+            get => Kdop.Flags[11];
+            set => Kdop.Flags[11] = value;
         }
 
         public bool ActiveDuringNiceWeather
         {
-            get => Flags[10];
-            set => Flags[10] = value;
+            get => Kdop.Flags[10];
+            set => Kdop.Flags[10] = value;
         }
 
         public bool PreferNonMovableAnimation
         {
-            get => Flags[12];
-            set => Flags[12] = value;
+            get => Kdop.Flags[12];
+            set => Kdop.Flags[12] = value;
         }
 
         public bool UniformItemPlacement
         {
-            get => Flags[13];
-            set => Flags[13] = value;
+            get => Kdop.Flags[13];
+            set => Kdop.Flags[13] = value;
         }
 
         public bool KeepOrientationOnBounce
         {
-            get => Flags[14];
-            set => Flags[14] = value;
+            get => Kdop.Flags[14];
+            set => Kdop.Flags[14] = value;
         }
 
         public Mover() : base()

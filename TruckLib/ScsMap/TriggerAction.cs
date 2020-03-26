@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap
             get => (ActionType)actionFlags.GetBitString(typeStart, typeLength);
             set
             {
-                actionFlags.SetBitString((uint)value, typeStart, typeLength);
+                actionFlags.SetBitString(typeStart, typeLength, (uint)value);
             }
         }
 

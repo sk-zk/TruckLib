@@ -42,33 +42,27 @@ namespace TruckLib.ScsMap
 
         internal virtual bool HasDataPayload => false;
 
-        internal KdopItem KdopItem { get; set; }
+        internal KdopItem Kdop { get; set; }
 
         /// <summary>
         /// The UID of this item. 
         /// </summary>
         public ulong Uid
         {
-            get => KdopItem.Uid;
-            set => KdopItem.Uid = value;
+            get => Kdop.Uid;
+            set => Kdop.Uid = value;
         }
 
         public float[] KdopMimimums
         {
-            get => KdopItem.Minimums;
-            set => KdopItem.Minimums = value;
+            get => Kdop.Minimums;
+            set => Kdop.Minimums = value;
         }
 
         public float[] KdopMaximums
         {
-            get => KdopItem.Maximums;
-            set => KdopItem.Maximums = value;
-        }
-
-        protected BitArray Flags
-        {
-            get => KdopItem.Flags;
-            set => KdopItem.Flags = value;
+            get => Kdop.Maximums;
+            set => Kdop.Maximums = value;
         }
 
         /// <summary>
@@ -76,8 +70,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         protected ushort ViewDistance
         {
-            get => KdopItem.ViewDistance;
-            set => KdopItem.ViewDistance = value;
+            get => Kdop.ViewDistance;
+            set => Kdop.ViewDistance = value;
         }
 
         protected abstract ushort DefaultViewDistance { get; }
@@ -87,10 +81,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public MapItem()
         {
-            KdopItem = new KdopItem(Utils.GenerateUuid());
+            Kdop = new KdopItem(Utils.GenerateUuid());
             if (!(this is UnresolvedItem))
             {
-                KdopItem.ViewDistance = DefaultViewDistance;
+                Kdop.ViewDistance = DefaultViewDistance;
                 itemFile = DefaultItemFile;
             }
         }

@@ -54,8 +54,8 @@ namespace TruckLib.ScsMap
         private readonly int noisePowerLength = 2;
         public TerrainNoise NoisePower
         {
-            get => (TerrainNoise)Flags.GetBitString(noisePowerStart, noisePowerLength);
-            set => Flags.SetBitString((uint)value, noisePowerStart, noisePowerLength);
+            get => (TerrainNoise)Kdop.Flags.GetBitString(noisePowerStart, noisePowerLength);
+            set => Kdop.Flags.SetBitString(noisePowerStart, noisePowerLength, (uint)value);
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IgnoreCutPlanes
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool LowPolyVegetation
         {
-            get => Flags[5];
-            set => Flags[5] = value;
+            get => Kdop.Flags[5];
+            set => Kdop.Flags[5] = value;
         }
 
         /// <summary>
@@ -90,8 +90,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool DetailVegetation
         {
-            get => !Flags[4];
-            set => Flags[4] = !value;
+            get => !Kdop.Flags[4];
+            set => Kdop.Flags[4] = !value;
         }
 
         /// <summary>
@@ -99,20 +99,20 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Collision
         {
-            get => !Flags[6];
-            set => Flags[6] = !value;
+            get => !Kdop.Flags[6];
+            set => Kdop.Flags[6] = !value;
         }
 
         public bool TerrainShadows
         {
-            get => !Flags[7];
-            set => Flags[7] = !value;
+            get => !Kdop.Flags[7];
+            set => Kdop.Flags[7] = !value;
         }
 
         public bool SmoothDetailVegetation
         {
-            get => Flags[9];
-            set => Flags[9] = value;
+            get => Kdop.Flags[9];
+            set => Kdop.Flags[9] = value;
         }
 
         /// <summary>
@@ -120,14 +120,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool VegetationCollision
         {
-            get => !Flags[10];
-            set => Flags[10] = !value;
+            get => !Kdop.Flags[10];
+            set => Kdop.Flags[10] = !value;
         }
 
         public bool InnerVegetationSphereSpace
         {
-            get => Flags[8];
-            set => Flags[8] = value;
+            get => Kdop.Flags[8];
+            set => Kdop.Flags[8] = value;
         }
 
         public BezierPatch() : base()

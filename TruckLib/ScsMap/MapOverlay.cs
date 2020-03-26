@@ -21,21 +21,21 @@ namespace TruckLib.ScsMap
 
         public bool[] HideForZoomLevel
         {
-            get => Flags.GetByteAsBools(0);
+            get => throw new NotImplementedException(); //Kdop.Flags.GetByteAsBools(0);
             // TODO: Allow setting values.
             set => throw new NotImplementedException();
         }
 
         public byte DlcGuard
         {
-            get => Flags.GetByte(1);
-            set => Flags.SetByte(1, value);
+            get => Kdop.Flags.GetByte(1);
+            set => Kdop.Flags.SetByte(1, value);
         }
 
         public OverlayType Type
         {
-            get => (OverlayType)Flags.GetByte(2);
-            set => Flags.SetByte(2, (byte)value);
+            get => (OverlayType)Kdop.Flags.GetByte(2);
+            set => Kdop.Flags.SetByte(2, (byte)value);
         }
 
         public static MapOverlay Add(IItemContainer map, Vector3 position, Token look, OverlayType type = OverlayType.RoadName)

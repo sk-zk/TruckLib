@@ -25,8 +25,8 @@ namespace TruckLib.ScsMap
      
         public bool InitHidden
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;

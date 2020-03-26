@@ -95,10 +95,10 @@ namespace TruckLib
         /// Sets multiple consecutive bits.
         /// </summary>
         /// <param name="arr"></param>
-        /// <param name="bitString">The bit string.</param>
         /// <param name="start">The start index.</param>
         /// <param name="length">The amount of bits to write.</param>
-        public static void SetBitString(this BitArray arr, uint bitString, int start, int length)
+        /// <param name="bitString">The bit string.</param>
+        public static void SetBitString(this BitArray arr, int start, int length, uint bitString)
         {
             for (int i = 0; i < length; i++)
             {

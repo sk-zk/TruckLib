@@ -28,14 +28,14 @@ namespace TruckLib.ScsMap
 
         public bool CrossroadArea
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         public bool RemoveSemaphores
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         public static TrafficArea Add(IItemContainer map, Vector3[] nodePositions, Token rule)

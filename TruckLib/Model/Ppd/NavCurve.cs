@@ -49,7 +49,7 @@ namespace TruckLib.Model.Ppd
         public byte PriorityModifier
         {
             get => (byte)Flags.GetBitString(16, 4);
-            set => Flags.SetBitString(value, 16, 4);
+            set => Flags.SetBitString(16, 4, value);
         }
 
         public bool ForceNoBlinker

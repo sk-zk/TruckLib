@@ -27,8 +27,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool OneSideOnly
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         /// <summary>

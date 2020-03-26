@@ -54,12 +54,15 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(sign.Look);
             w.Write(sign.Variant);
 
-            w.Write(sign.SignBoards.Length);
-            foreach (var board in sign.SignBoards)
+            w.Write((byte)sign.SignBoards.Length);
+            if (sign.SignBoards.Length > 0)
             {
-                w.Write(board.Road);
-                w.Write(board.City1);
-                w.Write(board.City2);
+                foreach (var board in sign.SignBoards)
+                {
+                    w.Write(board.Road);
+                    w.Write(board.City1);
+                    w.Write(board.City2);
+                }
             }
 
             w.WritePascalString(sign.SignTemplate);

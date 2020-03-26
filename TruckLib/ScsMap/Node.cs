@@ -214,7 +214,7 @@ namespace TruckLib.ScsMap
             } 
             else
             {
-                Sectors = Sectors.Append(sector).ToArray();
+                Sectors = Sectors.Push(sector);
             }
 
             Rotation = r.ReadQuaternion();

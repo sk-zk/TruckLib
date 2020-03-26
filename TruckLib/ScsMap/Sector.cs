@@ -263,7 +263,7 @@ namespace TruckLib.ScsMap
                 if(Map.Nodes.ContainsKey(node.Uid))
                 {
                     Map.Nodes[node.Uid].Sectors =
-                        Map.Nodes[node.Uid].Sectors.Append(this).ToArray();
+                        Map.Nodes[node.Uid].Sectors.Push(this);
                 }
                 else
                 {

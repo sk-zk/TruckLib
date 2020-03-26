@@ -13,6 +13,16 @@ namespace TruckLib
 {
     internal static class MiscExtensions
     {
+        public static T[] Push<T>(this T[] arr, T item)
+        {
+            if(arr is null)
+                return new[] { item };
+            
+            Array.Resize(ref arr, arr.Length + 1);
+            arr[^1] = item;
+            return arr;
+        }
+
         /// <summary>
         /// Clones an object.
         /// </summary>

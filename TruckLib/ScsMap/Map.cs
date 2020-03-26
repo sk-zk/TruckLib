@@ -467,9 +467,23 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            foreach (var kvp in Sectors)
+            var sectorNodes = new Dictionary<Sector, List<Node>>();
+            foreach(var sectorKvp in Sectors)
             {
-                kvp.Value.Save(sectorDirectory);
+                sectorNodes.Add(sectorKvp.Value, new List<Node>());
+            }
+            foreach(var nodeKvp in Nodes)
+            {
+                foreach(var sector in nodeKvp.Value.Sectors)
+                {
+                    sectorNodes[sector].Add(nodeKvp.Value);
+                }
+            }
+
+            foreach (var sectorKvp in Sectors)
+            {
+                Trace.WriteLine($"Writing sector {sectorKvp.Value.ToString()}");
+                sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value]);
             }
 
             var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");

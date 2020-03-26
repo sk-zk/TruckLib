@@ -276,11 +276,11 @@ namespace TruckLib.ScsMap
         /// Saves the sector as binary files to the specified directory.
         /// </summary>
         /// <param name="sectorDirectory">The sector directory.</param>
-        public void Save(string sectorDirectory)
+        public void Save(string sectorDirectory, List<Node> sectorNodes)
         {
-            WriteBase(GetFilename(BaseExtension), MapItems);
+            WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes);
             WriteData(GetFilename(DataExtension), MapItems);
-            WriteAux(GetFilename(AuxExtenstion), MapItems);
+            WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes);
             WriteDesc(GetFilename(DescExtension));
 
             string GetFilename(string ext)
@@ -294,14 +294,15 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="baseFilename">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
-        private void WriteBase(string baseFilename, Dictionary<ulong, MapItem> allItems)
+        private void WriteBase(string baseFilename, Dictionary<ulong, MapItem> allItems,
+            List<Node> sectorNodes)
         {
             var stream = new FileStream(baseFilename, FileMode.Create);
             using (var w = new BinaryWriter(stream))
             {
                 header.Serialize(w);
                 WriteItems(allItems, ItemFile.Base, w);
-                WriteNodes(w, ItemFile.Base);
+                WriteNodes(w, ItemFile.Base, sectorNodes);
             }
         }
 
@@ -310,14 +311,15 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="auxFilename">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
-        private void WriteAux(string auxFilename, Dictionary<ulong, MapItem> allItems)
+        private void WriteAux(string auxFilename, Dictionary<ulong, MapItem> allItems,
+            List<Node> sectorNodes)
         {
             var stream = new FileStream(auxFilename, FileMode.Create);
             using (var w = new BinaryWriter(stream))
             {
                 header.Serialize(w);
                 WriteItems(allItems, ItemFile.Aux, w);
-                WriteNodes(w, ItemFile.Aux);
+                WriteNodes(w, ItemFile.Aux, sectorNodes);
             }
         }
 
@@ -375,13 +377,12 @@ namespace TruckLib.ScsMap
         /// Writes the node part of a .base / .aux file.
         /// </summary>
         /// <param name="w">The writer.</param>
-        private void WriteNodes(BinaryWriter w, ItemFile file)
+        private void WriteNodes(BinaryWriter w, ItemFile file, List<Node> sectorNodes)
         {
             // get base nodes only || get aux nodes only
             List<Node> nodes = new List<Node>();
-            foreach (var kvp in Map.Nodes.Where(x => x.Value.Sectors.Contains(this)))
+            foreach (var node in sectorNodes)
             {
-                var node = kvp.Value;
                 if (!(node.ForwardItem is UnresolvedItem) 
                     && node.ForwardItem is MapItem fwItem 
                     && fwItem.ItemFile == file)

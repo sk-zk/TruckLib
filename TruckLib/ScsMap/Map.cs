@@ -171,7 +171,7 @@ namespace TruckLib.ScsMap
             }
 
             var node = new Node();
-            node.Sectors.Add(Sectors[sectorIdx]);
+            node.Sectors = node.Sectors.Append(Sectors[sectorIdx]).ToArray();
             node.Position = position;
             node.IsRed = isRed;
             Nodes.Add(node.Uid, node);

@@ -22,7 +22,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The sectors this node is in.
         /// </summary>
-        public List<Sector> Sectors { get; set; } = new List<Sector>();
+        // This is an array instead of a list to greatly reduce
+        // memory overhead
+        public Sector[] Sectors { get; set; }
 
         private Vector3 position = Vector3.Zero;
         /// <summary>
@@ -147,7 +149,7 @@ namespace TruckLib.ScsMap
         {
             // if the node isn't attached to a sector,
             // just move it
-            if (Sectors is null || Sectors.Count == 0)
+            if (Sectors is null || Sectors.Length == 0)
             {
                 Position = newPos;
             }
@@ -162,7 +164,7 @@ namespace TruckLib.ScsMap
                 if (!Sectors.Any(s => s.X == newSector.X && s.Z == newSector.Z))
                 {
                     map.AddSector(newSector); // just in case
-                    Sectors = new List<Sector> { map.Sectors[newSector] };
+                    Sectors = new Sector[] { map.Sectors[newSector] };
                 }
                 Position = newPos;
             }
@@ -206,7 +208,14 @@ namespace TruckLib.ScsMap
             }
             Sector = sector.Map.Sectors[sectorCoords];
             */
-            Sectors.Add(sector);
+            if (Sectors is null || Sectors.Length == 0)
+            {
+                Sectors = new[] { sector };
+            } 
+            else
+            {
+                Sectors = Sectors.Append(sector).ToArray();
+            }
 
             Rotation = r.ReadQuaternion();
 

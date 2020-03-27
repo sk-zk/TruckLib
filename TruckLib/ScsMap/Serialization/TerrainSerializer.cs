@@ -60,12 +60,10 @@ namespace TruckLib.ScsMap.Serialization
             t.NodeOffset = r.ReadVector3();
             t.ForwardNodeOffset = r.ReadVector3();
 
-            // road length
             t.Length = r.ReadSingle();
 
             t.RandomSeed = r.ReadUInt32();
 
-            // railings
             for (int i = 0; i < t.Railings.Models.Length; i++)
             {
                 t.Railings.Models[i].Model = r.ReadToken();
@@ -80,11 +78,10 @@ namespace TruckLib.ScsMap.Serialization
                 side.Terrain.Coefficient = r.ReadSingle();
 
                 // prev_profile
-                // TODO: What is this?
-                r.ReadToken();
-
                 // prev_profile_coef
-                // TODO: What is this?
+                // Ignore these because we'll only use them
+                // on serialization, which will do it dynamically
+                r.ReadToken();
                 r.ReadSingle();
 
                 foreach (var veg in side.Vegetation)
@@ -154,7 +151,6 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(t.Node.Uid);
             w.Write(t.ForwardNode.Uid);
 
-            // node offsets
             w.Write(t.NodeOffset);
             w.Write(t.ForwardNodeOffset);
 
@@ -168,26 +164,15 @@ namespace TruckLib.ScsMap.Serialization
                 w.Write((short)(railing.Offset * modelOffsetFactor));
             }
 
-            foreach (var side in new[] { t.Right, t.Left })
+            TerrainSide bwRight = null;
+            TerrainSide bwLeft = null;
+            if(t.BackwardItem is Terrain bwTerrain)
             {
-                w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
-                w.Write(side.Terrain.Profile);
-                w.Write(side.Terrain.Coefficient);
-
-                // prev_profile
-                w.Write(0L);
-
-                // prev_profile_coefficient
-                w.Write(1f);
-
-                foreach (var veg in side.Vegetation)
-                {
-                    veg.Serialize(w);
-                }
-
-                w.Write((ushort)(side.NoDetailVegetationFrom * noDetVegFromToFactor));
-                w.Write((ushort)(side.NoDetailVegetationTo * noDetVegFromToFactor));
+                bwRight = bwTerrain.Right;
+                bwLeft = bwTerrain.Left;
             }
+            WriteThatTerrainAndVegetationPart(t.Right, bwRight);
+            WriteThatTerrainAndVegetationPart(t.Left, bwLeft);
 
             WriteObjectList(w, t.VegetationSpheres);
 
@@ -201,6 +186,36 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(t.Right.UVRotation);
             w.Write(t.Left.UVRotation);
+
+            void WriteThatTerrainAndVegetationPart(TerrainSide side, TerrainSide bwTerrainSide)
+            {
+                w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
+                w.Write(side.Terrain.Profile);
+                w.Write(side.Terrain.Coefficient);
+
+                if (bwTerrainSide is null)
+                {
+                    // prev profile
+                    w.Write(0UL);
+                    // prev coef
+                    w.Write(0f);
+                }
+                else
+                {
+                    // prev profile
+                    w.Write(bwTerrainSide.Terrain.Profile);
+                    // prev coef
+                    w.Write(bwTerrainSide.Terrain.Coefficient);
+                }
+
+                foreach (var veg in side.Vegetation)
+                {
+                    veg.Serialize(w);
+                }
+
+                w.Write((ushort)(side.NoDetailVegetationFrom * noDetVegFromToFactor));
+                w.Write((ushort)(side.NoDetailVegetationTo * noDetVegFromToFactor));
+            }
         }
     }
 }

@@ -47,7 +47,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The nodes belonging to this prefab.
         /// </summary>
-        public List<Node> Nodes = new List<Node>();
+        public List<Node> Nodes = new List<Node>(2);
 
         /// <summary>
         /// The index of the origin node.
@@ -478,25 +478,28 @@ namespace TruckLib.ScsMap
         {
             for (int i = 0; i < Nodes.Count; i++)
             {
-                if (Nodes[i] is UnresolvedNode && allNodes.ContainsKey(Nodes[i].Uid))
+                if (Nodes[i] is UnresolvedNode
+                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
                 {
-                    Nodes[i] = allNodes[Nodes[i].Uid];
+                    Nodes[i] = resolvedNode;
                 }
             }
         }
 
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (FerryLink is UnresolvedItem && allItems.ContainsKey(FerryLink.Uid))
+            if (FerryLink is UnresolvedItem && 
+                allItems.TryGetValue(FerryLink.Uid, out var resolvedFerry))
             {
-                FerryLink = allItems[FerryLink.Uid];
+                FerryLink = resolvedFerry;
             }
 
             for (int i = 0; i < SlaveItems.Count; i++)
             {
-                if (SlaveItems[i] is UnresolvedItem && allItems.ContainsKey(SlaveItems[i].Uid))
+                if (SlaveItems[i] is UnresolvedItem 
+                    && allItems.TryGetValue(SlaveItems[i].Uid, out var resolvedSlaveItem))
                 {
-                    SlaveItems[i] = allItems[SlaveItems[i].Uid];
+                    SlaveItems[i] = resolvedSlaveItem;
                 }
             }
         }

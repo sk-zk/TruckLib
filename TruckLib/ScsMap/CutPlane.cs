@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Node> Nodes { get; set; } = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>(2);
 
         /// <summary>
         /// Determines if the cut plane is active in one direction only
@@ -47,7 +47,7 @@ namespace TruckLib.ScsMap
             // which just links to itself, so I'm creating the nodes in reverse
             // to create the references
             var posReverse = nodePositions.Reverse().ToArray(); 
-            var nodes = new List<Node>();
+            var nodes = new List<Node>(nodePositions.Length);
             for(int i = 0; i < posReverse.Count(); i++)
             {
                 var node = map.AddNode(posReverse[i]);
@@ -119,9 +119,10 @@ namespace TruckLib.ScsMap
         {
             for (int i = 0; i < Nodes.Count; i++)
             {
-                if (Nodes[i] is UnresolvedNode && allNodes.ContainsKey(Nodes[i].Uid))
+                if (Nodes[i] is UnresolvedNode && 
+                    allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
                 {
-                    Nodes[i] = allNodes[Nodes[i].Uid];
+                    Nodes[i] = resolvedNode;
                 }
             }
         }

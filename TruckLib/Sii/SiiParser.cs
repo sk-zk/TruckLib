@@ -153,9 +153,9 @@ namespace TruckLib.Sii
                 if (attrib.Name.EndsWith("[]")) // list type
                 {
                     var arrName = attrib.Name.Substring(0, attrib.Name.Length - 2);
-                    if (unit.Attributes.ContainsKey(arrName))
+                    if (unit.Attributes.TryGetValue(arrName, out var existingAttrib))
                     {
-                        (unit.Attributes[arrName] as List<object>).Add(attrib.Value);
+                        (existingAttrib as List<object>).Add(attrib.Value);
                     }
                     else
                     {

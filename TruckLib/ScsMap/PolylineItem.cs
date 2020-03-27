@@ -189,13 +189,13 @@ namespace TruckLib.ScsMap
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
-            if (allNodes.ContainsKey(ForwardNode.Uid))
+            if (allNodes.TryGetValue(ForwardNode.Uid, out var resolvedFw))
             {
-                ForwardNode = allNodes[ForwardNode.Uid];
+                ForwardNode = resolvedFw;
             }
-            if (allNodes.ContainsKey(Node.Uid))
+            if (allNodes.TryGetValue(Node.Uid, out var resolvedBw))
             {
-                Node = allNodes[Node.Uid];
+                Node = resolvedBw;
             }
         }
     }

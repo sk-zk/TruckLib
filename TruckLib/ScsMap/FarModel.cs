@@ -72,17 +72,19 @@ namespace TruckLib.ScsMap
 
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
-            if (Node is UnresolvedNode && allNodes.ContainsKey(Node.Uid))
+            if (Node is UnresolvedNode && 
+                allNodes.TryGetValue(Node.Uid, out var resolvedNode))
             {
-                Node = allNodes[Node.Uid];
+                Node = resolvedNode;
             }
 
             for(int i = 0; i < Models.Length; i++)
             {
                 if (Models[i].PerspectiveNode is UnresolvedNode 
-                    && allNodes.ContainsKey(Models[i].PerspectiveNode.Uid))
+                    && allNodes.TryGetValue(Models[i].PerspectiveNode.Uid, 
+                    out var resolvedPerspNode))
                 {
-                    Models[i].PerspectiveNode = allNodes[Models[i].PerspectiveNode.Uid];
+                    Models[i].PerspectiveNode = resolvedPerspNode;
                 }
             }
         } 

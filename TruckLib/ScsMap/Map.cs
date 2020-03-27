@@ -124,14 +124,12 @@ namespace TruckLib.ScsMap
         /// <returns>The new sector.</returns>
         public Sector AddSector(int x, int z)
         {
-            if (Sectors.ContainsKey((x, z)))
-            {
-                return Sectors[(x, z)];
-            }
-
-            var sector = new Sector(x, z, this);
-            Sectors.Add((x, z), sector);
-            return sector;
+            if (Sectors.TryGetValue((x, z), out var existing))
+                return existing;
+            
+             var sector = new Sector(x, z, this);
+             Sectors.Add((x, z), sector);
+             return sector;           
         }
 
         /// <summary>
@@ -274,8 +272,8 @@ namespace TruckLib.ScsMap
         {
             foreach (var sectorKvp in Sectors)
             {
-                if (sectorKvp.Value.MapItems.ContainsKey(uid))
-                    return sectorKvp.Value.MapItems[uid];
+                if (sectorKvp.Value.MapItems.TryGetValue(uid, out var item))
+                    return item;
             }
             return null;
         }

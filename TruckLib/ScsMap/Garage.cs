@@ -46,9 +46,9 @@ namespace TruckLib.ScsMap
             for (int i = 0; i < TrailerSpawnPoints.Count; i++)
             {
                 if (TrailerSpawnPoints[i] is UnresolvedNode 
-                    && allNodes.ContainsKey(TrailerSpawnPoints[i].Uid))
+                    && allNodes.TryGetValue(TrailerSpawnPoints[i].Uid, out var resolvedNode))
                 {
-                    TrailerSpawnPoints[i] = allNodes[TrailerSpawnPoints[i].Uid];
+                    TrailerSpawnPoints[i] = resolvedNode;
                 }
             }
         }

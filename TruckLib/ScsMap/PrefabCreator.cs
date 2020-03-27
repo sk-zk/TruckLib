@@ -195,8 +195,8 @@ namespace TruckLib.ScsMap
         /// <returns>A list of map nodes.</returns>
         private List<Node> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType)
         {
-            var list = new List<Node>();
             var selected = clonedPoints.Where(x => x.Type == spawnPointType).ToList();
+            var list = new List<Node>(selected.Count);
             foreach (var spawnPoint in selected)
             {
                 var spawnPos = GetAbsolutePosition(spawnPoint.Position);

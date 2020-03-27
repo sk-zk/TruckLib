@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => 120;
 
-        public List<Node> Nodes { get; set; } = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>(2);
 
         public Token NamePrefix { get; set; } = "walker_";
 
@@ -99,9 +99,10 @@ namespace TruckLib.ScsMap
         {
             for (int i = 0; i < Nodes.Count; i++)
             {
-                if (Nodes[i] is UnresolvedNode && allNodes.ContainsKey(Nodes[i].Uid))
+                if (Nodes[i] is UnresolvedNode
+                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
                 {
-                    Nodes[i] = allNodes[Nodes[i].Uid];
+                    Nodes[i] = resolvedNode;
                 }
             }
         }

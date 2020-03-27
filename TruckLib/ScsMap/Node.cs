@@ -259,13 +259,15 @@ namespace TruckLib.ScsMap
         {
             // uses the field instead of the property to not trigger recalc,
             // which we don't want while loading an existing map
-            if (forwardItem is UnresolvedItem && allItems.ContainsKey(forwardItem.Uid))
+            if (forwardItem is UnresolvedItem 
+                && allItems.TryGetValue(forwardItem.Uid, out var resolvedFw))
             {
-                forwardItem = allItems[forwardItem.Uid];
+                forwardItem = resolvedFw;
             }
-            if (backwardItem is UnresolvedItem && allItems.ContainsKey(backwardItem.Uid))
+            if (backwardItem is UnresolvedItem 
+                && allItems.TryGetValue(backwardItem.Uid, out var resolvedBw))
             {
-                backwardItem = allItems[backwardItem.Uid];
+                backwardItem = resolvedBw;
             }
         }
 

@@ -229,6 +229,7 @@ namespace TruckLib.ScsMap
         private void ReadItems(BinaryReader r, ItemFile file)
         {
             var itemCount = r.ReadUInt32();
+            MapItems.EnsureCapacity(MapItems.Count + (int)itemCount);
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();
@@ -261,10 +262,9 @@ namespace TruckLib.ScsMap
             {
                 var node = new Node();
                 node.ReadFromStream(this, r);
-                if (Map.Nodes.ContainsKey(node.Uid))
+                if (Map.Nodes.TryGetValue(node.Uid, out var existingNode))
                 {
-                    Map.Nodes[node.Uid].Sectors =
-                        Map.Nodes[node.Uid].Sectors.Push(this);
+                    existingNode.Sectors = existingNode.Sectors.Push(this);
                 }
                 else
                 {
@@ -387,7 +387,7 @@ namespace TruckLib.ScsMap
         private void WriteNodes(BinaryWriter w, ItemFile file, List<Node> sectorNodes)
         {
             // get base nodes only || get aux nodes only
-            List<Node> nodes = new List<Node>();
+            List<Node> nodes = new List<Node>(32);
             foreach (var node in sectorNodes)
             {
                 if (!(node.ForwardItem is UnresolvedItem)

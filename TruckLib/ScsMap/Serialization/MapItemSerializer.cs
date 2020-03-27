@@ -88,8 +88,8 @@ namespace TruckLib.ScsMap.Serialization
 
         public static List<Node> ReadNodeRefList(BinaryReader r)
         {
-            var list = new List<Node>();
             var count = r.ReadUInt32();
+            var list = new List<Node>((int)count);
             for (int i = 0; i < count; i++)
             {
                 list.Add(new UnresolvedNode(r.ReadUInt64()));

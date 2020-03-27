@@ -78,9 +78,10 @@ namespace TruckLib.ScsMap
         {
             for (int i = 0; i < nodeList.Count; i++)
             {
-                if (nodeList[i] is UnresolvedNode && allNodes.ContainsKey(nodeList[i].Uid))
+                if (nodeList[i] is UnresolvedNode && 
+                    allNodes.TryGetValue(nodeList[i].Uid, out var resolvedNode))
                 {
-                    nodeList[i] = allNodes[nodeList[i].Uid];
+                    nodeList[i] = resolvedNode;
                 }
             }
         }

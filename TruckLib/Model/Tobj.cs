@@ -44,7 +44,7 @@ namespace TruckLib.Model
 
         public byte ColorSpace { get; set; }
 
-        public List<string> TexturePaths { get; set; } = new List<string>();
+        public List<string> TexturePaths { get; set; } = new List<string>(1);
 
         private uint unknown0;
         private uint unknown1;

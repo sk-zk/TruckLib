@@ -48,9 +48,10 @@ namespace TruckLib.ScsMap
         /// <param name="allNodes">A list of all nodes in the entire map.</param>
         public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
-            if (Node is UnresolvedNode && allNodes.ContainsKey(Node.Uid))
+            if (Node is UnresolvedNode 
+                && allNodes.TryGetValue(Node.Uid, out var resolvedNode))
             {
-                Node = allNodes[Node.Uid];
+                Node = resolvedNode;
             }
         }
     }

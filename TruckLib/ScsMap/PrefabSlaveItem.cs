@@ -37,9 +37,10 @@ namespace TruckLib.ScsMap
 
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (PrefabLink is UnresolvedItem && allItems.ContainsKey(PrefabLink.Uid))
+            if (PrefabLink is UnresolvedItem 
+                && allItems.TryGetValue(PrefabLink.Uid, out var resolvedPrefab))
             {
-                PrefabLink = allItems[PrefabLink.Uid];
+                PrefabLink = resolvedPrefab;
             }
         }
     }

@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap
 
         public uint Count { get; set; } = 1;
 
-        public List<Node> Nodes { get; set; } = new List<Node>();
+        public List<Node> Nodes { get; set; } = new List<Node>(2);
 
         public List<float> Lengths { get; set; } = new List<float>();
 
@@ -190,9 +190,10 @@ namespace TruckLib.ScsMap
         {
             for (int i = 0; i < Nodes.Count; i++)
             {
-                if (Nodes[i] is UnresolvedNode && allNodes.ContainsKey(Nodes[i].Uid))
+                if (Nodes[i] is UnresolvedNode 
+                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
                 {
-                    Nodes[i] = allNodes[Nodes[i].Uid];
+                    Nodes[i] = resolvedNode;
                 }
             }
         }

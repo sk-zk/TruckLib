@@ -48,9 +48,9 @@ namespace TruckLib.HashFs
         {
             path = RemoveTrailingSlash(path);
             var hash = HashPath(path);
-            if(entries.ContainsKey(hash))
+            if(entries.TryGetValue(hash, out var entry))
             {
-                return entries[hash].IsDirectory ? 
+                return entry.IsDirectory ? 
                     EntryType.Directory : EntryType.File;
             }
             return EntryType.NotFound;

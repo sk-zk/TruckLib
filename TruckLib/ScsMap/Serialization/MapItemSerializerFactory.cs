@@ -14,9 +14,9 @@ namespace TruckLib.ScsMap.Serialization
 
         public static MapItemSerializer Get(ItemType type)
         {
-            if (cached.ContainsKey(type))
+            if (cached.TryGetValue(type, out var obj))
             {
-                return cached[type];
+                return obj;
             }
             else
             {

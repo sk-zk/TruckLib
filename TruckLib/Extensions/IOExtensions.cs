@@ -140,7 +140,7 @@ namespace TruckLib
         /// <returns></returns>
         public static List<T> ReadObjectList<T>(this BinaryReader r, uint count) where T : new()
         {
-            var list = new List<T>();
+            var list = new List<T>((int)count);
             if (count == 0) return list;
 
             if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // trucklib objects

@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var trj = new Trajectory();
+            var trj = new Trajectory(false);
             ReadKdopItem(r, trj);
 
             trj.Nodes = ReadNodeRefList(r);
@@ -20,6 +20,7 @@ namespace TruckLib.ScsMap.Serialization
             
             // checkpoints
             var checkpointCount = r.ReadUInt32();
+            trj.Checkpoints = new List<TrajectoryCheckpoint>((int)checkpointCount);
             for (int i = 0; i < checkpointCount; i++)
             {
                 var checkpoint = new TrajectoryCheckpoint

@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var walker = new Walker();
+            var walker = new Walker(false);
             ReadKdopItem(r, walker);
 
             walker.NamePrefix = r.ReadToken();

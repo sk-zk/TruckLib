@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap
 
         public Token Port { get; set; }
 
-        public Vector3 UnloadOffset { get; set; } = Vector3.Zero;
+        public Vector3 UnloadOffset { get; set; }
 
         public MapItem PrefabLink { get; set; }
 
@@ -30,6 +30,18 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[0];
             set => Kdop.Flags[0] = value;
+        }
+
+        public Ferry() : base() { }
+
+        internal Ferry(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
         }
 
         public static Ferry Add(IItemContainer map, Vector3 position, Token port)

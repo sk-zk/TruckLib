@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var ferry = new Ferry();
+            var ferry = new Ferry(false);
             ReadKdopItem(r, ferry);
 
             ferry.Port = r.ReadToken();

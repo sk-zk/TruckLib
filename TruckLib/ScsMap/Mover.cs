@@ -29,22 +29,22 @@ namespace TruckLib.ScsMap
 
         public Token Look { get; set; }
 
-        public float Speed { get; set; } = 1;
+        public float Speed { get; set; }
 
         /// <summary>
         /// Sets for how long objects pause at the end of the path, in seconds.
         /// </summary>
-        public float DelayAtEnd { get; set; } = 0;
+        public float DelayAtEnd { get; set; }
 
-        public float Width { get; set; } = 0;
+        public float Width { get; set; }
 
-        public uint Count { get; set; } = 1;
+        public uint Count { get; set; }
 
-        public List<Node> Nodes { get; set; } = new List<Node>(2);
+        public List<Node> Nodes { get; set; } 
 
-        public List<float> Lengths { get; set; } = new List<float>();
+        public List<float> Lengths { get; set; } 
 
-        public List<Token> Tags { get; set; } = new List<Token>();
+        public List<Token> Tags { get; set; }
 
         public bool ActiveDuringDay
         {
@@ -97,7 +97,6 @@ namespace TruckLib.ScsMap
             set => Flags[8] = value;
         }
         */
-
         public bool UseSound
         {
             get => !Kdop.Flags[9];
@@ -149,14 +148,27 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[14] = value;
         }
 
-        public Mover() : base()
+        public Mover() : base() { }
+
+        internal Mover(bool initFields) : base(initFields)
         {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
             ActiveDuringDay = true;
             ActiveDuringNight = true;
             ActiveDuringNiceWeather = true;
             ActiveDuringBadWeather = true;
             FollowDir = true;
             UseCurvedPath = true;
+            Nodes = new List<Node>(2);
+            Lengths = new List<float>();
+            Tags = new List<Token>();
+            Speed = 1;
+            Count = 1;
         }
 
         /// <summary>

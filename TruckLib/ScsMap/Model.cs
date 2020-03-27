@@ -49,26 +49,25 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Nibble ColorVariant
         {
-            get => (Nibble)Kdop.Flags.GetBitString(colorVariantPos, colorVariantLength);
-            set
-            {
-                Kdop.Flags.SetBitString(colorVariantPos, colorVariantLength, (uint)value);
-            }
+            get => (Nibble)Kdop.Flags.GetBitString(
+                colorVariantPos, colorVariantLength);
+            set => Kdop.Flags.SetBitString(
+                colorVariantPos, colorVariantLength, (uint)value);           
         }
 
         /// <summary>
         /// The relative scale of the model.
         /// </summary>
-        public Vector3 Scale { get; set; } = new Vector3(1f, 1f, 1f);
+        public Vector3 Scale { get; set; }
 
         /// <summary>
         /// Unit names of additional parts used by the model.
         /// </summary>
-        public List<Token> AdditionalParts { get; set; } = new List<Token>();
+        public List<Token> AdditionalParts { get; set; }
 
         public Token TerrainMaterial { get; set; }
 
-        public Color TerrainColor { get; set; } = Color.FromArgb(0x00ffffff);
+        public Color TerrainColor { get; set; }
 
         private int staticLodPos = 4;
         private int staticLodLength = 2;
@@ -149,6 +148,21 @@ namespace TruckLib.ScsMap
         {
             get => !Kdop.Flags[15];
             set => Kdop.Flags[15] = !value;
+        }
+
+        public Model() : base() { }
+
+        internal Model(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Scale = new Vector3(1f, 1f, 1f);
+            AdditionalParts = new List<Token>();
+            TerrainColor = Color.FromArgb(0x00ffffff);
         }
 
         /// <summary>

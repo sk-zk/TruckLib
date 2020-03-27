@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap
 
         public float ActivationDistance { get; set; }
 
-        internal FlagField SoundFlags = new FlagField();
+        internal FlagField SoundFlags;
 
         public bool Stream
         {
@@ -45,10 +45,19 @@ namespace TruckLib.ScsMap
             set => SoundFlags[1] = value;
         }
 
-        public Sound()
+        public Sound() : base() { }
+
+        internal Sound(bool initFields) : base(initFields)
         {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
             Looped = true;
             ThreeDimensional = true;
+            SoundFlags = new FlagField();
         }
 
         public static Sound Add(IItemContainer map, Vector3 position, Token name, float fullIntensityDistance, 

@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var sound = new Sound();
+            var sound = new Sound(false);
             ReadKdopItem(r, sound);
 
             sound.Name = r.ReadToken();

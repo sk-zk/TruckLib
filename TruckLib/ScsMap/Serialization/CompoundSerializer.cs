@@ -9,13 +9,13 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var comp = new Compound();
+            var comp = new Compound(false);
             ReadKdopItem(r, comp);
 
             comp.Node = new UnresolvedNode(r.ReadUInt64());
 
             var itemCount = r.ReadUInt32();
-            
+            comp.CompoundItems = new List<MapItem>((int)itemCount);
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();
@@ -26,9 +26,10 @@ namespace TruckLib.ScsMap.Serialization
             }
 
             var nodeCount = r.ReadUInt32();
+            comp.CompoundNodes = new List<Node>((int)nodeCount);
             for (int i = 0; i < nodeCount; i++)
             {
-                var node = new Node();
+                var node = new Node(false);
                 node.ReadFromStream(null, r);
                 if (!comp.CompoundNodes.Contains(node))
                 {

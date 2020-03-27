@@ -15,7 +15,20 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The nodes of the polygon.
         /// </summary>
-        public List<Node> Nodes { get; set; } = new List<Node>(2);
+        public List<Node> Nodes { get; set; }
+
+        public PolygonItem() : base() { }
+
+        internal PolygonItem(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Nodes = new List<Node>(2);
+        }
 
         /// <summary>
         /// Base method for adding a new PolygonItem to the map.

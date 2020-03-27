@@ -23,8 +23,9 @@ namespace TruckLib.ScsMap
 
         public UnresolvedItem() { }
 
-        public UnresolvedItem(ulong uid)
+        public UnresolvedItem(ulong uid) : base(false)
         {
+            Kdop = new KdopItem();
             Uid = uid;
         }
 

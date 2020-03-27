@@ -81,12 +81,19 @@ namespace TruckLib.ScsMap
         /// </summary>
         public MapItem()
         {
+            Init();
+        }
+
+        internal MapItem(bool initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected virtual void Init()
+        {
             Kdop = new KdopItem(Utils.GenerateUuid());
-            if (!(this is UnresolvedItem))
-            {
-                Kdop.ViewDistance = DefaultViewDistance;
-                itemFile = DefaultItemFile;
-            }
+            Kdop.ViewDistance = DefaultViewDistance;
+            itemFile = DefaultItemFile;          
         }
 
         /// <summary>

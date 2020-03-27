@@ -16,8 +16,17 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public PrefabSlaveItem()
+        public PrefabSlaveItem() : base() { }
+
+        internal PrefabSlaveItem(bool initFields) : base(initFields)
         {
+            if (initFields) Init();
+            
+        }
+
+        protected override void Init()
+        {
+            base.Init();
             Kdop.Flags[31] = true; // always set to true, no idea what it means though
         }
 

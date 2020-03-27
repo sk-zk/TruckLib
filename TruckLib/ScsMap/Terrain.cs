@@ -54,7 +54,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The terrain quad density. Roads would do this with hi-poly and superfine flags.
         /// </summary>
-        public StepSize StepSize { get; set; } = StepSize.Meters4;
+        public StepSize StepSize { get; set; }
 
         public Railings Railings { get; set; } = new Railings();
 
@@ -67,11 +67,10 @@ namespace TruckLib.ScsMap
         /// The vegetation spheres on this terrain.
         /// </summary>
         public List<VegetationSphere> VegetationSpheres { get; set; }
-            = new List<VegetationSphere>();
 
-        public Vector3 NodeOffset { get; set; } = Vector3.Zero;
+        public Vector3 NodeOffset { get; set; }
 
-        public Vector3 ForwardNodeOffset { get; set; } = Vector3.Zero;
+        public Vector3 ForwardNodeOffset { get; set; }
 
         /// <summary>
         /// Determines if the item is reflected in water.
@@ -103,6 +102,20 @@ namespace TruckLib.ScsMap
         public bool TerrainShadows = true;
 
         public bool SmoothDetailVegetation = false;
+
+        public Terrain() : base() { }
+
+        internal Terrain(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            StepSize = StepSize.Meters4;
+            VegetationSpheres = new List<VegetationSphere>();
+        }
 
         /// <summary>
         /// Adds a single terrain segment to the map.

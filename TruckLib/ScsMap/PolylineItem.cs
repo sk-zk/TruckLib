@@ -39,6 +39,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         public float Length { get; set; }
 
+        public PolylineItem() : base() { }
+
+        internal PolylineItem(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
         /// <summary>
         /// Creates a single, unconnected item. 
         /// <para>This method will create an empty item, add two new nodes to 

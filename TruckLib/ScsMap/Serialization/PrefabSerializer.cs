@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public override MapItem Deserialize(BinaryReader r)
         {
-            var pf = new Prefab();
+            var pf = new Prefab(false);
             ReadKdopItem(r, pf);
 
             pf.Model = r.ReadToken();

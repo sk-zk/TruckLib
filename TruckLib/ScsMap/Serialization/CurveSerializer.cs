@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var curve = new Curve();
+            var curve = new Curve(false);
             ReadKdopItem(r, curve);
 
             curve.Model = r.ReadToken();

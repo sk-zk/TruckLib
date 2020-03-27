@@ -19,7 +19,9 @@ namespace TruckLib.ScsMap
 
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
-        public List<Token> Tags { get; set; } = new List<Token>();
+        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
+
+        public List<Token> Tags { get; set; }
 
         public Token Model { get; set; } = new Token();
      
@@ -29,7 +31,18 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
-        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
+        public AnimatedModel() : base() { }
+
+        internal AnimatedModel(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Tags = new List<Token>();
+        }
 
         public static AnimatedModel Add(IItemContainer map, Vector3 position, Token model, List<Token> tags)
         {

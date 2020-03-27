@@ -18,6 +18,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void ReadKdopItem(BinaryReader r, MapItem item)
         {
+            item.Kdop = new KdopItem();
             item.Kdop.Uid = r.ReadUInt64();
             ReadKdopBounds(r, item);
             item.Kdop.Flags = new FlagField(r.ReadUInt32());

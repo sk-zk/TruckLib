@@ -20,8 +20,9 @@ namespace TruckLib.ScsMap.Serialization
 
         public override MapItem Deserialize(BinaryReader r)
         {
-            var road = new Road();
+            var road = new Road(false);
 
+            road.Kdop = new KdopItem();
             road.Uid = r.ReadUInt64();
             ReadKdopBounds(r, road);
 
@@ -289,6 +290,7 @@ namespace TruckLib.ScsMap.Serialization
             road.Right.NoDetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
 
             var vegSphereCount = r.ReadUInt32();
+            road.VegetationSpheres = new List<VegetationSphere>((int)vegSphereCount);
             for (int i = 0; i < vegSphereCount; i++)
             {
                 var sphere = new VegetationSphere();

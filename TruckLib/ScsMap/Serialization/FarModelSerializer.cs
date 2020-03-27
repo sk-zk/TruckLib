@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public override MapItem Deserialize(BinaryReader r)
         {
-            var fm = new FarModel();
+            var fm = new FarModel(false);
             ReadKdopItem(r, fm);
 
             fm.Width = r.ReadSingle() * sizeFactor;

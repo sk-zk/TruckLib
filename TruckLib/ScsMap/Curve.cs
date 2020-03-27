@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap
 
         public Token Model { get; set; }
 
-        public Token Look { get; set; } = "default";
+        public Token Look { get; set; }
 
         public Token FirstPart { get; set; }
 
@@ -44,13 +44,13 @@ namespace TruckLib.ScsMap
 
         public uint RandomSeed { get; set; }
 
-        public float Stretch { get; set; } = 1f;
+        public float Stretch { get; set; }
 
-        public float FixedStep { get; set; } = 0f;
+        public float FixedStep { get; set; }
 
-        public float Scale { get; set; } = 1;
+        public float Scale { get; set; }
 
-        public List<float> HeightOffsets { get; set; } = new List<float>();
+        public List<float> HeightOffsets { get; set; }
 
         /// <summary>
         /// Determines if the item is reflected in water.
@@ -137,6 +137,22 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[22];
             set => Kdop.Flags[22] = value;
+        }
+
+        public Curve() : base() { }
+
+        internal Curve(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Look = "default";
+            HeightOffsets = new List<float>();
+            Stretch = 1f;
+            Scale = 1f;
         }
 
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)

@@ -15,12 +15,25 @@ namespace TruckLib.ScsMap
     {
         public override ItemType ItemType => ItemType.Service;
 
-        public List<Node> Nodes { get; set; } = new List<Node>();
+        public List<Node> Nodes { get; set; }
 
         public ServiceType ServiceType
         {
             get => (ServiceType)Kdop.Flags.GetByte(0);
             set => Kdop.Flags.SetByte(0, (byte)value);
+        }
+
+        public Service() : base() { }
+
+        internal Service(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Nodes = new List<Node>();
         }
 
         public static Service Add(IItemContainer map, Prefab parent, Vector3 position)

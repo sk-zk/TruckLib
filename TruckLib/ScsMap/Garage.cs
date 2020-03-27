@@ -22,7 +22,20 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint BuyMode { get; set; }
 
-        public List<Node> TrailerSpawnPoints { get; set; } = new List<Node>();
+        public List<Node> TrailerSpawnPoints { get; set; }
+
+        public Garage() : base() { }
+
+        internal Garage(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            TrailerSpawnPoints = new List<Node>();
+        }
 
         public static Garage Add(IItemContainer map, Prefab parent, Vector3 position)
         {

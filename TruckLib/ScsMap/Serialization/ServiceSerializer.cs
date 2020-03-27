@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var service = new Service();
+            var service = new Service(false);
             ReadKdopItem(r, service);
 
             service.Node = new UnresolvedNode(r.ReadUInt64());

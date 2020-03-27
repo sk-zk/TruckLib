@@ -38,6 +38,18 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags.SetByte(2, (byte)value);
         }
 
+        public MapOverlay() : base() { }
+
+        internal MapOverlay(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+        }
+
         public static MapOverlay Add(IItemContainer map, Vector3 position, Token look, OverlayType type = OverlayType.RoadName)
         {
             var overlay = Add<MapOverlay>(map, position);

@@ -260,7 +260,7 @@ namespace TruckLib.ScsMap
             var nodeCount = r.ReadInt32();
             for (int i = 0; i < nodeCount; i++)
             {
-                var node = new Node();
+                var node = new Node(false);
                 node.ReadFromStream(this, r);
                 if (Map.Nodes.TryGetValue(node.Uid, out var existingNode))
                 {

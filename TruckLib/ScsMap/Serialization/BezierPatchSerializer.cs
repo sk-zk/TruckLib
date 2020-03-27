@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Text;
 
 namespace TruckLib.ScsMap.Serialization
@@ -11,8 +12,11 @@ namespace TruckLib.ScsMap.Serialization
 
         public override MapItem Deserialize(BinaryReader r)
         {
-            var bp = new BezierPatch();
+            var bp = new BezierPatch(false);
             ReadKdopItem(r, bp);
+
+            bp.ControlPoints = new Vector3[BezierPatch.ControlPointCols,
+                BezierPatch.ControlPointRows];
 
             for (int x = 0; x < BezierPatch.ControlPointCols; x++)
             {
@@ -40,6 +44,7 @@ namespace TruckLib.ScsMap.Serialization
             }
             bp.VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
+            bp.QuadData = new TerrainQuadData();
             bp.QuadData.Deserialize(r);
 
             return bp;

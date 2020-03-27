@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Token> Tags { get; set; } = new List<Token>();
+        public List<Token> Tags { get; set; }
 
         public Token Rule { get; set; }
 
@@ -36,6 +36,19 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[1];
             set => Kdop.Flags[1] = value;
+        }
+
+        public TrafficArea() : base() { }
+
+        internal TrafficArea(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Tags = new List<Token>();
         }
 
         public static TrafficArea Add(IItemContainer map, Vector3[] nodePositions, Token rule)

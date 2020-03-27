@@ -52,12 +52,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The seed for this building.
         /// </summary>
-        public uint RandomSeed { get; set; } = 1;
+        public uint RandomSeed { get; set; }
 
         /// <summary>
         /// Stretch coefficient.
         /// </summary>
-        public float Stretch { get; set; } = 1f;
+        public float Stretch { get; set; }
 
         /// <summary>
         /// Height offsets for individual elements of the building.
@@ -66,7 +66,7 @@ namespace TruckLib.ScsMap
         /// This feature exists in the format and works ingame, but I have not
         /// been able to find a way to apply it in the official editor.
         /// </remarks>
-        public List<float> HeightOffsets { get; set; } = new List<float>();
+        public List<float> HeightOffsets { get; set; }
 
         public bool Collision
         {
@@ -117,6 +117,21 @@ namespace TruckLib.ScsMap
         {
             get => !Kdop.Flags[5];
             set => Kdop.Flags[5] = !value;
+        }
+
+        public Building() : base() { }
+
+        internal Building(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            RandomSeed = 1;
+            Stretch = 1;
+            HeightOffsets = new List<float>();
         }
 
         /// <summary>

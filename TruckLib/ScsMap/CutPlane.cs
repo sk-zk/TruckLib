@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Node> Nodes { get; set; } = new List<Node>(2);
+        public List<Node> Nodes { get; set; }
 
         /// <summary>
         /// Determines if the cut plane is active in one direction only
@@ -29,6 +29,19 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[0];
             set => Kdop.Flags[0] = value;
+        }
+
+        public CutPlane() : base() { }
+
+        internal CutPlane(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Nodes = new List<Node>(2);
         }
 
         /// <summary>

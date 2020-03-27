@@ -25,9 +25,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Name { get; set; }
 
-        public float Width { get; set; } = 100f;
+        public float Width { get; set; }
 
-        public float Height { get; set; } = 100f;
+        public float Height { get; set; }
 
         public bool TriggerVisit
         {
@@ -42,12 +42,22 @@ namespace TruckLib.ScsMap
         {
             get => !Kdop.Flags[0];
             set => Kdop.Flags[0] = !value;
-        }
-     
-        public CityArea() : base()
+        }  
+
+        public CityArea() : base() { }
+
+        internal CityArea(bool initFields) : base(initFields)
         {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
             ShowInUi = true;
             TriggerVisit = true;
+            Width = 100f;
+            Height = 100f;
         }
 
         /// <summary>

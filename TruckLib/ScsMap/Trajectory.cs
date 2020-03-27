@@ -20,19 +20,17 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Node> Nodes { get; set; } = new List<Node>(2);
+        public List<Node> Nodes { get; set; }
 
-        public Token AccessRule { get; set; } = "_tj_default";
+        public Token AccessRule { get; set; } 
 
         public List<TrajectoryRule> Rules { get; set; } 
-            = new List<TrajectoryRule>();
 
         public List<TrajectoryCheckpoint> Checkpoints { get; set; } 
-            = new List<TrajectoryCheckpoint>();
 
-        public List<Token> Tags { get; set; } = new List<Token>();
+        public List<Token> Tags { get; set; }
 
-        internal FlagField NavigationFlags = new FlagField();
+        internal FlagField NavigationFlags;
 
         public bool ForceThisWay
         {
@@ -68,6 +66,22 @@ namespace TruckLib.ScsMap
         {
             get => NavigationFlags[14];
             set => NavigationFlags[14] = value;
+        }
+
+        internal Trajectory(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Nodes = new List<Node>(2);
+            AccessRule = "_tj_default";
+            Rules = new List<TrajectoryRule>();
+            Checkpoints = new List<TrajectoryCheckpoint>();
+            Tags = new List<Token>();
+            NavigationFlags = new FlagField();
         }
 
         internal override IEnumerable<Node> GetItemNodes()

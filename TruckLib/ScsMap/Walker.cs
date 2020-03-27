@@ -20,21 +20,21 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => 120;
 
-        public List<Node> Nodes { get; set; } = new List<Node>(2);
+        public List<Node> Nodes { get; set; }
 
-        public Token NamePrefix { get; set; } = "walker_";
+        public Token NamePrefix { get; set; } 
 
-        public float Speed { get; set; } = 1f;
+        public float Speed { get; set; }
 
-        public float EndDelay { get; set; } = 0f;
+        public float EndDelay { get; set; } 
 
-        public uint Count { get; set; } = 1;
+        public uint Count { get; set; } 
 
-        public float Width { get; set; } = 2f;
+        public float Width { get; set; } 
 
-        public float Angle { get; set; } = 0f;
+        public float Angle { get; set; } 
 
-        public List<float> Lengths { get; set; } = new List<float>();
+        public List<float> Lengths { get; set; }
 
         public bool UseCurvedPath
         {
@@ -88,6 +88,24 @@ namespace TruckLib.ScsMap
         {
             get => base.ViewDistance;
             set => base.ViewDistance = value;
+        }
+
+        internal Walker(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Nodes = new List<Node>(2);
+            Lengths = new List<float>();
+            NamePrefix = "walker_";
+            Speed = 1f;
+            EndDelay = 0f;
+            Count = 1;
+            Width = 2f;
+            Angle = 0f;
         }
 
         internal override IEnumerable<Node> GetItemNodes()

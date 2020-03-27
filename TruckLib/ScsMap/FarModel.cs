@@ -39,10 +39,22 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
-        public FarModel()
+        public FarModel() : base()
         {
-            const int maxFarModels = 4;
-            Models = new FarModelData[maxFarModels].Select(h => new FarModelData()).ToArray();
+            Models = new FarModelData[4].Select(
+                h => new FarModelData()).ToArray();
+        }
+
+        internal FarModel(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+            Models = new FarModelData[4].Select(
+                h => new FarModelData()).ToArray();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
         }
 
         public static FarModel Add(IItemContainer map, Token model, float width, float height, Vector3 position, Vector3 perspPosition)

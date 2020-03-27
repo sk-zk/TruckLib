@@ -23,6 +23,18 @@ namespace TruckLib.ScsMap
 
         public float Height { get; set; }
 
+        public NoWeatherArea() : base() { }
+
+        internal NoWeatherArea(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+        }
+
         /// <summary>
         /// Adds a NoWeatherArea to the map.
         /// </summary>

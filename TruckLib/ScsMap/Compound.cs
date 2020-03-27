@@ -29,13 +29,12 @@ namespace TruckLib.ScsMap
         /// Contains all map items owned by this compound.
         /// </summary>
         public List<MapItem> CompoundItems { get; set; } 
-            = new List<MapItem>();
+
 
         /// <summary>
         /// Contains all nodes owned by this compound.
         /// </summary>
         public List<Node> CompoundNodes { get; set; } 
-            = new List<Node>();
 
         /// <summary>
         /// Determines if the compounded items are reflected in water.
@@ -53,6 +52,20 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[1];
             set => Kdop.Flags[1] = value;
+        }
+
+        public Compound() : base() { }
+
+        internal Compound(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            CompoundItems = new List<MapItem>();
+            CompoundNodes = new List<Node>();
         }
 
         /// <summary>

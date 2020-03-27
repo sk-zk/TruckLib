@@ -22,9 +22,9 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Token> Tags { get; set; } = new List<Token>();
+        public List<Token> Tags { get; set; } 
 
-        public List<TriggerAction> Actions { get; set; } = new List<TriggerAction>();
+        public List<TriggerAction> Actions { get; set; } 
 
         /// <summary>
         /// Legacy parameter. Do not use.
@@ -72,14 +72,25 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[8] = value;
         }
 
-        public Trigger() : base()
+        public Trigger() : base() { }
+
+        internal Trigger(bool initFields) : base(initFields)
         {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
             PartialActivation = true;
             VehicleActivation = true;
             ConnectedTrailerActivation = true;
+            Tags = new List<Token>();
+            Actions = new List<TriggerAction>();
         }
 
-        public static Trigger Add(IItemContainer map, Vector3[] nodePositions, List<TriggerAction> actions)
+        public static Trigger Add(IItemContainer map, Vector3[] nodePositions, 
+            List<TriggerAction> actions)
         {
             var trigger = Add<Trigger>(map, nodePositions);
             trigger.Actions = actions;

@@ -15,7 +15,8 @@ namespace TruckLib.ScsMap.Serialization
 
         public override MapItem Deserialize(BinaryReader r)
         {
-            var t = new Terrain();
+            var t = new Terrain(false);
+            t.Kdop = new KdopItem();
             t.Uid = r.ReadUInt64();
 
             ReadKdopBounds(r, t);

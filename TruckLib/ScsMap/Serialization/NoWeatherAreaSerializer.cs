@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public override MapItem Deserialize(BinaryReader r)
         {
-            var nwa = new NoWeatherArea();
+            var nwa = new NoWeatherArea(false);
             ReadKdopItem(r, nwa);
 
             nwa.Width = r.ReadSingle() * sizeFactor;

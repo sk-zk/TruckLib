@@ -22,26 +22,44 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// List of easy difficulty (15 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsEasy { get; set; } = new List<Node>();
+        public List<Node> UnloadPointsEasy { get; set; }
 
         /// <summary>
         /// List of medium difficulty (40 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsMedium { get; set; } = new List<Node>();
+        public List<Node> UnloadPointsMedium { get; set; }
 
         /// <summary>
         /// List of hard difficulty (90 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsHard { get; set; } = new List<Node>();
+        public List<Node> UnloadPointsHard { get; set; }
 
         /// <summary>
         /// List of trailer spawn points.
         /// </summary>
-        public List<Node> TrailerSpawnPoints { get; set; } = new List<Node>();
+        public List<Node> TrailerSpawnPoints { get; set; }
 
-        public List<Node> Unknown1 { get; set; } = new List<Node>();
+        public List<Node> Unknown1 { get; set; }
 
-        public List<Node> LongTrailerSpawnPoints { get; set; } = new List<Node>();
+        public List<Node> LongTrailerSpawnPoints { get; set; } 
+
+        public Company() : base() { }
+
+        internal Company(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            UnloadPointsEasy = new List<Node>();
+            UnloadPointsMedium = new List<Node>();
+            UnloadPointsHard = new List<Node>();
+            TrailerSpawnPoints = new List<Node>();
+            Unknown1 = new List<Node>();
+            LongTrailerSpawnPoints = new List<Node>();
+        }
 
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
         {

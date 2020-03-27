@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        private Quaternion rotation = new Quaternion(0f, 0f, 0f, 1f);
+        private Quaternion rotation;
         /// <summary>
         /// Rotation of the node.
         /// </summary>
@@ -140,7 +140,19 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Node()
         {
+            Init();
+        }
+
+        internal Node(bool initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected virtual void Init()
+        {
             Uid = Utils.GenerateUuid();
+            rotation = new Quaternion(0f, 0f, 0f, 1f);
+            Flags = new FlagField();
         }
 
         public bool IsOrphaned() => ForwardItem is null && BackwardItem is null;

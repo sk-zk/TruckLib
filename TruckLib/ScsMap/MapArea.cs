@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Color of the map area.
         /// </summary>
-        public MapAreaColor Color { get; set; } = MapAreaColor.Road;
+        public MapAreaColor Color { get; set; }
 
         public byte DlcGuard
         {
@@ -47,6 +47,19 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[0];
             set => Kdop.Flags[0] = value;
+        }
+
+        public MapArea() : base() { }
+
+        internal MapArea(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Color = MapAreaColor.Road;
         }
 
         public static MapArea Add(IItemContainer map, Vector3[] nodePositions, MapAreaType type)

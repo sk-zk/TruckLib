@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var plane = new CutPlane();
+            var plane = new CutPlane(false);
             ReadKdopItem(r, plane);
 
             plane.Nodes = ReadNodeRefList(r);

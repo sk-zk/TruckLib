@@ -86,7 +86,6 @@ namespace TruckLib.ScsMap
         /// The vegetation spheres on this road.
         /// </summary>
         public List<VegetationSphere> VegetationSpheres { get; set; } 
-            = new List<VegetationSphere>();
 
         /// <summary>
         /// The segment step size.
@@ -158,8 +157,19 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection = false;
 
-        public Road() { }
-        
+        public Road() : base() { }
+
+        internal Road(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            VegetationSpheres = new List<VegetationSphere>();
+        }
+
         /// <summary>
         /// Adds a single road segment to the map.
         /// </summary>

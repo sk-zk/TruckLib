@@ -44,11 +44,10 @@ namespace TruckLib.ScsMap
 
         public Token Variant { get; set; }
 
-        private const int signBoardCount = 3;
         /// <summary>
         /// Sign text for legacy navigation signs (e.g. be-navigation/board straight left right b).
         /// </summary>
-        public SignBoard[] SignBoards { get; set; } = new SignBoard[signBoardCount];
+        public SignBoard[] SignBoards { get; set; }
 
         /// <summary>
         /// The sign template on this sign.
@@ -60,7 +59,6 @@ namespace TruckLib.ScsMap
         /// The attribute overrides used on the sign template.
         /// </summary>
         public List<SignOverride> SignOverrides { get; set; } 
-            = new List<SignOverride>();
 
         public bool FollowRoadDir
         {
@@ -78,6 +76,23 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[27];
             set => Kdop.Flags[27] = value;
+        }
+
+        public Sign() : base() 
+        {
+            SignBoards = new SignBoard[3];
+        }
+
+        internal Sign(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+            SignBoards = new SignBoard[3];
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            SignOverrides = new List<SignOverride>();
         }
 
         /// <summary>

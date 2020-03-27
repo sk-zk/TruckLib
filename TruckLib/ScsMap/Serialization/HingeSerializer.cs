@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var hinge = new Hinge();
+            var hinge = new Hinge(false);
             ReadKdopItem(r, hinge);
 
             hinge.Model = r.ReadToken();

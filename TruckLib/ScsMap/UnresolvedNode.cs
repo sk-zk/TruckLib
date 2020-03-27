@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap
     /// </summary>
     internal sealed class UnresolvedNode : Node
     {
-        public UnresolvedNode(ulong uid)
+        public UnresolvedNode(ulong uid) : base(false)
         {
             Uid = uid;
         }

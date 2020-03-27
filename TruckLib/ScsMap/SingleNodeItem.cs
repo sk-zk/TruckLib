@@ -17,6 +17,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Node Node { get; set; }
 
+        public SingleNodeItem() : base() { }
+
+        internal SingleNodeItem(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
         /// <summary>
         /// Base method for adding a new SingleNodeItem to the map.
         /// </summary>

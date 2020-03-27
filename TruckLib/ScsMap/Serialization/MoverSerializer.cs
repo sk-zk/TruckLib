@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var mover = new Mover();
+            var mover = new Mover(false);
             ReadKdopItem(r, mover);
 
             mover.Tags = ReadObjectList<Token>(r);

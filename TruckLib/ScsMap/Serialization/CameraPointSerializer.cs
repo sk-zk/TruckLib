@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var point = new CameraPoint();
+            var point = new CameraPoint(false);
             ReadKdopItem(r, point);
 
             point.Tags = ReadObjectList<Token>(r);

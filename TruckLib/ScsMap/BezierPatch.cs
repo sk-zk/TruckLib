@@ -31,24 +31,23 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
         /// </summary>
-        public Vector3[,] ControlPoints { get; set; } = new Vector3[ControlPointCols, ControlPointRows];
+        public Vector3[,] ControlPoints { get; set; }
 
-        public ushort XTesselation { get; set; } = 4;
+        public ushort XTesselation { get; set; }
 
-        public ushort ZTesselation { get; set; } = 4;
+        public ushort ZTesselation { get; set; }
 
         public float UVRotation { get; set; }
 
         public uint RandomSeed { get; set; }
 
-        public Vegetation[] Vegetation { get; set; } = new Vegetation[3];
+        public Vegetation[] Vegetation { get; set; }
 
         public List<VegetationSphere> VegetationSpheres { get; set; } 
-            = new List<VegetationSphere>();
 
         static readonly ushort DefaultQuadRows = 5;
         static readonly ushort DefaultQuadCols = 5;
-        public TerrainQuadData QuadData { get; set; } = new TerrainQuadData();
+        public TerrainQuadData QuadData { get; set; }
 
         private readonly int noisePowerStart = 2;
         private readonly int noisePowerLength = 2;
@@ -130,21 +129,37 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[8] = value;
         }
 
-        public BezierPatch() : base()
+        public BezierPatch() : base() 
         {
+            Vegetation = (new Vegetation[3]).Select
+                (h => new Vegetation()).ToArray();
+        }
+
+        internal BezierPatch(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+            Vegetation = (new Vegetation[3]).Select
+                (h => new Vegetation()).ToArray();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            XTesselation = 4;
+            ZTesselation = 4;
             ControlPoints = new Vector3[ControlPointCols, ControlPointRows];
-            for(int i = 0; i > ControlPointCols; i++)
+            for (int i = 0; i > ControlPointCols; i++)
             {
                 for (int j = 0; j > ControlPointRows; j++)
                 {
                     ControlPoints[i, j] = new Vector3();
                 }
             }
-            const int vegetationCount = 3;
-            Vegetation = (new Vegetation[vegetationCount]).Select(h => new Vegetation()).ToArray();
             SmoothDetailVegetation = true;
             VegetationCollision = true;
             NoisePower = TerrainNoise.Percent100;
+            VegetationSpheres = new List<VegetationSphere>();
+            QuadData = new TerrainQuadData();
         }
          
         public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints)

@@ -35,6 +35,18 @@ namespace TruckLib.ScsMap
 
         public float MaxRotation { get; set; }
 
+        public Hinge() : base() { }
+
+        internal Hinge(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+        }
+
         public static Hinge Add(IItemContainer map, Vector3 position, float minRot, float maxRot)
         {
             var hinge = Add<Hinge>(map, position);

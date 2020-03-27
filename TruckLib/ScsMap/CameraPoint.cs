@@ -20,7 +20,20 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Token> Tags { get; set; } = new List<Token>();
+        public List<Token> Tags { get; set; }
+
+        public CameraPoint() : base() { }
+
+        internal CameraPoint(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Tags = new List<Token>();
+        }
 
         public static CameraPoint Add(IItemContainer map, Vector3 position, List<Token> tags)
         {

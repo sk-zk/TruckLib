@@ -47,7 +47,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The nodes belonging to this prefab.
         /// </summary>
-        public List<Node> Nodes = new List<Node>(2);
+        public List<Node> Nodes;
 
         /// <summary>
         /// The index of the origin node.
@@ -57,7 +57,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Unit names of additional parts used.
         /// </summary>
-        public List<Token> AdditionalParts { get; set; } = new List<Token>();
+        public List<Token> AdditionalParts { get; set; }
 
         public byte DlcGuard
         {
@@ -79,13 +79,11 @@ namespace TruckLib.ScsMap
 
         public uint RandomSeed { get; set; }
 
-        public List<MapItem> SlaveItems { get; set; } = new List<MapItem>();
+        public List<MapItem> SlaveItems { get; set; }
 
         public List<VegetationPart> VegetationParts { get; set; } 
-            = new List<VegetationPart>();
 
         public List<VegetationSphere> VegetationSpheres { get; set; } 
-            = new List<VegetationSphere>();
 
         /// <summary>
         /// Determines if the prefab is a tunnel. 
@@ -212,10 +210,27 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[2] = !value;
         }
 
-        public Prefab()
+        public Prefab() : base() 
         {
-            const int cornerAmnt = 4;
-            Corners = new PrefabCorner[cornerAmnt].Select(h => new PrefabCorner()).ToArray();
+            Corners = new PrefabCorner[4]
+                .Select(h => new PrefabCorner()).ToArray();
+        }
+
+        internal Prefab(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+            Corners = new PrefabCorner[4]
+                .Select(h => new PrefabCorner()).ToArray();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+            Nodes = new List<Node>(2);
+            AdditionalParts = new List<Token>();
+            SlaveItems = new List<MapItem>();
+            VegetationParts = new List<VegetationPart>();
+            VegetationSpheres = new List<VegetationSphere>();
         }
 
         /// <summary>

@@ -14,6 +14,18 @@ namespace TruckLib.ScsMap
 
         public Token CityName { get; set; }
 
+        public BusStop() : base() { }
+
+        internal BusStop(bool initFields) : base(initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected override void Init()
+        {
+            base.Init();
+        }
+
         public static BusStop Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<BusStop>(map, parent, position);

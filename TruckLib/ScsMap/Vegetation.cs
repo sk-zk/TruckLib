@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     public class Vegetation
     {
         /// <summary>
-        /// The vegetation file used.
+        /// The vegetation type.
         /// </summary>
         public Token Name { get; set; }
 
@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap
 
         private float density = 400f;
         /// <summary>
-        /// The density of placed vegetation.
+        /// The density of vegetation models.
         /// </summary>
         public float Density
         {

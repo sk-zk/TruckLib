@@ -32,9 +32,9 @@ namespace TruckLib.ScsMap
         public Map Map { get; set; }
 
         /// <summary>
-        /// The path of the .base file of this sector.
+        /// The path of the .base file.
         /// </summary>
-        public string BasePath { get; set; }
+        internal string BasePath { get; set; }
 
         /// <summary>
         /// A list of all map items in this sector.
@@ -59,7 +59,7 @@ namespace TruckLib.ScsMap
 
         public Vector2 MaxBoundary { get; set; } = new Vector2(4000, 4000);
 
-        private FlagField Flags = new FlagField();
+        internal FlagField Flags = new FlagField();
 
         /// <summary>
         /// EOF marker of a .data file.
@@ -115,26 +115,18 @@ namespace TruckLib.ScsMap
             ReadDesc(Path.ChangeExtension(basePath, DescExtension));
         }
 
-        internal void GetSectorCoordsFromBasePath(string basePath)
-        {
-            var sectorName = Path.GetFileNameWithoutExtension(basePath);
-            X = int.Parse(sectorName.Substring(3, 5));
-            Z = int.Parse(sectorName.Substring(8, 5));
-        }
-
         /// <summary>
         /// Reads the .base file of the sector.
         /// </summary>
         /// <param name="path">The .base file of the sector.</param>
         private void ReadBase(string path)
         {
-            var fs = CreateOpenFileStream(path);
+            using var fs = CreateOpenFileStream(path);
             using var r = new BinaryReader(fs);
             header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
             ReadNodes(r);
-            fs.Dispose();
         }
 
         /// <summary>
@@ -143,13 +135,12 @@ namespace TruckLib.ScsMap
         /// <param name="path">The .aux file of the sector.</param>
         private void ReadAux(string path)
         {
-            var fs = CreateOpenFileStream(path);
+            using var fs = CreateOpenFileStream(path);
             using var r = new BinaryReader(fs);
             var auxHeader = new Header();
             auxHeader.Deserialize(r);
             ReadItems(r, ItemFile.Aux);
             ReadNodes(r);
-            fs.Dispose();
         }
 
         /// <summary>
@@ -158,30 +149,28 @@ namespace TruckLib.ScsMap
         /// <param name="path">The .data file of the sector.</param>
         private void ReadData(string path)
         {
-            var fs = CreateOpenFileStream(path);
+            using var fs = CreateOpenFileStream(path);
             using var r = new BinaryReader(fs);
 
-            // Read the header
+            // Header
             var dataHeader = new Header();
             dataHeader.Deserialize(r);
 
-            // Read the items
+            // Items
             while (r.BaseStream.Position < r.BaseStream.Length)
             {
                 var uid = r.ReadUInt64();
                 if (uid == dataEof) break;
 
-                if (!MapItems.ContainsKey(uid))
+                MapItem item;
+                if (!MapItems.TryGetValue(uid, out item))
                 {
-                    throw new KeyNotFoundException($"{this.ToString()}.data contains " +
+                    throw new KeyNotFoundException($"{ToString()}.data contains " +
                         $"unknown UID {uid} - can't continue.");
                 }
-                var item = MapItems[uid];
                 var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
                 serializer.DeserializeDataPayload(r, item);
             }
-
-            fs.Dispose();
         }
 
         private const float boundaryFactor = 256f;
@@ -199,7 +188,7 @@ namespace TruckLib.ScsMap
             //   they work, because they seem to relate to items
             //   at the borders of the sector
 
-            var fs = CreateOpenFileStream(path);
+            using var fs = CreateOpenFileStream(path);
             using var r = new BinaryReader(fs);
 
             SectorDescVersion = r.ReadUInt32();
@@ -213,12 +202,9 @@ namespace TruckLib.ScsMap
                 r.ReadInt32() / boundaryFactor
                 );
 
-            // flags - unknown
             Flags = new FlagField(r.ReadUInt32());
 
             Climate = r.ReadToken();
-
-            fs.Dispose();
         }
 
         /// <summary>
@@ -273,12 +259,6 @@ namespace TruckLib.ScsMap
             }
         }
 
-        private static FileStream CreateOpenFileStream(string path)
-        {
-            return new FileStream(path, FileMode.Open, FileAccess.Read,
-                FileShare.Read, 4096, FileOptions.SequentialScan);
-        }
-
         /// <summary>
         /// Saves the sector as binary files to the specified directory.
         /// </summary>
@@ -290,10 +270,8 @@ namespace TruckLib.ScsMap
             WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes);
             WriteDesc(GetFilename(DescExtension));
 
-            string GetFilename(string ext)
-            {
-                return Path.Combine(sectorDirectory, $"{ToString()}.{ext}");
-            }
+            string GetFilename(string ext) => 
+                Path.Combine(sectorDirectory, $"{ToString()}.{ext}");           
         }
 
         /// <summary>
@@ -304,13 +282,11 @@ namespace TruckLib.ScsMap
         private void WriteBase(string baseFilename, Dictionary<ulong, MapItem> allItems,
             List<Node> sectorNodes)
         {
-            var stream = new FileStream(baseFilename, FileMode.Create);
-            using (var w = new BinaryWriter(stream))
-            {
-                header.Serialize(w);
-                WriteItems(allItems, ItemFile.Base, w);
-                WriteNodes(w, ItemFile.Base, sectorNodes);
-            }
+            using var stream = new FileStream(baseFilename, FileMode.Create);
+            using var w = new BinaryWriter(stream);
+            header.Serialize(w);
+            WriteItems(allItems, ItemFile.Base, w);
+            WriteNodes(w, ItemFile.Base, sectorNodes);
         }
 
         /// <summary>
@@ -321,13 +297,11 @@ namespace TruckLib.ScsMap
         private void WriteAux(string auxFilename, Dictionary<ulong, MapItem> allItems,
             List<Node> sectorNodes)
         {
-            var stream = new FileStream(auxFilename, FileMode.Create);
-            using (var w = new BinaryWriter(stream))
-            {
-                header.Serialize(w);
-                WriteItems(allItems, ItemFile.Aux, w);
-                WriteNodes(w, ItemFile.Aux, sectorNodes);
-            }
+            using var stream = new FileStream(auxFilename, FileMode.Create);
+            using var w = new BinaryWriter(stream);
+            header.Serialize(w);
+            WriteItems(allItems, ItemFile.Aux, w);
+            WriteNodes(w, ItemFile.Aux, sectorNodes);
         }
 
         /// <summary>
@@ -337,21 +311,20 @@ namespace TruckLib.ScsMap
         /// <param name="allItems">A list of all items in the sector.</param>
         private void WriteData(string dataFilename, Dictionary<ulong, MapItem> allItems)
         {
-            var stream = new FileStream(dataFilename, FileMode.Create);
-            using (var w = new BinaryWriter(stream))
+            using var stream = new FileStream(dataFilename, FileMode.Create);
+            using var w = new BinaryWriter(stream);
+
+            header.Serialize(w);
+
+            foreach (var itemKvp in allItems.Where(x => x.Value.HasDataPayload))
             {
-                header.Serialize(w);
-
-                foreach (var itemKvp in allItems.Where(x => x.Value.HasDataPayload))
-                {
-                    var item = itemKvp.Value;
-                    w.Write((item as MapItem).Uid);
-                    var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
-                    serializer.SerializeDataPayload(w, item);
-                }
-
-                w.Write(dataEof);
+                var item = itemKvp.Value;
+                w.Write(item.Uid);
+                var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
+                serializer.SerializeDataPayload(w, item);
             }
+
+            w.Write(dataEof);
         }
 
         /// <summary>
@@ -360,24 +333,18 @@ namespace TruckLib.ScsMap
         /// <param name="descFilename">The path of the output file.</param>
         private void WriteDesc(string descFilename)
         {
-            var stream = new FileStream(descFilename, FileMode.Create);
-            using (var w = new BinaryWriter(stream))
-            {
-                // SectorDescVersion
-                w.Write(SectorDescVersion);
+            using var stream = new FileStream(descFilename, FileMode.Create);
+            using var w = new BinaryWriter(stream);
+            w.Write(SectorDescVersion);
 
-                // boundaries
-                w.Write((int)(MinBoundary.X * boundaryFactor));
-                w.Write((int)(MinBoundary.Y * boundaryFactor));
-                w.Write((int)(MaxBoundary.X * boundaryFactor));
-                w.Write((int)(MaxBoundary.Y * boundaryFactor));
+            w.Write((int)(MinBoundary.X * boundaryFactor));
+            w.Write((int)(MinBoundary.Y * boundaryFactor));
+            w.Write((int)(MaxBoundary.X * boundaryFactor));
+            w.Write((int)(MaxBoundary.Y * boundaryFactor));
 
-                // flags - always 0?
-                w.Write(Flags.Bits);
+            w.Write(Flags.Bits);
 
-                // climate profile
-                w.Write(Climate);
-            }
+            w.Write(Climate);
         }
 
         /// <summary>
@@ -387,7 +354,7 @@ namespace TruckLib.ScsMap
         private void WriteNodes(BinaryWriter w, ItemFile file, List<Node> sectorNodes)
         {
             // get base nodes only || get aux nodes only
-            List<Node> nodes = new List<Node>(32);
+            var nodes = new List<Node>(32);
             foreach (var node in sectorNodes)
             {
                 if (!(node.ForwardItem is UnresolvedItem)
@@ -429,6 +396,19 @@ namespace TruckLib.ScsMap
                     .Get(item.Value.ItemType);
                 serializer.Serialize(w, item.Value);
             }
+        }
+
+        internal void GetSectorCoordsFromBasePath(string basePath)
+        {
+            var sectorName = Path.GetFileNameWithoutExtension(basePath);
+            X = int.Parse(sectorName.Substring(3, 5));
+            Z = int.Parse(sectorName.Substring(8, 5));
+        }
+
+        private static FileStream CreateOpenFileStream(string path)
+        {
+            return new FileStream(path, FileMode.Open, FileAccess.Read,
+                FileShare.Read, 4096, FileOptions.SequentialScan);
         }
 
         /// <summary>

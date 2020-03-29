@@ -32,7 +32,8 @@ namespace TruckLib.ScsMap
         // I've pulled the node dictionary into Map instead of having one dict
         // per Sector. This is because certain nodes of items that cross 
         // sector boundaries are written to both sectors, and doing this was
-        // the best way to prevent two instances of the same node.
+        // the best way I could think of to prevent two instances of 
+        // the same node.
         public Dictionary<ulong, Node> Nodes { get; set; } 
             = new Dictionary<ulong, Node>();
 
@@ -221,7 +222,7 @@ namespace TruckLib.ScsMap
             {
                 foreach(var itemKvp in sectorKvp.Value.MapItems)
                 {
-                    allItems.Add(itemKvp.Value.Uid, itemKvp.Value);
+                    allItems.Add(itemKvp.Key, itemKvp.Value);
                 }
             }
             return allItems;
@@ -267,7 +268,7 @@ namespace TruckLib.ScsMap
         /// Returns the item with the given UID.
         /// </summary>
         /// <param name="uid"></param>
-        /// <returns></returns>
+        /// <returns>Returns the item, or null if it doesn't exist.</returns>
         public MapItem GetItem(ulong uid)
         {
             foreach (var sectorKvp in Sectors)
@@ -288,10 +289,7 @@ namespace TruckLib.ScsMap
             // delete item from all sectors
             foreach(var sectorKvp in Sectors)
             {
-                if(sectorKvp.Value.MapItems.ContainsKey(item.Uid))
-                {
-                    sectorKvp.Value.MapItems.Remove(item.Uid);
-                }
+                sectorKvp.Value.MapItems.Remove(item.Uid);
             }
            
             // remove item from its nodes, 
@@ -329,11 +327,8 @@ namespace TruckLib.ScsMap
         /// <param name="node"></param>
         public void Delete(Node node)
         {
-            if (Nodes.ContainsKey(node.Uid))
-            {
-                Nodes.Remove(node.Uid);
-            }
-
+            Nodes.Remove(node.Uid);
+            
             if (node.ForwardItem is MapItem fw)
             {
                 node.ForwardItem = null;
@@ -360,11 +355,9 @@ namespace TruckLib.ScsMap
 
                 EditorMapId = r.ReadUInt64();
 
-                // start position
                 StartPlacementPosition = r.ReadVector3();
                 StartPlacementSectorOrSomething = r.ReadUInt32();
 
-                // start rotation
                 StartPlacementRotation.W = r.ReadSingle();
                 StartPlacementRotation.X = r.ReadSingle();
                 StartPlacementRotation.Y = r.ReadSingle();
@@ -376,7 +369,6 @@ namespace TruckLib.ScsMap
                 NormalScale = r.ReadSingle();
                 CityScale = r.ReadSingle();
 
-                // SCS's Europe map UI corrections
                 EuropeMapUiCorrections = (r.ReadByte() == 1);
             }
         }
@@ -399,10 +391,7 @@ namespace TruckLib.ScsMap
                 if (!SectorShouldBeLoaded(baseFile))
                     continue;
 
-                var sector = new Sector(baseFile, this)
-                {
-                    Map = this
-                };
+                var sector = new Sector(baseFile, this);
                 Sectors.Add((sector.X, sector.Z), sector);
             }
 
@@ -413,10 +402,8 @@ namespace TruckLib.ScsMap
                 sectorKvp.Value.Read();
             }
 
-            bool SectorShouldBeLoaded(string baseFile)
-            {
-                return sectors == null || sectors.Contains(Path.GetFileName(baseFile));
-            }
+            bool SectorShouldBeLoaded(string baseFile) =>
+                sectors == null || sectors.Contains(Path.GetFileName(baseFile));          
         }
 
         /// <summary>
@@ -459,10 +446,8 @@ namespace TruckLib.ScsMap
             Directory.CreateDirectory(sectorDirectory);
             if(cleanDir)
             {
-                foreach (var file in new DirectoryInfo(sectorDirectory).GetFiles())
-                {
-                    file.Delete();
-                }
+                new DirectoryInfo(sectorDirectory).GetFiles().ToList()
+                    .ForEach(f => f.Delete());
             }
 
             var sectorNodes = new Dictionary<Sector, List<Node>>();
@@ -501,11 +486,9 @@ namespace TruckLib.ScsMap
 
                 w.Write(EditorMapId);
 
-                // start pos.
                 w.Write(StartPlacementPosition);
                 w.Write(StartPlacementSectorOrSomething);
 
-                // start rotation
                 w.Write(StartPlacementRotation.W);
                 w.Write(StartPlacementRotation.X);
                 w.Write(StartPlacementRotation.Y);
@@ -516,7 +499,6 @@ namespace TruckLib.ScsMap
                 w.Write(NormalScale);
                 w.Write(CityScale);
 
-                // SCS's Europe map UI corrections
                 w.Write(EuropeMapUiCorrections.ToByte());
             }
         }

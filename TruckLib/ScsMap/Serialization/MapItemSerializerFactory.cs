@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.ScsMap.Serialization
 {

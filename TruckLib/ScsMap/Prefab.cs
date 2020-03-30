@@ -51,8 +51,11 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// The index of the origin node.
+        /// <para>This defines which of the ppd nodes is the origin node.
+        /// It is not an index for the Nodes property as the origin node is
+        /// always the 0th node in the list.</para>
         /// </summary>
-        public ushort Origin { get; set; } = 0;
+        public ushort Origin { get; internal set; }
 
         /// <summary>
         /// Unit names of additional parts used.
@@ -241,9 +244,10 @@ namespace TruckLib.ScsMap
         /// <param name="unitName">The unit name of the prefab.</param>
         /// <param name="position">The position of control node 0.</param>
         /// <returns></returns>
-        public static Prefab Add(IItemContainer map, string unitName, string variant, string look, PrefabDescriptor ppd, Vector3 position)
+        public static Prefab Add(IItemContainer map, string unitName, string variant, string look, 
+            PrefabDescriptor ppd, Vector3 position, Quaternion rotation)
         {
-            return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position);
+            return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position, rotation);
         }
 
         [Obsolete]
@@ -262,8 +266,6 @@ namespace TruckLib.ScsMap
             prefab.Origin = origin;
 
             map.AddItem(prefab, prefab.Nodes[0]);
-            // TODO: Which node determines the sector? 
-            // Nodes[0] or Nodes[origin]?
             return prefab;
         }
 
@@ -282,7 +284,7 @@ namespace TruckLib.ScsMap
         {
             if(node > Nodes.Count)
             {
-                throw new ArgumentOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
+                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
             }
 
             Node backwardNode;
@@ -290,7 +292,7 @@ namespace TruckLib.ScsMap
 
             // if the node to attach to is the origin node,
             // the road has to be *prepended* instead
-            var prepend = (node == Origin);
+            var prepend = (node == 0);
             if (prepend)
             {
                 backwardNode = map.AddNode(forwardPos);
@@ -301,7 +303,7 @@ namespace TruckLib.ScsMap
                 backwardNode = Nodes[node];
                 forwardNode = map.AddNode(forwardPos);
             }
-
+         
             var road = new Road
             {
                 Node = backwardNode,
@@ -309,9 +311,10 @@ namespace TruckLib.ScsMap
             };
             road.Node.ForwardItem = road;
             road.ForwardNode.BackwardItem = road;
-            road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type);
+            road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type,
+                leftTerrainSize, rightTerrainSize);
             map.AddItem(road, road.Node);
-
+            
             // nodes of a prefab that have nothing attached to it
             // always have the prefab as ForwardItem, but they will be
             // set to BackwardItem when you attach a road going outward
@@ -323,13 +326,14 @@ namespace TruckLib.ScsMap
             }
             else
             {
+                backwardNode.Rotation = Quaternion.Inverse(backwardNode.Rotation);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
-            }
+            }          
 
             road.Recalculate();
-
+            
             backwardNode.IsRed = true;
-
+            
             return road;
         }
 
@@ -346,7 +350,7 @@ namespace TruckLib.ScsMap
                 throw new ArgumentOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
             }
 
-            if (itemNode.BackwardItem is null) 
+            if (itemNode.BackwardItem is null)
             {
                 // deal with prepend roads coming from the wrong direction
                 var oldPfNode = Nodes[prefabNodeIdx];
@@ -356,9 +360,7 @@ namespace TruckLib.ScsMap
                 itemNode.Position = oldPfNode.Position;
                 // set rotation to the inverse angle
                 // now that something is attached to it
-                var rot = oldPfNode.Rotation.ToEuler();
-                rot.Y -= (float)Math.PI;
-                itemNode.Rotation = Quaternion.CreateFromYawPitchRoll(rot.Y, rot.X, rot.Z);
+                itemNode.Rotation = Quaternion.Inverse(oldPfNode.Rotation);
                 itemNode.IsRed = true;
                 oldPfNode.Sectors[0].Map.Nodes.Remove(oldPfNode.Uid);
             }
@@ -426,7 +428,7 @@ namespace TruckLib.ScsMap
 
                 // if the p2 node is the origin, the nodes have to be merged to the p2 node.
                 // otherwise, the p1 node survives
-                if (p2NodeIdx == p2.Origin)
+                if (p2NodeIdx == 0)
                 {
                     p2Node.BackwardItem = this;
                     Nodes[p1NodeIdx] = p2Node;
@@ -463,7 +465,7 @@ namespace TruckLib.ScsMap
         /// of the origin node.</param>
         public void Move(Vector3 newPos)
         {
-            var translation = newPos - Nodes[Origin].Position;
+            var translation = newPos - Nodes[0].Position;
             MoveRel(translation);
         }
 
@@ -482,6 +484,24 @@ namespace TruckLib.ScsMap
             {
                 (si as PrefabSlaveItem).MoveRel(translation);
             }
+        }
+
+        public void ChangeOrigin(ushort newOrigin)
+        {
+            if (newOrigin > Nodes.Count)
+                throw new IndexOutOfRangeException();
+
+            if(Nodes[Origin].IsRed 
+                && Nodes[Origin].BackwardItem == null)
+            {
+                Nodes[Origin].IsRed = false;
+            }
+            Nodes[newOrigin].IsRed = true;
+
+            Nodes = Nodes.Skip(newOrigin)
+                .Concat(Nodes.Take(newOrigin))
+                .ToList();
+            Origin = newOrigin;
         }
 
         internal override IEnumerable<Node> GetItemNodes()

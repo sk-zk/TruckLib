@@ -15,15 +15,17 @@ namespace TruckLib.ScsMap
         private Vector3 node0Pos => ppd.Nodes[0].Position;
         private IItemContainer map;
         private Vector3 prefabPos;
+        private Quaternion prefabRot;
         private Prefab prefab;
         private List<SpawnPoint> clonedPoints;
 
         public Prefab FromPpd(IItemContainer map, string unitName, string variant, string look,
-            PrefabDescriptor ppd, Vector3 prefabPos)
+            PrefabDescriptor ppd, Vector3 pos, Quaternion rot)
         {
             this.map = map;
             this.ppd = ppd;
-            this.prefabPos = prefabPos;
+            this.prefabPos = pos;
+            this.prefabRot = rot;
 
             prefab = new Prefab();
 
@@ -201,7 +203,8 @@ namespace TruckLib.ScsMap
             {
                 var spawnPos = GetAbsolutePosition(spawnPoint.Position);
                 var spawnNode = map.AddNode(spawnPos, false);
-                spawnNode.Rotation = spawnPoint.Rotation;
+                spawnNode.Rotation = Quaternion.Normalize(
+                    spawnPoint.Rotation * prefabRot);
                 spawnNode.ForwardItem = item;
                 list.Add(spawnNode);
             }
@@ -220,7 +223,9 @@ namespace TruckLib.ScsMap
         /// <returns>The position of the point in the map.</returns>
         private Vector3 GetAbsolutePosition(Vector3 ppdPointPos)
         {
-            return prefabPos + (ppdPointPos - node0Pos);
+            var rotated = RotateNode(ppdPointPos, prefabRot);
+            var abs = prefabPos + (rotated - node0Pos);
+            return abs;
         }
 
         /// <summary>
@@ -234,20 +239,14 @@ namespace TruckLib.ScsMap
                 var ppdNodePos = ppdNode.Position;
 
                 // set map node position
-                Vector3 nodePos;
-                if (i == 0)
-                {
-                    nodePos = prefabPos;
-                }
-                else
-                {
-                    nodePos = GetAbsolutePosition(ppdNodePos);
-                }
+                var nodePos = GetAbsolutePosition(ppdNodePos);
+                
                 var mapNode = map.AddNode(nodePos, i == 0);
 
                 // set map node rotation
-                var angle = MathEx.AngleOffAroundAxis(ppdNode.Direction, -Vector3.UnitZ, Vector3.UnitY);
+                var angle = MathEx.AngleOffAroundAxis(ppdNode.Direction, -Vector3.UnitZ, Vector3.UnitY, false);
                 mapNode.Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0);
+                mapNode.Rotation *= prefabRot;
 
                 mapNode.ForwardItem = prefab;
 
@@ -261,9 +260,8 @@ namespace TruckLib.ScsMap
         /// <param name="ppdPointPos">The ppd point to rotate.</param>
         /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
         /// <returns>The rotated point.</returns>
-        private Vector3 RotateNode(Vector3 ppdPointPos, float angle)
+        private Vector3 RotateNode(Vector3 ppdPointPos, Quaternion rot)
         {
-            var rot = Quaternion.CreateFromYawPitchRoll(angle, 0, 0);
             ppdPointPos = MathEx.RotatePointAroundPivot(ppdPointPos, node0Pos, rot);
             return ppdPointPos;
         }

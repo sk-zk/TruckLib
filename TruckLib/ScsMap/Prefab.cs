@@ -245,9 +245,10 @@ namespace TruckLib.ScsMap
         /// <param name="position">The position of control node 0.</param>
         /// <returns></returns>
         public static Prefab Add(IItemContainer map, string unitName, string variant, string look, 
-            PrefabDescriptor ppd, Vector3 position, Quaternion rotation)
+            PrefabDescriptor ppd, Vector3 position, Quaternion? rotation = null)
         {
-            return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, position, rotation);
+            return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, 
+                position, rotation.GetValueOrDefault(Quaternion.Identity));
         }
 
         [Obsolete]
@@ -326,7 +327,9 @@ namespace TruckLib.ScsMap
             }
             else
             {
-                backwardNode.Rotation = Quaternion.Inverse(backwardNode.Rotation);
+                backwardNode.Rotation = (backwardNode.Rotation.IsIdentity)
+                    ? Quaternion.CreateFromAxisAngle(Vector3.UnitY, -3.14159265f)
+                    : Quaternion.Inverse(backwardNode.Rotation);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
             }          
 

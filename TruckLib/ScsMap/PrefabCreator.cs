@@ -156,24 +156,6 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates slave item for the given spawnpoint.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="spawnPoint"></param>
-        /// <returns></returns>
-        private T CreateSlaveItem<T>(SpawnPoint spawnPoint)
-            where T : PrefabSlaveItem, new()
-        {
-            var pos = GetAbsolutePosition(spawnPoint.Position);
-
-            var item = PrefabSlaveItem.Add<T>(map, prefab, pos);
-            item.Node.Rotation = spawnPoint.Rotation;
-            item.Node.ForwardItem = item;
-
-            return item;
-        }
-
-        /// <summary>
         /// Creates slave item of the first spawnpoint of the given type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -185,6 +167,24 @@ namespace TruckLib.ScsMap
             var first = clonedPoints.First(x => x.Type == type);
             var item = CreateSlaveItem<T>(first);
             clonedPoints.Remove(first);
+            return item;
+        }
+
+        /// <summary>
+        /// Creates slave item for the given spawnpoint.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="spawnPoint"></param>
+        /// <returns></returns>
+        private T CreateSlaveItem<T>(SpawnPoint spawnPoint)
+            where T : PrefabSlaveItem, new()
+        {
+            var pos = GetAbsolutePosition(spawnPoint.Position);
+
+            var item = PrefabSlaveItem.Add<T>(map, prefab, pos);
+            item.Node.Rotation = spawnPoint.Rotation * prefabRot;
+            item.Node.ForwardItem = item;
+
             return item;
         }
 
@@ -240,18 +240,23 @@ namespace TruckLib.ScsMap
 
                 // set map node position
                 var nodePos = GetAbsolutePosition(ppdNodePos);
-                
-                var mapNode = map.AddNode(nodePos, i == 0);
 
-                // set map node rotation
-                var angle = MathEx.AngleOffAroundAxis(ppdNode.Direction, -Vector3.UnitZ, Vector3.UnitY, false);
-                mapNode.Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0);
-                mapNode.Rotation *= prefabRot;
+                var mapNode = map.AddNode(nodePos, i == 0);
+                mapNode.Rotation = GetNodeRotation(ppdNode.Direction);
 
                 mapNode.ForwardItem = prefab;
 
                 prefab.Nodes.Add(mapNode);
             }
+        }
+
+        private Quaternion GetNodeRotation(Vector3 nodeDirection)
+        {
+            // TODO: Fix angle
+            var angle = MathEx.AngleOffAroundAxis(nodeDirection, -Vector3.UnitZ, Vector3.UnitY, false);
+            var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, (float)angle);
+            rot *= prefabRot;
+            return rot;
         }
 
         /// <summary>

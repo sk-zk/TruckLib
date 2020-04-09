@@ -33,6 +33,7 @@ namespace TruckLib.ScsMap
             get => SoundFlags[2];
             set => SoundFlags[2] = value;
         }
+
         public bool ThreeDimensional
         {
             get => SoundFlags[0];

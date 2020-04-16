@@ -12,6 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib", "TruckLib\TruckL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "00-SimpleExample", "Samples\00-SimpleExample\00-SimpleExample.csproj", "{488D9661-8899-4578-857D-2806B67F6E62}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01-Prefabs", "Samples\01-Prefabs\01-Prefabs.csproj", "{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +28,10 @@ Global
 		{488D9661-8899-4578-857D-2806B67F6E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{488D9661-8899-4578-857D-2806B67F6E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{488D9661-8899-4578-857D-2806B67F6E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

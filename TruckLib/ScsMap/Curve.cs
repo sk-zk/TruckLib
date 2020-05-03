@@ -115,6 +115,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[7] = !value;
         }
 
+        public Nibble ColorVariant
+        {
+            get => (Nibble)Kdop.Flags.GetBitString(16, 4);
+            set => Kdop.Flags.SetBitString(16, 4, (uint)value);
+        }
+
         /// <summary>
         /// Determines if only flat textures are used as vegetation.
         /// </summary>

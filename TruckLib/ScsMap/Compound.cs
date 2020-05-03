@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A compound item which holds multiple scenery items. 
+    /// A compound item which holds multiple aux items. 
     /// </summary>
     public class Compound : SingleNodeItem, IItemContainer
     {

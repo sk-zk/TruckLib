@@ -34,6 +34,11 @@ Simple reader for HashFS (.scs) files.
 * Anything to do with prefabs is probably not going to behave as expected.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
  fixed by recalculating.
+ 
+## Dependencies
+* [Ionic.Zlib](https://www.nuget.org/packages/Iconic.Zlib.Netstandard/)
+* [Microsoft.CSharp](https://www.nuget.org/packages/Microsoft.CSharp/)
+* [System.Numerics.Vectors](https://www.nuget.org/packages/System.Numerics.Vectors/)
 
 ## License
 TruckLib is licensed under GPL v2 except for `CityHash.cs`.

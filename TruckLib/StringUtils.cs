@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,8 @@ namespace TruckLib
         public static string RemoveStartingAtPattern(string str, string pattern)
         {
             var patternIdx = str.IndexOf(pattern);
-            if (patternIdx < 0) return str;
+            if (patternIdx < 0)
+                return str;
             str = str.Remove(patternIdx);
             return str;
         }
@@ -29,48 +31,23 @@ namespace TruckLib
         /// <returns></returns>
         public static bool IsNumerical(string str)
         {
-            // float written as hex bytes, e.g. "&3f800000"
+            if (IsHexNotationFloat(str))
+                return true;
+
+            return double.TryParse(str, NumberStyles.Float | NumberStyles.AllowExponent, 
+                CultureInfo.InvariantCulture, out var _);
+        }
+
+        /// <summary>
+        /// Checks if a string contains a float written as hex bytes as used in .sii files,
+        /// e.g. "&3f800000".
+        /// </summary>
+        public static bool IsHexNotationFloat(string str)
+        {
             const string hexPrefix = "&";
-            if (str.StartsWith(hexPrefix))
-            {
-                return str.Length == (hexPrefix.Length + 8)
-                    && IsHexadecimal(str.Substring(1));
-            }
-
-            const char positiveSign = '+';
-            const char negativeSign = '-';
-            const char decimalPoint = '.';
-            bool decimalPointFound = false;
-            bool containsDigits = false; // to return false on "+" etc.
-            for (int i = 0; i < str.Length; i++)
-            {
-                // signs are only allowed as first character
-                if (str[i] == negativeSign || str[i] == positiveSign)
-                {
-                    if (i > 0) return false;
-                    continue;
-                }
-
-                // check decimal point - only one per number
-                if (str[i] == decimalPoint)
-                {
-                    if (decimalPointFound) return false;
-                    decimalPointFound = true;
-                    continue;
-                }
-
-                // now check if it's anything other than a digit
-                if ((str[i] >= '0' && str[i] <= '9'))
-                {
-                    containsDigits = true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            }
-            return containsDigits;
+            return str.StartsWith(hexPrefix)
+                && str.Length == (hexPrefix.Length + 8)
+                && IsHexadecimal(str.Substring(1));
         }
 
         /// <summary>
@@ -86,7 +63,8 @@ namespace TruckLib
                     (c >= 'a' && c <= 'f') ||
                     (c >= 'A' && c <= 'F');
 
-                if (!isHex) return false;
+                if (!isHex)
+                    return false;
             }
             return true;
         }
@@ -100,7 +78,8 @@ namespace TruckLib
         /// <returns></returns>
         public static List<string> CStringBytesToList(byte[] bytes, Encoding encoding = null)
         {
-            if (encoding is null) encoding = Encoding.ASCII;
+            if (encoding is null)
+                encoding = Encoding.ASCII;
 
             var strings = new List<string>();
             int lastNull = -1;
@@ -119,7 +98,8 @@ namespace TruckLib
 
         public static List<byte[]> ListToCStringByteList(List<string> strings, Encoding encoding = null)
         {
-            if (encoding is null) encoding = Encoding.ASCII;
+            if (encoding is null)
+                encoding = Encoding.ASCII;
 
             var bytes = new List<byte[]>(strings.Count);
             foreach (var str in strings)

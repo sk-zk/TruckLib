@@ -24,8 +24,8 @@ namespace TruckLib.Sii
         /// <summary>
         /// Attributes of this unit.
         /// </summary>
-        public Dictionary<string, object> Attributes { get; set; } 
-            = new Dictionary<string, object>();
+        public Dictionary<string, dynamic> Attributes { get; set; } 
+            = new Dictionary<string, dynamic>();
 
         /// <summary>
         /// Includes of this unit.

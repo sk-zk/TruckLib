@@ -9,28 +9,31 @@ namespace TruckLib.Sii
     {
         public static MatFile DeserializeFromString(string matStr)
         {
-            var siiParser = new SiiParser();
-            siiParser.TupleAttribOpen = "{";
-            siiParser.TupleAttribClose = "}";
+            var siiParser = new SiiParser
+            {
+                TupleAttribOpen = "{",
+                TupleAttribClose = "}"
+            };
             var sii = siiParser.DeserializeFromString(matStr);
 
-            var mat = new MatFile();
-            mat.Attributes = sii.Units[0].Attributes;
-            mat.Effect = sii.Units[0].Name.Replace("\"", "");
+            var mat = new MatFile
+            {
+                Attributes = sii.Units[0].Attributes,
+                Effect = sii.Units[0].Name.Replace("\"", "")
+            };
             return mat;
         }
 
-        public static MatFile DeserializeFromFile(string path)
-        {
-            var str = File.ReadAllText(path);
-            return DeserializeFromString(str);
-        }
+        public static MatFile DeserializeFromFile(string path) =>
+            DeserializeFromString(File.ReadAllText(path));
 
         public static string Serialize(MatFile mat)
         {
-            var siiParser = new SiiParser();
-            siiParser.TupleAttribOpen = "{";
-            siiParser.TupleAttribClose = "}";
+            var siiParser = new SiiParser
+            {
+                TupleAttribOpen = "{",
+                TupleAttribClose = "}"
+            };
 
             var siiFile = new SiiFile();
             siiFile.GlobalScope = false;

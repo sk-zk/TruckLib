@@ -6,8 +6,6 @@ namespace TruckLib.Sii
 {
     public class SiiParserException : Exception
     {
-        public SiiParserException(string message) : base(message)
-        {
-        }
+        public SiiParserException(string message) : base(message) { }
     }
 }

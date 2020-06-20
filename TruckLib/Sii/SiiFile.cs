@@ -36,46 +36,30 @@ namespace TruckLib.Sii
         /// </summary>
         public bool GlobalScope { get; set; } = true;
 
-        public SiiFile()
-        {
-        }
+        public SiiFile() { }
 
         /// <summary>
         /// Deserializes a string containing a SII file.
         /// </summary>
-        /// <param name="sii"></param>
-        /// <returns></returns>
-        public static SiiFile FromString(string sii)
-        {
-            return new SiiParser().DeserializeFromString(sii);
-        }
+        public static SiiFile FromString(string sii) =>
+            new SiiParser().DeserializeFromString(sii);
 
         /// <summary>
         /// Deserializes a SII file.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static SiiFile FromFile(string path)
-        {
-            return new SiiParser().DeserializeFromFile(path);
-        }
+        public static SiiFile FromFile(string path) =>
+            new SiiParser().DeserializeFromFile(path);
 
         /// <summary>
         /// Serializes this object to a string.
         /// </summary>
-        /// <returns></returns>
-        public string Serialize()
-        {
-            return new SiiParser().Serialize(this);
-        }
+        public string Serialize() =>
+            new SiiParser().Serialize(this);
 
         /// <summary>
         /// Serializes this object to a file.
         /// </summary>
-        /// <param name="path"></param>
-        public void Serialize(string path)
-        {
+        public void Serialize(string path) =>
             new SiiParser().Serialize(this, path);
-        }
     }
 }

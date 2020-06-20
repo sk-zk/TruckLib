@@ -12,33 +12,25 @@ namespace TruckLib.Sii
         /// <summary>
         /// Name of the shader, e.g. "eut2.dif.spec.rfx".
         /// </summary>
-        public string Effect;
+        public string Effect { get; set; }
 
         /// <summary>
         /// Attributes of the shader.
         /// </summary>
-        public Dictionary<string, object> Attributes { get; set; }
-            = new Dictionary<string, object>();
+        public Dictionary<string, dynamic> Attributes { get; set; }
+            = new Dictionary<string, dynamic>();
 
-        public static MatFile FromString(string mat)
-        {
-            return MatParser.DeserializeFromString(mat);
-        }
+        public static MatFile FromString(string mat) =>
+            MatParser.DeserializeFromString(mat);
 
-        public static MatFile FromFile(string path)
-        {
-            return MatParser.DeserializeFromFile(path);
-        }
+        public static MatFile FromFile(string path) =>
+            MatParser.DeserializeFromFile(path);
 
-        public string Serialize()
-        {
-            return MatParser.Serialize(this);
-        }
+        public string Serialize() =>
+            MatParser.Serialize(this);
 
-        public void Serialize(string path)
-        {
+        public void Serialize(string path) =>
             MatParser.Serialize(this, path);
-        }
 
     }
 }

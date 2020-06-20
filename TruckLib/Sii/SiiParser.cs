@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace TruckLib.Sii
 {
@@ -15,12 +14,19 @@ namespace TruckLib.Sii
     /// </summary>
     internal class SiiParser
     {
+        public string Indentation { get; set; } = "    ";
         internal string TupleAttribOpen = "(";
         internal string TupleAttribClose = ")";
-        private readonly string SiiHeader = "SiiNunit";
-        private readonly char TupleSeperator = ',';
-        private readonly string IncludeKeyword = "@include";
-        private string Indentation = "    "; // no tabs for you.
+        private const string SiiHeader = "SiiNunit";
+        private const char TupleSeperator = ',';
+        private const string IncludeKeyword = "@include";
+
+        /// <summary>
+        /// Sets how to handle duplicate attributes in a unit.
+        /// </summary>
+        private bool OverrideOnDuplicate = true;
+
+        private CultureInfo culture = CultureInfo.InvariantCulture;
 
         public SiiFile DeserializeFromString(string sii)
         {
@@ -39,10 +45,12 @@ namespace TruckLib.Sii
                 var startBracket = start + m.Length; // start after the opening bracket of the unit
                 int? end = null;
                 var bracketsStack = 0;
-                for(int i = startBracket; i < sii.Length; i++)
+                for (int i = startBracket; i < sii.Length; i++)
                 {
-                    if (sii[i] == '{') bracketsStack++;
-                    if (sii[i] == '}') bracketsStack--;
+                    if (sii[i] == '{')
+                        bracketsStack++;
+                    else if (sii[i] == '}')
+                        bracketsStack--;
 
                     if (bracketsStack == -1)
                     {
@@ -51,14 +59,10 @@ namespace TruckLib.Sii
                     }
                 }
 
-                if(end is null)
-                {
+                if (end is null)
                     throw new SiiParserException($"Expected '}}' at {sii.Length - 1}, found EOF");
-                }
                 else
-                {
                     siiFile.Units.Add(ParseUnit(sii.Substring(start, end.Value - start + 1)));
-                }
             }
 
             // parse top level includes
@@ -67,39 +71,36 @@ namespace TruckLib.Sii
             return siiFile;
         }
 
-        public SiiFile DeserializeFromFile(string path)
-        {
-            var str = File.ReadAllText(path);
-            return DeserializeFromString(str);
-        }
+        public SiiFile DeserializeFromFile(string path) =>
+            DeserializeFromString(File.ReadAllText(path));
 
         private void GetTopLevelIncludes(string sii, SiiFile siiFile)
         {
-            using (var sr = new StringReader(sii))
+            using var sr = new StringReader(sii);
+
+            var bracketsStack = 0;
+            // in files that use the global scope SiiNunit { },
+            // ignore first bracket level:
+            if (sii.StartsWith(SiiHeader))
+                bracketsStack = -1;
+
+            string line;
+            while ((line = sr.ReadLine()) != null)
             {
-                var bracketsStack = 0;
-                // in files that use the global scope SiiNunit { },
-                // ignore first bracket level:
-                if (sii.StartsWith(SiiHeader)) bracketsStack = -1;
-
-                while (true)
+                // only parse top level includes, so
+                // make sure we're not inside a unit
+                foreach (var character in line)
                 {
-                    var line = sr.ReadLine();
-                    if (line == null) break;
+                    if (character == '{')
+                        ++bracketsStack;
+                    else if (character == '}')
+                        --bracketsStack;
+                }
 
-                    // only parse top level includes, so
-                    // make sure we're not inside a unit
-                    foreach (var character in line)
-                    {
-                        if (character == '{') ++bracketsStack;
-                        if (character == '}') --bracketsStack;
-                    }
-
-                    if (bracketsStack == 0 && line.StartsWith(IncludeKeyword))
-                    {
-                        var include = ParseInclude(line);
-                        siiFile.Includes.Add(include);
-                    }
+                if (bracketsStack == 0 && line.StartsWith(IncludeKeyword))
+                {
+                    var include = ParseInclude(line);
+                    siiFile.Includes.Add(include);
                 }
             }
         }
@@ -108,18 +109,13 @@ namespace TruckLib.Sii
         {
             // TODO: Remove block comments
             var siiNoComments = new StringBuilder();
-            using (var sr = new StringReader(sii))
+            using var sr = new StringReader(sii);
+            string line;
+            while ((line = sr.ReadLine()) != null)
             {
-                while (true)
-                {
-                    var line = sr.ReadLine();
-                    if (line == null) break;
-
-                    line = StringUtils.RemoveStartingAtPattern(line, "#");
-                    line = StringUtils.RemoveStartingAtPattern(line, "//");
-
-                    siiNoComments.AppendLine(line);
-                }
+                line = StringUtils.RemoveStartingAtPattern(line, "#");
+                line = StringUtils.RemoveStartingAtPattern(line, "//");
+                siiNoComments.AppendLine(line);
             }
             return siiNoComments.ToString();
         }
@@ -138,10 +134,14 @@ namespace TruckLib.Sii
             };
 
             var attributeLines = unitStr.Substring(openBracketPos + 1,
-                closeBracketPos - openBracketPos - 1).Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                closeBracketPos - openBracketPos - 1)
+                .Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
             foreach (var line in attributeLines)
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
+                if (string.IsNullOrWhiteSpace(line)) 
+                    continue;
+
                 if (line.StartsWith(IncludeKeyword)) // no whitespace allowed
                 {
                     var include = ParseInclude(line);
@@ -149,29 +149,37 @@ namespace TruckLib.Sii
                     continue;
                 }
 
-                var attrib = ParseAttribute(line);
-                if (attrib.Name.EndsWith("[]")) // list type
+                var (Name, Value) = ParseAttribute(line);
+                if (Name.EndsWith("[]")) // list type
                 {
-                    var arrName = attrib.Name.Substring(0, attrib.Name.Length - 2);
+                    var arrName = Name[0..^2];
                     if (unit.Attributes.TryGetValue(arrName, out var existingAttrib))
-                    {
-                        (existingAttrib as List<object>).Add(attrib.Value);
-                    }
+                        (existingAttrib as List<dynamic>).Add(Value);
                     else
-                    {
-                        unit.Attributes.Add(arrName, new List<object> { attrib.Value });
-                    }
+                        AddAttribute(unit, arrName, new List<dynamic> { Value });
                 }
                 else
                 {
-                    unit.Attributes.Add(attrib.Name, attrib.Value);
+                    AddAttribute(unit, Name, Value);
                 }
-
             }
             return unit;
         }
 
-        private (string Name, object Value) ParseAttribute(string line)
+        private void AddAttribute(Unit unit, string name, dynamic value)
+        {
+            if (unit.Attributes.ContainsKey(name))
+            {
+                if (OverrideOnDuplicate)
+                    unit.Attributes[name] = value;
+            }
+            else
+            {
+                unit.Attributes.Add(name, value);
+            }
+        }
+
+        private (string Name, dynamic Value) ParseAttribute(string line)
         {
             line = line.Trim();
             var firstColonPos = line.IndexOf(':');
@@ -181,12 +189,11 @@ namespace TruckLib.Sii
             return (attributeName, value);
         }
 
-        private object ParseAttributeValue(string valueStr)
+        private dynamic ParseAttributeValue(string valueStr)
         {
             if (string.IsNullOrWhiteSpace(valueStr))
-            {
                 return "";
-            }
+            
             valueStr = valueStr.Trim();
 
             // figure out type:
@@ -194,77 +201,58 @@ namespace TruckLib.Sii
             // string
             const string doubleQuote = "\"";
             if (valueStr.StartsWith(doubleQuote) && valueStr.EndsWith(doubleQuote))
-            {
-                return valueStr.Substring(1, valueStr.Length - 2);
-            }
+                return valueStr[1..^1];
 
             // inline struct / tuple types like float3, quaternion etc.
             // which type is actually used isn't possible to determine from
             // the .sii file alone
             if (valueStr.StartsWith(TupleAttribOpen) && valueStr.EndsWith(TupleAttribClose)
                 && valueStr.Contains(TupleSeperator))
-            {
                 return ParseTuple(valueStr);
-            }
 
             // bools
-            if (valueStr == "true") return true;
-            if (valueStr == "false") return false;
+            if (valueStr == "true") 
+                return true;
+            if (valueStr == "false") 
+                return false;
 
             // numerical types
             // the type of an attribute is not included in the .sii file,
             // so if there's no decimal point, I can only guess
             if (StringUtils.IsNumerical(valueStr))
-            {
                 return ParseNumber(valueStr);
-            }
 
             // unit pointers
             if (valueStr.Contains("."))
-            {
                 return valueStr;
-            }
 
             // token
             if (Token.IsValidToken(valueStr))
-            {
                 return new Token(valueStr);
-            }
 
             // unknown or not implemented
             return valueStr;
         }
 
-        private object ParseTuple(string valueStr)
+        private dynamic ParseTuple(string valueStr)
         {
-            var tupleVals = valueStr.Substring(1, valueStr.Length - 2)
-                .Split(TupleSeperator);
+            var tupleVals = valueStr[1..^1].Split(TupleSeperator);
 
             // determine the type of the tuple
-            Type[] types = new Type[tupleVals.Count()];
+            var types = new Type[tupleVals.Count()];
             for (int i = 0; i < tupleVals.Length; i++)
-            {
                 types[i] = ParseAttributeValue(tupleVals[i]).GetType();
-            }
 
             if (types.Contains(typeof(float)))
-            {
                 return TupleValsToArray<float>(tupleVals);
-            }
-            if (types.Contains(typeof(ulong)))
-            {
+            else if (types.Contains(typeof(ulong)))
                 return TupleValsToArray<ulong>(tupleVals);
-            }
-            if (types.Contains(typeof(long)))
-            {
+            else if(types.Contains(typeof(long)))
                 return TupleValsToArray<long>(tupleVals);
-            }
-            if (types.Contains(typeof(int)))
-            {
+            else if(types.Contains(typeof(int)))
                 return TupleValsToArray<int>(tupleVals);
-            }
 
-            return TupleValsToArray<object>(tupleVals); // whatever, object array it is
+            return TupleValsToArray<dynamic>(tupleVals); // whatever, dynamic array it is
         }
 
         private T[] TupleValsToArray<T>(string[] tupleVals)
@@ -272,43 +260,37 @@ namespace TruckLib.Sii
             var arr = new T[tupleVals.Length];
             for (int i = 0; i < arr.Length; i++)
             {
-                if (typeof(T) == typeof(float))
-                {
-                    arr[i] = (T)(object)float.Parse(tupleVals[i], 
-                        NumberStyles.Float, CultureInfo.InvariantCulture);
-                }
-                else
-                {
-                    arr[i] = (T)ParseAttributeValue(tupleVals[i]);
-                }
+                arr[i] = (T)ParseAttributeValue(tupleVals[i]);
             }
             return arr;
         }
 
-        private object ParseNumber(string valueStr)
+        private dynamic ParseNumber(string valueStr)
         {
-            if (valueStr.Contains("."))
+            if (StringUtils.IsHexNotationFloat(valueStr))
             {
-                if (float.TryParse(valueStr, NumberStyles.Float,
-                    CultureInfo.InvariantCulture, out float floatResult))
+                var bitsAsInt = int.Parse(valueStr[1..], NumberStyles.HexNumber);
+                return BitConverter.Int32BitsToSingle(bitsAsInt);
+            }
+            else if (valueStr.Contains(".") || valueStr.Contains("e") || valueStr.Contains("E"))
+            {
+                if (float.TryParse(valueStr, NumberStyles.Float | NumberStyles.AllowExponent,
+                    culture, out float floatResult))
                 {
                     return floatResult;
                 }
             }
             else
             {
-                if (int.TryParse(valueStr, NumberStyles.Integer,
-                    CultureInfo.InvariantCulture, out int intResult))
+                if (int.TryParse(valueStr, NumberStyles.Integer, culture, out int intResult))
                 {
                     return intResult;
                 }
-                if (long.TryParse(valueStr, NumberStyles.Integer,
-                    CultureInfo.InvariantCulture, out long longResult))
+                if (long.TryParse(valueStr, NumberStyles.Integer, culture, out long longResult))
                 {
                     return longResult;
                 }
-                if (ulong.TryParse(valueStr, NumberStyles.Integer,
-                    CultureInfo.InvariantCulture, out ulong ulongResult))
+                if (ulong.TryParse(valueStr, NumberStyles.Integer, culture, out ulong ulongResult))
                 {
                     return ulongResult;
                 }
@@ -351,9 +333,7 @@ namespace TruckLib.Sii
             }
 
             if (siiFile.GlobalScope)
-            {
                 sb.AppendLine("}");
-            }
 
             return sb.ToString();
         }
@@ -362,7 +342,7 @@ namespace TruckLib.Sii
         {
             foreach (var attrib in unit.Attributes)
             {
-                if (attrib.Value is List<object> list)
+                if (attrib.Value is List<dynamic> list)
                 {
                     foreach (var entry in list)
                     {
@@ -380,38 +360,62 @@ namespace TruckLib.Sii
             }
         }
 
-        private void SerializeAttributeValue(StringBuilder sb, object attribValue)
+        private void SerializeAttributeValue(StringBuilder sb, dynamic attribValue)
         {
-            // TODO: Finish this method
+            switch (attribValue)
+            {
+                case string _:
+                    sb.Append($"\"{attribValue}\"");
+                    break;
+                case Array arr:
+                    SerializeArray(sb, arr);
+                    break;
+                case double d:
+                    // force ".0" if number has no decimals so the game will definitely parse it as float.
+                    if (d % 1 == 0)
+                        sb.Append(d.ToString("F1", culture));
+                    else
+                        sb.Append(d.ToString(culture));
+                    break;
+                case float f:
+                    // force ".0" if number has no decimals so the game will definitely parse it as float.
+                    if (f % 1 == 0)
+                        sb.Append(f.ToString("F1", culture));
+                    else
+                        sb.Append(f.ToString(culture));
+                    break;
+                case bool b:
+                    sb.Append(b ? "true" : "false");
+                    break;
+                case Token t:
+                    sb.Append(t.String);
+                    break;
+                default:
+                    sb.Append(Convert.ToString(attribValue, culture));
+                    break;
+            }
+        }
 
-            if (attribValue is string)
+        private void SerializeArray(StringBuilder sb, Array arr)
+        {
+            sb.Append(TupleAttribOpen);
+
+            IList list = arr;
+            for (int i = 0; i < list.Count; i++)
             {
-                sb.Append($"\"{attribValue}\"");
+                SerializeAttributeValue(sb, list[i]);
+
+                if (i != list.Count - 1)
+                    sb.Append(TupleSeperator);
             }
-            else if(attribValue is Array arr)
-            {
-                sb.Append(TupleAttribOpen);
-                IList list = arr;
-                for (int i = 0; i < list.Count; i++)
-                {
-                    sb.Append(Convert.ToString(list[i], CultureInfo.InvariantCulture));
-                    if (i != list.Count - 1)
-                        sb.Append(TupleSeperator);
-                }
-                sb.Append(TupleAttribClose);
-            }
-            else
-            {
-                sb.Append(Convert.ToString(attribValue, CultureInfo.InvariantCulture));
-            }
+
+            sb.Append(TupleAttribClose);
         }
 
         private void SerializeIncludes(StringBuilder sb, List<string> includes)
         {
             foreach (var include in includes)
-            {
                 sb.AppendLine($"{IncludeKeyword} \"{include}\"");
-            }
         }
 
     }

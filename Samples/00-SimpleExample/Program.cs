@@ -9,11 +9,16 @@ namespace Example
     {
         static void Main(string[] args)
         {
+            // This example program places a few road segments
+            // and models at hardcoded locations into an empty map
+            // and saves the map into the mod folder.
+
             // Create an empty map
             var map = new Map("example");
 
             // Add a road segment:
-            // Use the [Item Type].Add method to add a new item to the map.
+            // Use the [Item Type].Add method to create a new item
+            // and automatically add it to the map.
             var r = Road.Add(map,
                 new Vector3(19, 0, 19.5f), // position of backward (red) node
                 new Vector3(65, 0, 23),    // position of forward (green) node
@@ -47,7 +52,7 @@ namespace Example
             r.Right.Vegetation[0].From = 15;
             r.Right.Vegetation[0].To = 80;
 
-            // Models:
+            // Road models:
             // Let's add some reflector posts as well.
             r.Right.Models[0].Name = "219"; // "reflective post"
             r.Right.Models[0].Distance = 50;
@@ -62,7 +67,7 @@ namespace Example
                 .Append(new Vector3(146.5f, 0, 25))
                 .Append(new Vector3(216, 0, 25));
 
-            // Finally, let's place two models:
+            // Finally, let's place two model items:
             Model.Add(map,
                 new Vector3(103.75f, -0.3f, 31.73f), // position 
                 -2.99f,       // Y rotation in radians
@@ -79,7 +84,7 @@ namespace Example
             var modName = "example";
             map.Save(Path.Combine(modFolder, modName, "map"), true);
 
-            // Don't forget to hit F8 after loading it in the editor for the first time.
+            // Remember to hit F8 after loading it in the editor for the first time.
         }
     }
 }

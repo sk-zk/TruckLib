@@ -22,6 +22,7 @@ namespace Prefabs
             // (Modify this path before running)
             var extractedRoot = @"D:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\_extracted";
 
+
             // 1) Add a company prefab to the map.
             // The most convenient way to do this is to load the .ppd file 
             // of the model and let the library deal with placing the nodes
@@ -30,10 +31,10 @@ namespace Prefabs
             var companyPpdPath = Path.Combine(extractedRoot,
                 @"prefab2/car_dealer/car_dealer_01_fr.ppd");
             var companyPpd = PrefabDescriptor.Open(companyPpdPath);
-         
+
             var companyPos = new Vector3(55, 0, 70);
-            var companyRot = Quaternion.CreateFromYawPitchRoll(1.5708f, 0, 0); // 90°                    
-            
+            var companyRot = Quaternion.CreateFromYawPitchRoll(1.5708f, 0, 0); // 90°
+
             var company = Prefab.Add(map,
                 "dlc_fr_14", // Unit name
                 "bhv_fr",    // Variant
@@ -42,7 +43,8 @@ namespace Prefabs
                 companyPos,  // position of node 0
                 companyRot   // optional: rotation
                 );
-                         
+
+
             // 2) Attach a T-crossing prefab to the entrance of the company.
   
             var crossingPpdPath = Path.Combine(extractedRoot,
@@ -50,7 +52,7 @@ namespace Prefabs
             var crossingPpd = PrefabDescriptor.Open(crossingPpdPath);
 
             var crossingPos = companyPos;
-            
+
             var crossing = Prefab.Add(map,
                 "387",
                 "shoul_fr_1",
@@ -66,20 +68,22 @@ namespace Prefabs
 
             // Now attach it.
             company.Attach(crossing);
-            
+
+
             // 3) Finally, let's connect the other ends of the prefab with a road.
+
             var road = crossing.AppendRoad(map, 1, new Vector3(100, 0, 88), "ger1");
             road = road.Append(new Vector3(100, 0, 52));
             road = road.Append(crossing.Nodes[0].Position);
             crossing.Attach(road);
-            
+
             // Save the map
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var modFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod");
             var modName = "example";
             map.Save(Path.Combine(modFolder, modName, "map"), true);
 
-            // Don't forget to hit F8 after loading it in the editor for the first time.
+            // Remember to hit F8 after loading it in the editor for the first time.
         }
     }
 }

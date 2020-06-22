@@ -17,7 +17,8 @@ namespace TruckLib
         /// The character set.
         /// </summary>
         public static readonly char[] CharacterSet =
-        { '\0', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b',
+        { 
+            '\0', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b',
             'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
             'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '_'
         };
@@ -61,7 +62,9 @@ namespace TruckLib
         /// <returns>A token.</returns>
         public static ulong StringToToken(string input)
         {
-            if (string.IsNullOrEmpty(input)) return 0;
+            if (string.IsNullOrEmpty(input))
+                return 0;
+
             if (!IsValidToken(input))
                 throw new ArgumentException($"Input is not a valid token.");
 
@@ -83,14 +86,13 @@ namespace TruckLib
         public static string TokenToString(ulong token)
         {
             // for empty tokens, return "" rather than "\0"
-            if (token == 0) return "";
+            if (token == 0)
+                return "";
 
             // Determine length of string
             int length = 1;
             while (Math.Pow(CharsetLength, length) - 1 < token)
-            {
                 length++;
-            }
 
             // reverse the token, from last to first character
             var input = new char[length];
@@ -123,12 +125,15 @@ namespace TruckLib
 
         public static bool IsValidToken(string str)
         {
-            if (str.Length > MaxLength) return false;
+            if (str.Length > MaxLength)
+                return false;
 
-            foreach(var c in str)
+            foreach (var c in str)
             {
-                if(!CharacterSet.Contains(c)) return false;
+                if (!CharacterSet.Contains(c))
+                    return false;
             }
+
             return true;
         }
 
@@ -155,31 +160,24 @@ namespace TruckLib
             if (ReferenceEquals(this, obj)) 
                 return true;
 
-            if (obj is null) 
-                return false;
-
-            if (obj is Token token2)
-                return this.Value == token2.Value;
-
-            if (obj is ulong ul)
-                return this.Value == ul;
-
-            if (obj is int i)
-                return this.Value == (ulong)i;
-            
-            if (obj is string str)
-                return this.String == str;
-            
-            return false;
+            return obj switch
+            {
+                null =>         false,
+                Token token2 => Value == token2.Value,
+                ulong ul =>     Value == ul,
+                int i =>        Value == (ulong)i,
+                string str =>   String == str,
+                _ => false,
+            };
         }
 
-        public override int GetHashCode() 
-            => Value.GetHashCode();
+        public override int GetHashCode() =>
+            Value.GetHashCode();
 
-        public static bool operator ==(Token token, object obj) 
-            => token.Equals(obj);
+        public static bool operator ==(Token token, object obj) =>
+            token.Equals(obj);
 
-        public static bool operator !=(Token token, object obj) 
-            => !token.Equals(obj);
+        public static bool operator !=(Token token, object obj) =>
+            !token.Equals(obj);
     }
 }

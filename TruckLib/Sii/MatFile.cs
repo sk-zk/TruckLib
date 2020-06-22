@@ -20,10 +20,10 @@ namespace TruckLib.Sii
         public Dictionary<string, dynamic> Attributes { get; set; }
             = new Dictionary<string, dynamic>();
 
-        public static MatFile FromString(string mat) =>
+        public static MatFile Load(string mat) =>
             MatParser.DeserializeFromString(mat);
 
-        public static MatFile FromFile(string path) =>
+        public static MatFile Open(string path) =>
             MatParser.DeserializeFromFile(path);
 
         public string Serialize() =>

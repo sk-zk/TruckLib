@@ -41,13 +41,13 @@ namespace TruckLib.Sii
         /// <summary>
         /// Deserializes a string containing a SII file.
         /// </summary>
-        public static SiiFile FromString(string sii) =>
+        public static SiiFile Load(string sii) =>
             new SiiParser().DeserializeFromString(sii);
 
         /// <summary>
         /// Deserializes a SII file.
         /// </summary>
-        public static SiiFile FromFile(string path) =>
+        public static SiiFile Open(string path) =>
             new SiiParser().DeserializeFromFile(path);
 
         /// <summary>

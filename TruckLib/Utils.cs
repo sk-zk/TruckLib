@@ -13,10 +13,8 @@ namespace TruckLib
         /// Generates an 8 byte UUID.
         /// </summary>
         /// <returns>An 8 byte UUID.</returns>
-        public static ulong GenerateUuid()
-        {
-            return BitConverter.ToUInt64(Guid.NewGuid().ToByteArray(), 0);
-        }
+        public static ulong GenerateUuid() =>
+            BitConverter.ToUInt64(Guid.NewGuid().ToByteArray(), 0);
 
         /// <summary>
         /// Checks if a number is within the specified range. 
@@ -29,9 +27,7 @@ namespace TruckLib
         public static ushort SetIfInRange(ushort value, ushort min, ushort max)
         {
             if (value < min || value > max)
-            {
                 throw new ArgumentException($"Value must be between {min} and {max}.");
-            }
             return value;
         }
 
@@ -46,9 +42,7 @@ namespace TruckLib
         public static int SetIfInRange(int value, int min, int max)
         {
             if (value < min || value > max)
-            {
                 throw new ArgumentException($"Value must be between {min} and {max}.");
-            }
             return value;
         }
 
@@ -63,9 +57,7 @@ namespace TruckLib
         public static float SetIfInRange(float value, float min, float max)
         {
             if (value < min || value > max)
-            {
                 throw new ArgumentException($"Value must be between {min} and {max}.");
-            }
             return value;
         }
 

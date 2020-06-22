@@ -74,9 +74,7 @@ namespace TruckLib
             {
                 var point = Interpolate(p0, m0, p1, m1, i / 100f);
                 if (i > 0)
-                {
                     dist += (point - prev).Length();
-                }
                 prev = point;
             }
             return dist;

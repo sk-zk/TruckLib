@@ -59,8 +59,7 @@ namespace TruckLib
                 serializer.Serialize(writer, item);
                 if (serializer is IDataPayload)
                 {
-                    (serializer as IDataPayload)
-                        .SerializeDataPayload(writer, item);
+                    (serializer as IDataPayload).SerializeDataPayload(writer, item);
                 }
                 stream.Position = 0;
 
@@ -69,14 +68,13 @@ namespace TruckLib
                     cloned = (T)serializer.Deserialize(reader);
                     if (serializer is IDataPayload)
                     {
-                        (serializer as IDataPayload)
-                            .DeserializeDataPayload(reader, item);
+                        (serializer as IDataPayload).DeserializeDataPayload(reader, item);
                     }
                 }
             }
 
             // don't allow duplicate uids
-             item.Uid = Utils.GenerateUuid();
+            item.Uid = Utils.GenerateUuid();
 
             return cloned;
         }
@@ -140,9 +138,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="b">The bool.</param>
         /// <returns>1 if true, 0 if false.</returns>
-        public static byte ToByte(this bool b)
-        {
-            return b ? (byte)1 : (byte)0;
-        }
+        public static byte ToByte(this bool b) =>
+            b ? (byte)1 : (byte)0;
     }
 }

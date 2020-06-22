@@ -41,7 +41,7 @@ namespace TruckLib
 
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rot)
         {
-            return Vector3.Transform((point - pivot), rot) + pivot;
+            return Vector3.Transform(point - pivot, rot) + pivot;
         }
 
         /// <summary>

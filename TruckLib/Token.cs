@@ -117,7 +117,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="letter">The character.</param>
         /// <returns>Its index.</returns>
-        static int GetCharIndex(char letter)
+        private static int GetCharIndex(char letter)
         {
             var index = Array.IndexOf(CharacterSet, letter);
             return index == -1 ? 0 : index;

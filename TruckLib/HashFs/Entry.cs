@@ -16,7 +16,7 @@ namespace TruckLib.HashFs
 
         public bool IsDirectory => Flags[0];
         public bool IsCompressed => Flags[1];
-        public bool Verify => Flags[2]; //TODO: What is this?
+        public bool Verify => Flags[2]; // TODO: What is this?
         public bool IsEncrypted => Flags[3];
     }
 }

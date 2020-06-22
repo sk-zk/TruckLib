@@ -13,8 +13,8 @@ namespace TruckLib
             set => bits = value;
         }
 
-        const int byteSize = 8;
-        const uint byteMask = 0xFFU;
+        private const int byteSize = 8;
+        private const uint byteMask = 0xFFU;
 
         public FlagField(uint bits)
         {
@@ -34,13 +34,9 @@ namespace TruckLib
                 ErrorIfNotInRange(index, 0, 31);
                 var mask = 1U << index;
                 if (value)
-                {
                     bits |= mask;
-                }
                 else
-                {
                     bits &= ~mask;
-                }
             }
         }
 
@@ -86,7 +82,9 @@ namespace TruckLib
 
         public void SetBitString(int start, int length, uint value)
         {
-            if (length == 0) return;
+            if (length == 0)
+                return;
+
             ErrorIfNotInRange(start, 0, 31);
             ErrorIfNotInRange(length, 0, 31);
 
@@ -102,15 +100,11 @@ namespace TruckLib
             bits |= value << start;
         }
 
-        public override string ToString()
-        {
-            return Convert.ToString(bits, 2).PadLeft(32, '0');
-        }
+        public override string ToString() =>
+            Convert.ToString(bits, 2).PadLeft(32, '0');
 
-        public override int GetHashCode()
-        {
-            return bits.GetHashCode();
-        }
+        public override int GetHashCode() =>
+            bits.GetHashCode();
 
         private void ErrorIfNotInRange(int i, int min, int max)
         {

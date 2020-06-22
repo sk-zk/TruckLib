@@ -11,19 +11,19 @@ namespace TruckLib.HashFs
     /// </summary>
     public class HashFsReader : IDisposable
     {
-        const uint Magic = 0x23534353; // as ascii: "SCS#"
-        const ushort SupportedVersion = 1;
-        const string SupportedHashMethod = "CITY";
-        const string rootPath = "/";
+        private const uint Magic = 0x23534353; // as ascii: "SCS#"
+        private const ushort SupportedVersion = 1;
+        private const string SupportedHashMethod = "CITY";
+        private const string rootPath = "/";
 
-        BinaryReader reader;
+        private BinaryReader reader;
 
-        ushort Salt;
-        string HashMethod;
-        uint EntriesCount;
-        uint StartOffset;
+        private ushort Salt;
+        private string HashMethod;
+        private uint EntriesCount;
+        private uint StartOffset;
 
-        Dictionary<ulong, Entry> entries = new Dictionary<ulong, Entry>();
+        private Dictionary<ulong, Entry> entries = new Dictionary<ulong, Entry>();
 
         /// <summary>
         /// Opens a HashFS file.
@@ -50,8 +50,9 @@ namespace TruckLib.HashFs
             var hash = HashPath(path);
             if(entries.TryGetValue(hash, out var entry))
             {
-                return entry.IsDirectory ? 
-                    EntryType.Directory : EntryType.File;
+                return entry.IsDirectory
+                    ? EntryType.Directory
+                    : EntryType.File;
             }
             return EntryType.NotFound;
         }
@@ -99,8 +100,8 @@ namespace TruckLib.HashFs
                 // is directory
                 if (files[i].StartsWith(dirMarker))
                 {
-                    if (filesOnly) continue;
-
+                    if (filesOnly)
+                        continue;
                     subPath = files[i].Substring(1) + "/";
                 }
                 // is file
@@ -112,13 +113,9 @@ namespace TruckLib.HashFs
                 if (absolute)
                 {
                     if (path == rootPath)
-                    {
                         subPath = rootPath + subPath;
-                    }
                     else
-                    {
                         subPath = $"{path}/{subPath}";
-                    }
                 }
 
                 paths.Add(subPath);
@@ -160,9 +157,7 @@ namespace TruckLib.HashFs
         {
             path = path.Substring(1);
             if (Salt != 0)
-            {
                 path = Salt + path;
-            }
             var hash = CityHash.CityHash64(Encoding.ASCII.GetBytes(path), (ulong)path.Length);
             return hash;
         }
@@ -193,13 +188,15 @@ namespace TruckLib.HashFs
 
             for (int i = 0; i < EntriesCount + 1; i++)
             {
-                var entry = new Entry();
-                entry.Hash = reader.ReadUInt64();
-                entry.Offset = reader.ReadUInt64();
-                entry.Flags = new FlagField(reader.ReadUInt32());
-                entry.Crc = reader.ReadUInt32();
-                entry.Size = reader.ReadUInt32();
-                entry.CompressedSize = reader.ReadUInt32();
+                var entry = new Entry
+                {
+                    Hash = reader.ReadUInt64(),
+                    Offset = reader.ReadUInt64(),
+                    Flags = new FlagField(reader.ReadUInt32()),
+                    Crc = reader.ReadUInt32(),
+                    Size = reader.ReadUInt32(),
+                    CompressedSize = reader.ReadUInt32()
+                };
                 entries.Add(entry.Hash, entry);
             }
         }
@@ -207,7 +204,7 @@ namespace TruckLib.HashFs
         private string RemoveTrailingSlash(string path)
         {
             if (path.EndsWith("/") && path != rootPath)
-                path = path.Substring(0, path.Length - 1);
+                path = path[0..^1];
             return path;
         }
 

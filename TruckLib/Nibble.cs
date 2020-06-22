@@ -14,8 +14,7 @@ namespace TruckLib
             get => value;
             set
             {
-                this.value = (byte)Utils.SetIfInRange(
-                    (int)value, MinValue, MaxValue);
+                this.value = (byte)Utils.SetIfInRange((int)value, MinValue, MaxValue);
             }
         }
 
@@ -65,34 +64,16 @@ namespace TruckLib
         public static bool operator !=(Nibble a, int b) => a.Value != b;
         public static bool operator !=(int a, Nibble b) => a != b.Value;
 
-        public static explicit operator Nibble(byte b)
-        {
-            return new Nibble(b);
-        }
+        public static explicit operator Nibble(byte b) => new Nibble(b);
 
-        public static explicit operator Nibble(int i)
-        {
-            return new Nibble((byte)i);
-        }
+        public static explicit operator Nibble(int i) => new Nibble((byte)i);
 
-        public static explicit operator byte(Nibble n)
-        {
-            return n.Value;
-        }
+        public static explicit operator byte(Nibble n) => n.Value;
 
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
+        public override bool Equals(object obj) => base.Equals(obj);
 
-        public override int GetHashCode()
-        {
-            return value.GetHashCode();
-        }
+        public override int GetHashCode() => value.GetHashCode();
 
-        public override string ToString()
-        {
-            return value.ToString();
-        }
+        public override string ToString() => value.ToString();
     }
 }

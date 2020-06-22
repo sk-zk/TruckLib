@@ -305,28 +305,23 @@ namespace TruckLib
         /// <param name="list"></param>
         public static void WriteObjectList<T>(this BinaryWriter w, List<T> list)
         {
-            if (list is null || list.Count == 0) return;
+            if (list is null || list.Count == 0) 
+                return;
 
             if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // trucklib objects
             {
                 foreach (var obj in list)
-                {
                     (obj as IBinarySerializable).Serialize(w);
-                }
             }
             else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
             {
                 foreach (var value in list)
-                {
                     WriteListValue(w, value);
-                }
             }
             else if(typeof(T) == typeof(Vector2) || typeof(T) == typeof(Vector3))
             {
                 foreach (var value in list)
-                {
                     WriteListValue(w, value);
-                }
             }
             else
             {
@@ -337,65 +332,52 @@ namespace TruckLib
         private static void WriteListValue<T>(BinaryWriter w, T value)
         {
             // dont @ me.
-            if (value is bool _bool)
+            switch (value)
             {
-                w.Write(_bool);
-            }
-            else if (value is byte _byte)
-            {
-                w.Write(_byte);
-            }
-            else if (value is sbyte _sbyte)
-            {
-                w.Write(_sbyte);
-            }
-            else if (value is char _char)
-            {
-                w.Write(_char);
-            }
-            else if (value is double _double)
-            {
-                w.Write(_double);
-            }
-            else if (value is float _float)
-            {
-                w.Write(_float);
-            }
-            else if (value is short _short)
-            {
-                w.Write(_short);
-            }
-            else if (value is int _int)
-            {
-                w.Write(_int);
-            }
-            else if (value is long _long)
-            {
-                w.Write(_long);
-            }
-            else if (value is ushort _ushort)
-            {
-                w.Write(_ushort);
-            }
-            else if (value is uint _uint)
-            {
-                w.Write(_uint);
-            }
-            else if (value is ulong _ulong)
-            {
-                w.Write(_ulong);
-            }
-            else if (value is Vector2 _vec2)
-            {
-                w.Write(_vec2);
-            }
-            else if(value is Vector3 _vec3)
-            {
-                w.Write(_vec3);
-            }
-            else
-            {
-                throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
+                case bool _bool:
+                    w.Write(_bool);
+                    break;
+                case byte _byte:
+                    w.Write(_byte);
+                    break;
+                case sbyte _sbyte:
+                    w.Write(_sbyte);
+                    break;
+                case char _char:
+                    w.Write(_char);
+                    break;
+                case double _double:
+                    w.Write(_double);
+                    break;
+                case float _float:
+                    w.Write(_float);
+                    break;
+                case short _short:
+                    w.Write(_short);
+                    break;
+                case int _int:
+                    w.Write(_int);
+                    break;
+                case long _long:
+                    w.Write(_long);
+                    break;
+                case ushort _ushort:
+                    w.Write(_ushort);
+                    break;
+                case uint _uint:
+                    w.Write(_uint);
+                    break;
+                case ulong _ulong:
+                    w.Write(_ulong);
+                    break;
+                case Vector2 _vec2:
+                    w.Write(_vec2);
+                    break;
+                case Vector3 _vec3:
+                    w.Write(_vec3);
+                    break;
+                default:
+                    throw new NotImplementedException($"Don't know what to do with {typeof(T).Name}");
             }
         }
 

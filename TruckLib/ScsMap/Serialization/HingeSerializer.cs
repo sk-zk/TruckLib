@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, hinge);
 
             hinge.Model = r.ReadToken();
-            hinge.Variant = r.ReadToken();
+            hinge.Look = r.ReadToken();
             hinge.Node = new UnresolvedNode(r.ReadUInt64());
             hinge.MinRotation = r.ReadSingle();
             hinge.MaxRotation = r.ReadSingle();
@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap.Serialization
             var hinge = item as Hinge;
             WriteKdopItem(w, hinge);
             w.Write(hinge.Model);
-            w.Write(hinge.Variant);
+            w.Write(hinge.Look);
             w.Write(hinge.Node.Uid);
             w.Write(hinge.MinRotation);
             w.Write(hinge.MaxRotation);

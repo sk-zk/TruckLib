@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap
 
         public Token Model { get; set; }
 
-        public Token Variant { get; set; }
+        public Token Look { get; set; }
 
         public float MinRotation { get; set; }
 
@@ -52,7 +52,7 @@ namespace TruckLib.ScsMap
             var hinge = Add<Hinge>(map, position);
 
             hinge.Model = "door";
-            hinge.Variant = "default";
+            hinge.Look = "default";
             hinge.MinRotation = minRot;
             hinge.MaxRotation = maxRot;
 

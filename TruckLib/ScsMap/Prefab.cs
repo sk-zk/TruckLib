@@ -134,8 +134,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the prefab marks a state border.
+        /// Previously used to mark the prefab as a state border.
         /// </summary>
+        [Obsolete]
         public bool IsStateBorder
         {
             get => Kdop.Flags[18];

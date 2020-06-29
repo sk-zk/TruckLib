@@ -28,24 +28,6 @@ namespace TruckLib.ScsMap
 
         internal FlagField SoundFlags;
 
-        public bool Stream
-        {
-            get => SoundFlags[2];
-            set => SoundFlags[2] = value;
-        }
-
-        public bool ThreeDimensional
-        {
-            get => SoundFlags[0];
-            set => SoundFlags[0] = value;
-        }
-
-        public bool Looped
-        {
-            get => SoundFlags[1];
-            set => SoundFlags[1] = value;
-        }
-
         public Sound() : base() { }
 
         internal Sound(bool initFields) : base(initFields)
@@ -56,9 +38,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Looped = true;
-            ThreeDimensional = true;
-            SoundFlags = new FlagField();
+            SoundFlags = new FlagField(0x110);
         }
 
         public static Sound Add(IItemContainer map, Vector3 position, Token name, float fullIntensityDistance, 

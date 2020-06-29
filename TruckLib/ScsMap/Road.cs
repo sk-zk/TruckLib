@@ -96,10 +96,11 @@ namespace TruckLib.ScsMap
         public RoadResolution Resolution { get; set; } = RoadResolution.HighPoly;
 
         /// <summary>
-        /// [Legacy roads only] 
-        /// <para>Determines if this road is a city road and can therefore have a sidewalk.
+        /// [Legacy roads only]<br/>
+        /// <para>Makes this road a city road and can therefore have a sidewalk.
         /// </para>
         /// </summary>
+        [Obsolete]
         public bool IsCityRoad = false;
 
         public byte DlcGuard = Lookup.DlcGuard.None;
@@ -150,6 +151,7 @@ namespace TruckLib.ScsMap
 
         public bool SmoothDetailVegetation = true;
 
+        [Obsolete]
         public bool StretchTerrain = false;
 
         /// <summary>

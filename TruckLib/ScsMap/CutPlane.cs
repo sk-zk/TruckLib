@@ -31,6 +31,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
+        public bool RotatedLimits
+        {
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
+        }
+
         public CutPlane() : base() { }
 
         internal CutPlane(bool initFields) : base(initFields)

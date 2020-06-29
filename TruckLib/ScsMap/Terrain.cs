@@ -87,6 +87,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool LowPolyVegetation = false;
 
+        [Obsolete]
         public bool StretchTerrain = false;
 
         /// <summary>

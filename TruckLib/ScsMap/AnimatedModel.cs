@@ -13,6 +13,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// TODO: What even is this?
     /// </summary>
+    [Obsolete]
     public class AnimatedModel : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.AnimatedModel;

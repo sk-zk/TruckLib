@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ionic.Zlib;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -57,12 +58,17 @@ namespace TruckLib.HashFs
             return EntryType.NotFound;
         }
 
+        public Dictionary<ulong, Entry> GetEntries()
+        {
+            return new Dictionary<ulong, Entry>(entries);
+        }
+
         /// <summary>
-        /// Extracts and decompresses a file.
+        /// Extracts and decompresses an entry to memory.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public byte[] ExtractEntry(string path)
+        public byte[] Extract(string path)
         {
             if (EntryExists(path) == EntryType.NotFound)
                 throw new FileNotFoundException();
@@ -72,12 +78,62 @@ namespace TruckLib.HashFs
         }
 
         /// <summary>
+        /// Extracts and decompresses an entry to memory.
+        /// </summary>
+        /// <param name="entry">The entry header of the file to extract.</param>
+        /// <returns></returns>
+        public byte[] Extract(Entry entry)
+        {
+            if (!entries.ContainsValue(entry))
+                throw new FileNotFoundException();
+
+            return GetEntryContent(entry);
+        }
+
+        /// <summary>
+        /// Extracts and decompresses an entry to a file.
+        /// </summary>
+        /// <param name="path">The path of the file in the archive.</param>
+        /// <param name="outputPath">The output path.</param>
+        public void ExtractToFile(string path, string outputPath)
+        {
+            if (EntryExists(path) == EntryType.NotFound)
+                throw new FileNotFoundException();
+
+            var entry = GetEntryHeader(path);
+            ExtractToFile(entry, outputPath);
+        }
+
+        /// <summary>
+        /// Extracts and decompresses an entry to a file.
+        /// </summary>
+        /// <param name="entry">The entry header of the file to extract.</param>
+        /// <param name="outputPath">The output path.</param>
+        public void ExtractToFile(Entry entry, string outputPath)
+        {
+            reader.BaseStream.Position = (long)entry.Offset;
+            using (var fileStream = new FileStream(outputPath, FileMode.Create))
+            {
+                if (entry.IsCompressed)
+                {
+                    var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
+                    zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+                }
+                else
+                {
+                    reader.BaseStream.CopyTo(fileStream, (int)entry.Size);
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns a list of subdirectories and files in the given directory.
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="absolute"></param>
+        /// <param name="returnAbsolute"></param>
         /// <returns></returns>
-        public List<string> GetDirectoryListing(string path, bool absolute = true, bool filesOnly = false)
+        public (List<string> subdirs, List<string> files) GetDirectoryListing(
+            string path, bool filesOnly = false, bool returnAbsolute = true)
         {
             path = RemoveTrailingSlash(path);
 
@@ -88,51 +144,72 @@ namespace TruckLib.HashFs
                 throw new ArgumentException($"\"{path}\" is not a directory.");
 
             var entry = GetEntryHeader(path);
-            var files = Encoding.ASCII.GetString(GetEntryContent(entry))
-                .Split("\n");
+
+            var (subdirs, files) = GetDirectoryListing(entry, filesOnly);
+
+            if (returnAbsolute)
+            {
+                MakePathsAbsolute(path, subdirs);
+                MakePathsAbsolute(path, files);
+            }
+
+            return (subdirs, files);
+
+            static void MakePathsAbsolute(string parent, List<string> subdirs)
+            {
+                for (int i = 0; i < subdirs.Count; i++)
+                {
+                    if (parent == rootPath)
+                        subdirs[i] = rootPath + subdirs[i];
+                    else
+                        subdirs[i] = $"{parent}/{subdirs[i]}";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of subdirectories and files in the given directory.
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="filesOnly"></param>
+        /// <returns></returns>
+        public (List<string> subdirs, List<string> files) GetDirectoryListing(
+            Entry entry, bool filesOnly = false)
+        {        
+            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split("\n");
 
             const string dirMarker = "*";
-            var paths = new List<string>();
-            for (int i = 0; i < files.Length; i++)
+            var subdirs = new List<string>();
+            var files = new List<string>();
+            for (int i = 0; i < dirEntries.Length; i++)
             {
-                string subPath;
-
                 // is directory
-                if (files[i].StartsWith(dirMarker))
+                if (dirEntries[i].StartsWith(dirMarker))
                 {
                     if (filesOnly)
                         continue;
-                    subPath = files[i].Substring(1) + "/";
+                    var subPath = dirEntries[i].Substring(1) + "/";
+                    subdirs.Add(subPath);
                 }
                 // is file
                 else
                 {
-                    subPath = files[i];
+                    files.Add(dirEntries[i]);
                 }
-
-                if (absolute)
-                {
-                    if (path == rootPath)
-                        subPath = rootPath + subPath;
-                    else
-                        subPath = $"{path}/{subPath}";
-                }
-
-                paths.Add(subPath);
             }
 
-            return paths;
+            return (subdirs, files);
         }
 
         private byte[] GetEntryContent(Entry entry)
         {
-            reader.BaseStream.Position = (int)entry.Offset;
+            reader.BaseStream.Position = (long)entry.Offset;
             byte[] file;
             if (entry.IsCompressed)
             {
                 file = reader.ReadBytes((int)entry.CompressedSize);
                 file = Ionic.Zlib.ZlibStream.UncompressBuffer(file);
-            } 
+            }
             else
             {
                 // I hope this is correct
@@ -155,9 +232,12 @@ namespace TruckLib.HashFs
         /// <returns></returns>
         private ulong HashPath(string path)
         {
-            path = path.Substring(1);
+            if(path != "")
+                path = path.Substring(1);
+
             if (Salt != 0)
                 path = Salt + path;
+
             var hash = CityHash.CityHash64(Encoding.ASCII.GetBytes(path), (ulong)path.Length);
             return hash;
         }
@@ -166,17 +246,17 @@ namespace TruckLib.HashFs
         {
             uint magic = reader.ReadUInt32();
             if (magic != Magic)
-                throw new Exception("Probably not a HashFS file.");
+                throw new InvalidDataException("Probably not a HashFS file.");
 
             ushort version = reader.ReadUInt16();
             if (version != SupportedVersion)
-                throw new Exception($"Version {version} is not supported.");
+                throw new NotSupportedException($"Version {version} is not supported.");
 
             Salt = reader.ReadUInt16();
 
             HashMethod = new string(reader.ReadChars(4));
             if (HashMethod != SupportedHashMethod)
-                throw new Exception($"Hash method \"{HashMethod}\" is not supported.");
+                throw new NotSupportedException($"Hash method \"{HashMethod}\" is not supported.");
 
             EntriesCount = reader.ReadUInt32();
             StartOffset = reader.ReadUInt32();
@@ -186,7 +266,7 @@ namespace TruckLib.HashFs
         {
             reader.BaseStream.Position = StartOffset;
 
-            for (int i = 0; i < EntriesCount + 1; i++)
+            for (int i = 0; i < EntriesCount; i++)
             {
                 var entry = new Entry
                 {

@@ -33,7 +33,7 @@ namespace TruckLib.ScsMap
 
         public byte DlcGuard
         {
-            get => (Kdop.Flags.GetByte(1));
+            get => Kdop.Flags.GetByte(1);
             set => Kdop.Flags.SetByte(1, value);
         }
 

@@ -73,7 +73,7 @@ namespace TruckLib.ScsMap
         public Vector3 ForwardNodeOffset { get; set; }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection = false;
 
@@ -95,9 +95,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Boundary = true;
 
-        /// <summary>
-        /// Determines if the player can collide with this item.
-        /// </summary>
         public bool Collision = true;
 
         public bool TerrainShadows = true;

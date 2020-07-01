@@ -99,7 +99,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
+        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
         {
@@ -116,6 +117,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[22] = value;
         }
 
+        /// <summary>
+        /// Enables activation points. 
+        /// </summary>
         public bool Activation
         {
             get => !Kdop.Flags[21];
@@ -152,6 +156,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[17] = !value;
         }
 
+        /// <summary>
+        /// Determines if this road has invisible walls on its sides.
+        /// </summary>
         public bool Boundary
         {
             get => !Kdop.Flags[16];
@@ -193,6 +200,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[26] = value;
         }
 
+        /// <summary>
+        /// This should be set to true on the last prefab before a ferry.
+        /// </summary>
         public bool IsFerryEntrance
         {
             get => Kdop.Flags[25];
@@ -200,7 +210,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {

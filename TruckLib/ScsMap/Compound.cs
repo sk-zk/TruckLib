@@ -34,10 +34,10 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Contains all nodes owned by this compound.
         /// </summary>
-        public List<Node> CompoundNodes { get; set; } 
+        public List<Node> CompoundNodes { get; set; }
 
         /// <summary>
-        /// Determines if the compounded items are reflected in water.
+        /// Determines if the items are reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {

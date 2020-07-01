@@ -32,12 +32,13 @@ namespace TruckLib.ScsMap
         public RoadVegetation[] Vegetation { get; set; }
 
         /// <summary>
-        /// Determines if the player can collide with vegetation.
+        /// Determines if vegetation has collision.
         /// </summary>
         public bool VegetationCollision = false;
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
+        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation = true;
 

@@ -11,7 +11,9 @@ using System.Collections.Specialized;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// TODO: What even is this?
+    /// <p>TODO: What even is this?</p>
+    /// <p>Removed from the editor item menu, but it's still in the game and the
+    /// item properties dialog still works.</p>
     /// </summary>
     [Obsolete]
     public class AnimatedModel : SingleNodeItem
@@ -45,7 +47,8 @@ namespace TruckLib.ScsMap
             Tags = new List<Token>();
         }
 
-        public static AnimatedModel Add(IItemContainer map, Vector3 position, Token model, List<Token> tags)
+        public static AnimatedModel Add(IItemContainer map, Token model, Vector3 position, 
+            List<Token> tags = null)
         {
             var anim = Add<AnimatedModel>(map, position);
 

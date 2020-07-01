@@ -62,10 +62,6 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Height offsets for individual elements of the building.
         /// </summary>
-        /// <remarks>
-        /// This feature exists in the format and works ingame, but I have not
-        /// been able to find a way to apply it in the official editor.
-        /// </remarks>
         public List<float> HeightOffsets { get; set; }
 
         public bool Collision
@@ -84,7 +80,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -93,7 +89,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// TODO: What is this?
+        /// Enables or disables accessories.
         /// </summary>
         public bool Acc
         {
@@ -102,7 +98,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item casts shadows.
+        /// Determines if the item casts shadows.
         /// </summary>
         public bool Shadows
         {

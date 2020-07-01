@@ -66,6 +66,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[24] = value;
         }
 
+        /// <summary>
+        /// Determines if the item is reflected on water surfaces.
+        /// </summary>
         public bool WaterReflection
         {
             get => Kdop.Flags[26];

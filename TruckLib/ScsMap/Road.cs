@@ -106,7 +106,7 @@ namespace TruckLib.ScsMap
         public byte DlcGuard = Lookup.DlcGuard.None;
 
         /// <summary>
-        /// Causes the navigation to apply a huge penalty to paths using this road.
+        /// Causes the navigation to avoid this road segment.
         /// </summary>
         public bool GpsAvoid = false;
 
@@ -142,9 +142,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Boundary = true;
 
-        /// <summary>
-        /// Determines if the player can collide with this item.
-        /// </summary>
         public bool Collision = true;
 
         public bool TerrainShadows = true;
@@ -155,7 +152,7 @@ namespace TruckLib.ScsMap
         public bool StretchTerrain = false;
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection = false;
 

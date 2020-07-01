@@ -97,7 +97,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -106,7 +106,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item uses left hand traffic.
+        /// Enables the LHT variant of the model (?).
         /// </summary>
         public bool LeftHandTraffic
         { 
@@ -115,7 +115,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
+        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
         {
@@ -123,9 +124,6 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[12] = value;
         }
 
-        /// <summary>
-        /// Determines if the player can collide with this item.
-        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[13];
@@ -133,7 +131,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item casts shadows.
+        /// Determines if the item casts shadows.
         /// </summary>
         public bool Shadows
         {

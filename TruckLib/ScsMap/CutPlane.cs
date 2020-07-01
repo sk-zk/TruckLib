@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap
         public List<Node> Nodes { get; set; }
 
         /// <summary>
-        /// Determines if the cut plane is active in one direction only
+        /// Determines if the cut plane is active in one direction only.
         /// </summary>
         public bool OneSideOnly
         {

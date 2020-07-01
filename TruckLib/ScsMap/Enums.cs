@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Item type IDs in .base files.
+    /// Item type IDs in .base/.aux files.
     /// </summary>
     public enum ItemType
     {
@@ -54,7 +54,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed terrain noise values for road terrain.
+    /// Allowed terrain noise values for terrain.
     /// </summary>
     public enum TerrainNoise
     {
@@ -64,7 +64,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed transition values for road terrain.
+    /// Allowed transition values for terrain.
     /// </summary>
     public enum TerrainTransition
     {
@@ -96,7 +96,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Vegetation modes for veg. spheres.
+    /// Vegetation modes for vegetation spheres.
     /// </summary>
     public enum VegetationSphereType
     {
@@ -125,7 +125,6 @@ namespace TruckLib.ScsMap
 
     /// <summary>
     /// Quad resolution of a standalone terrain. 
-    /// Roads would do this with hi-poly and superfine flags.
     /// </summary>
     public enum StepSize
     {
@@ -171,7 +170,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         Parking = 1,
 
-        // TODO: What does this do?
+        /// <summary>
+        /// The item will display the name of a city like a City item.
+        /// </summary>
         CityName = 2,
 
         // TODO: What does this do?

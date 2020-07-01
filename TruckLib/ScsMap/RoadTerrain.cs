@@ -31,11 +31,15 @@ namespace TruckLib.ScsMap
         public Token Profile { get; set; } = "profile0";
 
         /// <summary>
-        /// Vertical scale of the terrain profile.
+        /// Vertical scale coefficient of the terrain profile.
         /// </summary>
         public float Coefficient { get; set; } = 1f;
 
         public TerrainNoise Noise { get; set; } = TerrainNoise.Percent100;
+
+        /// <summary>
+        /// Length of terrain transition to neighboring segment.
+        /// </summary>
         public TerrainTransition Transition { get; set; } = TerrainTransition._16;
 
         public TerrainQuadData QuadData { get; set; } = new TerrainQuadData();

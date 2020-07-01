@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         public Node Node { get; set; }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {

@@ -46,14 +46,20 @@ namespace TruckLib.ScsMap
 
         public float Stretch { get; set; }
 
+        /// <summary>
+        /// Specifies at which intervals to repeat the model segment.
+        /// </summary>
         public float FixedStep { get; set; }
 
         public float Scale { get; set; }
 
+        /// <summary>
+        /// Height offsets for individual elements of the curve.
+        /// </summary>
         public List<float> HeightOffsets { get; set; }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -70,15 +76,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[1] = value;
         }
 
-        /// <summary>
-        /// Determines if the player can collide with this item.
-        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[2];
             set => Kdop.Flags[2] = !value;
         }
 
+        /// <summary>
+        /// Inverts the model by 180 degrees.
+        /// </summary>
         public bool InvertGeometry
         {
             get => Kdop.Flags[3];
@@ -98,7 +104,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item casts shadows.
+        /// Determines if the item casts shadows.
         /// </summary>
         public bool Shadows
         {
@@ -137,7 +143,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
+        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
         {
@@ -159,6 +166,7 @@ namespace TruckLib.ScsMap
             HeightOffsets = new List<float>();
             Stretch = 1f;
             Scale = 1f;
+            TerrainColor = Color.White;
         }
 
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)

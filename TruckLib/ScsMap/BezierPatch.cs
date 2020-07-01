@@ -33,8 +33,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Vector3[,] ControlPoints { get; set; }
 
+        /// <summary>
+        /// Amount of quads on the X axis.
+        /// </summary>
         public ushort XTesselation { get; set; }
 
+        /// <summary>
+        /// Amount of quads on the Z axis.
+        /// </summary>
         public ushort ZTesselation { get; set; }
 
         public float UVRotation { get; set; }
@@ -58,7 +64,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected in water.
+        /// Determines if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -85,7 +91,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is drawn.
+        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
         {
@@ -93,9 +100,6 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[4] = !value;
         }
 
-        /// <summary>
-        /// Determines if the player can collide with this item.
-        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[6];
@@ -123,6 +127,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[10] = !value;
         }
 
+        /// <summary>
+        /// If true, vegetation is only placed inside vegetation spheres.
+        /// </summary>
         public bool InnerVegetationSphereSpace
         {
             get => Kdop.Flags[8];

@@ -12,15 +12,13 @@ namespace TruckLib.ScsMap
     /// <para>This item has been replaced by Movers and will probably be 
     /// removed from the game at some point.</para>
     /// </summary>
-    public class Walker : MapItem
+    public class Walker : PathItem
     {
         public override ItemType ItemType => ItemType.Walker;
 
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
         protected override ushort DefaultViewDistance => 120;
-
-        public List<Node> Nodes { get; set; }
 
         public Token NamePrefix { get; set; } 
 
@@ -90,6 +88,8 @@ namespace TruckLib.ScsMap
             set => base.ViewDistance = value;
         }
 
+        public Walker() : base() { }
+
         internal Walker(bool initFields) : base(initFields)
         {
             if (initFields) Init();
@@ -98,7 +98,6 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<Node>(2);
             Lengths = new List<float>();
             NamePrefix = "walker_";
             Speed = 1f;
@@ -106,23 +105,6 @@ namespace TruckLib.ScsMap
             Count = 1;
             Width = 2f;
             Angle = 0f;
-        }
-
-        internal override IEnumerable<Node> GetItemNodes()
-        {
-            return new List<Node>(Nodes);
-        }
-
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
         }
     }
 }

@@ -12,15 +12,13 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Used for Special Transport DLC. TODO: Figure out how this works
     /// </summary>
-    public class Trajectory : MapItem
+    public class Trajectory : PathItem
     {
         public override ItemType ItemType => ItemType.Trajectory;
 
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
-
-        public List<Node> Nodes { get; set; }
 
         public Token AccessRule { get; set; } 
 
@@ -68,6 +66,8 @@ namespace TruckLib.ScsMap
             set => NavigationFlags[14] = value;
         }
 
+        public Trajectory() : base() { }
+
         internal Trajectory(bool initFields) : base(initFields)
         {
             if (initFields) Init();
@@ -76,51 +76,11 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<Node>(2);
             AccessRule = "_tj_default";
             Rules = new List<TrajectoryRule>();
             Checkpoints = new List<TrajectoryCheckpoint>();
             Tags = new List<Token>();
             NavigationFlags = new FlagField();
-        }
-
-        internal override IEnumerable<Node> GetItemNodes()
-        {
-            return new List<Node>(Nodes);
-        }
-
-        /// <summary>
-        /// Moves the item to a different location.
-        /// </summary>
-        /// <param name="newPos"></param>
-        public void Move(Vector3 newPos)
-        {
-            var translation = newPos - Nodes[0].Position;
-            MoveRel(translation);
-        }
-
-        /// <summary>
-        /// Translates the item to a different location.
-        /// </summary>
-        /// <param name="translation"></param>
-        public void MoveRel(Vector3 translation)
-        {
-            foreach (var node in Nodes)
-            {
-                node.Move(node.Position + translation);
-            }
-        }
-
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
         }
     }
 }

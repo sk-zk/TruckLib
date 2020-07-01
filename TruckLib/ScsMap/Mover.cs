@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// A model with a static loop animation.
     /// </summary>
-    public class Mover : MapItem
+    public class Mover : PathItem
     {
         public override ItemType ItemType => ItemType.Mover;
 
@@ -36,22 +36,32 @@ namespace TruckLib.ScsMap
         /// </summary>
         public float DelayAtEnd { get; set; }
 
+        /// <summary>
+        /// Width of the path.
+        /// </summary>
         public float Width { get; set; }
 
+        /// <summary>
+        /// The amount of models that will appear on the path.
+        /// </summary>
         public uint Count { get; set; }
-
-        public List<Node> Nodes { get; set; } 
 
         public List<float> Lengths { get; set; } 
 
         public List<Token> Tags { get; set; }
 
+        /// <summary>
+        /// Sets the mover to be active when street lamps are off.
+        /// </summary>
         public bool ActiveDuringDay
         {
             get => Kdop.Flags[1];
             set => Kdop.Flags[1] = value;
         }
 
+        /// <summary>
+        /// Sets the mover to be active when street lamps are on.
+        /// </summary>
         public bool ActiveDuringNight
         {
             get => Kdop.Flags[2];
@@ -131,6 +141,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[10] = value;
         }
 
+        /// <summary>
+        /// Enables static animation for moving model if available.
+        /// </summary>
         public bool PreferNonMovableAnimation
         {
             get => Kdop.Flags[12];
@@ -165,50 +178,10 @@ namespace TruckLib.ScsMap
             ActiveDuringBadWeather = true;
             FollowDir = true;
             UseCurvedPath = true;
-            Nodes = new List<Node>(2);
             Lengths = new List<float>();
             Tags = new List<Token>();
             Speed = 1;
             Count = 1;
-        }
-
-        /// <summary>
-        /// Moves the item to a different location.
-        /// </summary>
-        /// <param name="newPos"></param>
-        public void Move(Vector3 newPos)
-        {
-            var translation = newPos - Nodes[0].Position;
-            MoveRel(translation);
-        }
-
-        /// <summary>
-        /// Translates the item to a different location.
-        /// </summary>
-        /// <param name="translation"></param>
-        public void MoveRel(Vector3 translation)
-        {
-            foreach(var node in Nodes)
-            {
-                node.Move(node.Position + translation);
-            }
-        }
-
-        internal override IEnumerable<Node> GetItemNodes()
-        {
-            return new List<Node>(Nodes);
-        }
-
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode 
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
         }
     }
 }

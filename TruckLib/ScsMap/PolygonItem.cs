@@ -10,14 +10,9 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Base class for items which define a polygonal area.
     /// </summary>
-    public abstract class PolygonItem : MapItem
+    public abstract class PolygonItem : MultiNodeItem
     {
-        /// <summary>
-        /// The nodes of the polygon.
-        /// </summary>
-        public List<Node> Nodes { get; set; }
-
-        public PolygonItem() : base() { }
+        protected PolygonItem() : base() { }
 
         internal PolygonItem(bool initFields) : base(initFields)
         {
@@ -28,45 +23,6 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Nodes = new List<Node>(2);
-        }
-
-        /// <summary>
-        /// Base method for adding a new PolygonItem to the map.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="map"></param>
-        /// <param name="positions"></param>
-        /// <returns></returns>
-        public static T Add<T>(IItemContainer map, Vector3[] positions) where T : PolygonItem, new()
-        {
-            var poly = new T();
-            CreateNodes(map, positions, poly);
-            map.AddItem(poly, poly.Nodes.First());
-            return poly;
-        }
-
-        /// <summary>
-        /// Creates map nodes for this item.
-        /// </summary>
-        /// <param name="map"></param>
-        /// <param name="nodePositions"></param>
-        /// <param name="item"></param>
-        protected static void CreateNodes(IItemContainer map, Vector3[] nodePositions, PolygonItem item)
-        {
-            // all nodes have the item as ForwardItem; 
-            // how the nodes connect is determined by their position in the list only
-            for (int i = 0; i < nodePositions.Length; i++)
-            {
-                var node = map.AddNode(nodePositions[i]);
-                if (i == 0) 
-                {
-                    // one node has to have the red node flag.
-                    // without it, the item can't be deleted.
-                    node.IsRed = true;
-                }
-                node.ForwardItem = item;
-                item.Nodes.Add(node);
-            }
         }
 
         /// <summary>
@@ -88,8 +44,8 @@ namespace TruckLib.ScsMap
         /// <param name="n"></param>
         public void Move(Vector3 newPos, int n = 0)
         {
-            if (n < 0 || n >= Nodes.Count) 
-                throw new ArgumentOutOfRangeException();
+            if (n < 0 || n >= Nodes.Count)
+                throw new ArgumentOutOfRangeException(nameof(n));
 
             var translation = newPos - Nodes[n].Position;
             MoveRel(translation);
@@ -101,29 +57,8 @@ namespace TruckLib.ScsMap
         /// <param name="translation"></param>
         public void MoveRel(Vector3 translation)
         {
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                Node node = Nodes[i];
+            foreach (Node node in Nodes)
                 node.Move(node.Position + translation);
-            }
         }
-
-        internal override IEnumerable<Node> GetItemNodes()
-        {
-            return new List<Node>(Nodes);
-        }
-
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode 
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
-        }   
-        
     }
 }

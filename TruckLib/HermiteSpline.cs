@@ -67,17 +67,7 @@ namespace TruckLib
         /// <returns></returns>
         public static float ApproximateLength(Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1)
         {
-            Vector3 prev = Vector3.Zero;
-            float dist = 0;
-            const int step = 1;
-            for (int i = 0; i < 100; i += step)
-            {
-                var point = Interpolate(p0, m0, p1, m1, i / 100f);
-                if (i > 0)
-                    dist += (point - prev).Length();
-                prev = point;
-            }
-            return dist;
+           return MathEx.ApproximateLength(Interpolate, p0, m0, p1, m1);
         }
     }
 }

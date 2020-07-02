@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     {
         public override ItemType ItemType => ItemType.FuelPump;
 
-        public static FuelPump Add(IItemContainer map, Prefab parent, Vector3 position)
+        public new static FuelPump Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<FuelPump>(map, parent, position);
         }

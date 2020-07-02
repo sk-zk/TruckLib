@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// A model with a static loop animation.
     /// </summary>
-    public class Mover : PathItem
+    public class Mover : PathItem, IRecalculatable
     {
         public override ItemType ItemType => ItemType.Mover;
 
@@ -182,6 +182,30 @@ namespace TruckLib.ScsMap
             Tags = new List<Token>();
             Speed = 1;
             Count = 1;
+        }
+
+        public static Mover Add(IItemContainer map, Vector3[] positions, Token model, Token look)
+        {
+            var mover = Add<Mover>(map, positions);
+
+            mover.Model = model;
+            mover.Look = look;
+            mover.Recalculate();
+
+            return mover;
+        }
+
+        public void Recalculate()
+        {
+            if (Nodes.Count > 1)
+            {
+                // TODO: Actually calculate lengths
+                Lengths = Enumerable.Repeat(1f, Nodes.Count - 1).ToList();
+            }
+            else
+            {
+                Lengths = new List<float>();
+            }
         }
     }
 }

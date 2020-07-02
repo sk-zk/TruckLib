@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 
 namespace TruckLib.ScsMap
 {
-    public abstract class PathItem : MapItem
+    public abstract class PathItem : MultiNodeItem
     {
-        public List<Node> Nodes { get; set; }
-
         protected PathItem() : base() { }
 
         internal PathItem(bool initFields) : base(initFields)
@@ -42,21 +41,5 @@ namespace TruckLib.ScsMap
                 node.Move(node.Position + translation);
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
-        {
-            return new List<Node>(Nodes);
-        }
-
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
-        }
     }
 }

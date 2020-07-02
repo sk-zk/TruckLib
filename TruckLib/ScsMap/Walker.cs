@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     /// <para>This item has been replaced by Movers and will probably be 
     /// removed from the game at some point.</para>
     /// </summary>
-    public class Walker : PathItem
+    public class Walker : PathItem, IRecalculatable
     {
         public override ItemType ItemType => ItemType.Walker;
 
@@ -105,6 +105,13 @@ namespace TruckLib.ScsMap
             Count = 1;
             Width = 2f;
             Angle = 0f;
+        }
+
+        public void Recalculate()
+        {
+            // TODO: Properly calculate lengths
+            Lengths = new List<float>(Nodes.Count);
+            Lengths.ForEach(x => x = 1);
         }
     }
 }

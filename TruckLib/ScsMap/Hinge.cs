@@ -45,14 +45,17 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
+            Model = "door";
+            Look = "default";
         }
 
-        public static Hinge Add(IItemContainer map, Vector3 position, float minRot, float maxRot)
+        public static Hinge Add(IItemContainer map, Vector3 position, Token model, 
+            Token look, float minRot, float maxRot)
         {
             var hinge = Add<Hinge>(map, position);
 
-            hinge.Model = "door";
-            hinge.Look = "default";
+            hinge.Model = model;
+            hinge.Look = look;
             hinge.MinRotation = minRot;
             hinge.MaxRotation = maxRot;
 

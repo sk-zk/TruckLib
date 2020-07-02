@@ -50,7 +50,8 @@ namespace TruckLib.ScsMap
             base.Init();
         }
 
-        public static MapOverlay Add(IItemContainer map, Vector3 position, Token look, OverlayType type = OverlayType.RoadName)
+        public static MapOverlay Add(IItemContainer map, Vector3 position, Token look,
+            OverlayType type = OverlayType.RoadName)
         {
             var overlay = Add<MapOverlay>(map, position);
 

@@ -57,7 +57,8 @@ namespace TruckLib.ScsMap
             base.Init();
         }
 
-        public static FarModel Add(IItemContainer map, Token model, float width, float height, Vector3 position, Vector3 perspPosition)
+        public static FarModel Add(IItemContainer map, Token model, float width, float height,
+            Vector3 position, Vector3 perspPosition)
         {
             var farModel = new FarModel();
 

@@ -73,5 +73,21 @@ namespace TruckLib
             return Math.Atan2(Vector3.Dot(v, right), Vector3.Dot(v, forward));
         }
 
+        public static float ApproximateLength(Func<Vector3, Vector3, Vector3, Vector3, float, Vector3> splineFunction,
+            Vector3 val0, Vector3 val1, Vector3 val2, Vector3 val3)
+        {
+            Vector3 prev = Vector3.Zero;
+            float dist = 0;
+            const int step = 1;
+            for (int i = 0; i < 100; i += step)
+            {
+                var point = splineFunction(val0, val1, val2, val3, i / 100f);
+                if (i > 0)
+                    dist += (point - prev).Length();
+                prev = point;
+            }
+            return dist;
+        }
+
     }
 }

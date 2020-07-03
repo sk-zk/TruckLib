@@ -54,18 +54,6 @@ namespace TruckLib.ScsMap
             set => Kdop.Uid = value;
         }
 
-        public float[] KdopMimimums
-        {
-            get => Kdop.Minimums;
-            set => Kdop.Minimums = value;
-        }
-
-        public float[] KdopMaximums
-        {
-            get => Kdop.Maximums;
-            set => Kdop.Maximums = value;
-        }
-
         /// <summary>
         /// View distance of an item in meters.
         /// </summary>

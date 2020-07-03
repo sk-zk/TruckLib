@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Contains all nodes owned by this compound.
         /// </summary>
-        public List<Node> CompoundNodes { get; set; }
+        public List<INode> CompoundNodes { get; set; }
 
         /// <summary>
         /// Determines if the items are reflected on water surfaces.
@@ -65,7 +65,7 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             CompoundItems = new List<MapItem>();
-            CompoundNodes = new List<Node>();
+            CompoundNodes = new List<INode>();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace TruckLib.ScsMap
         /// <param name="item">The item.</param>
         /// <param name="mainNode">The main node of the item. This will determine which sector
         /// contains the item.</param>
-        void IItemContainer.AddItem(MapItem item, Node mainNode)
+        void IItemContainer.AddItem(MapItem item, INode mainNode)
         {
             if(item.ItemFile != ItemFile.Aux)
             {
@@ -128,7 +128,7 @@ namespace TruckLib.ScsMap
             return GetAllItems<T>().ToDictionary(k => k.Uid, v => v);
         }
 
-        public Dictionary<ulong, Node> GetAllNodes()
+        public Dictionary<ulong, INode> GetAllNodes()
         {
             return CompoundNodes.ToDictionary(k => k.Uid, v => v);
         }
@@ -170,7 +170,7 @@ namespace TruckLib.ScsMap
         /// Deletes a node and the items attached to it.
         /// </summary>
         /// <param name="node"></param>
-        public void Delete(Node node)
+        public void Delete(INode node)
         {
             if (CompoundNodes.Contains(node))
             {

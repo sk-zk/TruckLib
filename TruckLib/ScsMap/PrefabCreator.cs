@@ -196,10 +196,10 @@ namespace TruckLib.ScsMap
         /// <param name="spawnPointType">The spawn point type.</param>
         /// <param name="node0Pos">The ppd position of the prefab's red control node.</param>
         /// <returns>A list of map nodes.</returns>
-        private List<Node> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType)
+        private List<INode> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType)
         {
             var selected = clonedPoints.Where(x => x.Type == spawnPointType).ToList();
-            var list = new List<Node>(selected.Count);
+            var list = new List<INode>(selected.Count);
             foreach (var spawnPoint in selected)
             {
                 var spawnPos = GetAbsolutePosition(spawnPoint.Position);

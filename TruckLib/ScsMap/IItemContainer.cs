@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
 
         Dictionary<ulong, T> GetAllItems<T>() where T : MapItem;
 
-        Dictionary<ulong, Node> GetAllNodes();
+        Dictionary<ulong, INode> GetAllNodes();
 
         Node AddNode(Vector3 position, bool isRed);
 
@@ -33,10 +33,10 @@ namespace TruckLib.ScsMap
         /// <param name="item">The item.</param>
         /// <param name="mainNode">The main node of the item. This will determine which sector
         /// contains the item.</param>
-        internal void AddItem(MapItem item, Node mainNode);
+        internal void AddItem(MapItem item, INode mainNode);
 
         void Delete(MapItem item);
 
-        void Delete(Node node);
+        void Delete(INode node);
     }
 }

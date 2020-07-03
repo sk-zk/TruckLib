@@ -22,26 +22,26 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// List of easy difficulty (15 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsEasy { get; set; }
+        public List<INode> UnloadPointsEasy { get; set; }
 
         /// <summary>
         /// List of medium difficulty (40 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsMedium { get; set; }
+        public List<INode> UnloadPointsMedium { get; set; }
 
         /// <summary>
         /// List of hard difficulty (90 XP) parking spots.
         /// </summary>
-        public List<Node> UnloadPointsHard { get; set; }
+        public List<INode> UnloadPointsHard { get; set; }
 
         /// <summary>
         /// List of trailer spawn points.
         /// </summary>
-        public List<Node> TrailerSpawnPoints { get; set; }
+        public List<INode> TrailerSpawnPoints { get; set; }
 
-        public List<Node> Unknown1 { get; set; }
+        public List<INode> Unknown1 { get; set; }
 
-        public List<Node> LongTrailerSpawnPoints { get; set; } 
+        public List<INode> LongTrailerSpawnPoints { get; set; } 
 
         public Company() : base() { }
 
@@ -53,12 +53,12 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            UnloadPointsEasy = new List<Node>();
-            UnloadPointsMedium = new List<Node>();
-            UnloadPointsHard = new List<Node>();
-            TrailerSpawnPoints = new List<Node>();
-            Unknown1 = new List<Node>();
-            LongTrailerSpawnPoints = new List<Node>();
+            UnloadPointsEasy = new List<INode>();
+            UnloadPointsMedium = new List<INode>();
+            UnloadPointsHard = new List<INode>();
+            TrailerSpawnPoints = new List<INode>();
+            Unknown1 = new List<INode>();
+            LongTrailerSpawnPoints = new List<INode>();
         }
 
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
@@ -85,7 +85,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
 

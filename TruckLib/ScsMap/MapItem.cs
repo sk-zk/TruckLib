@@ -12,14 +12,14 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Base class for all map items.
     /// </summary>
-    public abstract class MapItem : IMapObject
+    public abstract class MapItem : IMapItem
     {
         /// <summary>
         /// The item_type used as identifier in the map format.
         /// </summary>
         public abstract ItemType ItemType
         {
-            get; 
+            get;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace TruckLib.ScsMap
         {
             Kdop = new KdopItem(Utils.GenerateUuid());
             Kdop.ViewDistance = DefaultViewDistance;
-            itemFile = DefaultItemFile;          
+            itemFile = DefaultItemFile;
         }
 
         /// <summary>
@@ -102,15 +102,15 @@ namespace TruckLib.ScsMap
         /// and adds references to them in the item's Node fields.
         /// </summary>
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
-        internal abstract void UpdateNodeReferences(Dictionary<ulong, Node> allNodes);
+        internal abstract void UpdateNodeReferences(Dictionary<ulong, INode> allNodes);
 
         /// <summary>
         /// Returns all external nodes this item references.
         /// </summary>
         /// <returns></returns>
-        internal abstract IEnumerable<Node> GetItemNodes();
+        internal abstract IEnumerable<INode> GetItemNodes();
 
-        protected static Node ResolveNodeReference(Node node, Dictionary<ulong, Node> allNodes)
+        protected static INode ResolveNodeReference(INode node, Dictionary<ulong, INode> allNodes)
         {
             if (node is UnresolvedNode && allNodes.TryGetValue(node.Uid, out var resolvedNode))
                 return resolvedNode;
@@ -118,7 +118,7 @@ namespace TruckLib.ScsMap
                 return node;
         }
 
-        protected static void ResolveNodeReferences(IList<Node> nodes, Dictionary<ulong, Node> allNodes)
+        protected static void ResolveNodeReferences(IList<INode> nodes, Dictionary<ulong, INode> allNodes)
         {
             for (int i = 0; i < nodes.Count; i++)
             {

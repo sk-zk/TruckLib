@@ -14,40 +14,20 @@ namespace TruckLib.ScsMap
     /// instances of this class are replaced with the actual items 
     /// (if they exist).
     /// </summary>
-    internal sealed class UnresolvedItem : MapItem
+    internal struct UnresolvedItem : IMapItem
     {
-        private readonly string exceptionMessage = "This item is unresolved.";
+        public ulong Uid { get; set; }
 
-        public override ItemType ItemType => throw new InvalidOperationException(exceptionMessage);
-        public override ItemFile DefaultItemFile => throw new InvalidOperationException(exceptionMessage);
-        protected override ushort DefaultViewDistance => throw new InvalidOperationException(exceptionMessage);
-
-        public UnresolvedItem() { }
-
-        public UnresolvedItem(ulong uid) : base(false)
+        public UnresolvedItem(ulong uid)
         {
-            Kdop = new KdopItem();
             Uid = uid;
         }
 
-        public override void Move(Vector3 newPos)
-        {
-            throw new InvalidOperationException(exceptionMessage);
-        }
+        public ItemFile DefaultItemFile => throw new InvalidOperationException();
+        public ItemFile ItemFile => throw new InvalidOperationException();
+        public ItemType ItemType => throw new InvalidOperationException();
 
-        public override void Translate(Vector3 translation)
-        {
-            throw new InvalidOperationException(exceptionMessage);
-        }
-
-        internal override IEnumerable<Node> GetItemNodes()
-        {
-            throw new InvalidOperationException(exceptionMessage);
-        }
-
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
-        {
-            throw new InvalidOperationException(exceptionMessage);
-        }
+        public void Move(Vector3 newPos) => throw new InvalidOperationException();
+        public void Translate(Vector3 translation) => throw new InvalidOperationException();
     }
 }

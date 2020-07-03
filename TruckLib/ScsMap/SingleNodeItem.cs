@@ -15,7 +15,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The node of the item.
         /// </summary>
-        public Node Node { get; set; }
+        public INode Node { get; set; }
 
         public SingleNodeItem() : base() { }
 
@@ -53,7 +53,7 @@ namespace TruckLib.ScsMap
             Node.Move(Node.Position + translation);
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
+        internal override IEnumerable<INode> GetItemNodes()
         {
             return new[] { Node };
         }
@@ -63,7 +63,7 @@ namespace TruckLib.ScsMap
         /// and adds a reference to it in the item's Node field.
         /// </summary>
         /// <param name="allNodes">A list of all nodes in the entire map.</param>
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);
         }

@@ -15,7 +15,7 @@ namespace TruckLib.ScsMap
     {
         public override ItemType ItemType => ItemType.Service;
 
-        public List<Node> Nodes { get; set; }
+        public List<INode> Nodes { get; set; }
 
         public ServiceType ServiceType
         {
@@ -33,7 +33,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<Node>();
+            Nodes = new List<INode>();
         }
 
         public static Service Add(IItemContainer map, Prefab parent, Vector3 position)
@@ -56,7 +56,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
             ResolveNodeReferences(Nodes, allNodes);

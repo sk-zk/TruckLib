@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public List<Node> Nodes { get; set; }
+        public List<INode> Nodes { get; set; }
 
         /// <summary>
         /// Determines if the cut plane is active in one direction only.
@@ -47,7 +47,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<Node>(2);
+            Nodes = new List<INode>(2);
         }
 
         /// <summary>
@@ -57,7 +57,8 @@ namespace TruckLib.ScsMap
         /// <param name="nodePositions"></param>
         /// <param name="oneSideOnly"></param>
         /// <returns></returns>
-        public static CutPlane Add(IItemContainer map, IList<Vector3> nodePositions, bool oneSideOnly = false)
+        public static CutPlane Add(IItemContainer map, IList<Vector3> nodePositions,
+            bool oneSideOnly = false)
         {
             var cutPlane = new CutPlane();
             cutPlane.OneSideOnly = oneSideOnly;
@@ -66,7 +67,7 @@ namespace TruckLib.ScsMap
             // which just links to itself, so I'm creating the nodes in reverse
             // to create the references
             var posReverse = nodePositions.Reverse().ToArray(); 
-            var nodes = new List<Node>(nodePositions.Count());
+            var nodes = new List<INode>(nodePositions.Count());
             for(int i = 0; i < posReverse.Count(); i++)
             {
                 var node = map.AddNode(posReverse[i]);
@@ -126,12 +127,12 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
+        internal override IEnumerable<INode> GetItemNodes()
         {
-            return new List<Node>(Nodes);
+            return new List<INode>(Nodes);
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
         }

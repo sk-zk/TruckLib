@@ -27,12 +27,12 @@ namespace TruckLib.ScsMap
         /// The backward node / the node which holds this item as ForwardItem
         /// (= the node which highlights the item if you mouse over it).
         /// </summary>
-        public Node Node { get; set; }
+        public INode Node { get; set; }
 
         /// <summary>
         /// The forward node (= the one which is green on a single segment of this item).
         /// </summary>
-        public Node ForwardNode { get; set; }
+        public INode ForwardNode { get; set; }
 
         /// <summary>
         /// The length of the item's path.
@@ -165,7 +165,7 @@ namespace TruckLib.ScsMap
             return newItem;
         }
 
-        private static void SetMiddleRotation(Node pBackw, Node pMiddle, Node pNew)
+        private static void SetMiddleRotation(INode pBackw, INode pMiddle, INode pNew)
         {
             var pNew_yaw = pNew.Rotation.ToEuler().Y;
 
@@ -211,12 +211,12 @@ namespace TruckLib.ScsMap
             Recalculate();
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
+        internal override IEnumerable<INode> GetItemNodes()
         {
             return new[] { Node, ForwardNode };
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);
             ForwardNode = ResolveNodeReference(ForwardNode, allNodes);

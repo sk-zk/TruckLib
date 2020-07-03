@@ -87,10 +87,10 @@ namespace TruckLib.ScsMap.Serialization
             w.WriteObjectList<T>(list);
         }
 
-        public static List<Node> ReadNodeRefList(BinaryReader r)
+        public static List<INode> ReadNodeRefList(BinaryReader r)
         {
             var count = r.ReadUInt32();
-            var list = new List<Node>((int)count);
+            var list = new List<INode>((int)count);
             for (int i = 0; i < count; i++)
             {
                 list.Add(new UnresolvedNode(r.ReadUInt64()));
@@ -98,12 +98,12 @@ namespace TruckLib.ScsMap.Serialization
             return list;
         }
 
-        public static List<MapItem> ReadItemRefList(BinaryReader r)
+        public static List<IMapItem> ReadItemRefList(BinaryReader r)
         {
-            return ReadObjectList<UnresolvedItem>(r).Cast<MapItem>().ToList();
+            return ReadObjectList<UnresolvedItem>(r).Cast<IMapItem>().ToList();
         }
 
-        public static void WriteNodeRefList(BinaryWriter w, List<Node> nodeList)
+        public static void WriteNodeRefList(BinaryWriter w, List<INode> nodeList)
         {
             if (nodeList is null)
             {
@@ -118,7 +118,7 @@ namespace TruckLib.ScsMap.Serialization
             }
         }
 
-        public static void WriteItemRefList(BinaryWriter w, List<MapItem> itemList)
+        public static void WriteItemRefList(BinaryWriter w, List<IMapItem> itemList)
         {
             if (itemList is null)
             {

@@ -34,8 +34,8 @@ namespace TruckLib.ScsMap
         // sector boundaries are written to both sectors, and doing this was
         // the best way I could think of to prevent two instances of 
         // the same node.
-        public Dictionary<ulong, Node> Nodes { get; set; } 
-            = new Dictionary<ulong, Node>();
+        public Dictionary<ulong, INode> Nodes { get; set; } 
+            = new Dictionary<ulong, INode>();
 
         /// <summary>
         /// Scale of the game outside cities.
@@ -174,7 +174,7 @@ namespace TruckLib.ScsMap
         /// <param name="item">The item.</param>
         /// <param name="mainNode">The main node of the item. This will determine which sector
         /// contains the item.</param>
-        void IItemContainer.AddItem(MapItem item, Node mainNode)
+        void IItemContainer.AddItem(MapItem item, INode mainNode)
         {
             mainNode.Sectors[0].MapItems.Add(item.Uid, item);
         }
@@ -196,7 +196,7 @@ namespace TruckLib.ScsMap
         /// Returns a list containing all nodes in the entire map.
         /// </summary>
         /// <returns>All nodes in the entire map.</returns>
-        public Dictionary<ulong, Node> GetAllNodes()
+        public Dictionary<ulong, INode> GetAllNodes()
         {       
             return Nodes;
         }
@@ -304,9 +304,11 @@ namespace TruckLib.ScsMap
             // delete dependent items
             if(item is Prefab pf)
             {
-                foreach(var s in pf.SlaveItems)
+                foreach(var slaveItem in pf.SlaveItems)
                 {
-                    Delete(s);
+                    if (slaveItem is MapItem mapItem)
+                        Delete(mapItem);
+                    // if Unresolved, just ignore it
                 }
             }
         }
@@ -315,7 +317,7 @@ namespace TruckLib.ScsMap
         /// Deletes a node and the items attached to it.
         /// </summary>
         /// <param name="node"></param>
-        public void Delete(Node node)
+        public void Delete(INode node)
         {
             Nodes.Remove(node.Uid);
             
@@ -440,10 +442,10 @@ namespace TruckLib.ScsMap
                     .ForEach(f => f.Delete());
             }
 
-            var sectorNodes = new Dictionary<Sector, List<Node>>();
+            var sectorNodes = new Dictionary<Sector, List<INode>>();
             foreach(var sectorKvp in Sectors)
             {
-                sectorNodes.Add(sectorKvp.Value, new List<Node>());
+                sectorNodes.Add(sectorKvp.Value, new List<INode>());
             }
             foreach(var nodeKvp in Nodes)
             {

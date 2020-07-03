@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,11 +14,31 @@ namespace TruckLib.ScsMap
     /// instances of this class are replaced with the actual nodes 
     /// (if they exist).
     /// </summary>
-    internal sealed class UnresolvedNode : Node
+    internal struct UnresolvedNode : INode
     {
-        public UnresolvedNode(ulong uid) : base(false)
+        public ulong Uid { get; set; }
+
+        public UnresolvedNode(ulong uid)
         {
             Uid = uid;
         }
+
+        #region Nothing to see here
+        public byte BackwardCountry { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public IMapObject BackwardItem { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public byte ForwardCountry { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public IMapObject ForwardItem { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public bool FreeRotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public bool IsCountryBorder { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public bool IsRed { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public Vector3 Position { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public Quaternion Rotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public Sector[] Sectors { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public bool IsOrphaned() => throw new InvalidOperationException();
+        public void Move(Vector3 newPos) => throw new InvalidOperationException();
+        public void ReadFromStream(Sector sector, BinaryReader r) => throw new InvalidOperationException();
+        public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems) => throw new InvalidOperationException();
+        public void WriteToStream(BinaryWriter w) => throw new InvalidOperationException();
+        #endregion
     }
 }

@@ -22,7 +22,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint BuyMode { get; set; }
 
-        public List<Node> TrailerSpawnPoints { get; set; }
+        public List<INode> TrailerSpawnPoints { get; set; }
 
         public Garage() : base() { }
 
@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            TrailerSpawnPoints = new List<Node>();
+            TrailerSpawnPoints = new List<INode>();
         }
 
         public static Garage Add(IItemContainer map, Prefab parent, Vector3 position)
@@ -57,7 +57,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
             ResolveNodeReferences(TrailerSpawnPoints, allNodes);

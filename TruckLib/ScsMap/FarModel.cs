@@ -28,7 +28,7 @@ namespace TruckLib.ScsMap
 
         public FarModelData[] Models { get; set; }
 
-        public Node Node { get; set; }
+        public INode Node { get; set; }
 
         /// <summary>
         /// Determines if the item is reflected on water surfaces.
@@ -92,12 +92,12 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
+        internal override IEnumerable<INode> GetItemNodes()
         {
             return Models.Select(x => x.PerspectiveNode).Prepend(Node);
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);
 
@@ -128,6 +128,6 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// This node defines where the model will be rendered (I think).
         /// </summary>
-        public Node PerspectiveNode;
+        public INode PerspectiveNode;
     }
 }

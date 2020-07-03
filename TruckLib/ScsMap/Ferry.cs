@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap
 
         public Vector3 UnloadOffset { get; set; }
 
-        public MapItem PrefabLink { get; set; }
+        public IMapItem PrefabLink { get; set; }
 
         /// <summary>
         /// Determines if the item is actually a train transport.

@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     {
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
-        public MapItem PrefabLink { get; set; }
+        public IMapItem PrefabLink { get; set; }
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 

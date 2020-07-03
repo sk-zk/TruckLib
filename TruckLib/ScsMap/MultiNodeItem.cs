@@ -8,7 +8,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The nodes of the item.
         /// </summary>
-        public List<Node> Nodes { get; set; }
+        public List<INode> Nodes { get; set; }
 
         protected MultiNodeItem() : base() { }
 
@@ -52,12 +52,12 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
+        internal override IEnumerable<INode> GetItemNodes()
         {
-            return new List<Node>(Nodes);
+            return new List<INode>(Nodes);
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
         }

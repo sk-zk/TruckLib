@@ -263,7 +263,7 @@ namespace TruckLib.ScsMap
         /// Saves the sector as binary files to the specified directory.
         /// </summary>
         /// <param name="sectorDirectory">The sector directory.</param>
-        public void Save(string sectorDirectory, List<Node> sectorNodes)
+        public void Save(string sectorDirectory, List<INode> sectorNodes)
         {
             WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes);
             WriteData(GetFilename(DataExtension), MapItems);
@@ -280,7 +280,7 @@ namespace TruckLib.ScsMap
         /// <param name="baseFilename">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
         private void WriteBase(string baseFilename, Dictionary<ulong, MapItem> allItems,
-            List<Node> sectorNodes)
+            List<INode> sectorNodes)
         {
             using var stream = new FileStream(baseFilename, FileMode.Create);
             using var w = new BinaryWriter(stream);
@@ -295,7 +295,7 @@ namespace TruckLib.ScsMap
         /// <param name="auxFilename">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
         private void WriteAux(string auxFilename, Dictionary<ulong, MapItem> allItems,
-            List<Node> sectorNodes)
+            List<INode> sectorNodes)
         {
             using var stream = new FileStream(auxFilename, FileMode.Create);
             using var w = new BinaryWriter(stream);
@@ -351,10 +351,10 @@ namespace TruckLib.ScsMap
         /// Writes the node part of a .base / .aux file.
         /// </summary>
         /// <param name="w">The writer.</param>
-        private void WriteNodes(BinaryWriter w, ItemFile file, List<Node> sectorNodes)
+        private void WriteNodes(BinaryWriter w, ItemFile file, List<INode> sectorNodes)
         {
             // get base nodes only || get aux nodes only
-            var nodes = new List<Node>(32);
+            var nodes = new List<INode>(32);
             foreach (var node in sectorNodes)
             {
                 if (!(node.ForwardItem is UnresolvedItem)

@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// A map node.
     /// </summary>
-    public class Node : IItemReferences, IMapObject
+    public class Node : INode, IItemReferences, IMapObject
     {
         /// <summary>
         /// The UID of this node.
@@ -76,8 +76,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The forward item belonging to this node. 
         /// </summary>
-        public IMapObject ForwardItem 
-        { 
+        public IMapObject ForwardItem
+        {
             get => forwardItem;
             set
             {
@@ -220,7 +220,7 @@ namespace TruckLib.ScsMap
             if (Sectors is null || Sectors.Length == 0)
             {
                 Sectors = new[] { sector };
-            } 
+            }
             else
             {
                 Sectors = Sectors.Push(sector);
@@ -232,13 +232,13 @@ namespace TruckLib.ScsMap
             // This reference will be resolved in Map.UpdateItemReferences()
             // once all sectors are loaded
             var bwItemUid = r.ReadUInt64();
-            BackwardItem = bwItemUid == 0 ? null : new UnresolvedItem(bwItemUid);
+            BackwardItem = bwItemUid == 0 ? null : (IMapObject)new UnresolvedItem(bwItemUid);
 
             // The item attached to the node in forward direction.
             // This reference will be resolved in Map.UpdateItemReferences()
             // once all sectors are loaded
             var fwItemUid = r.ReadUInt64();
-            ForwardItem = fwItemUid == 0 ? null : new UnresolvedItem(fwItemUid);
+            ForwardItem = fwItemUid == 0 ? null : (IMapObject)new UnresolvedItem(fwItemUid);
 
             Flags = new FlagField(r.ReadUInt32());
         }
@@ -268,12 +268,12 @@ namespace TruckLib.ScsMap
         {
             // uses the field instead of the property to not trigger recalc,
             // which we don't want while loading an existing map
-            if (forwardItem is UnresolvedItem 
+            if (forwardItem is UnresolvedItem
                 && allItems.TryGetValue(forwardItem.Uid, out var resolvedFw))
             {
                 forwardItem = resolvedFw;
             }
-            if (backwardItem is UnresolvedItem 
+            if (backwardItem is UnresolvedItem
                 && allItems.TryGetValue(backwardItem.Uid, out var resolvedBw))
             {
                 backwardItem = resolvedBw;

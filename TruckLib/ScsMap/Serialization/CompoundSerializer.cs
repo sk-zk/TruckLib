@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap.Serialization
             }
 
             var nodeCount = r.ReadUInt32();
-            comp.CompoundNodes = new List<Node>((int)nodeCount);
+            comp.CompoundNodes = new List<INode>((int)nodeCount);
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);

@@ -47,7 +47,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The nodes belonging to this prefab.
         /// </summary>
-        public List<Node> Nodes;
+        public List<INode> Nodes;
 
         /// <summary>
         /// The index of the origin node.
@@ -78,11 +78,11 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token SemaphoreProfile { get; set; }
 
-        public MapItem FerryLink { get; set; }
+        public IMapItem FerryLink { get; set; }
 
         public uint RandomSeed { get; set; }
 
-        public List<MapItem> SlaveItems { get; set; }
+        public List<IMapItem> SlaveItems { get; set; }
 
         public List<VegetationPart> VegetationParts { get; set; } 
 
@@ -240,9 +240,9 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<Node>(2);
+            Nodes = new List<INode>(2);
             AdditionalParts = new List<Token>();
-            SlaveItems = new List<MapItem>();
+            SlaveItems = new List<IMapItem>();
             VegetationParts = new List<VegetationPart>();
             VegetationSpheres = new List<VegetationSphere>();
         }
@@ -299,8 +299,8 @@ namespace TruckLib.ScsMap
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
             }
 
-            Node backwardNode;
-            Node forwardNode;
+            INode backwardNode;
+            INode forwardNode;
 
             // if the node to attach to is the origin node,
             // the road has to be *prepended* instead
@@ -357,7 +357,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="item">The polyline item to attach.</param>
         /// <param name="prefabNodeIdx">The index of the prefab node to attach to.</param>
-        public void Attach(PolylineItem item, Node itemNode, ushort prefabNodeIdx)
+        public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
         {
             if (prefabNodeIdx > Nodes.Count)
             {
@@ -397,11 +397,11 @@ namespace TruckLib.ScsMap
         {
             // find closest node
             float shortestDist = float.MaxValue;
-            Node closestPrefabNode = null;
-            Node closestItemNode = null;
+            INode closestPrefabNode = null;
+            INode closestItemNode = null;
             foreach(var node in Nodes)
             {
-                foreach(var itemNode in new Node[] { item.ForwardNode, item.Node })
+                foreach (var itemNode in new[] { item.ForwardNode, item.Node })
                 {
                     var dist = Vector3.DistanceSquared(node.Position, itemNode.Position);
                     if (dist < shortestDist)
@@ -510,12 +510,12 @@ namespace TruckLib.ScsMap
             Origin = newOrigin;
         }
 
-        internal override IEnumerable<Node> GetItemNodes()
+        internal override IEnumerable<INode> GetItemNodes()
         {
-            return new List<Node>(Nodes);
+            return new List<INode>(Nodes);
         }
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
         }
@@ -541,14 +541,14 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Used for Attach(Prefab). Compares the position of two nodes.
         /// </summary>
-        internal class NodePositionComparer : IEqualityComparer<Node>
+        internal class NodePositionComparer : IEqualityComparer<INode>
         {
-            public bool Equals(Node x, Node y)
+            public bool Equals(INode x, INode y)
             {
                 return x.Position == y.Position;
             }
 
-            public int GetHashCode(Node obj)
+            public int GetHashCode(INode obj)
             {
                 // apparently this has to happen for Equals to be called
                 return 0;

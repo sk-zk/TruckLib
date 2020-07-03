@@ -56,18 +56,10 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
-
-            for (int i = 0; i < Nodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
+            ResolveNodeReferences(Nodes, allNodes);
         }
 
     }

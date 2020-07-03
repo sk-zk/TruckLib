@@ -216,16 +216,10 @@ namespace TruckLib.ScsMap
             return new[] { Node, ForwardNode };
         }
 
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
-            if (allNodes.TryGetValue(ForwardNode.Uid, out var resolvedFw))
-            {
-                ForwardNode = resolvedFw;
-            }
-            if (allNodes.TryGetValue(Node.Uid, out var resolvedBw))
-            {
-                Node = resolvedBw;
-            }
+            Node = ResolveNodeReference(Node, allNodes);
+            ForwardNode = ResolveNodeReference(ForwardNode, allNodes);
         }
     }
 }

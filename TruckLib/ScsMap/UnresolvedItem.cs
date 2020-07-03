@@ -45,7 +45,7 @@ namespace TruckLib.ScsMap
             throw new InvalidOperationException(exceptionMessage);
         }
 
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             throw new InvalidOperationException(exceptionMessage);
         }

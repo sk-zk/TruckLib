@@ -97,15 +97,11 @@ namespace TruckLib.ScsMap
             return Models.Select(x => x.PerspectiveNode).Prepend(Node);
         }
 
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
-            if (Node is UnresolvedNode && 
-                allNodes.TryGetValue(Node.Uid, out var resolvedNode))
-            {
-                Node = resolvedNode;
-            }
+            Node = ResolveNodeReference(Node, allNodes);
 
-            for(int i = 0; i < Models.Length; i++)
+            for (int i = 0; i < Models.Length; i++)
             {
                 if (Models[i].PerspectiveNode is UnresolvedNode 
                     && allNodes.TryGetValue(Models[i].PerspectiveNode.Uid, 

@@ -36,18 +36,10 @@ namespace TruckLib.ScsMap
             CameraSpeed = 1f;
         }
 
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
-
-            for (int i = 0; i < TrackNodes.Count; i++)
-            {
-                if (Nodes[i] is UnresolvedNode
-                    && allNodes.TryGetValue(Nodes[i].Uid, out var resolvedNode))
-                {
-                    Nodes[i] = resolvedNode;
-                }
-            }
+            ResolveNodeReferences(TrackNodes, allNodes);
         }
     }
 }

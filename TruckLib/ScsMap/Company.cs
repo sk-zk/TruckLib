@@ -85,28 +85,16 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
+        internal override void UpdateNodeReferences(Dictionary<ulong, Node> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
 
-            UpdateNodeList(UnloadPointsEasy, allNodes);
-            UpdateNodeList(UnloadPointsMedium, allNodes);
-            UpdateNodeList(UnloadPointsHard, allNodes);
-            UpdateNodeList(TrailerSpawnPoints, allNodes);
-            UpdateNodeList(Unknown1, allNodes);
-            UpdateNodeList(LongTrailerSpawnPoints, allNodes);
-        }
-
-        private static void UpdateNodeList(List<Node> nodeList, Dictionary<ulong, Node> allNodes)
-        {
-            for (int i = 0; i < nodeList.Count; i++)
-            {
-                if (nodeList[i] is UnresolvedNode && 
-                    allNodes.TryGetValue(nodeList[i].Uid, out var resolvedNode))
-                {
-                    nodeList[i] = resolvedNode;
-                }
-            }
+            ResolveNodeReferences(UnloadPointsEasy, allNodes);
+            ResolveNodeReferences(UnloadPointsMedium, allNodes);
+            ResolveNodeReferences(UnloadPointsHard, allNodes);
+            ResolveNodeReferences(TrailerSpawnPoints, allNodes);
+            ResolveNodeReferences(Unknown1, allNodes);
+            ResolveNodeReferences(LongTrailerSpawnPoints, allNodes);
         }
     }
 }

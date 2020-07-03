@@ -102,12 +102,29 @@ namespace TruckLib.ScsMap
         /// and adds references to them in the item's Node fields.
         /// </summary>
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
-        public abstract void UpdateNodeReferences(Dictionary<ulong, Node> allNodes);
+        internal abstract void UpdateNodeReferences(Dictionary<ulong, Node> allNodes);
 
         /// <summary>
         /// Returns all external nodes this item references.
         /// </summary>
         /// <returns></returns>
         internal abstract IEnumerable<Node> GetItemNodes();
+
+        protected static Node ResolveNodeReference(Node node, Dictionary<ulong, Node> allNodes)
+        {
+            if (node is UnresolvedNode && allNodes.TryGetValue(node.Uid, out var resolvedNode))
+                return resolvedNode;
+            else
+                return node;
+        }
+
+        protected static void ResolveNodeReferences(IList<Node> nodes, Dictionary<ulong, Node> allNodes)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                nodes[i] = ResolveNodeReference(nodes[i], allNodes);
+            }
+        }
+
     }
 }

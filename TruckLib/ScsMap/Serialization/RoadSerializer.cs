@@ -26,6 +26,9 @@ namespace TruckLib.ScsMap.Serialization
             road.Uid = r.ReadUInt64();
             ReadKdopBounds(r, road);
 
+            road.Left = new RoadSide();
+            road.Right = new RoadSide();
+
             // === kdop flags ===
             var kflag1 = r.ReadByte();
             road.Left.Terrain.Noise = (TerrainNoise)(kflag1 & 0b11);
@@ -280,6 +283,7 @@ namespace TruckLib.ScsMap.Serialization
             road.CenterMaterialColor = r.ReadColor();
 
             road.RandomSeed = r.ReadUInt32();
+            road.CenterVegetation = new CenterVegetation();
             road.CenterVegetation.Name = r.ReadToken();
             road.CenterVegetation.Density = r.ReadUInt16() / centerVegDensityFactor;
             road.CenterVegetation.Scale = (VegetationScale)r.ReadByte();

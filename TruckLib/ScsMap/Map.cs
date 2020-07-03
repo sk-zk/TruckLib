@@ -130,17 +130,7 @@ namespace TruckLib.ScsMap
             
              var sector = new Sector(x, z, this);
              Sectors.Add((x, z), sector);
-             return sector;           
-        }
-
-        /// <summary>
-        /// Creates a new sector.
-        /// </summary>
-        /// <param name="coordinates">The coordinates of the sector.</param>
-        /// <returns>The new sector.</returns>
-        public Sector AddSector((int X, int Z) coordinates)
-        {
-            return AddSector(coordinates.X, coordinates.Z);
+             return sector;
         }
 
         /// <summary>
@@ -166,7 +156,7 @@ namespace TruckLib.ScsMap
             var sectorIdx = GetSectorOfCoordinate(position);
             if(!Sectors.ContainsKey(sectorIdx))
             {
-                AddSector(sectorIdx);
+                AddSector(sectorIdx.X, sectorIdx.Z);
             }
 
             var node = new Node();

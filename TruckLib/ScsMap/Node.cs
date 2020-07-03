@@ -173,11 +173,8 @@ namespace TruckLib.ScsMap
                 // one of the node's sectors.
                 // if not, set Sectors to the new sector.
                 var newSector = Map.GetSectorOfCoordinate(newPos);
-                if (!Sectors.Any(s => s.X == newSector.X && s.Z == newSector.Z))
-                {
-                    map.AddSector(newSector); // just in case
-                    Sectors = new Sector[] { map.Sectors[newSector] };
-                }
+                map.AddSector(newSector.X, newSector.Z); // just in case
+                Sectors = new Sector[] { map.Sectors[newSector] };
                 Position = newPos;
             }
 

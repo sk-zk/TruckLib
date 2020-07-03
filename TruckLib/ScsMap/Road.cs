@@ -56,29 +56,29 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Terrain, models, railings, sidewalk on the left side of this road.
         /// </summary>
-        public RoadSide Left { get; set; } = new RoadSide();
+        public RoadSide Left { get; set; }
 
         /// <summary>
         /// Terrain, models, railings, sidewalk on the right side of this road.
         /// </summary>
-        public RoadSide Right { get; set; } = new RoadSide();
+        public RoadSide Right { get; set; }
 
         /// <summary>
         /// The terrain material used in the center of the road.
         /// </summary>
-        public Token CenterMaterial { get; set; } = "0";
+        public Token CenterMaterial { get; set; }
 
         /// <summary>
         /// The vegetation used in the center of the road.
         /// </summary>
-        public CenterVegetation CenterVegetation { get; set; } = new CenterVegetation();
+        public CenterVegetation CenterVegetation { get; set; } 
 
-        public Color CenterMaterialColor { get; set; } = Color.FromArgb(0xffffff);
+        public Color CenterMaterialColor { get; set; }
 
         /// <summary>
         /// The seed which determines the placement of vegetation models.
         /// </summary>
-        public uint RandomSeed { get; set; } = 0;
+        public uint RandomSeed { get; set; }
 
         public Token OverlayScheme { get; set; }
 
@@ -90,10 +90,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The segment step size.
         /// </summary>
-        // set to HighPoly by default since you probably aren't creating
-        // non-template roads, so the road is HighPoly no matter what, 
-        // but this setting is needed to make the terrain match the road.
-        public RoadResolution Resolution { get; set; } = RoadResolution.HighPoly;
+        public RoadResolution Resolution { get; set; }
 
         /// <summary>
         /// [Legacy roads only]<br/>
@@ -103,7 +100,7 @@ namespace TruckLib.ScsMap
         [Obsolete]
         public bool IsCityRoad = false;
 
-        public byte DlcGuard = Lookup.DlcGuard.None;
+        public byte DlcGuard;
 
         /// <summary>
         /// Causes the navigation to avoid this road segment.
@@ -166,7 +163,17 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
+            Left = new RoadSide();
+            Right = new RoadSide();
+            DlcGuard = Lookup.DlcGuard.None;
+            Resolution = RoadResolution.HighPoly;
+            CenterMaterial = "0";
+            CenterMaterialColor = Color.FromArgb(0xffffff);
+            CenterVegetation = new CenterVegetation();
             VegetationSpheres = new List<VegetationSphere>();
+            // set to HighPoly by default since you probably aren't creating
+            // non-template roads, so the road is HighPoly no matter what, 
+            // but this setting is needed to make the terrain match the road.
         }
 
         /// <summary>

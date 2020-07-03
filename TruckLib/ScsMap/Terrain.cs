@@ -44,19 +44,19 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Terrain and vegetation on the left side.
         /// </summary>
-        public TerrainSide Left { get; set; } = new TerrainSide();
+        public TerrainSide Left { get; set; }
 
         /// <summary>
         /// Terrain and vegetation on the right side.
         /// </summary>
-        public TerrainSide Right { get; set; } = new TerrainSide();
+        public TerrainSide Right { get; set; }
 
         /// <summary>
         /// The terrain quad density. Roads would do this with hi-poly and superfine flags.
         /// </summary>
         public StepSize StepSize { get; set; }
 
-        public Railings Railings { get; set; } = new Railings();
+        public Railings Railings { get; set; } 
 
         /// <summary>
         /// The random seed which determines the placement of vegetation models.
@@ -111,6 +111,9 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
+            Left = new TerrainSide();
+            Right = new TerrainSide();
+            Railings = new Railings();
             StepSize = StepSize.Meters4;
             VegetationSpheres = new List<VegetationSphere>();
         }

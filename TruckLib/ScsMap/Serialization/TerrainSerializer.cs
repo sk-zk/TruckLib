@@ -21,6 +21,10 @@ namespace TruckLib.ScsMap.Serialization
 
             ReadKdopBounds(r, t);
 
+            t.Left = new TerrainSide();
+            t.Right = new TerrainSide();
+            t.Railings = new Railings();
+
             var kflag1 = r.ReadByte();
             var karr1 = new BitArray(new[] { kflag1 });
             t.Right.Terrain.Noise = (TerrainNoise)(kflag1 & 0b11);

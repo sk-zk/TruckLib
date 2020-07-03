@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -79,7 +80,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Creates a new item and generates a UID for it.
         /// </summary>
-        public MapItem()
+        protected MapItem()
         {
             Init();
         }
@@ -95,6 +96,18 @@ namespace TruckLib.ScsMap
             Kdop.ViewDistance = DefaultViewDistance;
             itemFile = DefaultItemFile;          
         }
+
+        /// <summary>
+        /// Moves the item to a different location.
+        /// </summary>
+        /// <param name="newPos"></param>
+        public abstract void Move(Vector3 newPos);
+
+        /// <summary>
+        /// Translates the item to a different location.
+        /// </summary>
+        /// <param name="translation"></param>
+        public abstract void Translate(Vector3 translation);
 
         /// <summary>
         /// Searches a list of all nodes for the nodes referenced by UID in this map item

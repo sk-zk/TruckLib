@@ -78,6 +78,20 @@ namespace TruckLib.ScsMap
             return farModel;
         }
 
+        public override void Move(Vector3 newPos)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            Node.Move(Node.Position + translation);
+            foreach (var model in Models)
+            {
+                model.PerspectiveNode?.Move(model.PerspectiveNode.Position + translation);
+            }
+        }
+
         internal override IEnumerable<Node> GetItemNodes()
         {
             return Models.Select(x => x.PerspectiveNode).Prepend(Node);

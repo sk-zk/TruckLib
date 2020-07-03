@@ -472,22 +472,18 @@ namespace TruckLib.ScsMap
             return Nodes.Intersect(p2.Nodes).Any();
         }
 
-        /// <summary>
-        /// Moves the prefab to a different location.
-        /// </summary>
-        /// <param name="newPos">The new absolute position
-        /// of the origin node.</param>
-        public void Move(Vector3 newPos)
+        public override void Move(Vector3 newPos)
         {
-            var translation = newPos - Nodes[0].Position;
-            MoveRel(translation);
+            Move(newPos, 0);
         }
 
-        /// <summary>
-        /// Translates the prefab to a different location.
-        /// </summary>
-        /// <param name="translation">The translation vector.</param>
-        public void MoveRel(Vector3 translation)
+        public void Move(Vector3 newPos, ushort nodeIdx)
+        {
+            var translation = newPos - Nodes[nodeIdx].Position;
+            Translate(translation);
+        }
+
+        public override void Translate(Vector3 translation)
         {
             foreach (var node in Nodes)
             {
@@ -496,7 +492,7 @@ namespace TruckLib.ScsMap
 
             foreach (var si in SlaveItems)
             {
-                (si as PrefabSlaveItem).MoveRel(translation);
+                (si as PrefabSlaveItem).Translate(translation);
             }
         }
 
@@ -505,12 +501,8 @@ namespace TruckLib.ScsMap
             if (newOrigin > Nodes.Count)
                 throw new IndexOutOfRangeException();
 
-            if(Nodes[Origin].IsRed 
-                && Nodes[Origin].BackwardItem == null)
-            {
-                Nodes[Origin].IsRed = false;
-            }
-            Nodes[newOrigin].IsRed = true;
+            Nodes[newOrigin].IsRed = 
+                Nodes[Origin].IsRed && Nodes[Origin].BackwardItem == null;
 
             Nodes = Nodes.Skip(newOrigin)
                 .Concat(Nodes.Take(newOrigin))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -105,6 +106,18 @@ namespace TruckLib.ScsMap
             Count = 1;
             Width = 2f;
             Angle = 0f;
+        }
+
+        public override void Move(Vector3 newPos)
+        {
+            base.Move(newPos);
+            Recalculate();
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            base.Translate(translation);
+            Recalculate();
         }
 
         public void Recalculate()

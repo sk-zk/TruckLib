@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     internal class PrefabCreator
     {
         private PrefabDescriptor ppd;
-        private Vector3 node0Pos => ppd.Nodes[0].Position;
+        private Vector3 Node0Pos => ppd.Nodes[0].Position;
         private IItemContainer map;
         private Vector3 prefabPos;
         private Quaternion prefabRot;
@@ -27,11 +27,12 @@ namespace TruckLib.ScsMap
             this.prefabPos = pos;
             this.prefabRot = rot;
 
-            prefab = new Prefab();
-
-            prefab.Model = unitName;
-            prefab.Variant = variant;
-            prefab.Look = look;
+            prefab = new Prefab
+            {
+                Model = unitName,
+                Variant = variant,
+                Look = look
+            };
 
             // create map nodes from ppd
             CreateMapNodes();
@@ -224,7 +225,7 @@ namespace TruckLib.ScsMap
         private Vector3 GetAbsolutePosition(Vector3 ppdPointPos)
         {
             var rotated = RotateNode(ppdPointPos, prefabRot);
-            var abs = prefabPos + (rotated - node0Pos);
+            var abs = prefabPos + (rotated - Node0Pos);
             return abs;
         }
 
@@ -267,7 +268,7 @@ namespace TruckLib.ScsMap
         /// <returns>The rotated point.</returns>
         private Vector3 RotateNode(Vector3 ppdPointPos, Quaternion rot)
         {
-            ppdPointPos = MathEx.RotatePointAroundPivot(ppdPointPos, node0Pos, rot);
+            ppdPointPos = MathEx.RotatePointAroundPivot(ppdPointPos, Node0Pos, rot);
             return ppdPointPos;
         }
 

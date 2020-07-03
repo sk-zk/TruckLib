@@ -21,21 +21,15 @@ namespace TruckLib.ScsMap
             Nodes = new List<Node>(2);
         }
 
-        /// <summary>
-        /// Moves the item to a different location.
-        /// </summary>
-        /// <param name="newPos"></param>
-        public void Move(Vector3 newPos)
+        /// <inheritdoc/>
+        public override void Move(Vector3 newPos)
         {
             var translation = newPos - Nodes[0].Position;
-            MoveRel(translation);
+            Translate(translation);
         }
 
-        /// <summary>
-        /// Translates the item to a different location.
-        /// </summary>
-        /// <param name="translation"></param>
-        public void MoveRel(Vector3 translation)
+        /// <inheritdoc/>
+        public override void Translate(Vector3 translation)
         {
             foreach (var node in Nodes)
                 node.Move(node.Position + translation);

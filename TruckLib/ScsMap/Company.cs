@@ -66,9 +66,14 @@ namespace TruckLib.ScsMap
             return PrefabSlaveItem.Add<Company>(map, parent, position);
         }
 
-        internal override void MoveRel(Vector3 translation)
+        public override void Move(Vector3 newPos)
         {
-            base.MoveRel(translation);
+            throw new NotImplementedException();
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            base.Translate(translation);
 
             var allNodes = UnloadPointsEasy.Concat(UnloadPointsMedium)
                 .Concat(UnloadPointsHard).Concat(TrailerSpawnPoints)

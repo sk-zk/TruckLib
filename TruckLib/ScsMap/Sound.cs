@@ -41,8 +41,8 @@ namespace TruckLib.ScsMap
             SoundFlags = new FlagField(0x110);
         }
 
-        public static Sound Add(IItemContainer map, Vector3 position, Token name, float fullIntensityDistance, 
-            float activationDistance)
+        public static Sound Add(IItemContainer map, Vector3 position, Token name,
+            float fullIntensityDistance, float activationDistance)
         {
             var sound = Add<Sound>(map, position);
 

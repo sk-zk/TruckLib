@@ -39,7 +39,12 @@ namespace TruckLib.ScsMap
             return item;
         }
 
-        internal virtual void MoveRel(Vector3 translation)
+        public override void Move(Vector3 newPos)
+        {
+            Node.Move(newPos);
+        }
+
+        public override void Translate(Vector3 translation)
         {
             Node.Move(Node.Position + translation);
         }

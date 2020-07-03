@@ -158,15 +158,14 @@ namespace TruckLib.ScsMap
             p1.BackwardItem = newItem;
 
             p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
-            SetMiddleRotation(p2, p1, p0, true);
+            SetMiddleRotation(p2, p1, p0);
 
             p0.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
             return newItem;
         }
 
-        private static void SetMiddleRotation(Node pBackw, Node pMiddle, Node pNew,
-            bool isPrepend = false)
+        private static void SetMiddleRotation(Node pBackw, Node pMiddle, Node pNew)
         {
             var pNew_yaw = pNew.Rotation.ToEuler().Y;
 
@@ -184,9 +183,32 @@ namespace TruckLib.ScsMap
         {
             if (Node is null) return;
 
+            RecalculateRotation();
+            RecalculateLength();
+        }
+
+        internal void RecalculateLength()
+        {
             HermiteSpline.ApproximateLength(
-                Node.Position, Node.Rotation.ToEuler(), 
+                Node.Position, Node.Rotation.ToEuler(),
                 ForwardNode.Position, ForwardNode.Rotation.ToEuler());
+        }
+
+        internal void RecalculateRotation()
+        {
+            // TODO Write this method if my brain ever starts working again
+        }
+
+        public override void Move(Vector3 newPos)
+        {
+            Node.Move(newPos);
+            Recalculate();
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            Node.Move(Node.Position + translation);
+            Recalculate();
         }
 
         internal override IEnumerable<Node> GetItemNodes()

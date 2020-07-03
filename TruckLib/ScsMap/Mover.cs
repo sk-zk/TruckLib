@@ -195,6 +195,18 @@ namespace TruckLib.ScsMap
             return mover;
         }
 
+        public override void Move(Vector3 newPos)
+        {
+            base.Move(newPos);
+            Recalculate();
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            base.Translate(translation);
+            Recalculate();
+        }
+
         public void Recalculate()
         {
             if (Nodes.Count > 1)

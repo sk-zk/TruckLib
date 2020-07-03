@@ -42,9 +42,14 @@ namespace TruckLib.ScsMap
             return PrefabSlaveItem.Add<Garage>(map, parent, position);
         }
 
-        internal override void MoveRel(Vector3 translation)
+        public override void Move(Vector3 newPos)
         {
-            base.MoveRel(translation);
+            throw new NotImplementedException();
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            base.Translate(translation);
 
             foreach (var node in TrailerSpawnPoints)
             {

@@ -57,7 +57,7 @@ namespace TruckLib.ScsMap
         /// <param name="nodePositions"></param>
         /// <param name="oneSideOnly"></param>
         /// <returns></returns>
-        public static CutPlane Add(IItemContainer map, Vector3[] nodePositions, bool oneSideOnly = false)
+        public static CutPlane Add(IItemContainer map, IList<Vector3> nodePositions, bool oneSideOnly = false)
         {
             var cutPlane = new CutPlane();
             cutPlane.OneSideOnly = oneSideOnly;
@@ -66,7 +66,7 @@ namespace TruckLib.ScsMap
             // which just links to itself, so I'm creating the nodes in reverse
             // to create the references
             var posReverse = nodePositions.Reverse().ToArray(); 
-            var nodes = new List<Node>(nodePositions.Length);
+            var nodes = new List<Node>(nodePositions.Count());
             for(int i = 0; i < posReverse.Count(); i++)
             {
                 var node = map.AddNode(posReverse[i]);
@@ -111,17 +111,14 @@ namespace TruckLib.ScsMap
         /// will be set to the given position.
         /// </summary>
         /// <param name="newPos"></param>
-        public void Move(Vector3 newPos)
+        public override void Move(Vector3 newPos)
         {
             var translation = newPos - Nodes[0].Position;
-            MoveRel(translation);
+            Translate(translation);
         }
 
-        /// <summary>
-        /// Translates the item to a different location.
-        /// </summary>
-        /// <param name="translation"></param>
-        public void MoveRel(Vector3 translation)
+
+        public override void Translate(Vector3 translation)
         {
             foreach (var node in Nodes)
             {

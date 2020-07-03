@@ -43,6 +43,16 @@ namespace TruckLib.ScsMap
             return newItem;
         }
 
+        public override void Move(Vector3 newPos)
+        {
+            Node.Move(newPos);
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            Node.Move(Node.Position + translation);
+        }
+
         internal override IEnumerable<Node> GetItemNodes()
         {
             return new[] { Node };

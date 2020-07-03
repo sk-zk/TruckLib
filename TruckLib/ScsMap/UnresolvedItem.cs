@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,16 @@ namespace TruckLib.ScsMap
         {
             Kdop = new KdopItem();
             Uid = uid;
+        }
+
+        public override void Move(Vector3 newPos)
+        {
+            throw new InvalidOperationException(exceptionMessage);
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            throw new InvalidOperationException(exceptionMessage);
         }
 
         internal override IEnumerable<Node> GetItemNodes()

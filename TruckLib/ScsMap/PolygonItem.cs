@@ -36,26 +36,31 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
+        public override void Move(Vector3 newPos)
+        {
+            Move(newPos, 0);
+        }
+
         /// <summary>
         /// Moves the item, with the given parameter as the new position
         /// of the Nth node.
         /// </summary>
         /// <param name="newPos"></param>
         /// <param name="n"></param>
-        public void Move(Vector3 newPos, int n = 0)
+        public void Move(Vector3 newPos, int n)
         {
             if (n < 0 || n >= Nodes.Count)
                 throw new ArgumentOutOfRangeException(nameof(n));
 
             var translation = newPos - Nodes[n].Position;
-            MoveRel(translation);
+            Translate(translation);
         }
 
         /// <summary>
         /// Translates the item to a different location.
         /// </summary>
         /// <param name="translation"></param>
-        public void MoveRel(Vector3 translation)
+        public override void Translate(Vector3 translation)
         {
             foreach (Node node in Nodes)
                 node.Move(node.Position + translation);

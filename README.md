@@ -5,11 +5,9 @@ Euro Truck Simulator 2 / American Truck Simulator. It also handles various other
 
 The library currently supports map version 880 (game version 1.38).
 
-(The code is 💩💩💩, so expect bugs, missing features,
-sudden API changes, inconsistent naming; all that fun stuff that is exactly 
-what you want from a library.)
+(It's all still fairly experimental and half-finished, so you'll probably run into some issues sooner or later.)
 
-You can find some sample code in the Samples folder. (Proper documentation will follow eventually™.)
+You can find some sample code in the Samples folder. Proper documentation will follow eventually™.
 
 TruckLib is not affiliated with SCS Software.
 
@@ -21,17 +19,17 @@ Create or modify maps for ETS2 and ATS.
 Mostly complete de/serializer for .sii and .mat files.
 
 **TruckLib.Model**:  
-For working with binary model files (.pm\*). Functions well enough to create or modify simple static models,
+Code for working with binary model files (.pm\*). Works well enough to create or modify simple static models,
 but that's about it at the moment.
 
 Also contains a (binary) tobj de/serializer.
 
 **TruckLib.HashFs**:  
-Simple reader for HashFS (.scs) files.
+A reader for HashFS (.scs) files.
 
 ## Known issues and limitations
 * The library does not calculate the bounding box of items, so you'll need to recalculate the map (F8) on load.
-* Anything to do with prefabs is probably not going to work all that well.
+* Anything to do with prefabs may or may not break in unexpected ways.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
  fixed by recalculating.
  

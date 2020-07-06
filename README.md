@@ -22,7 +22,7 @@ Mostly complete de/serializer for .sii and .mat files.
 Code for working with binary model files (.pm\*). Works well enough to create or modify simple static models,
 but that's about it at the moment.
 
-Also contains a (binary) tobj de/serializer.
+Also contains a (binary) .tobj de/serializer.
 
 **TruckLib.HashFs**:  
 A reader for HashFS (.scs) files.

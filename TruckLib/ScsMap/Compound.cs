@@ -28,13 +28,13 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Contains all map items owned by this compound.
         /// </summary>
-        public List<MapItem> CompoundItems { get; set; } 
+        public List<MapItem> Items { get; set; } 
 
 
         /// <summary>
         /// Contains all nodes owned by this compound.
         /// </summary>
-        public List<INode> CompoundNodes { get; set; }
+        public List<INode> Nodes { get; set; }
 
         /// <summary>
         /// Determines if the items are reflected on water surfaces.
@@ -64,8 +64,8 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            CompoundItems = new List<MapItem>();
-            CompoundNodes = new List<INode>();
+            Items = new List<MapItem>();
+            Nodes = new List<INode>();
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace TruckLib.ScsMap
                 Position = position,
                 IsRed = isRed
             };
-            CompoundNodes.Add(node);
+            Nodes.Add(node);
             return node;
         }
 
@@ -110,17 +110,17 @@ namespace TruckLib.ScsMap
                 // The game will crash without logging an error message if you try to do that.
                 throw new InvalidOperationException("A compound can only contain .aux items.");
             }
-            CompoundItems.Add(item);
+            Items.Add(item);
         }
 
         public IEnumerable<T> GetAllItems<T>() where T : MapItem
         {
-            return CompoundItems.Where(x => x is T).Cast<T>();
+            return Items.Where(x => x is T).Cast<T>();
         }
 
         public Dictionary<ulong, MapItem> GetAllItems()
         {
-            return CompoundItems.ToDictionary(k => k.Uid, v => v);
+            return Items.ToDictionary(k => k.Uid, v => v);
         }
 
         Dictionary<ulong, T> IItemContainer.GetAllItems<T>()
@@ -130,7 +130,7 @@ namespace TruckLib.ScsMap
 
         public Dictionary<ulong, INode> GetAllNodes()
         {
-            return CompoundNodes.ToDictionary(k => k.Uid, v => v);
+            return Nodes.ToDictionary(k => k.Uid, v => v);
         }
 
         /// <summary>
@@ -141,9 +141,9 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item from compound
-            if (CompoundItems.Contains(item))
+            if (Items.Contains(item))
             {
-                CompoundItems.Remove(item);
+                Items.Remove(item);
             }
 
             // remove item from its nodes, 
@@ -172,9 +172,9 @@ namespace TruckLib.ScsMap
         /// <param name="node"></param>
         public void Delete(INode node)
         {
-            if (CompoundNodes.Contains(node))
+            if (Nodes.Contains(node))
             {
-                CompoundNodes.Remove(node);
+                Nodes.Remove(node);
             }
 
             if (node.ForwardItem is MapItem fw)
@@ -196,14 +196,14 @@ namespace TruckLib.ScsMap
             var nodesDict = GetAllNodes();
 
             // first of all, find map items referenced in nodes
-            foreach (var node in CompoundNodes)
+            foreach (var node in Nodes)
             {
                 node.UpdateItemReferences(itemsDict);
             }
 
             // then find nodes referenced in map items
             // and map items referenced in map items
-            foreach (var item in CompoundItems)
+            foreach (var item in Items)
             {
                 item.UpdateNodeReferences(nodesDict);
                 if (item is IItemReferences hasItemRef)

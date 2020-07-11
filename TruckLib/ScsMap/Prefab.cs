@@ -543,16 +543,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         internal class NodePositionComparer : IEqualityComparer<INode>
         {
-            public bool Equals(INode x, INode y)
-            {
-                return x.Position == y.Position;
-            }
-
-            public int GetHashCode(INode obj)
-            {
-                // apparently this has to happen for Equals to be called
-                return 0;
-            }
+            public bool Equals(INode x, INode y) => x.Position == y.Position;
+            public int GetHashCode(INode obj) => 0; // apparently this has to happen for Equals to be called
         }
     }
 

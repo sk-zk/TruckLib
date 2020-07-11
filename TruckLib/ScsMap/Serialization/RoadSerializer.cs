@@ -283,11 +283,13 @@ namespace TruckLib.ScsMap.Serialization
             road.CenterMaterialColor = r.ReadColor();
 
             road.RandomSeed = r.ReadUInt32();
-            road.CenterVegetation = new CenterVegetation();
-            road.CenterVegetation.Name = r.ReadToken();
-            road.CenterVegetation.Density = r.ReadUInt16() / centerVegDensityFactor;
-            road.CenterVegetation.Scale = (VegetationScale)r.ReadByte();
-            road.CenterVegetation.Offset = r.ReadByte() / centerVegOffsetFactor;
+            road.CenterVegetation = new CenterVegetation
+            {
+                Name = r.ReadToken(),
+                Density = r.ReadUInt16() / centerVegDensityFactor,
+                Scale = (VegetationScale)r.ReadByte(),
+                Offset = r.ReadByte() / centerVegOffsetFactor
+            };
             road.Left.NoDetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
             road.Right.NoDetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
             road.Left.NoDetailVegetationTo = r.ReadUInt16() / vegFromToFactor;

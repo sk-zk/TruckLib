@@ -30,14 +30,14 @@ namespace TruckLib.ScsMap.Serialization
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);
-                node.ReadFromStream(null, r);
+                node.Deserialize(r);
                 if (!comp.Nodes.Contains(node))
                 {
                     comp.Nodes.Add(node);
                 }
             }
 
-            comp.UpdateInternalNodeReferences();
+            comp.UpdateInternalReferences();
 
             return comp;
         }
@@ -62,7 +62,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(comp.Nodes.Count);
             foreach (var node in comp.Nodes)
             {
-                node.WriteToStream(w);
+                node.Serialize(w);
             }
         }
     }

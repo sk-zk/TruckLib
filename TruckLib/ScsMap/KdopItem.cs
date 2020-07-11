@@ -13,22 +13,12 @@ namespace TruckLib.ScsMap
     /// This class is used to simplify deserialization and should not be
     /// directly exposed in item classes.
     /// </summary>
-    internal class KdopItem
+    internal class KdopItem : KdopBounds
     {
         /// <summary>
         /// The UID of the item.
         /// </summary>
         public ulong Uid { get; set; } = 0;
-
-        /// <summary>
-        /// Minimums of the kDOP bounding box which is used for rendering and collision detection.
-        /// </summary>
-        public float[] Minimums { get; set; } = new float[5];
-
-        /// <summary>
-        /// Maximums of the kDOP bounding box which is used for rendering and collision detection.
-        /// </summary>
-        public float[] Maximums { get; set; } = new float[5];
 
         /// <summary>
         /// A flag field which is part of the kdop_item but is actually used for item flags 
@@ -54,20 +44,11 @@ namespace TruckLib.ScsMap
         public const ushort ViewDistanceMiddle = 950;
         public const ushort ViewDistanceFar = 1400;
 
-        public KdopItem() 
-        {
-            Minimums[0] = 1;
-            Minimums[1] = 1;
-            Minimums[2] = 1;
-            Maximums[0] = 2;
-            Maximums[1] = 2;
-            Maximums[2] = 2;
-        }
+        public KdopItem() : base() { }
 
         public KdopItem(ulong uid) : this()
         {
             Uid = uid;
         }
-
     }
 }

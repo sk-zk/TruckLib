@@ -101,9 +101,7 @@ namespace TruckLib.ScsMap
         /// and should not be called on its own.
         /// </summary>
         /// <param name="item">The item.</param>
-        /// <param name="mainNode">The main node of the item. This will determine which sector
-        /// contains the item.</param>
-        void IItemContainer.AddItem(MapItem item, INode mainNode)
+        void IItemContainer.AddItem(MapItem item)
         {
             if(item.ItemFile != ItemFile.Aux)
             {
@@ -190,7 +188,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal void UpdateInternalNodeReferences()
+        internal void UpdateInternalReferences()
         {
             var itemsDict = GetAllItems();
             var nodesDict = GetAllNodes();

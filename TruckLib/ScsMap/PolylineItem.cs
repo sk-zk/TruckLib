@@ -76,7 +76,7 @@ namespace TruckLib.ScsMap
             newItem.Node.Rotation = rotation;
             newItem.ForwardNode.Rotation = rotation; 
 
-            map.AddItem(newItem, forwardNode);
+            map.AddItem(newItem);
             return newItem;
         }
 
@@ -211,10 +211,11 @@ namespace TruckLib.ScsMap
             Recalculate();
         }
 
-        internal override IEnumerable<INode> GetItemNodes()
-        {
-            return new[] { Node, ForwardNode };
-        }
+        internal override IEnumerable<INode> GetItemNodes() =>
+            new[] { Node, ForwardNode };
+
+        internal override INode GetMainNode() => ForwardNode;
+
 
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {

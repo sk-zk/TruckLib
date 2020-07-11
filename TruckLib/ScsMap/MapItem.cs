@@ -110,6 +110,12 @@ namespace TruckLib.ScsMap
         /// <returns></returns>
         internal abstract IEnumerable<INode> GetItemNodes();
 
+        /// <summary>
+        /// Returns the node which will be used to determine which sector will be the parent of the item.
+        /// </summary>
+        /// <returns></returns>
+        internal abstract INode GetMainNode();
+
         protected static INode ResolveNodeReference(INode node, Dictionary<ulong, INode> allNodes)
         {
             if (node is UnresolvedNode && allNodes.TryGetValue(node.Uid, out var resolvedNode))

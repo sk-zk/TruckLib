@@ -247,13 +247,14 @@ namespace TruckLib.ScsMap
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);
-                node.ReadFromStream(this, r);
+                node.Deserialize(r);
                 if (Map.Nodes.TryGetValue(node.Uid, out var existingNode))
                 {
                     existingNode.Sectors = existingNode.Sectors.Push(this);
                 }
                 else
                 {
+                    node.Sectors = new[] { this };
                     Map.Nodes.Add(node.Uid, node);
                 }
             }
@@ -374,7 +375,7 @@ namespace TruckLib.ScsMap
             w.Write(nodes.Count());
             foreach (var node in nodes)
             {
-                node.WriteToStream(w);
+                node.Serialize(w);
             }
         }
 

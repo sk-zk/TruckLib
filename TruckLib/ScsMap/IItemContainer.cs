@@ -31,9 +31,7 @@ namespace TruckLib.ScsMap
         /// and should not be called on its own.
         /// </summary>
         /// <param name="item">The item.</param>
-        /// <param name="mainNode">The main node of the item. This will determine which sector
-        /// contains the item.</param>
-        internal void AddItem(MapItem item, INode mainNode);
+        internal void AddItem(MapItem item);
 
         void Delete(MapItem item);
 

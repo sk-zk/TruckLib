@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// A map node.
     /// </summary>
-    public class Node : INode, IItemReferences, IMapObject
+    public class Node : INode, IItemReferences, IMapObject, IBinarySerializable
     {
         /// <summary>
         /// The UID of this node.
@@ -167,7 +167,6 @@ namespace TruckLib.ScsMap
             }
             else
             {
-
                 var map = Sectors[0].Map;
                 // check if the new position is still inside 
                 // one of the node's sectors.
@@ -196,7 +195,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="sector">The sector the node was in.</param>
         /// <param name="r"></param>
-        public void ReadFromStream(Sector sector, BinaryReader r)
+        public void Deserialize(BinaryReader r)
         {
             Uid = r.ReadUInt64();
 
@@ -205,26 +204,6 @@ namespace TruckLib.ScsMap
                 r.ReadInt32() / positionFactor,
                 r.ReadInt32() / positionFactor
             );
-
-            /* TODO: Figure out why I needed this code to begin with,
-             * if I ever needed it at all
-            // Sector
-            // not all nodes in a sector file are actually in that sector,
-            // so we'll check for each of them
-            var sectorCoords = Map.GetSectorOfCoordinate(Position);
-            if(!sector.Map.Sectors.ContainsKey(sectorCoords)) {
-                sector.Map.AddSector(sectorCoords);
-            }
-            Sector = sector.Map.Sectors[sectorCoords];
-            */
-            if (Sectors is null || Sectors.Length == 0)
-            {
-                Sectors = new[] { sector };
-            }
-            else
-            {
-                Sectors = Sectors.Push(sector);
-            }
 
             Rotation = r.ReadQuaternion();
 
@@ -243,7 +222,7 @@ namespace TruckLib.ScsMap
             Flags = new FlagField(r.ReadUInt32());
         }
 
-        public void WriteToStream(BinaryWriter w)
+        public void Serialize(BinaryWriter w)
         {
             w.Write(Uid);
 

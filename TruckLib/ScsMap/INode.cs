@@ -19,9 +19,9 @@ namespace TruckLib.ScsMap
 
         bool IsOrphaned();
         void Move(Vector3 newPos);
-        void ReadFromStream(Sector sector, BinaryReader r);
+        void Deserialize(BinaryReader r);
         string ToString();
         void UpdateItemReferences(Dictionary<ulong, MapItem> allItems);
-        void WriteToStream(BinaryWriter w);
+        void Serialize(BinaryWriter w);
     }
 }

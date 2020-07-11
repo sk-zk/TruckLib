@@ -47,7 +47,7 @@ namespace TruckLib
             return cloned;   
         }
 
-        public static T CloneItem<T>(this T item) where T : MapItem, new()
+        public static T CloneItem<T>(this T item) where T : MapItem
         {
             T cloned;
 
@@ -68,13 +68,10 @@ namespace TruckLib
                     cloned = (T)serializer.Deserialize(reader);
                     if (serializer is IDataPayload)
                     {
-                        (serializer as IDataPayload).DeserializeDataPayload(reader, item);
+                        (serializer as IDataPayload).DeserializeDataPayload(reader, cloned);
                     }
                 }
             }
-
-            // don't allow duplicate uids
-            item.Uid = Utils.GenerateUuid();
 
             return cloned;
         }

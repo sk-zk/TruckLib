@@ -74,7 +74,7 @@ namespace TruckLib.ScsMap
             farModel.Width = width;
             farModel.Height = height;
 
-            map.AddItem(farModel, node);
+            map.AddItem(farModel);
             return farModel;
         }
 
@@ -92,10 +92,10 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override IEnumerable<INode> GetItemNodes()
-        {
-            return Models.Select(x => x.PerspectiveNode).Prepend(Node);
-        }
+        internal override IEnumerable<INode> GetItemNodes() =>
+            Models.Select(x => x.PerspectiveNode).Prepend(Node);
+
+        internal override INode GetMainNode() => Node;
 
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
@@ -110,7 +110,7 @@ namespace TruckLib.ScsMap
                     Models[i].PerspectiveNode = resolvedPerspNode;
                 }
             }
-        } 
+        }
     }
 
     public struct FarModelData

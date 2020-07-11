@@ -38,7 +38,7 @@ namespace TruckLib.ScsMap
             var newItem = new T();
             newItem.Node = node;
             newItem.Node.ForwardItem = newItem;
-            map.AddItem(newItem, newItem.Node);
+            map.AddItem(newItem);
 
             return newItem;
         }
@@ -53,10 +53,9 @@ namespace TruckLib.ScsMap
             Node.Move(Node.Position + translation);
         }
 
-        internal override IEnumerable<INode> GetItemNodes()
-        {
-            return new[] { Node };
-        }
+        internal override IEnumerable<INode> GetItemNodes() => new[] { Node };
+
+        internal override INode GetMainNode() => Node;
 
         /// <summary>
         /// Searches a list of all nodes for the node referenced by UID in this map item

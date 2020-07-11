@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
         {
             var item = new T();
             CreateNodes(map, positions, item);
-            map.AddItem(item, item.Nodes[0]);
+            map.AddItem(item);
             return item;
         }
 
@@ -52,10 +52,9 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override IEnumerable<INode> GetItemNodes()
-        {
-            return new List<INode>(Nodes);
-        }
+        internal override IEnumerable<INode> GetItemNodes() => new List<INode>(Nodes);
+
+        internal override INode GetMainNode() => Nodes[0];
 
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {

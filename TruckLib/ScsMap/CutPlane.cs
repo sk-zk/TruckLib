@@ -90,7 +90,7 @@ namespace TruckLib.ScsMap
             // the item is added to the sector the first node is in.
             // if you store it somewhere else, it will still work, but 
             // it can't be deleted until you update it
-            map.AddItem(cutPlane, nodes.Last());
+            map.AddItem(cutPlane);
             return cutPlane;
         }
 
@@ -127,14 +127,16 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal override IEnumerable<INode> GetItemNodes()
-        {
-            return new List<INode>(Nodes);
-        }
+        internal override IEnumerable<INode> GetItemNodes() =>
+            new List<INode>(Nodes);
+
+        internal override INode GetMainNode() =>
+            Nodes[^1];
 
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
         }
+
     }
 }

@@ -277,7 +277,7 @@ namespace TruckLib.ScsMap
             prefab.Model = model;
             prefab.Origin = origin;
 
-            map.AddItem(prefab, prefab.Nodes[0]);
+            map.AddItem(prefab);
             return prefab;
         }
 
@@ -325,7 +325,7 @@ namespace TruckLib.ScsMap
             road.ForwardNode.BackwardItem = road;
             road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type,
                 leftTerrainSize, rightTerrainSize);
-            map.AddItem(road, road.Node);
+            map.AddItem(road);
             
             // nodes of a prefab that have nothing attached to it
             // always have the prefab as ForwardItem, but they will be
@@ -510,10 +510,10 @@ namespace TruckLib.ScsMap
             Origin = newOrigin;
         }
 
-        internal override IEnumerable<INode> GetItemNodes()
-        {
-            return new List<INode>(Nodes);
-        }
+        internal override IEnumerable<INode> GetItemNodes() =>
+            new List<INode>(Nodes);
+
+        internal override INode GetMainNode() => Nodes[0];
 
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {

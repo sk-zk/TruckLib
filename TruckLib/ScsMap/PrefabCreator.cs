@@ -42,7 +42,7 @@ namespace TruckLib.ScsMap
                 CreateSlaveItems();
             }
 
-            map.AddItem(prefab, prefab.Nodes[0]);
+            map.AddItem(prefab);
             return prefab;
         }
 

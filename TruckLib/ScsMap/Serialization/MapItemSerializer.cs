@@ -27,8 +27,13 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void ReadKdopBounds(BinaryReader r, MapItem item)
         {
-            foreach (var arr in new float[][] {
-                item.Kdop.Minimums, item.Kdop.Maximums })
+            ReadKdopBounds(r, item.Kdop);
+        }
+
+        public static void ReadKdopBounds(BinaryReader r, KdopBounds kb)
+        {
+
+            foreach (var arr in new[] { kb.Minimums, kb.Maximums })
             {
                 for (int i = 0; i < 5; i++)
                 {

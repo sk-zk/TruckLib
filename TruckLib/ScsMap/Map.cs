@@ -154,7 +154,7 @@ namespace TruckLib.ScsMap
         public Node AddNode(Vector3 position, bool isRed)
         {
             var sectorIdx = GetSectorOfCoordinate(position);
-            if(!Sectors.ContainsKey(sectorIdx))
+            if (!Sectors.ContainsKey(sectorIdx))
             {
                 AddSector(sectorIdx.X, sectorIdx.Z);
             }
@@ -172,11 +172,9 @@ namespace TruckLib.ScsMap
         /// and should not be called on its own.
         /// </summary>
         /// <param name="item">The item.</param>
-        /// <param name="mainNode">The main node of the item. This will determine which sector
-        /// contains the item.</param>
-        void IItemContainer.AddItem(MapItem item, INode mainNode)
+        void IItemContainer.AddItem(MapItem item)
         {
-            mainNode.Sectors[0].MapItems.Add(item.Uid, item);
+            item.GetMainNode().Sectors[0].MapItems.Add(item.Uid, item);
         }
 
         /// <summary>
@@ -334,35 +332,66 @@ namespace TruckLib.ScsMap
             }
         }
 
+        public void Import(Selection selection, Vector3 position)
+        {
+            // deep cloning everything the lazy way
+
+            var clonedItems = selection.Items.Select(x => x.CloneItem())
+                .ToDictionary(k => k.Uid, v => v);
+            var clonedNodes = selection.Nodes.Select(x => (x as Node).Clone())
+                .ToDictionary(k => k.Uid, v => (INode)v);
+
+            foreach (var nodeKvp in clonedNodes)
+            {
+                var node = nodeKvp.Value;
+
+                node.Position += position - selection.Origin;
+                node.UpdateItemReferences(clonedItems);
+                var sectorIdx = GetSectorOfCoordinate(node.Position);
+                AddSector(sectorIdx.X, sectorIdx.Z);
+                node.Sectors = new[] { Sectors[sectorIdx] };
+                Nodes.Add(node.Uid, node);
+            }
+
+            foreach (var itemKvp in clonedItems)
+            {
+                var item = itemKvp.Value;
+
+                item.UpdateNodeReferences(clonedNodes);
+                if (item is IItemReferences itemRefs)
+                    itemRefs.UpdateItemReferences(clonedItems);
+                (this as IItemContainer).AddItem(item);
+            }
+        }
+
         /// <summary>
         /// Reads the .mbd of a map.
         /// </summary>
         /// <param name="mbdPath">The path to the .mbd file.</param>
         private void ReadMbd(string mbdPath)
         {
-            using (var r = new BinaryReader(new FileStream(mbdPath, FileMode.Open)))
-            {
-                var header = new Header();
-                header.Deserialize(r);
+            using var r = new BinaryReader(new FileStream(mbdPath, FileMode.Open));
 
-                EditorMapId = r.ReadUInt64();
+            var header = new Header();
+            header.Deserialize(r);
 
-                StartPlacementPosition = r.ReadVector3();
-                StartPlacementSectorOrSomething = r.ReadUInt32();
+            EditorMapId = r.ReadUInt64();
 
-                StartPlacementRotation.W = r.ReadSingle();
-                StartPlacementRotation.X = r.ReadSingle();
-                StartPlacementRotation.Y = r.ReadSingle();
-                StartPlacementRotation.Z = r.ReadSingle();
+            StartPlacementPosition = r.ReadVector3();
+            StartPlacementSectorOrSomething = r.ReadUInt32();
 
-                // TODO: What is this?
-                gameTag = r.ReadUInt32();
+            StartPlacementRotation.W = r.ReadSingle();
+            StartPlacementRotation.X = r.ReadSingle();
+            StartPlacementRotation.Y = r.ReadSingle();
+            StartPlacementRotation.Z = r.ReadSingle();
 
-                NormalScale = r.ReadSingle();
-                CityScale = r.ReadSingle();
+            // TODO: What is this?
+            gameTag = r.ReadUInt32();
 
-                EuropeMapUiCorrections = (r.ReadByte() == 1);
-            }
+            NormalScale = r.ReadSingle();
+            CityScale = r.ReadSingle();
+
+            EuropeMapUiCorrections = (r.ReadByte() == 1);
         }
 
         /// <summary>
@@ -472,27 +501,26 @@ namespace TruckLib.ScsMap
         private void SaveMbd(string mbdPath)
         {
             var stream = new FileStream(mbdPath, FileMode.Create);
-            using (var w = new BinaryWriter(stream))
-            {
-                header.Serialize(w);
+            using var w = new BinaryWriter(stream);
 
-                w.Write(EditorMapId);
+            header.Serialize(w);
 
-                w.Write(StartPlacementPosition);
-                w.Write(StartPlacementSectorOrSomething);
+            w.Write(EditorMapId);
 
-                w.Write(StartPlacementRotation.W);
-                w.Write(StartPlacementRotation.X);
-                w.Write(StartPlacementRotation.Y);
-                w.Write(StartPlacementRotation.Z);
+            w.Write(StartPlacementPosition);
+            w.Write(StartPlacementSectorOrSomething);
 
-                w.Write(gameTag);
+            w.Write(StartPlacementRotation.W);
+            w.Write(StartPlacementRotation.X);
+            w.Write(StartPlacementRotation.Y);
+            w.Write(StartPlacementRotation.Z);
 
-                w.Write(NormalScale);
-                w.Write(CityScale);
+            w.Write(gameTag);
 
-                w.Write(EuropeMapUiCorrections.ToByte());
-            }
+            w.Write(NormalScale);
+            w.Write(CityScale);
+
+            w.Write(EuropeMapUiCorrections.ToByte());
         }
     }
 }

@@ -263,11 +263,11 @@ namespace TruckLib.ScsMap
         }
 
         [Obsolete]
-        public static Prefab Add(IItemContainer map, Token model, Vector3[] positions, ushort origin = 0)
+        public static Prefab Add(IItemContainer map, Token model, IList<Vector3> positions, ushort origin = 0)
         {
             var prefab = new Prefab();
 
-            for(int i = 0; i < positions.Length; i++)
+            for(int i = 0; i < positions.Count; i++)
             {
                 var node = map.AddNode(positions[i], i == 0);
                 node.ForwardItem = prefab;

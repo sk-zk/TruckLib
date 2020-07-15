@@ -62,7 +62,7 @@ namespace TruckLib.ScsMap
             Color = MapAreaColor.Road;
         }
 
-        public static MapArea Add(IItemContainer map, Vector3[] nodePositions, MapAreaType type)
+        public static MapArea Add(IItemContainer map, IList<Vector3> nodePositions, MapAreaType type)
         {
             var ma = Add<MapArea>(map, nodePositions);
             ma.Type = type;

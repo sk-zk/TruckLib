@@ -51,7 +51,7 @@ namespace TruckLib.ScsMap
             Tags = new List<Token>();
         }
 
-        public static TrafficArea Add(IItemContainer map, Vector3[] nodePositions, Token rule)
+        public static TrafficArea Add(IItemContainer map, IList<Vector3> nodePositions, Token rule)
         {
             var ta = Add<TrafficArea>(map, nodePositions);
             ta.Rule = rule;

@@ -184,7 +184,7 @@ namespace TruckLib.ScsMap
             Count = 1;
         }
 
-        public static Mover Add(IItemContainer map, Vector3[] positions, Token model, Token look)
+        public static Mover Add(IItemContainer map, IList<Vector3> positions, Token model, Token look)
         {
             var mover = Add<Mover>(map, positions);
 

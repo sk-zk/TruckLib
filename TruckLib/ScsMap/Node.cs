@@ -28,7 +28,7 @@ namespace TruckLib.ScsMap
 
         private Vector3 position = Vector3.Zero;
         /// <summary>
-        /// Position of the node. Note that this will be converted to fixed length floats.
+        /// Position of the node. Note that this will be serialized as fixed point values.
         /// </summary>
         public Vector3 Position
         {

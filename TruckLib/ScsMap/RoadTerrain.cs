@@ -111,23 +111,28 @@ namespace TruckLib.ScsMap
         {
             var amt = QuadData.Cols * QuadData.Rows;
 
+            var quads = QuadData.Quads;
             if (amt == 0)
             {
-                QuadData.Quads.Clear();
+                quads.Clear();
                 return;
             }
 
-            if (amt == QuadData.Quads.Count) return;
+            if (amt == quads.Count)
+                return;
 
-            if (QuadData.Quads.Count < amt)
+            if (quads.Count < amt)
             {
-                var missing = amt - QuadData.Quads.Count;
-                QuadData.Quads.AddRange(new TerrainQuad[missing]
-                    .Select(x => new TerrainQuad()));
+                var missing = amt - quads.Count;
+                quads.Capacity += missing;
+                for(int i= 0; i < missing; i++)
+                {
+                    quads.Add(new TerrainQuad());
+                }
             }
             else
             {
-                QuadData.Quads.RemoveRange(amt, QuadData.Quads.Count - amt);
+                quads.RemoveRange(amt, quads.Count - amt);
             }
         }
 

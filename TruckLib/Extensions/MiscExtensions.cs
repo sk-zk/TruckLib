@@ -11,11 +11,11 @@ using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib
 {
-    internal static class MiscExtensions
+    public static class MiscExtensions
     {
-        public static T[] Push<T>(this T[] arr, T item)
+        internal static T[] Push<T>(this T[] arr, T item)
         {
-            if(arr is null)
+            if (arr is null)
                 return new[] { item };
             
             Array.Resize(ref arr, arr.Length + 1);
@@ -26,9 +26,6 @@ namespace TruckLib
         /// <summary>
         /// Clones an object.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public static T Clone<T>(this T obj) where T : IBinarySerializable, new()
         {
             T cloned = new T();
@@ -79,9 +76,9 @@ namespace TruckLib
         /// <summary>
         /// Converts a quaternion to Euler angles.
         /// </summary>
-        /// <param name="q"></param>
+        /// <param name="q">The quaternion.</param>
         /// <returns>Euler angles in radians.</returns>
-        public static Vector3 ToEuler(this Quaternion q)
+        internal static Vector3 ToEuler(this Quaternion q)
         {
             // via https://stackoverflow.com/a/56055813
 
@@ -119,9 +116,9 @@ namespace TruckLib
         /// <summary>
         /// Converts a quaternion to Euler angles in degrees.
         /// </summary>
-        /// <param name="q"></param>
+        /// <param name="q">The quaternion.</param>
         /// <returns>Euler angles in degrees.</returns>
-        public static Vector3 ToEulerDeg(this Quaternion q)
+        internal static Vector3 ToEulerDeg(this Quaternion q)
         {
             var rad = q.ToEuler();
             rad.X = (float)(rad.X * MathEx.RadToDeg);
@@ -135,7 +132,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="b">The bool.</param>
         /// <returns>1 if true, 0 if false.</returns>
-        public static byte ToByte(this bool b) =>
+        internal static byte ToByte(this bool b) =>
             b ? (byte)1 : (byte)0;
     }
 }

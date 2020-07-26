@@ -10,81 +10,45 @@ using TruckLib.ScsMap;
 
 namespace TruckLib
 {
-    internal static class IOExtensions
+    public static class IOExtensions
     {
         private static readonly Encoding StringEncoding = Encoding.UTF8;
 
-        /// <summary>
-        /// Reads a Vector2.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public static Vector2 ReadVector2(this BinaryReader r)
-        {
-            return new Vector2(r.ReadSingle(), r.ReadSingle());
-        }
+        public static Vector2 ReadVector2(this BinaryReader r) =>
+            new Vector2(r.ReadSingle(), r.ReadSingle());
 
-        /// <summary>
-        /// Reads a Vector3.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public static Vector3 ReadVector3(this BinaryReader r)
-        {
-            return new Vector3(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
-        }
+        public static Vector3 ReadVector3(this BinaryReader r) =>
+            new Vector3(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
-        /// <summary>
-        /// Reads a Vector4.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public static Vector4 ReadVector4(this BinaryReader r)
-        {
-            return new Vector4(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
-        }
+        public static Vector4 ReadVector4(this BinaryReader r) =>
+            new Vector4(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
-        public static Matrix4x4 ReadMatrix4x4(this BinaryReader r)
-        {
-            return new Matrix4x4(
+        public static Matrix4x4 ReadMatrix4x4(this BinaryReader r) =>
+            new Matrix4x4(
                     r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
                     r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
                     r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
                     r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()
                 );
-        }
+
+        public static Token ReadToken(this BinaryReader r) =>
+            new Token(r.ReadUInt64());
 
         /// <summary>
-        /// Reads a token.
+        /// Reads a string in the format used in SCS's binary formats.
         /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public static Token ReadToken(this BinaryReader r)
-        {
-            return new Token(r.ReadUInt64());
-        }
-
-        /// <summary>
-        /// Reads a string in the format used by SCS.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
         public static string ReadPascalString(this BinaryReader r)
         {
             // uint64 for string length - someone's been planning ahead
 
             var byteLen = r.ReadUInt64();
-            var str = StringEncoding.GetString(
-                r.ReadBytes((int)byteLen)
-                );
-            return str;
+            var bytes = r.ReadBytes((int)byteLen);
+            return StringEncoding.GetString(bytes);
         }
 
         /// <summary>
         /// Reads a color in RGBA format.
         /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
         public static Color ReadColor(this BinaryReader r)
         {
             var red = r.ReadByte();
@@ -97,8 +61,6 @@ namespace TruckLib
         /// <summary>
         /// Reads a quaternion in WXYZ format.
         /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
         public static Quaternion ReadQuaternion(this BinaryReader r)
         {
             var w = r.ReadSingle();
@@ -108,7 +70,7 @@ namespace TruckLib
             return new Quaternion(x, y, z, w);
         }
 
-        public static object Read<T>(this BinaryReader r)
+        internal static object Read<T>(this BinaryReader r)
         {
             // send help.
             switch (Type.GetTypeCode(typeof(T)))
@@ -134,60 +96,52 @@ namespace TruckLib
         /// <summary>
         /// Reads a list of IBinarySerializable objects or various other types.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="r"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
         public static List<T> ReadObjectList<T>(this BinaryReader r, uint count) where T : new()
         {
             var list = new List<T>((int)count);
-            if (count == 0) return list;
+            if (count == 0) 
+                return list;
 
             if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // trucklib objects
             {
-                for (int i = 0; i < count; i++)
+                ReadList(r =>
                 {
                     var obj = new T() as IBinarySerializable;
                     obj.Deserialize(r);
-                    list.Add((T)obj);
-                }
+                    return (T)obj;
+                });
             }
             else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
             {
-                for (int i = 0; i < count; i++)
+                ReadList(r =>
                 {
                     var val = r.Read<T>();
-                    // copy-pasting methods suddenly doesn't seem so bad anymore
-                    var Tval = (T)Convert.ChangeType(val, typeof(T));
-                    list.Add(Tval);
-                }
+                    return (T)Convert.ChangeType(val, typeof(T));
+                });
             }
             else if (typeof(T) == typeof(Vector2))
             {
-                for (int i = 0; i < count; i++)
+                ReadList(r =>
                 {
                     var vector = r.ReadVector2();
-                    var Tvector = (T)Convert.ChangeType(vector, typeof(T));
-                    list.Add(Tvector);
-                }
+                    return (T)Convert.ChangeType(vector, typeof(T));
+                });
             }
             else if (typeof(T) == typeof(Vector3))
             {
-                for (int i = 0; i < count; i++)
+                ReadList(r =>
                 {
                     var vector = r.ReadVector3();
-                    var Tvector = (T)Convert.ChangeType(vector, typeof(T));
-                    list.Add(Tvector);
-                }
+                    return (T)Convert.ChangeType(vector, typeof(T));
+                });
             }
             else if(typeof(T) == typeof(UnresolvedItem))
             {
-                for (int i = 0; i < count; i++)
+                ReadList(r =>
                 {
                     var item = new UnresolvedItem(r.ReadUInt64());
-                    var Titem = (T)Convert.ChangeType(item, typeof(T));
-                    list.Add(Titem);
-                }
+                    return (T)Convert.ChangeType(item, typeof(T));
+                });
             }
             else
             {
@@ -195,24 +149,20 @@ namespace TruckLib
             }
 
             return list;
+
+            void ReadList(Func<BinaryReader, T> readOneItem)
+            {
+                for (int i = 0; i < count; i++)
+                    list.Add(readOneItem.Invoke(r));
+            }
         }
 
-        /// <summary>
-        /// Writes a Vector2.
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="vector"></param>
         public static void Write(this BinaryWriter w, Vector2 vector)
         {
             w.Write(vector.X);
             w.Write(vector.Y);
         }
 
-        /// <summary>
-        /// Writes a Vector3.
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="vector"></param>
         public static void Write(this BinaryWriter w, Vector3 vector)
         {
             w.Write(vector.X);
@@ -220,11 +170,6 @@ namespace TruckLib
             w.Write(vector.Z);
         }
 
-        /// <summary>
-        /// Writes a Vector4.
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="vector"></param>
         public static void Write(this BinaryWriter w, Vector4 vector)
         {
             w.Write(vector.X);
@@ -241,11 +186,6 @@ namespace TruckLib
             w.Write(m.M41); w.Write(m.M42); w.Write(m.M43); w.Write(m.M44);
         }
 
-        /// <summary>
-        /// Writes a token to the stream.
-        /// </summary>
-        /// <param name="w"></param>
-        /// <param name="token"></param>
         public static void Write(this BinaryWriter w, Token token)
         {
             w.Write(token.Value);
@@ -254,8 +194,6 @@ namespace TruckLib
         /// <summary>
         /// Writes a color in RGBA format.
         /// </summary>
-        /// <param name="w"></param>
-        /// <param name="color"></param>
         public static void Write(this BinaryWriter w, Color color)
         {
             w.Write(color.R);
@@ -265,10 +203,8 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Writes a string.
+        /// Writes a string in the format used in SCS's binary formats.
         /// </summary>
-        /// <param name="w"></param>
-        /// <param name="str"></param>
         public static void WritePascalString(this BinaryWriter w, string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -286,8 +222,6 @@ namespace TruckLib
         /// <summary>
         /// Writes a quaternion in WXYZ format.
         /// </summary>
-        /// <param name="w"></param>
-        /// <param name="q"></param>
         public static void Write(this BinaryWriter w, Quaternion q)
         {
             w.Write(q.W);
@@ -300,9 +234,6 @@ namespace TruckLib
         /// <summary>
         /// Writes a list of IBinarySerializable objects or various other types.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="w"></param>
-        /// <param name="list"></param>
         public static void WriteObjectList<T>(this BinaryWriter w, List<T> list)
         {
             if (list is null || list.Count == 0) 

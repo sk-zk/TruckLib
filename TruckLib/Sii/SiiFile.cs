@@ -18,7 +18,7 @@ namespace TruckLib.Sii
 
         // TODO:
         // Support array indicies
-        // Support placement type
+        // Support placement type (currently unused in the game though (?))
         // Remove block comments
 
         /// <summary>

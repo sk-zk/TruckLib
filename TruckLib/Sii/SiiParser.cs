@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -203,6 +204,10 @@ namespace TruckLib.Sii
             if (valueStr.StartsWith(doubleQuote) && valueStr.EndsWith(doubleQuote))
                 return valueStr[1..^1];
 
+            // expicit quaternion - undocumented but used in a few files
+            if (Regex.IsMatch(valueStr, @"\(.+;.+,.+,.+\)"))
+                return ParseQuaternion(valueStr);
+
             // inline struct / tuple types like float3, quaternion etc.
             // which type is actually used isn't possible to determine from
             // the .sii file alone
@@ -232,6 +237,17 @@ namespace TruckLib.Sii
 
             // unknown or not implemented
             return valueStr;
+        }
+
+        private dynamic ParseQuaternion(string valueStr)
+        {
+            var vals = valueStr[1..^1].Split(new[] { TupleSeperator, ';' });
+            return new Quaternion(
+                float.Parse(vals[1], culture), // x
+                float.Parse(vals[2], culture), // y
+                float.Parse(vals[3], culture), // z
+                float.Parse(vals[0], culture)  // w
+                );
         }
 
         private dynamic ParseTuple(string valueStr)
@@ -389,6 +405,12 @@ namespace TruckLib.Sii
                     break;
                 case Token t:
                     sb.Append(t.String);
+                    break;
+                case Quaternion q:
+                    sb.Append($"{TupleAttribOpen}{q.W.ToString(culture)}; ");
+                    sb.Append($"{q.X.ToString(culture)}{TupleSeperator} ");
+                    sb.Append($"{q.Y.ToString(culture)}{TupleSeperator} ");
+                    sb.Append($"{q.Z.ToString(culture)}{TupleAttribClose}");
                     break;
                 default:
                     sb.Append(Convert.ToString(attribValue, culture));

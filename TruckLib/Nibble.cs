@@ -65,9 +65,10 @@ namespace TruckLib
         public static bool operator !=(int a, Nibble b) => a != b.Value;
 
         public static explicit operator Nibble(byte b) => new Nibble(b);
-
+        public static explicit operator Nibble(short i) => new Nibble((byte)i);
+        public static explicit operator Nibble(ushort i) => new Nibble((byte)i);
         public static explicit operator Nibble(int i) => new Nibble((byte)i);
-
+        public static explicit operator Nibble(uint i) => new Nibble((byte)i);
         public static explicit operator byte(Nibble n) => n.Value;
 
         public override bool Equals(object obj) => base.Equals(obj);

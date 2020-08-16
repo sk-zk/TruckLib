@@ -15,7 +15,7 @@ namespace TruckLib.HashFs
         private const uint Magic = 0x23534353; // as ascii: "SCS#"
         private const ushort SupportedVersion = 1;
         private const string SupportedHashMethod = "CITY";
-        private const string rootPath = "/";
+        private const string RootPath = "/";
 
         private BinaryReader reader;
 
@@ -112,17 +112,15 @@ namespace TruckLib.HashFs
         public void ExtractToFile(Entry entry, string outputPath)
         {
             reader.BaseStream.Position = (long)entry.Offset;
-            using (var fileStream = new FileStream(outputPath, FileMode.Create))
+            using var fileStream = new FileStream(outputPath, FileMode.Create);
+            if (entry.IsCompressed)
             {
-                if (entry.IsCompressed)
-                {
-                    var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
-                    zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
-                }
-                else
-                {
-                    reader.BaseStream.CopyTo(fileStream, (int)entry.Size);
-                }
+                var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
+                zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+            }
+            else
+            {
+                reader.BaseStream.CopyTo(fileStream, (int)entry.Size);
             }
         }
 
@@ -159,8 +157,8 @@ namespace TruckLib.HashFs
             {
                 for (int i = 0; i < subdirs.Count; i++)
                 {
-                    if (parent == rootPath)
-                        subdirs[i] = rootPath + subdirs[i];
+                    if (parent == RootPath)
+                        subdirs[i] = RootPath + subdirs[i];
                     else
                         subdirs[i] = $"{parent}/{subdirs[i]}";
                 }
@@ -208,7 +206,7 @@ namespace TruckLib.HashFs
             if (entry.IsCompressed)
             {
                 file = reader.ReadBytes((int)entry.CompressedSize);
-                file = Ionic.Zlib.ZlibStream.UncompressBuffer(file);
+                file = ZlibStream.UncompressBuffer(file);
             }
             else
             {
@@ -283,7 +281,7 @@ namespace TruckLib.HashFs
 
         private string RemoveTrailingSlash(string path)
         {
-            if (path.EndsWith("/") && path != rootPath)
+            if (path.EndsWith("/") && path != RootPath)
                 path = path[0..^1];
             return path;
         }

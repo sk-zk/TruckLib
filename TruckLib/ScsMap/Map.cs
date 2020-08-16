@@ -55,12 +55,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Editor start position. TODO: Figure out these values
         /// </summary>
-        private uint StartPlacementSectorOrSomething = 0x800800;
+        private uint StartPlacementSectorOrSomething = 0x4B000800;
 
         /// <summary>
         /// Editor start rotation.
         /// </summary>
-        private Quaternion StartPlacementRotation = new Quaternion(0, 0, 0, 1);
+        private Quaternion StartPlacementRotation = Quaternion.Identity;
 
         /// <summary>
         /// <para>SCS's Europe map UI corrections.</para>
@@ -380,10 +380,7 @@ namespace TruckLib.ScsMap
             StartPlacementPosition = r.ReadVector3();
             StartPlacementSectorOrSomething = r.ReadUInt32();
 
-            StartPlacementRotation.W = r.ReadSingle();
-            StartPlacementRotation.X = r.ReadSingle();
-            StartPlacementRotation.Y = r.ReadSingle();
-            StartPlacementRotation.Z = r.ReadSingle();
+            StartPlacementRotation = r.ReadQuaternion();
 
             // TODO: What is this?
             gameTag = r.ReadUInt32();
@@ -510,10 +507,7 @@ namespace TruckLib.ScsMap
             w.Write(StartPlacementPosition);
             w.Write(StartPlacementSectorOrSomething);
 
-            w.Write(StartPlacementRotation.W);
-            w.Write(StartPlacementRotation.X);
-            w.Write(StartPlacementRotation.Y);
-            w.Write(StartPlacementRotation.Z);
+            w.Write(StartPlacementRotation);
 
             w.Write(gameTag);
 

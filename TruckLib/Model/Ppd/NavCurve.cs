@@ -44,54 +44,22 @@ namespace TruckLib.Model.Ppd
 
         protected FlagField Flags = new FlagField();
 
-        // TODO: Check if these flags are correct
-
-        public byte PriorityModifier
+        public BlinkerType Blinker
         {
-            get => (byte)Flags.GetBitString(16, 4);
-            set => Flags.SetBitString(16, 4, value);
-        }
-
-        public bool ForceNoBlinker
-        {
-            get => Flags[2];
-            set => Flags[2] = value;
-        }
-
-        public bool RightBlinker
-        {
-            get => Flags[3];
-            set => Flags[3] = value;
-        }
-
-        public bool LeftBlinker
-        {
-            get => Flags[4];
-            set => Flags[4] = value;
+            get => (BlinkerType)Flags.GetBitString(2, 3);
+            set => Flags.SetBitString(2, 3, (uint)value);
         }
 
         /// <summary>
-        /// Determines if small AI vehicles can use this curve.
+        /// Determines which AI vehicles can use this curve.
         /// <para>AI vehicles will try to go into most suitable curve, 
         /// but if there will be none, they can also use any other 
         /// even if they are not allowed to.</para>
         /// </summary>
-        public bool AllowSmallVehicles
+        public AllowedVehicles AllowedVehicles
         {
-            get => Flags[5];
-            set => Flags[5] = value;
-        }
-
-        /// <summary>
-        /// Determines if large AI vehicles can use this curve.
-        /// <para>AI vehicles will try to go into most suitable curve, 
-        /// but if there will be none, they can also use any other 
-        /// even if they are not allowed to.</para>
-        /// </summary>
-        public bool AllowLargeVehicles
-        {
-            get => Flags[6];
-            set => Flags[6] = value;
+            get => (AllowedVehicles)Flags.GetBitString(5, 2);
+            set => Flags.SetBitString(5, 2, (uint)value);
         }
 
         /// <summary>
@@ -99,8 +67,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool LowProbability
         {
-            get => Flags[14];
-            set => Flags[14] = value;
+            get => Flags[13];
+            set => Flags[13] = value;
         }
 
         /// <summary>
@@ -108,8 +76,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool LimitDisplacement
         {
-            get => Flags[15];
-            set => Flags[15] = value;
+            get => Flags[14];
+            set => Flags[14] = value;
         }
 
         /// <summary>
@@ -118,8 +86,14 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool AdditivePriority
         {
-            get => Flags[16];
-            set => Flags[16] = value;
+            get => Flags[15];
+            set => Flags[15] = value;
+        }
+
+        public Nibble PriorityModifier
+        {
+            get => (Nibble)Flags.GetBitString(16, 4);
+            set => Flags.SetBitString(16, 4, (uint)value);
         }
 
         public void Deserialize(BinaryReader r)

@@ -6,6 +6,22 @@ using System.Threading.Tasks;
 
 namespace TruckLib.Model.Ppd
 {
+    public enum AllowedVehicles
+    {
+        PlayerOnly = 0,
+        SmallVehicles = 1,
+        LargeVehicles = 2,
+        AllVehicles = 3
+    }
+
+    public enum BlinkerType
+    {
+        NoBlinker = 0,
+        NoBlinkerForced = 0b001,
+        RightBlinker = 0b010,
+        LeftBlinker = 0b100
+    }
+
     /// <summary>
     /// Type of a prefab semaphore.
     /// </summary>

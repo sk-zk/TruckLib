@@ -21,8 +21,18 @@ namespace TruckLib.Model.Ppd
 
         protected FlagField VisFlags = new FlagField();
 
-        // TODO: Figure out nav flags
+        // TODO: Figure out Assigned Node / Destination Nodes
         public FlagField NavFlags = new FlagField();
+
+        /// <summary>
+        /// Mark the approximate location of the prefab exit. 
+        /// (useful for company prefabs where navigation will navigate from/to this point.)
+        /// </summary>
+        public bool PrefabExit
+        {
+            get => NavFlags[10];
+            set => NavFlags[10] = value;
+        }
 
         /// <summary>
         /// The type of road this map point should visualize. 
@@ -111,7 +121,7 @@ namespace TruckLib.Model.Ppd
                 Neighbours[i] = r.ReadInt32();
             }
 
-            // I think we can ignore this?
+            // TODO: I think we can ignore this?
             var neighbourCount = r.ReadUInt32(); 
         }
 

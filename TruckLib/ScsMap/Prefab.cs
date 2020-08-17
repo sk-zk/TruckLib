@@ -69,7 +69,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Vegetation and terrain data for each of the prefab's corners.
+        /// Vegetation and terrain data for each prefab corner.
         /// </summary>
         public PrefabCorner[] Corners { get; set; }
 
@@ -226,15 +226,13 @@ namespace TruckLib.ScsMap
 
         public Prefab() : base() 
         {
-            Corners = new PrefabCorner[4]
-                .Select(h => new PrefabCorner()).ToArray();
+            Corners = new PrefabCorner[4].Select(h => new PrefabCorner()).ToArray();
         }
 
         internal Prefab(bool initFields) : base(initFields)
         {
             if (initFields) Init();
-            Corners = new PrefabCorner[4]
-                .Select(h => new PrefabCorner()).ToArray();
+            Corners = new PrefabCorner[4].Select(h => new PrefabCorner()).ToArray();
         }
 
         protected override void Init()
@@ -248,7 +246,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// 
+        /// Creates a prefab item from a ppd and adds it to the map.
         /// </summary>
         /// <param name="map">The map the prefab is added to.</param>
         /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
@@ -295,9 +293,7 @@ namespace TruckLib.ScsMap
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
             if(node > Nodes.Count)
-            {
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
-            }
 
             INode backwardNode;
             INode forwardNode;
@@ -330,7 +326,8 @@ namespace TruckLib.ScsMap
             // nodes of a prefab that have nothing attached to it
             // always have the prefab as ForwardItem, but they will be
             // set to BackwardItem when you attach a road going outward
-            if (!prepend) backwardNode.BackwardItem = this;
+            if (!prepend)
+                backwardNode.BackwardItem = this;
                 
             if (prepend)
             {
@@ -360,9 +357,7 @@ namespace TruckLib.ScsMap
         public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
         {
             if (prefabNodeIdx > Nodes.Count)
-            {
                 throw new ArgumentOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
-            }
 
             if (itemNode.BackwardItem is null)
             {
@@ -386,6 +381,8 @@ namespace TruckLib.ScsMap
                 item.ForwardNode.IsRed = true;
                 itemNode.Sectors[0].Map.Nodes.Remove(itemNode.Uid);
             }
+
+            //item.Recalculate(); apparently we don't need this?
         }
 
         /// <summary>
@@ -410,11 +407,10 @@ namespace TruckLib.ScsMap
                         closestPrefabNode = node;
                         closestItemNode = itemNode;
                     }
-                }              
+                }
             }
 
             Attach(item, closestItemNode, (ushort)Nodes.IndexOf(closestPrefabNode));
-            item.Recalculate();
         }
 
         /// <summary>
@@ -429,11 +425,9 @@ namespace TruckLib.ScsMap
             // nodes of this prefab which will replace the corresponding newPf nodes.
             var overlappingNodes = Nodes.Intersect(p2.Nodes, new NodePositionComparer()).ToList();
             if (overlappingNodes.Count() == 0)
-            {
                 throw new NotImplementedException("No overlapping node found - can't attach prefab");
-            }
 
-            for(var i = 0; i < overlappingNodes.Count(); i++)
+            for (var i = 0; i < overlappingNodes.Count(); i++)
             {
                 var p1Node = overlappingNodes[i];
                 var p1NodeIdx = Nodes.IndexOf(p1Node);
@@ -462,15 +456,12 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Checks if two prefabs are connected to each other at one 
-        /// or more nodes.
+        /// Checks if two prefabs are connected to each other at one or more nodes.
         /// </summary>
         /// <param name="p2">The other prefab.</param>
         /// <returns></returns>
-        public bool IsAttachedTo(Prefab p2)
-        {
-            return Nodes.Intersect(p2.Nodes).Any();
-        }
+        public bool IsAttachedTo(Prefab p2) =>
+            Nodes.Intersect(p2.Nodes).Any();
 
         public override void Move(Vector3 newPos)
         {
@@ -486,14 +477,10 @@ namespace TruckLib.ScsMap
         public override void Translate(Vector3 translation)
         {
             foreach (var node in Nodes)
-            {
                 node.Move(node.Position + translation);
-            }
 
             foreach (var si in SlaveItems)
-            {
                 (si as PrefabSlaveItem).Translate(translation);
-            }
         }
 
         public void ChangeOrigin(ushort newOrigin)

@@ -47,6 +47,28 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Gets the first item of the polyline chain this item is a part of.
+        /// </summary>
+        public MapItem FindFirstItem()
+        {
+            var first = this;
+            while (first.BackwardItem is PolylineItem pli)
+                first = pli;
+            return first;
+        }
+
+        /// <summary>
+        /// Gets the last item of the polyline chain this item is a part of.
+        /// </summary>
+        public MapItem FindLastItem()
+        {
+            var last = this;
+            while (last.ForwardItem is PolylineItem pli)
+                last = pli;
+            return last;
+        }
+
+        /// <summary>
         /// Creates a single, unconnected item. 
         /// <para>This method will create an empty item, add two new nodes to 
         /// the map, update fwd/bwd references and then add the item to the map.
@@ -102,13 +124,11 @@ namespace TruckLib.ScsMap
              *  Node        ForwardNode     new node
              *
              */
-            var p2 = ForwardNode;
             var p1 = Node;
+            var p2 = ForwardNode;
 
             if (ForwardItem != null) // there's already an item attached
-            {
                 throw new ArgumentOutOfRangeException("Can't append item: ForwardItem is not null");
-            }
 
             var p3 = p2.Sectors[0].Map.AddNode(position, false);
             var newItem = new T
@@ -144,9 +164,7 @@ namespace TruckLib.ScsMap
             var p2 = ForwardNode;
 
             if (BackwardItem != null) // there's already an item attached
-            {
                 throw new ArgumentOutOfRangeException("Can't prepend item: BackwardItem is not null");
-            }
 
             var p0 = p1.Sectors[0].Map.AddNode(position, true);
             var newItem = new T
@@ -157,8 +175,7 @@ namespace TruckLib.ScsMap
             p0.ForwardItem = newItem;
             p1.BackwardItem = newItem;
 
-            p0.Rotation = MathEx.GetNodeRotation(p0.Position, p1.Position);
-            SetMiddleRotation(p2, p1, p0);
+            newItem.RecalculateRotation();
 
             p0.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
@@ -181,7 +198,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public virtual void Recalculate()
         {
-            if (Node is null) return;
+            if (Node is null) 
+                return;
 
             RecalculateRotation();
             RecalculateLength();
@@ -189,6 +207,9 @@ namespace TruckLib.ScsMap
 
         internal void RecalculateLength()
         {
+            if (Node is null)
+                return;
+
             HermiteSpline.ApproximateLength(
                 Node.Position, Node.Rotation.ToEuler(),
                 ForwardNode.Position, ForwardNode.Rotation.ToEuler());
@@ -196,7 +217,32 @@ namespace TruckLib.ScsMap
 
         internal void RecalculateRotation()
         {
-            // TODO Write this method if my brain ever starts working again
+            if (Node is null)
+                return;
+
+            // just redo everything from the start,
+            // as if you'd just added all the segments from start to end.
+            // it's dumb, but it works
+
+            var first = (PolylineItem)FindFirstItem();
+            var initialRot = MathEx.GetNodeRotation(first.Node.Position, first.ForwardNode.Position);
+
+            if (!(first.BackwardItem is Prefab))
+                first.Node.Rotation = initialRot;
+            first.ForwardNode.Rotation = initialRot;
+
+            var next = first;
+            while (next.ForwardItem is PolylineItem fw)
+            {
+                var p1 = next.Node;
+                var p2 = next.ForwardNode;
+                var p3 = fw.ForwardNode;
+
+                if (!(p3.ForwardItem is Prefab))
+                    p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
+                SetMiddleRotation(p1, p2, p3);
+                next = fw;
+            }
         }
 
         public override void Move(Vector3 newPos)

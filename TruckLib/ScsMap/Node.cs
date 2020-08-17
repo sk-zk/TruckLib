@@ -37,7 +37,8 @@ namespace TruckLib.ScsMap
             {
                 var recalc = position != value;
                 position = value;
-                if (recalc) RecalculateItems();
+                if (recalc)
+                    RecalculateItems();
             }
         }
 
@@ -50,42 +51,19 @@ namespace TruckLib.ScsMap
             get => rotation;
             set
             {
-                var recalc = rotation != value;
                 rotation = value;
-                if (recalc) RecalculateItems();
             }
         }
-
-        private IMapObject backwardItem;
 
         /// <summary>
         /// The backward item belonging to this node. 
         /// </summary>
-        public IMapObject BackwardItem
-        {
-            get => backwardItem;
-            set
-            {
-                var recalc = backwardItem != value;
-                backwardItem = value;
-                if (recalc) RecalculateItems();
-            }
-        }
+        public IMapObject BackwardItem { get; set; }
 
-        private IMapObject forwardItem;
         /// <summary>
         /// The forward item belonging to this node. 
         /// </summary>
-        public IMapObject ForwardItem
-        {
-            get => forwardItem;
-            set
-            {
-                var recalc = forwardItem != value;
-                forwardItem = value;
-                if (recalc) RecalculateItems();
-            }
-        }
+        public IMapObject ForwardItem { get; set; }
 
         protected FlagField Flags;
 
@@ -176,17 +154,15 @@ namespace TruckLib.ScsMap
                 Sectors = new Sector[] { map.Sectors[newSector] };
                 Position = newPos;
             }
-
-            // if one or both of the items are polyline items,
-            // their length has to be recalculated
-            // and terrain has to be adjusted
-            RecalculateItems();
         }
 
         protected virtual void RecalculateItems()
         {
-            if (BackwardItem is IRecalculatable bw) bw.Recalculate();
-            if (ForwardItem is IRecalculatable fw) fw.Recalculate();
+            // TODO Whenever polyline recalculation changes, 
+            // check if this needs to be updated.
+
+            if (BackwardItem is IRecalculatable bw)
+                bw.Recalculate();
         }
 
         private const float positionFactor = 256f;
@@ -199,13 +175,13 @@ namespace TruckLib.ScsMap
         {
             Uid = r.ReadUInt64();
 
-            Position = new Vector3(
+            position = new Vector3(
                 r.ReadInt32() / positionFactor,
                 r.ReadInt32() / positionFactor,
                 r.ReadInt32() / positionFactor
             );
 
-            Rotation = r.ReadQuaternion();
+            rotation = r.ReadQuaternion();
 
             // The item attached to the node in backward direction.
             // This reference will be resolved in Map.UpdateItemReferences()
@@ -247,15 +223,15 @@ namespace TruckLib.ScsMap
         {
             // uses the field instead of the property to not trigger recalc,
             // which we don't want while loading an existing map
-            if (forwardItem is UnresolvedItem
-                && allItems.TryGetValue(forwardItem.Uid, out var resolvedFw))
+            if (ForwardItem is UnresolvedItem
+                && allItems.TryGetValue(ForwardItem.Uid, out var resolvedFw))
             {
-                forwardItem = resolvedFw;
+                ForwardItem = resolvedFw;
             }
-            if (backwardItem is UnresolvedItem
-                && allItems.TryGetValue(backwardItem.Uid, out var resolvedBw))
+            if (BackwardItem is UnresolvedItem
+                && allItems.TryGetValue(BackwardItem.Uid, out var resolvedBw))
             {
-                backwardItem = resolvedBw;
+                BackwardItem = resolvedBw;
             }
         }
 

@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "00-SimpleExample", "Samples
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01-Prefabs", "Samples\01-Prefabs\01-Prefabs.csproj", "{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{AC4C4972-7FD4-45EE-91EC-B6B3261687EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{488D9661-8899-4578-857D-2806B67F6E62} = {AC4C4972-7FD4-45EE-91EC-B6B3261687EB}
+		{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32} = {AC4C4972-7FD4-45EE-91EC-B6B3261687EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D344736D-3D15-4C27-BC73-39923D2CD584}

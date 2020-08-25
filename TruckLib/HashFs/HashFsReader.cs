@@ -130,7 +130,7 @@ namespace TruckLib.HashFs
         /// <param name="path"></param>
         /// <param name="returnAbsolute"></param>
         /// <returns></returns>
-        public (List<string> subdirs, List<string> files) GetDirectoryListing(
+        public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             string path, bool filesOnly = false, bool returnAbsolute = true)
         {
             path = RemoveTrailingSlash(path);
@@ -171,7 +171,7 @@ namespace TruckLib.HashFs
         /// <param name="entry"></param>
         /// <param name="filesOnly"></param>
         /// <returns></returns>
-        public (List<string> subdirs, List<string> files) GetDirectoryListing(
+        public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             Entry entry, bool filesOnly = false)
         {        
             var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split("\n");

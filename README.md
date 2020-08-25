@@ -7,7 +7,7 @@ The library currently supports map version 880 (game version 1.38).
 
 (It's all still fairly experimental and half-finished, so you'll probably run into some issues sooner or later.)
 
-You can find some sample code in the Samples folder. Proper documentation will follow eventually™.
+Proper documentation will follow eventually™. Until then, you can find some sample code in the Samples folder, or you can check out my tool [DlcCheck](https://github.com/sk-zk/DlcCheck) and my weird experimental thing [OsmProto](https://github.com/sk-zk/OsmProto) for some more existing code.
 
 TruckLib is not affiliated with SCS Software.
 

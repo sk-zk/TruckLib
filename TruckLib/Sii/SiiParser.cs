@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -27,7 +28,7 @@ namespace TruckLib.Sii
         /// </summary>
         private bool OverrideOnDuplicate = true;
 
-        private CultureInfo culture = CultureInfo.InvariantCulture;
+        private readonly CultureInfo culture = CultureInfo.InvariantCulture;
 
         public SiiFile DeserializeFromString(string sii)
         {
@@ -159,6 +160,10 @@ namespace TruckLib.Sii
                     else
                         AddAttribute(unit, arrName, new List<dynamic> { Value });
                 }
+                else if(Name.EndsWith("]")) // check for array type with specified index
+                {
+                    ParseArrayAttribute(unit, Name, Value);
+                }
                 else
                 {
                     AddAttribute(unit, Name, Value);
@@ -188,6 +193,48 @@ namespace TruckLib.Sii
             var valueStr = line.Substring(firstColonPos + 1, line.Length - firstColonPos - 1);
             var value = ParseAttributeValue(valueStr);
             return (attributeName, value);
+        }
+
+        private void ParseArrayAttribute(Unit unit, string Name, dynamic Value)
+        {
+            var match = Regex.Match(Name, @"^(.+)\[(\d+)\]$");
+            if (!match.Success)
+                return;
+
+            var arrName = match.Groups[1].Value;
+            var arrIndex = int.Parse(match.Groups[2].Value);
+
+            dynamic[] arr;
+            if (unit.Attributes.TryGetValue(arrName, out var val))
+            {
+                if (val is int)
+                {
+                    // some files declare the length of the array at the top,
+                    // e.g.:
+                    //    boards: 2
+                    //    boards[0]: _nameless.572.9550
+                    //    boards[1]: _nameless.573.3230
+                    // this block is here to handle that case.
+                    arr = new dynamic[val];
+                    unit.Attributes[arrName] = arr;
+                }
+                else
+                {
+                    arr = val;
+                }
+            }
+            else
+            {
+                arr = new dynamic[arrIndex + 1];
+                AddAttribute(unit, arrName, arr);
+            }
+
+            if (arr.Length < arrIndex + 1)
+            {
+                Array.Resize(ref arr, arrIndex + 1);
+                unit.Attributes[arrName] = arr;
+            }
+            arr[arrIndex] = Value;
         }
 
         private dynamic ParseAttributeValue(string valueStr)
@@ -360,17 +407,26 @@ namespace TruckLib.Sii
             {
                 if (attrib.Value is List<dynamic> list)
                 {
-                    foreach (var entry in list)
-                    {
-                        sb.Append($"{Indentation}{attrib.Key}[]: ");
-                        SerializeAttributeValue(sb, entry);
-                        sb.AppendLine();
-                    }
+                    SerializeCollection(list, _ => $"{attrib.Key}[]: ");
+                }
+                else if (attrib.Value is dynamic[] arr)
+                {
+                    SerializeCollection(arr, i => $"{attrib.Key}[{i}]: ");
                 }
                 else
                 {
                     sb.Append($"{Indentation}{attrib.Key}: ");
                     SerializeAttributeValue(sb, attrib.Value);
+                    sb.AppendLine();
+                }
+            }
+
+            void SerializeCollection(IList list, Func<int, string> attribNameFunc)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    sb.Append(Indentation + attribNameFunc.Invoke(i));
+                    SerializeAttributeValue(sb, list[i]);
                     sb.AppendLine();
                 }
             }
@@ -384,7 +440,7 @@ namespace TruckLib.Sii
                     sb.Append($"\"{attribValue}\"");
                     break;
                 case Array arr:
-                    SerializeArray(sb, arr);
+                    SerializeTuple(sb, arr);
                     break;
                 case double d:
                     // force ".0" if number has no decimals so the game will definitely parse it as float.
@@ -418,7 +474,7 @@ namespace TruckLib.Sii
             }
         }
 
-        private void SerializeArray(StringBuilder sb, Array arr)
+        private void SerializeTuple(StringBuilder sb, Array arr)
         {
             sb.Append(TupleAttribOpen);
 

@@ -17,7 +17,6 @@ namespace TruckLib.Sii
         // https://modding.scssoft.com/wiki/Documentation/Engine/Units
 
         // TODO:
-        // Support array indicies
         // Support placement type (currently unused in the game though (?))
         // Remove block comments
 

@@ -136,6 +136,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[20] = value;
         }
 
+        /// <summary>
+        /// Makes the model follow a linear path rather than a spline.
+        /// </summary>
         public bool UseLinearPath
         {
             get => Kdop.Flags[21];

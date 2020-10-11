@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TruckLib.Model.Ppd
 {
     /// <summary>
-    /// Represents a map point. Map points are used to draw a representation 
+    /// Represents a map point which is used to draw a representation 
     /// of the item to the UI map.
     /// </summary>
     public class MapPoint : IBinarySerializable

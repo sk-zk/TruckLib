@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib
 {
     /// <summary>
-    /// Interface for classes that can de/serialize themselves to a binary map format.
+    /// Interface for classes that can de/serialize themselves to a binary format.
     /// </summary>
     public interface IBinarySerializable
     {

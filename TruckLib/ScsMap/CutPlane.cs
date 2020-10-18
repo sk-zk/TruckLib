@@ -37,6 +37,18 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[1] = value;
         }
 
+        public CutPlaneNodeAngle StartNodeAngle
+        {
+            get => Kdop.Flags.GetByte(2);
+            set => Kdop.Flags.SetByte(2, (byte)value.InternalValue);
+        }
+
+        public CutPlaneNodeAngle EndNodeAngle
+        {
+            get => Kdop.Flags.GetByte(3);
+            set => Kdop.Flags.SetByte(3, (byte)value.InternalValue);
+        }
+
         public CutPlane() : base() { }
 
         internal CutPlane(bool initFields) : base(initFields)

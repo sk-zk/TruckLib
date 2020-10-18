@@ -57,8 +57,6 @@ namespace TruckLib.ScsMap.Serialization
                 corner.DetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
                 corner.DetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
 
-                corner.UVRotation = r.ReadSingle();
-
                 foreach (var veg in corner.Vegetation)
                 {
                     veg.Deserialize(r);
@@ -129,8 +127,6 @@ namespace TruckLib.ScsMap.Serialization
 
                 w.Write((ushort)(corner.DetailVegetationFrom * vegFromToFactor));
                 w.Write((ushort)(corner.DetailVegetationTo * vegFromToFactor));
-
-                w.Write(corner.UVRotation);
 
                 foreach (var veg in corner.Vegetation)
                 {

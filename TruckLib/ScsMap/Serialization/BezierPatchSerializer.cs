@@ -30,8 +30,6 @@ namespace TruckLib.ScsMap.Serialization
             bp.XTesselation = r.ReadUInt16();
             bp.ZTesselation = r.ReadUInt16();
 
-            bp.UVRotation = r.ReadSingle();
-
             bp.Node = new UnresolvedNode(r.ReadUInt64());
 
             bp.RandomSeed = r.ReadUInt32();
@@ -66,8 +64,6 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(bp.XTesselation);
             w.Write(bp.ZTesselation);
-
-            w.Write(bp.UVRotation);
 
             w.Write(bp.Node.Uid);
 

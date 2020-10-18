@@ -315,9 +315,6 @@ namespace TruckLib.ScsMap.Serialization
             {
                 road.Right.AdditionalParts.Add(r.ReadToken());
             }
-
-            road.Right.UVRotation = r.ReadSingle();
-            road.Left.UVRotation = r.ReadSingle();
         }
 
         public void SerializeDataPayload(BinaryWriter w, MapItem item)
@@ -378,8 +375,6 @@ namespace TruckLib.ScsMap.Serialization
                 w.Write(part);
             }
 
-            w.Write(road.Right.UVRotation);
-            w.Write(road.Left.UVRotation);
         }
     }
 }

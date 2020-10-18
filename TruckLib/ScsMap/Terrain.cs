@@ -162,7 +162,7 @@ namespace TruckLib.ScsMap
             Right.Terrain.Size = rightSize;
             foreach (var side in new[] { Left, Right })
             {
-                side.Terrain.QuadData.BrushMaterials = new List<Token> { material };
+                side.Terrain.QuadData.BrushMaterials = new List<Material> { new Material("0") };
                 side.Terrain.CalculateQuadGrid(StepSize, Length);
             }
         }

@@ -63,8 +63,6 @@ namespace TruckLib.ScsMap
 
         public List<Token> AdditionalParts { get; set; } = new List<Token>();
 
-        public float UVRotation { get; set; }
-
         public RoadSide()
         {
             const int modelCount = 2;

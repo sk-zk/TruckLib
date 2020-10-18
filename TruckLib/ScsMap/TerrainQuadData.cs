@@ -14,28 +14,17 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class TerrainQuadData : IBinarySerializable
     {
-        public static readonly Token QuadErase = new Token(0xB823);
-
-        /// <summary>
-        /// The main terrain material.
-        /// </summary>
-        public Token Material
-        {
-            get => BrushMaterials[0];
-            set => BrushMaterials[0] = value;
-        }
+        public static readonly Token QuadErase = 0xB823;
 
         /// <summary>
         /// Brush materials used on terrain quads.
         /// </summary>
-        public List<Token> BrushMaterials { get; set; } 
-            = new List<Token> { "0" };
+        public List<Material> BrushMaterials { get; set; }
 
         /// <summary>
         /// Brush colors used on terrain quads.
         /// </summary>
-        public List<Color> BrushColors { get; set; } 
-            = new List<Color>() { Color.FromArgb(0, 255, 255, 255) };
+        public List<Color> BrushColors { get; set; }
 
         /// <summary>
         /// Amount of terrain quad rows.
@@ -64,18 +53,18 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<VertexData> Normals { get; set; } = new List<VertexData>();
 
+        public TerrainQuadData()
+        {
+            BrushMaterials = new List<Material> { new Material("0") };
+            BrushColors = new List<Color>() { Color.FromArgb(0, 255, 255, 255) };
+        }
+
         public void Deserialize(BinaryReader r)
         {
-            // the uids of the material brushes used on this terrain.
+            // the material brushes used on this terrain.
             // first one is the main mat.
-            // 0xB823 is Quad Erase.
             var brushMatCount = r.ReadUInt16();
-            BrushMaterials.Clear();
-            for (int i = 0; i < brushMatCount; i++)
-            {
-                var brush = r.ReadToken();
-                BrushMaterials.Add(brush);
-            }
+            BrushMaterials = r.ReadObjectList<Material>(brushMatCount);
 
             // colors used on this terrain
             var colorsCount = r.ReadUInt16();
@@ -132,17 +121,10 @@ namespace TruckLib.ScsMap
         }
 
         public void Serialize(BinaryWriter w)
-        {           
-            // amount of materials used on this terrain
+        {
+            // the material brushes used on this terrain.
             w.Write((ushort)BrushMaterials.Count);
-
-            // the uids of the material brushes used on this terrain.
-            // first one is the main mat.
-            // Quad Erase is 0xB823.
-            foreach(var brush in BrushMaterials)
-            {
-                w.Write(brush);
-            }
+            w.WriteObjectList(BrushMaterials);
 
             // colors used on this terrain
             w.Write((ushort)BrushColors.Count);

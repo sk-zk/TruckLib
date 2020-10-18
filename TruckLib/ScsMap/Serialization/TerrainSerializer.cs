@@ -107,9 +107,6 @@ namespace TruckLib.ScsMap.Serialization
             t.Left.Edge = r.ReadToken();
             t.Left.EdgeLook = r.ReadToken();
 
-            t.Right.UVRotation = r.ReadSingle();
-            t.Left.UVRotation = r.ReadSingle();
-
             return t;
         }
 
@@ -170,7 +167,7 @@ namespace TruckLib.ScsMap.Serialization
 
             TerrainSide bwRight = null;
             TerrainSide bwLeft = null;
-            if(t.BackwardItem is Terrain bwTerrain)
+            if (t.BackwardItem is Terrain bwTerrain)
             {
                 bwRight = bwTerrain.Right;
                 bwLeft = bwTerrain.Left;
@@ -187,9 +184,6 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(t.Right.EdgeLook);
             w.Write(t.Left.Edge);
             w.Write(t.Left.EdgeLook);
-
-            w.Write(t.Right.UVRotation);
-            w.Write(t.Left.UVRotation);
 
             void WriteThatTerrainAndVegetationPart(TerrainSide side, TerrainSide bwTerrainSide)
             {

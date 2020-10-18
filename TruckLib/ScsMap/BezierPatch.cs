@@ -43,8 +43,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public ushort ZTesselation { get; set; }
 
-        public float UVRotation { get; set; }
-
         public uint RandomSeed { get; set; }
 
         public Vegetation[] Vegetation { get; set; }

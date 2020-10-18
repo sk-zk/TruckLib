@@ -41,7 +41,8 @@ namespace TruckLib.ScsMap
         MapArea = 0x2A,
         FarModel = 0x2B,
         Curve = 0x2C,
-        CameraPath = 0x2D
+        CameraPath = 0x2D,
+        Cutscene = 0x2E,
     };
 
     /// <summary>

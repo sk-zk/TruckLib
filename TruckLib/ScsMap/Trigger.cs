@@ -89,11 +89,9 @@ namespace TruckLib.ScsMap
             Actions = new List<TriggerAction>();
         }
 
-        public static Trigger Add(IItemContainer map, IList<Vector3> nodePositions, 
-            List<TriggerAction> actions)
+        public static Trigger Add(IItemContainer map, IList<Vector3> nodePositions)
         {
             var trigger = Add<Trigger>(map, nodePositions);
-            trigger.Actions = actions;
             return trigger;
         }
     }

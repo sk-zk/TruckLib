@@ -155,6 +155,16 @@ namespace TruckLib
             return new Token(s);
         }
 
+        public static implicit operator Token(ulong v) 
+            => new Token(v);
+
+        public static implicit operator Token(int v)
+        {
+            if (v < 0)
+                throw new ArgumentOutOfRangeException(nameof(v), "Value can't be less than zero.");
+            return new Token((ulong)v);
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) 

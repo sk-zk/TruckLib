@@ -16,12 +16,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The item attached to this item in backward direction.
         /// </summary>
-        public MapItem BackwardItem => (MapItem)Node.BackwardItem;
+        public IMapItem BackwardItem => (IMapItem)Node.BackwardItem;
 
         /// <summary>
         /// The item attached to this item in forward direction.
         /// </summary>
-        public MapItem ForwardItem => (MapItem)ForwardNode.ForwardItem;
+        public IMapItem ForwardItem => (IMapItem)ForwardNode.ForwardItem;
 
         /// <summary>
         /// The backward node / the node which holds this item as ForwardItem

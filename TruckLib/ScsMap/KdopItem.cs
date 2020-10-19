@@ -50,5 +50,7 @@ namespace TruckLib.ScsMap
         {
             Uid = uid;
         }
+
+        internal KdopItem(bool initFields) : base(initFields) { }
     }
 }

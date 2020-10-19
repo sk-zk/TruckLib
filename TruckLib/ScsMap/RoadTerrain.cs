@@ -28,21 +28,40 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The terrain profile.
         /// </summary>
-        public Token Profile { get; set; } = "profile0";
+        public Token Profile { get; set; }
 
         /// <summary>
         /// Vertical scale coefficient of the terrain profile.
         /// </summary>
-        public float Coefficient { get; set; } = 1f;
+        public float Coefficient { get; set; } 
 
-        public TerrainNoise Noise { get; set; } = TerrainNoise.Percent100;
+        public TerrainNoise Noise { get; set; }
 
         /// <summary>
         /// Length of terrain transition to neighboring segment.
         /// </summary>
-        public TerrainTransition Transition { get; set; } = TerrainTransition._16;
+        public TerrainTransition Transition { get; set; }
 
-        public TerrainQuadData QuadData { get; set; } = new TerrainQuadData();
+        public TerrainQuadData QuadData { get; set; } 
+
+        public RoadTerrain()
+        {
+            Init();
+        }
+
+        internal RoadTerrain(bool initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected void Init()
+        {
+            Profile = "profile0";
+            Coefficient = 1f;
+            Noise = TerrainNoise.Percent100;
+            Transition = TerrainTransition._16;
+            QuadData = new TerrainQuadData();
+        }
 
         public static int GetRowWidthAt(int index)
         {

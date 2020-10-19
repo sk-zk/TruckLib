@@ -34,6 +34,11 @@ namespace TruckLib.ScsMap.Serialization
 
             pf.Origin = r.ReadUInt16();
 
+            foreach (var corner in pf.Corners)
+            {
+                corner.Terrain = new RoadTerrain(false);
+            }
+
             for (int i = 0; i < pf.Nodes.Count; i++)
             {
                 pf.Corners[i].Terrain.Profile = r.ReadToken();
@@ -78,6 +83,7 @@ namespace TruckLib.ScsMap.Serialization
 
             foreach (var corner in pf.Corners)
             {
+                corner.Terrain.QuadData = new TerrainQuadData(false);
                 corner.Terrain.QuadData.Deserialize(r);
             }
         }

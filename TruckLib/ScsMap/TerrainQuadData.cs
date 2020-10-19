@@ -40,23 +40,36 @@ namespace TruckLib.ScsMap
         /// Terrain quads in this terrain. Indexing begins in the bottom left corner
         /// in driving direction.
         /// </summary>
-        public List<TerrainQuad> Quads { get; set; } = new List<TerrainQuad>();
+        public List<TerrainQuad> Quads { get; set; } 
 
         // TODO: Change implementation of this data to be easier to work with
         /// <summary>
         /// Offsets of terrain vertices, created with the vertex tool.
         /// </summary>
-        public List<VertexData> Offsets { get; set; } = new List<VertexData>();
+        public List<VertexData> Offsets { get; set; }
 
         /// <summary>
         /// TODO: What is this?
         /// </summary>
-        public List<VertexData> Normals { get; set; } = new List<VertexData>();
+        public List<VertexData> Normals { get; set; }
 
         public TerrainQuadData()
         {
+            Init();
+        }
+
+        internal TerrainQuadData(bool initFields)
+        {
+            if (initFields) Init();
+        }
+
+        protected void Init()
+        {
             BrushMaterials = new List<Material> { new Material("0") };
             BrushColors = new List<Color>() { Color.FromArgb(0, 255, 255, 255) };
+            Quads = new List<TerrainQuad>();
+            Offsets = new List<VertexData>();
+            Normals = new List<VertexData>();
         }
 
         public void Deserialize(BinaryReader r)
@@ -68,7 +81,7 @@ namespace TruckLib.ScsMap
 
             // colors used on this terrain
             var colorsCount = r.ReadUInt16();
-            BrushColors.Clear();
+            BrushColors = new List<Color>(colorsCount);
             for (int i = 0; i < colorsCount; i++)
             {
                 var red = r.ReadByte();
@@ -85,15 +98,11 @@ namespace TruckLib.ScsMap
             // terrain quad data; 4 bytes per quad.
             // indexing begins at the bottom left quad in forward direction.
             var terrainQuadCount = r.ReadUInt32();
-            for (int i = 0; i < terrainQuadCount; i++)
-            {
-                var quad = new TerrainQuad();
-                quad.Deserialize(r);           
-                Quads.Add(quad);
-            }
+            Quads = r.ReadObjectList<TerrainQuad>(terrainQuadCount);
 
             // offset from vertex tool
             var offsetCount = r.ReadUInt32();
+            Offsets = new List<VertexData>((int)offsetCount);
             for (int i = 0; i < offsetCount; i++)
             {
                 var offset = new VertexData()
@@ -108,6 +117,7 @@ namespace TruckLib.ScsMap
             // normals
             // what is this??
             var normalCount = r.ReadUInt32();
+            Normals = new List<VertexData>((int)normalCount);
             for (int i = 0; i < normalCount; i++)
             {
                 var normal = new VertexData

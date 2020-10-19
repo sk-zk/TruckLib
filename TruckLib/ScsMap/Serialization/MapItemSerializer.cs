@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void ReadKdopItem(BinaryReader r, MapItem item)
         {
-            item.Kdop = new KdopItem();
+            item.Kdop = new KdopItem(false);
             item.Kdop.Uid = r.ReadUInt64();
             ReadKdopBounds(r, item);
             item.Kdop.Flags = new FlagField(r.ReadUInt32());
@@ -32,13 +32,13 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void ReadKdopBounds(BinaryReader r, KdopBounds kb)
         {
+            ReadKbArr(r, kb.Minimums);
+            ReadKbArr(r, kb.Maximums);
 
-            foreach (var arr in new[] { kb.Minimums, kb.Maximums })
+            static void ReadKbArr(BinaryReader r, float[] arr)
             {
-                for (int i = 0; i < 5; i++)
-                {
+                for (int i = 0; i < arr.Length; i++)
                     arr[i] = r.ReadSingle();
-                }
             }
         }
 

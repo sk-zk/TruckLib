@@ -370,7 +370,7 @@ namespace TruckLib.ScsMap
         /// <param name="mbdPath">The path to the .mbd file.</param>
         private void ReadMbd(string mbdPath)
         {
-            using var r = new BinaryReader(new FileStream(mbdPath, FileMode.Open));
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(mbdPath)));
 
             var header = new Header();
             header.Deserialize(r);

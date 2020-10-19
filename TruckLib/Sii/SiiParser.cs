@@ -406,26 +406,29 @@ namespace TruckLib.Sii
             {
                 if (attrib.Value is List<dynamic> list)
                 {
-                    SerializeCollection(list, _ => $"{attrib.Key}[]: ");
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        sb.Append($"{Indentation}{attrib.Key}[]: ");
+                        SerializeAttributeValue(sb, list[i]);
+                        sb.AppendLine();
+                    }
                 }
                 else if (attrib.Value is dynamic[] arr)
                 {
-                    SerializeCollection(arr, i => $"{attrib.Key}[{i}]: ");
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        if (arr[i] is null)
+                            continue;
+
+                        sb.Append($"{Indentation}{attrib.Key}[{i}]: ");
+                        SerializeAttributeValue(sb, arr[i]);
+                        sb.AppendLine();
+                    }
                 }
                 else
                 {
                     sb.Append($"{Indentation}{attrib.Key}: ");
                     SerializeAttributeValue(sb, attrib.Value);
-                    sb.AppendLine();
-                }
-            }
-
-            void SerializeCollection(IList list, Func<int, string> attribNameFunc)
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    sb.Append(Indentation + attribNameFunc.Invoke(i));
-                    SerializeAttributeValue(sb, list[i]);
                     sb.AppendLine();
                 }
             }

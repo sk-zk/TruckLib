@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The terrain on this side.
         /// </summary>
-        public RoadTerrain Terrain { get; set; } = new RoadTerrain();
+        public RoadTerrain Terrain { get; set; }
 
         /// <summary>
         /// The vegetation on this side.
@@ -34,13 +34,13 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Determines if vegetation has collision.
         /// </summary>
-        public bool VegetationCollision = false;
+        public bool VegetationCollision;
 
         /// <summary>
         /// Determines if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
-        public bool DetailVegetation = true;
+        public bool DetailVegetation;
 
         public float NoDetailVegetationFrom { get; set; }
 
@@ -51,6 +51,23 @@ namespace TruckLib.ScsMap
             const int vegetationCount = 3;
             Vegetation = (new RoadVegetation[vegetationCount])
                 .Select(h => new RoadVegetation()).ToArray();
+
+            Init();
+        }
+
+        internal TerrainSide(bool initFields)
+        {
+            const int vegetationCount = 3;
+            Vegetation = (new RoadVegetation[vegetationCount])
+                .Select(h => new RoadVegetation()).ToArray();
+
+            if (initFields) Init();
+        }
+
+        protected void Init()
+        {
+            DetailVegetation = true;
+            Terrain = new RoadTerrain();
         }
     }
 }

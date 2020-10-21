@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The UID of the item.
         /// </summary>
-        public ulong Uid { get; set; } = 0;
+        public ulong Uid { get; set; }
 
         /// <summary>
         /// A flag field which is part of the kdop_item but is actually used for item flags 
@@ -50,5 +50,7 @@ namespace TruckLib.ScsMap
         {
             Uid = uid;
         }
+
+        internal KdopItem(bool initFields) : base(initFields) { }
     }
 }

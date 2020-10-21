@@ -121,7 +121,7 @@ namespace TruckLib.ScsMap
         public static Selection Open(string sbdPath)
         {
             var s = new Selection();
-            using var r = new BinaryReader(new FileStream(sbdPath, FileMode.Open));
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(sbdPath)));
 
             s.header = new Header();
             s.header.Deserialize(r);

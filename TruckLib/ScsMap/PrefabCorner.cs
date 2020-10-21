@@ -14,16 +14,16 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The terrain of this corner.
         /// </summary>
-        public RoadTerrain Terrain { get; set; } = new RoadTerrain();
+        public RoadTerrain Terrain { get; set; }
 
         /// <summary>
         /// The vegetation of this corner.
         /// </summary>
         public RoadVegetation[] Vegetation { get; set; }
 
-        public float DetailVegetationFrom { get; set; } = 5;
+        public float DetailVegetationFrom { get; set; }
 
-        public float DetailVegetationTo { get; set; } = 100;
+        public float DetailVegetationTo { get; set; }
 
         /// <summary>
         /// The unit name of the corner model.
@@ -42,9 +42,27 @@ namespace TruckLib.ScsMap
 
         public PrefabCorner()
         {
-           const int vegetationAmnt = 2;
-           Vegetation = new RoadVegetation[vegetationAmnt]
-                .Select(h => new RoadVegetation()).ToArray();
+            const int vegetationAmnt = 2;
+            Vegetation = new RoadVegetation[vegetationAmnt]
+                 .Select(h => new RoadVegetation()).ToArray();
+
+            Init();
+        }
+
+        internal PrefabCorner(bool initFields)
+        {
+            const int vegetationAmnt = 2;
+            Vegetation = new RoadVegetation[vegetationAmnt]
+                 .Select(h => new RoadVegetation()).ToArray();
+
+            if (initFields) Init();
+        }
+
+        protected void Init()
+        {
+            Terrain = new RoadTerrain();
+            DetailVegetationFrom = 5;
+            DetailVegetationTo = 100;
         }
     }
 }

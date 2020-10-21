@@ -121,8 +121,7 @@ namespace TruckLib.ScsMap
         /// <param name="path">The .base file of the sector.</param>
         private void ReadBase(string path)
         {
-            using var fs = CreateOpenFileStream(path);
-            using var r = new BinaryReader(fs);
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
             header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
@@ -135,8 +134,7 @@ namespace TruckLib.ScsMap
         /// <param name="path">The .aux file of the sector.</param>
         private void ReadAux(string path)
         {
-            using var fs = CreateOpenFileStream(path);
-            using var r = new BinaryReader(fs);
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
             var auxHeader = new Header();
             auxHeader.Deserialize(r);
             ReadItems(r, ItemFile.Aux);
@@ -149,8 +147,7 @@ namespace TruckLib.ScsMap
         /// <param name="path">The .data file of the sector.</param>
         private void ReadData(string path)
         {
-            using var fs = CreateOpenFileStream(path);
-            using var r = new BinaryReader(fs);
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
 
             // Header
             var dataHeader = new Header();
@@ -188,8 +185,7 @@ namespace TruckLib.ScsMap
             //   they work, because they seem to relate to items
             //   at the borders of the sector
 
-            using var fs = CreateOpenFileStream(path);
-            using var r = new BinaryReader(fs);
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
 
             SectorDescVersion = r.ReadUInt32();
 
@@ -404,12 +400,6 @@ namespace TruckLib.ScsMap
             var sectorName = Path.GetFileNameWithoutExtension(basePath);
             X = int.Parse(sectorName.Substring(3, 5));
             Z = int.Parse(sectorName.Substring(8, 5));
-        }
-
-        private static FileStream CreateOpenFileStream(string path)
-        {
-            return new FileStream(path, FileMode.Open, FileAccess.Read,
-                FileShare.Read, 4096, FileOptions.SequentialScan);
         }
 
         /// <summary>

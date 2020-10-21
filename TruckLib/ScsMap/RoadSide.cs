@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Terrain for this side of the road.
         /// </summary>
-        public RoadTerrain Terrain { get; set; } = new RoadTerrain();
+        public RoadTerrain Terrain { get; set; }
 
         /// <summary>
         /// Vegetation on this side of the road.
@@ -69,6 +69,23 @@ namespace TruckLib.ScsMap
             Models = (new RoadModel[modelCount]).Select(h => new RoadModel()).ToArray();
             const int vegetationCount = 3;
             Vegetation = (new RoadVegetation[vegetationCount]).Select(h => new RoadVegetation()).ToArray();
+
+            Init();
+        }
+
+        internal RoadSide(bool initFields)
+        {
+            const int modelCount = 2;
+            Models = (new RoadModel[modelCount]).Select(h => new RoadModel()).ToArray();
+            const int vegetationCount = 3;
+            Vegetation = (new RoadVegetation[vegetationCount]).Select(h => new RoadVegetation()).ToArray();
+
+            if (initFields) Init();
+        }
+
+        protected void Init()
+        {
+            Terrain = new RoadTerrain();
         }
 
         public RoadSide Clone()

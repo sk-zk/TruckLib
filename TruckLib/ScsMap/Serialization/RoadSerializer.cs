@@ -22,12 +22,14 @@ namespace TruckLib.ScsMap.Serialization
         {
             var road = new Road(false);
 
-            road.Kdop = new KdopItem();
+            road.Kdop = new KdopItem(false);
             road.Uid = r.ReadUInt64();
             ReadKdopBounds(r, road);
 
-            road.Left = new RoadSide();
-            road.Right = new RoadSide();
+            road.Left = new RoadSide(false);
+            road.Left.Terrain = new RoadTerrain(false);
+            road.Right = new RoadSide(false);
+            road.Right.Terrain = new RoadTerrain(false);
 
             // === kdop flags ===
             var kflag1 = r.ReadByte();
@@ -276,6 +278,7 @@ namespace TruckLib.ScsMap.Serialization
                 }
 
                 side.Sidewalk.Material = r.ReadToken();
+                side.Terrain.QuadData = new TerrainQuadData(false);
                 side.Terrain.QuadData.Deserialize(r);
             }
 
@@ -304,17 +307,8 @@ namespace TruckLib.ScsMap.Serialization
                 road.VegetationSpheres.Add(sphere);
             }
 
-            var leftAdditionalPartsCount = r.ReadUInt32();
-            for (int i = 0; i < leftAdditionalPartsCount; i++)
-            {
-                road.Left.AdditionalParts.Add(r.ReadToken());
-            }
-
-            var rightAdditionalPartsCount = r.ReadUInt32();
-            for (int i = 0; i < rightAdditionalPartsCount; i++)
-            {
-                road.Right.AdditionalParts.Add(r.ReadToken());
-            }
+            road.Left.AdditionalParts = ReadObjectList<Token>(r);
+            road.Right.AdditionalParts = ReadObjectList<Token>(r);
         }
 
         public void SerializeDataPayload(BinaryWriter w, MapItem item)
@@ -364,17 +358,8 @@ namespace TruckLib.ScsMap.Serialization
                 sphere.Serialize(w);
             }
 
-            w.Write(road.Left.AdditionalParts.Count);
-            foreach (var part in road.Left.AdditionalParts)
-            {
-                w.Write(part);
-            }
-            w.Write(road.Right.AdditionalParts.Count);
-            foreach (var part in road.Right.AdditionalParts)
-            {
-                w.Write(part);
-            }
-
+            WriteObjectList(w, road.Left.AdditionalParts);
+            WriteObjectList(w, road.Right.AdditionalParts);
         }
     }
 }

@@ -226,18 +226,25 @@ namespace TruckLib.ScsMap
 
         public Prefab() : base() 
         {
-            Corners = new PrefabCorner[6].Select(h => new PrefabCorner()).ToArray();
+            Init();
         }
 
         internal Prefab(bool initFields) : base(initFields)
         {
-            if (initFields) Init();
-            Corners = new PrefabCorner[6].Select(h => new PrefabCorner()).ToArray();
+            if (initFields)
+            {
+                Init();
+            }
+            else
+            {
+                Corners = new PrefabCorner[6].Select(h => new PrefabCorner(false)).ToArray();
+            }
         }
 
         protected override void Init()
         {
             base.Init();
+            Corners = new PrefabCorner[6].Select(h => new PrefabCorner()).ToArray();
             Nodes = new List<INode>(2);
             AdditionalParts = new List<Token>();
             SlaveItems = new List<IMapItem>();

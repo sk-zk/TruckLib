@@ -16,13 +16,15 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var t = new Terrain(false);
-            t.Kdop = new KdopItem();
+            t.Kdop = new KdopItem(false);
             t.Uid = r.ReadUInt64();
 
             ReadKdopBounds(r, t);
 
-            t.Left = new TerrainSide();
-            t.Right = new TerrainSide();
+            t.Left = new TerrainSide(false);
+            t.Left.Terrain = new RoadTerrain(false);
+            t.Right = new TerrainSide(false);
+            t.Right.Terrain = new RoadTerrain(false);
             t.Railings = new Railings();
 
             var kflag1 = r.ReadByte();
@@ -99,7 +101,9 @@ namespace TruckLib.ScsMap.Serialization
 
             t.VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
+            t.Right.Terrain.QuadData = new TerrainQuadData(false);
             t.Right.Terrain.QuadData.Deserialize(r);
+            t.Left.Terrain.QuadData = new TerrainQuadData(false);
             t.Left.Terrain.QuadData.Deserialize(r);
 
             t.Right.Edge = r.ReadToken();

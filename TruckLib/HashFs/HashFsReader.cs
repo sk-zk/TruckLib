@@ -120,7 +120,9 @@ namespace TruckLib.HashFs
             }
             else
             {
-                reader.BaseStream.CopyTo(fileStream, (int)entry.Size);
+                var buffer = new byte[(int)entry.Size];
+                reader.BaseStream.Read(buffer, 0, (int)entry.Size);
+                fileStream.Write(buffer, 0, (int)entry.Size);
             }
         }
 

@@ -35,5 +35,8 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte IdahoAndOregon = 10;
         public static readonly byte IdahoAndUtah = 11;
         public static readonly byte IdahoAndWashington = 12;
+        public static readonly byte Colorado = 13;
+        public static readonly byte ColoradoAndNewMexico = 14;
+        public static readonly byte ColoradoAndUtah = 15;
     }
 }

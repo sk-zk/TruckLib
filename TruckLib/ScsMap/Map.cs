@@ -370,25 +370,26 @@ namespace TruckLib.ScsMap
         /// <param name="mbdPath">The path to the .mbd file.</param>
         private void ReadMbd(string mbdPath)
         {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(mbdPath)));
+            using (var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(mbdPath))))
+            {
+                var header = new Header();
+                header.Deserialize(r);
 
-            var header = new Header();
-            header.Deserialize(r);
+                EditorMapId = r.ReadUInt64();
 
-            EditorMapId = r.ReadUInt64();
+                StartPlacementPosition = r.ReadVector3();
+                StartPlacementSectorOrSomething = r.ReadUInt32();
 
-            StartPlacementPosition = r.ReadVector3();
-            StartPlacementSectorOrSomething = r.ReadUInt32();
+                StartPlacementRotation = r.ReadQuaternion();
 
-            StartPlacementRotation = r.ReadQuaternion();
+                // TODO: What is this?
+                gameTag = r.ReadUInt32();
 
-            // TODO: What is this?
-            gameTag = r.ReadUInt32();
+                NormalScale = r.ReadSingle();
+                CityScale = r.ReadSingle();
 
-            NormalScale = r.ReadSingle();
-            CityScale = r.ReadSingle();
-
-            EuropeMapUiCorrections = (r.ReadByte() == 1);
+                EuropeMapUiCorrections = (r.ReadByte() == 1);
+            }
         }
 
         /// <summary>
@@ -498,23 +499,24 @@ namespace TruckLib.ScsMap
         private void SaveMbd(string mbdPath)
         {
             var stream = new FileStream(mbdPath, FileMode.Create);
-            using var w = new BinaryWriter(stream);
+            using (var w = new BinaryWriter(stream))
+            {
+                header.Serialize(w);
 
-            header.Serialize(w);
+                w.Write(EditorMapId);
 
-            w.Write(EditorMapId);
+                w.Write(StartPlacementPosition);
+                w.Write(StartPlacementSectorOrSomething);
 
-            w.Write(StartPlacementPosition);
-            w.Write(StartPlacementSectorOrSomething);
+                w.Write(StartPlacementRotation);
 
-            w.Write(StartPlacementRotation);
+                w.Write(gameTag);
 
-            w.Write(gameTag);
+                w.Write(NormalScale);
+                w.Write(CityScale);
 
-            w.Write(NormalScale);
-            w.Write(CityScale);
-
-            w.Write(EuropeMapUiCorrections.ToByte());
+                w.Write(EuropeMapUiCorrections.ToByte());
+            }
         }
     }
 }

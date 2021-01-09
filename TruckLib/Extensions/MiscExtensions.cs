@@ -19,7 +19,7 @@ namespace TruckLib
                 return new[] { item };
             
             Array.Resize(ref arr, arr.Length + 1);
-            arr[^1] = item;
+            arr[arr.Length - 1] = item;
             return arr;
         }
 

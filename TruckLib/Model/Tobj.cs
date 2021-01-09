@@ -63,18 +63,26 @@ namespace TruckLib.Model
         {
             var tobj = new Tobj();
 
-            using var fs = new FileStream(tobjPath, FileMode.Open);
-            using var r = new BinaryReader(fs);
-            tobj.Deserialize(r);
+            using (var fs = new FileStream(tobjPath, FileMode.Open))
+            {
+                using (var r = new BinaryReader(fs))
+                {
+                    tobj.Deserialize(r);
+                }
+            }
 
             return tobj;
         }
 
         public void Save(string tobjPath)
         {
-            using var fs = new FileStream(tobjPath, FileMode.Create);
-            using var w = new BinaryWriter(fs);
-            Serialize(w);
+            using (var fs = new FileStream(tobjPath, FileMode.Create))
+            {
+                using (var w = new BinaryWriter(fs))
+                {
+                    Serialize(w);
+                }
+            }
         }
 
         public void Deserialize(BinaryReader r)

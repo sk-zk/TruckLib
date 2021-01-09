@@ -23,15 +23,24 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public float MinLength => StepSize switch
+        public float MinLength
         {
-            // step size / 2
-            StepSize.Meters2 => 1,
-            StepSize.Meters4 => 2,
-            StepSize.Meters12 => 6,
-            StepSize.Meters16 => 8,
-            _ => 8,
-        };
+            get
+            {
+                switch (StepSize)
+                {
+                    case StepSize.Meters2:
+                        return 1;
+                    case StepSize.Meters4:
+                        return 2;
+                    case StepSize.Meters12:
+                        return 6;
+                    default:
+                    case StepSize.Meters16:
+                        return 8;
+                }
+            }
+        }
 
         public float MaxLength => 99999f;
 

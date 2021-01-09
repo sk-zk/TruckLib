@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         /// and should not be called on its own.
         /// </summary>
         /// <param name="item">The item.</param>
-        internal void AddItem(MapItem item);
+        void AddItem(MapItem item);
 
         void Delete(MapItem item);
 

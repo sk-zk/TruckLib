@@ -104,42 +104,42 @@ namespace TruckLib
 
             if (typeof(IBinarySerializable).IsAssignableFrom(typeof(T))) // trucklib objects
             {
-                ReadList(r =>
+                ReadList(_r =>
                 {
                     var obj = new T() as IBinarySerializable;
-                    obj.Deserialize(r);
+                    obj.Deserialize(_r);
                     return (T)obj;
                 });
             }
             else if (typeof(IComparable).IsAssignableFrom(typeof(T))) // int, float etc.
             {
-                ReadList(r =>
+                ReadList(_r =>
                 {
-                    var val = r.Read<T>();
+                    var val = _r.Read<T>();
                     return (T)Convert.ChangeType(val, typeof(T));
                 });
             }
             else if (typeof(T) == typeof(Vector2))
             {
-                ReadList(r =>
+                ReadList(_r =>
                 {
-                    var vector = r.ReadVector2();
+                    var vector = _r.ReadVector2();
                     return (T)Convert.ChangeType(vector, typeof(T));
                 });
             }
             else if (typeof(T) == typeof(Vector3))
             {
-                ReadList(r =>
+                ReadList(_r =>
                 {
-                    var vector = r.ReadVector3();
+                    var vector = _r.ReadVector3();
                     return (T)Convert.ChangeType(vector, typeof(T));
                 });
             }
             else if(typeof(T) == typeof(UnresolvedItem))
             {
-                ReadList(r =>
+                ReadList(_r =>
                 {
-                    var item = new UnresolvedItem(r.ReadUInt64());
+                    var item = new UnresolvedItem(_r.ReadUInt64());
                     return (T)Convert.ChangeType(item, typeof(T));
                 });
             }

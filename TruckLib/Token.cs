@@ -167,18 +167,27 @@ namespace TruckLib
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj)) 
+            if (ReferenceEquals(this, obj))
                 return true;
 
-            return obj switch
+            if (obj != null)
             {
-                null =>         false,
-                Token token2 => Value == token2.Value,
-                ulong ul =>     Value == ul,
-                int i =>        Value == (ulong)i,
-                string str =>   String == str,
-                _ => false,
-            };
+                if (obj is Token token2)
+                    return Value == token2.Value;
+
+                if (obj is ulong ul)
+                    return Value == ul;
+
+                if (obj is int i)
+                    return Value == (ulong)i;
+
+                if (obj is string str)
+                    return String == str;
+
+                return false;
+            }
+
+            return false;
         }
 
         public override int GetHashCode() =>

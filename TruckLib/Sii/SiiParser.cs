@@ -77,31 +77,32 @@ namespace TruckLib.Sii
 
         private void GetTopLevelIncludes(string sii, SiiFile siiFile)
         {
-            using var sr = new StringReader(sii);
-
-            var bracketsStack = 0;
-            // in files that use the global scope SiiNunit { },
-            // ignore first bracket level:
-            if (sii.StartsWith(SiiHeader))
-                bracketsStack = -1;
-
-            string line;
-            while ((line = sr.ReadLine()) != null)
+            using (var sr = new StringReader(sii))
             {
-                // only parse top level includes, so
-                // make sure we're not inside a unit
-                foreach (var character in line)
-                {
-                    if (character == '{')
-                        ++bracketsStack;
-                    else if (character == '}')
-                        --bracketsStack;
-                }
+                var bracketsStack = 0;
+                // in files that use the global scope SiiNunit { },
+                // ignore first bracket level:
+                if (sii.StartsWith(SiiHeader))
+                    bracketsStack = -1;
 
-                if (bracketsStack == 0 && line.StartsWith(IncludeKeyword))
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    var include = ParseInclude(line);
-                    siiFile.Includes.Add(include);
+                    // only parse top level includes, so
+                    // make sure we're not inside a unit
+                    foreach (var character in line)
+                    {
+                        if (character == '{')
+                            ++bracketsStack;
+                        else if (character == '}')
+                            --bracketsStack;
+                    }
+
+                    if (bracketsStack == 0 && line.StartsWith(IncludeKeyword))
+                    {
+                        var include = ParseInclude(line);
+                        siiFile.Includes.Add(include);
+                    }
                 }
             }
         }
@@ -110,15 +111,17 @@ namespace TruckLib.Sii
         {
             // TODO: Remove block comments
             var siiNoComments = new StringBuilder();
-            using var sr = new StringReader(sii);
-            string line;
-            while ((line = sr.ReadLine()) != null)
+            using (var sr = new StringReader(sii))
             {
-                line = StringUtils.RemoveStartingAtPattern(line, "#");
-                line = StringUtils.RemoveStartingAtPattern(line, "//");
-                siiNoComments.AppendLine(line);
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    line = StringUtils.RemoveStartingAtPattern(line, "#");
+                    line = StringUtils.RemoveStartingAtPattern(line, "//");
+                    siiNoComments.AppendLine(line);
+                }
+                return siiNoComments.ToString();
             }
-            return siiNoComments.ToString();
         }
 
         private Unit ParseUnit(string unitStr)
@@ -153,7 +156,7 @@ namespace TruckLib.Sii
                 var (Name, Value) = ParseAttribute(line);
                 if (Name.EndsWith("[]")) // list type
                 {
-                    var arrName = Name[0..^2];
+                    var arrName = Name.Substring(0, Name.Length - 2);
                     if (unit.Attributes.TryGetValue(arrName, out var existingAttrib))
                         (existingAttrib as List<dynamic>).Add(Value);
                     else
@@ -248,7 +251,7 @@ namespace TruckLib.Sii
             // string
             const string doubleQuote = "\"";
             if (valueStr.StartsWith(doubleQuote) && valueStr.EndsWith(doubleQuote))
-                return valueStr[1..^1];
+                return valueStr.Substring(1, valueStr.Length - 1);
 
             // expicit quaternion - undocumented but used in a few files
             if (Regex.IsMatch(valueStr, @"\(.+;.+,.+,.+\)"))
@@ -287,7 +290,7 @@ namespace TruckLib.Sii
 
         private dynamic ParseQuaternion(string valueStr)
         {
-            var vals = valueStr[1..^1].Split(new[] { TupleSeperator, ';' });
+            var vals = valueStr.Substring(1, valueStr.Length - 1).Split(new[] { TupleSeperator, ';' });
             return new Quaternion(
                 float.Parse(vals[1], culture), // x
                 float.Parse(vals[2], culture), // y
@@ -298,7 +301,7 @@ namespace TruckLib.Sii
 
         private dynamic ParseTuple(string valueStr)
         {
-            var tupleVals = valueStr[1..^1].Split(TupleSeperator);
+            var tupleVals = valueStr.Substring(1, valueStr.Length - 1).Split(TupleSeperator);
 
             // determine the type of the tuple
             var types = new Type[tupleVals.Count()];
@@ -331,8 +334,10 @@ namespace TruckLib.Sii
         {
             if (StringUtils.IsHexNotationFloat(valueStr))
             {
-                var bitsAsInt = int.Parse(valueStr[1..], NumberStyles.HexNumber);
-                return BitConverter.Int32BitsToSingle(bitsAsInt);
+                var bitsAsInt = int.Parse(valueStr.Substring(1, valueStr.Length - 1), NumberStyles.HexNumber);
+                byte[] floatVals = BitConverter.GetBytes(bitsAsInt);
+                float f = BitConverter.ToSingle(floatVals, 0);
+                return f;
             }
             else if (valueStr.Contains(".") || valueStr.Contains("e") || valueStr.Contains("E"))
             {

@@ -8,7 +8,7 @@ namespace TruckLib.ScsMap.Serialization
     {
         // don't create a new object every single time
         // because it's not necessary
-        private static Dictionary<ItemType, MapItemSerializer> cached 
+        private static Dictionary<ItemType, MapItemSerializer> cached
             = new Dictionary<ItemType, MapItemSerializer>();
 
         public static MapItemSerializer Get(ItemType type)
@@ -27,43 +27,76 @@ namespace TruckLib.ScsMap.Serialization
 
         private static MapItemSerializer Create(ItemType type)
         {
-            return type switch
+            switch (type)
             {
-                ItemType.AnimatedModel => new AnimatedModelSerializer(),
-                ItemType.BezierPatch => new BezierPatchSerializer(),
-                ItemType.Building => new BuildingSerializer(),
-                ItemType.BusStop => new BusStopSerializer(),
-                ItemType.CameraPath => new CameraPathSerializer(),
-                ItemType.CameraPoint => new CameraPointSerializer(),
-                ItemType.CityArea => new CityAreaSerializer(),
-                ItemType.Company => new CompanySerializer(),
-                ItemType.Compound => new CompoundSerializer(),
-                ItemType.Curve => new CurveSerializer(),
-                ItemType.CutPlane => new CutPlaneSerializer(),
-                ItemType.Cutscene => new CutsceneSerializer(),
-                ItemType.FarModel => new FarModelSerializer(),
-                ItemType.Ferry => new FerrySerializer(),
-                ItemType.FuelPump => new ServiceSerializer(),
-                ItemType.Garage => new GarageSerializer(),
-                ItemType.Hinge => new HingeSerializer(),
-                ItemType.MapArea => new MapAreaSerializer(),
-                ItemType.MapOverlay => new MapOverlaySerializer(),
-                ItemType.Model => new ModelSerializer(),
-                ItemType.Mover => new MoverSerializer(),
-                ItemType.NoWeatherArea => new NoWeatherAreaSerializer(),
-                ItemType.Prefab => new PrefabSerializer(),
-                ItemType.Road => new RoadSerializer(),
-                ItemType.Service => new ServiceSerializer(),
-                ItemType.Sign => new SignSerializer(),
-                ItemType.Sound => new SoundSerializer(),
-                ItemType.Terrain => new TerrainSerializer(),
-                ItemType.TrafficArea => new TrafficAreaSerializer(),
-                ItemType.Trajectory => new TrajectorySerializer(),
-                ItemType.Trigger => new TriggerSerializer(),
-                ItemType.Walker => new WalkerSerializer(),
-                _ => throw new NotImplementedException($"Item type {type} is not supported."),
-            };
+                case ItemType.AnimatedModel:
+                    return new AnimatedModelSerializer();
+                case ItemType.BezierPatch:
+                    return new BezierPatchSerializer();
+                case ItemType.Building:
+                    return new BuildingSerializer();
+                case ItemType.BusStop:
+                    return new BusStopSerializer();
+                case ItemType.CameraPath:
+                    return new CameraPathSerializer();
+                case ItemType.CameraPoint:
+                    return new CameraPointSerializer();
+                case ItemType.CityArea:
+                    return new CityAreaSerializer();
+                case ItemType.Company:
+                    return new CompanySerializer();
+                case ItemType.Compound:
+                    return new CompoundSerializer();
+                case ItemType.Curve:
+                    return new CurveSerializer();
+                case ItemType.CutPlane:
+                    return new CutPlaneSerializer();
+                case ItemType.Cutscene:
+                    return new CutsceneSerializer();
+                case ItemType.FarModel:
+                    return new FarModelSerializer();
+                case ItemType.Ferry:
+                    return new FerrySerializer();
+                case ItemType.FuelPump:
+                    return new ServiceSerializer();
+                case ItemType.Garage:
+                    return new GarageSerializer();
+                case ItemType.Hinge:
+                    return new HingeSerializer();
+                case ItemType.MapArea:
+                    return new MapAreaSerializer();
+                case ItemType.MapOverlay:
+                    return new MapOverlaySerializer();
+                case ItemType.Model:
+                    return new ModelSerializer();
+                case ItemType.Mover:
+                    return new MoverSerializer();
+                case ItemType.NoWeatherArea:
+                    return new NoWeatherAreaSerializer();
+                case ItemType.Prefab:
+                    return new PrefabSerializer();
+                case ItemType.Road:
+                    return new RoadSerializer();
+                case ItemType.Service:
+                    return new ServiceSerializer();
+                case ItemType.Sign:
+                    return new SignSerializer();
+                case ItemType.Sound:
+                    return new SoundSerializer();
+                case ItemType.Terrain:
+                    return new TerrainSerializer();
+                case ItemType.TrafficArea:
+                    return new TrafficAreaSerializer();
+                case ItemType.Trajectory:
+                    return new TrajectorySerializer();
+                case ItemType.Trigger:
+                    return new TriggerSerializer();
+                case ItemType.Walker:
+                    return new WalkerSerializer();
+                default:
+                    throw new NotImplementedException($"Item type {type} is not supported.");
+            }
+
         }
-   
     }
 }

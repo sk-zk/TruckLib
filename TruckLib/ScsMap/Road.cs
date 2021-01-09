@@ -27,13 +27,23 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
-        public float MinLength => Resolution switch
+        public float MinLength
         {
-            RoadResolution.Superfine => 0.40000001f,
-            RoadResolution.HighPoly => 1.25f,
-            RoadResolution.Normal => 3.75f,
-            _ => 3.75f,
-        };
+            get
+            {
+                switch (Resolution)
+                {
+                    case RoadResolution.Superfine:
+                        return 0.4f;
+                    case RoadResolution.HighPoly:
+                        return 1.25f;
+                    case RoadResolution.Normal:
+                        return 3.75f;
+                    default:
+                        return 3.75f;
+                }
+            }
+        }
 
         public float MaxLength => 1000f;
 

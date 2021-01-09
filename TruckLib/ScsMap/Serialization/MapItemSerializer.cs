@@ -32,10 +32,10 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void ReadKdopBounds(BinaryReader r, KdopBounds kb)
         {
-            ReadKbArr(r, kb.Minimums);
-            ReadKbArr(r, kb.Maximums);
+            ReadKbArr(kb.Minimums);
+            ReadKbArr(kb.Maximums);
 
-            static void ReadKbArr(BinaryReader r, float[] arr)
+            void ReadKbArr(float[] arr)
             {
                 for (int i = 0; i < arr.Length; i++)
                     arr[i] = r.ReadSingle();

@@ -69,7 +69,7 @@ namespace TruckLib.ScsMap
             {
                 return RowWidthSequence[index];
             }
-            return RowWidthSequence[^1];
+            return RowWidthSequence[RowWidthSequence.Length - 1];
         }
 
         /// <summary>

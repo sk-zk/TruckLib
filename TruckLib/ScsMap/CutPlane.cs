@@ -83,6 +83,6 @@ namespace TruckLib.ScsMap
         }
 
         internal override INode GetMainNode() =>
-            Nodes[^1];
+            Nodes[Nodes.Count - 1];
     }
 }

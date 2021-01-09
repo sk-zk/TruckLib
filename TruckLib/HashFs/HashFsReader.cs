@@ -112,17 +112,19 @@ namespace TruckLib.HashFs
         public void ExtractToFile(Entry entry, string outputPath)
         {
             reader.BaseStream.Position = (long)entry.Offset;
-            using var fileStream = new FileStream(outputPath, FileMode.Create);
-            if (entry.IsCompressed)
+            using (var fileStream = new FileStream(outputPath, FileMode.Create))
             {
-                var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
-                zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
-            }
-            else
-            {
-                var buffer = new byte[(int)entry.Size];
-                reader.BaseStream.Read(buffer, 0, (int)entry.Size);
-                fileStream.Write(buffer, 0, (int)entry.Size);
+                if (entry.IsCompressed)
+                {
+                    var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
+                    zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+                }
+                else
+                {
+                    var buffer = new byte[(int)entry.Size];
+                    reader.BaseStream.Read(buffer, 0, (int)entry.Size);
+                    fileStream.Write(buffer, 0, (int)entry.Size);
+                }
             }
         }
 
@@ -154,16 +156,16 @@ namespace TruckLib.HashFs
             }
 
             return (subdirs, files);
+        }
 
-            static void MakePathsAbsolute(string parent, List<string> subdirs)
+        private void MakePathsAbsolute(string parent, List<string> subdirs)
+        {
+            for (int i = 0; i < subdirs.Count; i++)
             {
-                for (int i = 0; i < subdirs.Count; i++)
-                {
-                    if (parent == RootPath)
-                        subdirs[i] = RootPath + subdirs[i];
-                    else
-                        subdirs[i] = $"{parent}/{subdirs[i]}";
-                }
+                if (parent == RootPath)
+                    subdirs[i] = RootPath + subdirs[i];
+                else
+                    subdirs[i] = $"{parent}/{subdirs[i]}";
             }
         }
 
@@ -176,7 +178,7 @@ namespace TruckLib.HashFs
         public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             Entry entry, bool filesOnly = false)
         {        
-            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split("\n");
+            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split('\n');
 
             const string dirMarker = "*";
             var subdirs = new List<string>();
@@ -284,7 +286,7 @@ namespace TruckLib.HashFs
         private string RemoveTrailingSlash(string path)
         {
             if (path.EndsWith("/") && path != RootPath)
-                path = path[0..^1];
+                path = path.Substring(0, path.Length - 1);
             return path;
         }
 

@@ -121,24 +121,25 @@ namespace TruckLib.ScsMap
         public static Selection Open(string sbdPath)
         {
             var s = new Selection();
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(sbdPath)));
+            using (var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(sbdPath))))
+            {
+                s.header = new Header();
+                s.header.Deserialize(r);
 
-            s.header = new Header();
-            s.header.Deserialize(r);
+                s.Origin = new Vector3(r.ReadInt32() / 256f, r.ReadInt32() / 256f, r.ReadInt32() / 256f);
+                s.KdopBounds = new KdopBounds();
+                MapItemSerializer.ReadKdopBounds(r, s.KdopBounds);
 
-            s.Origin = new Vector3(r.ReadInt32() / 256f, r.ReadInt32() / 256f, r.ReadInt32() / 256f);
-            s.KdopBounds = new KdopBounds();
-            MapItemSerializer.ReadKdopBounds(r, s.KdopBounds);
+                var itemCount = r.ReadUInt32();
+                var nodeCount = r.ReadUInt32();
 
-            var itemCount = r.ReadUInt32();
-            var nodeCount = r.ReadUInt32();
+                s.ReadItems(r, itemCount);
+                s.ReadNodes(r, nodeCount);
 
-            s.ReadItems(r, itemCount);
-            s.ReadNodes(r, nodeCount);
+                s.UpdateInternalReferences();
 
-            s.UpdateInternalReferences();
-
-            return s;
+                return s;
+            }
         }
 
         private void ReadNodes(BinaryReader r, uint nodeCount)

@@ -12,6 +12,9 @@ namespace TruckLib.HashFs
     /// </summary>
     public class HashFsReader : IDisposable
     {
+        public string Path { get; private set; }
+        public int EntryCount => entries.Count;
+
         private const uint Magic = 0x23534353; // as ascii: "SCS#"
         private const ushort SupportedVersion = 1;
         private const string SupportedHashMethod = "CITY";
@@ -34,6 +37,7 @@ namespace TruckLib.HashFs
         public static HashFsReader Open(string path)
         {
             var hfr = new HashFsReader();
+            hfr.Path = path;
             hfr.reader = new BinaryReader(new FileStream(path, FileMode.Open));
             hfr.ParseHeader();
             hfr.CacheEntryHeaders();

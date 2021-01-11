@@ -40,7 +40,7 @@ namespace Example
             // Define what the terrain will look like.
             // We'll set all of the following properties on the right side only
             // and then clone them to the left side.
-            r.Right.Terrain.QuadData.Material = "34"; // "grass_ger_main"
+            r.Right.Terrain.QuadData.BrushMaterials[0] = new Material("34"); // "grass_ger_main"
             r.Right.Terrain.Profile = "profile12"; // "hills2"
             r.Right.Terrain.Noise = TerrainNoise.Percent0;
             r.Right.Terrain.Coefficient = 0.5f;

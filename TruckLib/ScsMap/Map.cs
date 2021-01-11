@@ -226,11 +226,11 @@ namespace TruckLib.ScsMap
             var allItems = new Dictionary<ulong, T>();
             foreach (var sectorKvp in Sectors)
             {
-                foreach(var itemKvp in sectorKvp.Value.MapItems)
+                foreach (var itemKvp in sectorKvp.Value.MapItems)
                 {
-                    if(itemKvp.Value is T)
+                    if (itemKvp.Value is T t)
                     {
-                        allItems.Add(itemKvp.Key, (T)itemKvp.Value);
+                        allItems.Add(itemKvp.Key, t);
                     }
                 }
             }

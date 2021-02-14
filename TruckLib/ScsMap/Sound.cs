@@ -16,17 +16,28 @@ namespace TruckLib.ScsMap
     {
         public override ItemType ItemType => ItemType.Sound;
 
-        public override ItemFile DefaultItemFile => ItemFile.Aux;
+        public override ItemFile DefaultItemFile => ItemFile.Snd;
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         public Token Name { get; set; }
 
-        public float FullIntensityDistance { get; set; }
+        public Token Reverb { get; set; }
 
-        public float ActivationDistance { get; set; }
+        public float AreaWidth { get; set; }
 
-        internal FlagField SoundFlags;
+        public float AreaHeight { get; set; }
+
+        private const int typeStart = 0;
+        private const int typeLength = 2;
+        public SoundType Type
+        {
+            get => (SoundType)Kdop.Flags.GetBitString(typeStart, typeLength);
+            set
+            {
+                Kdop.Flags.SetBitString(typeStart, typeLength, (uint)value);
+            }
+        }
 
         public Sound() : base() { }
 
@@ -38,17 +49,15 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            SoundFlags = new FlagField(0x110);
+            AreaWidth = 100f;
+            AreaHeight = 100f;
         }
 
-        public static Sound Add(IItemContainer map, Vector3 position, Token name,
-            float fullIntensityDistance, float activationDistance)
+        public static Sound Add(IItemContainer map, Vector3 position, Token name)
         {
             var sound = Add<Sound>(map, position);
 
             sound.Name = name;
-            sound.FullIntensityDistance = fullIntensityDistance;
-            sound.ActivationDistance = activationDistance;
 
             return sound;
         }

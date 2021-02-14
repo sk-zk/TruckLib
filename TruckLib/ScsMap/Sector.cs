@@ -68,6 +68,7 @@ namespace TruckLib.ScsMap
 
         private const string BaseExtension = "base";
         private const string DataExtension = "data";
+        private const string SndExtension = "snd";
         private const string AuxExtenstion = "aux";
         private const string DescExtension = "desc";
 
@@ -112,6 +113,7 @@ namespace TruckLib.ScsMap
             ReadBase(basePath);
             ReadData(Path.ChangeExtension(basePath, DataExtension));
             ReadAux(Path.ChangeExtension(basePath, AuxExtenstion));
+            ReadSnd(Path.ChangeExtension(basePath, SndExtension));
             ReadDesc(Path.ChangeExtension(basePath, DescExtension));
         }
 
@@ -122,7 +124,7 @@ namespace TruckLib.ScsMap
         private void ReadBase(string path)
         {
             using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-            header = new Header();
+            this.header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
             ReadNodes(r);
@@ -135,8 +137,8 @@ namespace TruckLib.ScsMap
         private void ReadAux(string path)
         {
             using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-            var auxHeader = new Header();
-            auxHeader.Deserialize(r);
+            var header = new Header();
+            header.Deserialize(r);
             ReadItems(r, ItemFile.Aux);
             ReadNodes(r);
         }
@@ -150,8 +152,8 @@ namespace TruckLib.ScsMap
             using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
 
             // Header
-            var dataHeader = new Header();
-            dataHeader.Deserialize(r);
+            var header = new Header();
+            header.Deserialize(r);
 
             // Items
             while (r.BaseStream.Position < r.BaseStream.Length)
@@ -159,8 +161,7 @@ namespace TruckLib.ScsMap
                 var uid = r.ReadUInt64();
                 if (uid == dataEof) break;
 
-                MapItem item;
-                if (!MapItems.TryGetValue(uid, out item))
+                if (!MapItems.TryGetValue(uid, out MapItem item))
                 {
                     throw new KeyNotFoundException($"{ToString()}.data contains " +
                         $"unknown UID {uid} - can't continue.");
@@ -168,6 +169,22 @@ namespace TruckLib.ScsMap
                 var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
                 serializer.DeserializeDataPayload(r, item);
             }
+        }
+
+        /// <summary>
+        /// Reads the .snd file of the sector.
+        /// </summary>
+        /// <param name="path">The .snd file of the sector.</param>
+        private void ReadSnd(string path)
+        {
+            if (!File.Exists(path))
+                return;
+
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+            var header = new Header();
+            header.Deserialize(r);
+            ReadItems(r, ItemFile.Snd);
+            ReadNodes(r);
         }
 
         private const float boundaryFactor = 256f;
@@ -204,7 +221,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Reads items from a .base or .aux file.
+        /// Reads items from a .base/.aux/.snd file.
         /// </summary>
         /// <param name="r">The reader.</param>
         /// <param name="file">The file which is being read.</param>
@@ -234,7 +251,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Reads the node section of a .base / .aux file.
+        /// Reads the node section of a .base/.aux/.snd file.
         /// </summary>
         /// <param name="r">The reader. (Position must be the start of the footer)</param>
         private void ReadNodes(BinaryReader r)
@@ -265,6 +282,7 @@ namespace TruckLib.ScsMap
             WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes);
             WriteData(GetFilename(DataExtension), MapItems);
             WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes);
+            WriteSnd(GetFilename(SndExtension), MapItems, sectorNodes);
             WriteDesc(GetFilename(DescExtension));
 
             string GetFilename(string ext) => 
@@ -299,6 +317,21 @@ namespace TruckLib.ScsMap
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Aux, w);
             WriteNodes(w, ItemFile.Aux, sectorNodes);
+        }
+
+        /// <summary>
+        /// Writes the .snd part of the sector.
+        /// </summary>
+        /// <param name="sndFilename">The path of the output file.</param>
+        /// <param name="allItems">A list of all items in the sector.</param>
+        private void WriteSnd(string sndFilename, Dictionary<ulong, MapItem> allItems,
+            List<INode> sectorNodes)
+        {
+            using var stream = new FileStream(sndFilename, FileMode.Create);
+            using var w = new BinaryWriter(stream);
+            header.Serialize(w);
+            WriteItems(allItems, ItemFile.Snd, w);
+            WriteNodes(w, ItemFile.Snd, sectorNodes);
         }
 
         /// <summary>
@@ -345,7 +378,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Writes the node part of a .base / .aux file.
+        /// Writes the node part of a .base/.aux/.snd file.
         /// </summary>
         /// <param name="w">The writer.</param>
         private void WriteNodes(BinaryWriter w, ItemFile file, List<INode> sectorNodes)
@@ -376,9 +409,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Writes base / aux items to a base / aux file.
+        /// Writes base/aux/snd items to a base/aux/snd file.
         /// </summary>
-        /// <typeparam name="T">Either IBaseItem or IAuxItem, defining which items to write.</typeparam>
         /// <param name="allItems">All items in the sector.</param>
         /// <param name="w">The writer.</param>
         private void WriteItems(Dictionary<ulong, MapItem> allItems, ItemFile file, BinaryWriter w)

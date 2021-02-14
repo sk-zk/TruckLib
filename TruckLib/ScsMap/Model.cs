@@ -42,8 +42,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Variant { get; set; }
 
-        private int colorVariantPos = 8;
-        private int colorVariantLength = 4;
+        private const int colorVariantPos = 8;
+        private const int colorVariantLength = 4;
         /// <summary>
         /// The color variant.
         /// </summary>
@@ -69,16 +69,14 @@ namespace TruckLib.ScsMap
 
         public Color TerrainColor { get; set; }
 
-        private int staticLodPos = 4;
-        private int staticLodLength = 2;
-        /// <summary>
-        /// Forces the game to display a lower LOD of the model, 
-        /// no matter where the camera is.
-        /// </summary>
-        public StaticLod StaticLod
+        public float TerrainRotation { get; set; }
+
+        private const int lodPos = 4;
+        private const int lodLength = 2;
+        public ModelLod Lod
         {
-            get => (StaticLod)Kdop.Flags.GetBitString(staticLodPos, staticLodLength);
-            set => Kdop.Flags.SetBitString(staticLodPos, staticLodLength, (uint)value);
+            get => (ModelLod)Kdop.Flags.GetBitString(lodPos, lodLength);
+            set => Kdop.Flags.SetBitString(lodPos, lodLength, (uint)value);
         }
 
         public bool ModelHookups

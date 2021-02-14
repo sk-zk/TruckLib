@@ -99,14 +99,6 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[5] = value;
         }
 
-        /* This property has apparently been removed
-         * as of 1.35 (map ver. 868)
-        public bool Pedestrian
-        {
-            get => Flags[8];
-            set => Flags[8] = value;
-        }
-        */
         public bool UseSound
         {
             get => !Kdop.Flags[9];

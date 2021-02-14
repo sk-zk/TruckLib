@@ -180,6 +180,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[29] = value;
         }
 
+        public bool NoDetailVegetation
+        {
+            get => Kdop.Flags[23];
+            set => Kdop.Flags[23] = value;
+        }
+
         /// <summary>
         /// Determines if AI traffic can use this road.
         /// <para>If not, AI vehicles will choose a different route.

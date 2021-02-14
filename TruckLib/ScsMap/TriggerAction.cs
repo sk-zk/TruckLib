@@ -12,6 +12,17 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Name { get; set; }
 
+        private const int typeStart = 0;
+        private const int typeLength = 4; // presumably
+        public ActionType Type
+        {
+            get => (ActionType)actionFlags.GetBitString(typeStart, typeLength);
+            set
+            {
+                actionFlags.SetBitString(typeStart, typeLength, (uint)value);
+            }
+        }
+
         public override void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();

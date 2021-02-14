@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; } 
 
-        public List<TriggerAction> Actions { get; set; } 
+        public List<TriggerAction> Actions { get; set; }
 
         /// <summary>
         /// Legacy parameter. Do not use.

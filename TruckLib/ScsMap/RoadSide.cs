@@ -57,11 +57,16 @@ namespace TruckLib.ScsMap
         public RoadModel[] Models { get; set; }
 
         /// <summary>
-        /// Railings on or on the side of road.
+        /// Railings on the side of road.
         /// </summary>
         public RoadRailings Railings { get; set; } = new RoadRailings();
 
         public List<Token> AdditionalParts { get; set; } = new List<Token>();
+
+        public List<EdgeOverride> EdgeOverrides { get; set; }
+
+        public List<VariantOverride> VariantOverrides { get; set; }
+
 
         public RoadSide()
         {
@@ -86,6 +91,8 @@ namespace TruckLib.ScsMap
         protected void Init()
         {
             Terrain = new RoadTerrain();
+            EdgeOverrides = new List<EdgeOverride>();
+            VariantOverrides = new List<VariantOverride>();
         }
 
         public RoadSide Clone()

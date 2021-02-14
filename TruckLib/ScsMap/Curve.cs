@@ -53,6 +53,8 @@ namespace TruckLib.ScsMap
 
         public float Scale { get; set; }
 
+        public float TerrainRotation { get; set; }
+
         /// <summary>
         /// Height offsets for individual elements of the curve.
         /// </summary>

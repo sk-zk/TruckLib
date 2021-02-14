@@ -18,25 +18,16 @@ namespace TruckLib.ScsMap
 
         public float TargetRange { get; set; }
 
-        private const int typeStart = 0;
-        private const int typeLength = 4; // presumably
-        public ActionType Type 
-        {
-            get => (ActionType)actionFlags.GetBitString(typeStart, typeLength);
-            set
-            {
-                actionFlags.SetBitString(typeStart, typeLength, (uint)value);
-            }
-        }
+        protected FlagField actionFlags = new FlagField();
 
-        private FlagField actionFlags = new FlagField();
+        private const uint NoParamsMarker = uint.MaxValue;
 
         public virtual void Deserialize(BinaryReader r)
         {
             var numParamCount = r.ReadUInt32();
-            // if there are no custom params of any kind, 
-            // this value is 0xFFFFFFFF.
-            if (numParamCount == uint.MaxValue)
+            // if there are no custom params of any kind,
+            // there's just an 0xFFFFFFFF here and the item ends.
+            if (numParamCount == NoParamsMarker)
                 return;
 
             for (int i = 0; i < numParamCount; i++)
@@ -65,6 +56,12 @@ namespace TruckLib.ScsMap
 
         public virtual void Serialize(BinaryWriter w)
         {
+            if (HasNoCustomParams())
+            {
+                w.Write(NoParamsMarker);
+                return;
+            }
+
             w.Write(NumParams.Count);
             foreach (var param in NumParams)
             {
@@ -87,6 +84,11 @@ namespace TruckLib.ScsMap
             w.Write(TargetRange);
             w.Write(actionFlags.Bits);
         }
+
+        private bool HasNoCustomParams() => 
+            NumParams.Count == 0 
+            && StringParams.Count == 0 
+            && TargetTags.Count == 0;
     }
 
     public enum ActionType

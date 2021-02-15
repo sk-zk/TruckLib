@@ -145,6 +145,8 @@ namespace TruckLib.ScsMap
             p2.IsRed = true;
             p2.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
+            RecalculateLength();
+
             return newItem;
         }
 
@@ -179,6 +181,8 @@ namespace TruckLib.ScsMap
 
             p0.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
+            RecalculateLength();
+
             return newItem;
         }
 
@@ -210,7 +214,7 @@ namespace TruckLib.ScsMap
             if (Node is null)
                 return;
 
-            HermiteSpline.ApproximateLength(
+            Length = HermiteSpline.ApproximateLength(
                 Node.Position, Node.Rotation.ToEuler(),
                 ForwardNode.Position, ForwardNode.Rotation.ToEuler());
         }

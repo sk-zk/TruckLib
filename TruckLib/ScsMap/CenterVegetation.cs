@@ -20,5 +20,7 @@ namespace TruckLib.ScsMap
             get => offset;
             set => offset = Utils.SetIfInRange(value, 0, 25);
         }
+
+        public CenterVegetation Clone() => (CenterVegetation)MemberwiseClone();
     }
 }

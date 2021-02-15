@@ -165,7 +165,6 @@ namespace TruckLib.ScsMap
             base.Init();
             Left = new RoadSide();
             Right = new RoadSide();
-            DlcGuard = Lookup.DlcGuard.None;
             Resolution = RoadResolution.HighPoly;
             CenterMaterial = "0";
             CenterMaterialColor = Color.FromArgb(0xffffff);
@@ -219,7 +218,7 @@ namespace TruckLib.ScsMap
             r.Right = Right.Clone();
             r.CenterMaterial = CenterMaterial;
             r.CenterMaterialColor = CenterMaterialColor;
-            r.CenterVegetation = CenterVegetation;
+            r.CenterVegetation = CenterVegetation.Clone();
             r.Material = Material;
             r.OverlayScheme = OverlayScheme;
             r.RandomSeed = RandomSeed;

@@ -97,19 +97,22 @@ namespace TruckLib.ScsMap
 
         public RoadSide Clone()
         {
-            var rs = (RoadSide)MemberwiseClone();
-            rs.Terrain = Terrain.Clone();
+            var cloned = (RoadSide)MemberwiseClone();
+            cloned.Terrain = Terrain.Clone();
+            cloned.Sidewalk = Sidewalk.Clone();
             for(int i = 0; i < Vegetation.Length; i++)
             {
-                rs.Vegetation[i] = Vegetation[i].Clone();
+                cloned.Vegetation[i] = Vegetation[i].Clone();
             }
             for (int i = 0; i < Models.Length; i++)
             {
-                rs.Models[i] = Models[i].Clone();
+                cloned.Models[i] = Models[i].Clone();
             }
-            rs.Railings = Railings.Clone();
-            rs.AdditionalParts = new List<Token>(AdditionalParts);
-            return rs;
+            cloned.Railings = Railings.Clone();
+            cloned.AdditionalParts = new List<Token>(AdditionalParts);
+            cloned.EdgeOverrides = new List<EdgeOverride>(EdgeOverrides);
+            cloned.VariantOverrides = new List<VariantOverride>(VariantOverrides);
+            return cloned;
         }
     }
 

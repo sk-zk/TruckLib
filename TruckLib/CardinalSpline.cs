@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TruckLib
 {
-    public class HermiteSpline
+    public class CardinalSpline
     {
         /// <param name="p0">Point 0</param>
         /// <param name="m0">Tangent 0</param>
@@ -13,9 +13,12 @@ namespace TruckLib
         /// <param name="m1">Tangent 1</param>
         /// <param name="t">Position</param>
         /// <returns></returns>
-        public static Vector3 Interpolate(Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1, float t)
+        public static Vector3 Interpolate(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t, float tension)
         {
-            // uses doubles internally for extra precision
+            // tangents
+            float tensionFactor = (1f - tension) / 2f;
+            Vector3 m1 = tensionFactor * (p2 - p0);
+            Vector3 m2 = tensionFactor * (p3 - p1);
 
             double t_2 = t * t;
             double t_3 = t * t * t;
@@ -27,9 +30,9 @@ namespace TruckLib
             double h4 = t_3 - t_2;
 
             // interpolation polynomial
-            double x = h1 * p0.X + h3 * m0.X + h2 * p1.X + h4 * m1.X;
-            double y = h1 * p0.Y + h3 * m0.Y + h2 * p1.Y + h4 * m1.Y;
-            double z = h1 * p0.Z + h3 * m0.Z + h2 * p1.Z + h4 * m1.Z;
+            double x = h1 * p1.X + h3 * m1.X + h2 * p2.X + h4 * m2.X;
+            double y = h1 * p1.Y + h3 * m1.Y + h2 * p2.Y + h4 * m2.Y;
+            double z = h1 * p1.Z + h3 * m1.Z + h2 * p2.Z + h4 * m2.Z;
 
             return new Vector3((float)x, (float)y, (float)z);
         }
@@ -40,9 +43,12 @@ namespace TruckLib
         /// <param name="m1">Tangent 1</param>
         /// <param name="t">Position</param>
         /// <returns></returns>
-        public static Vector3 Derivative(Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1, float t)
+        public static Vector3 Derivative(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t, float tension)
         {
-            // uses doubles internally for extra precision
+            // tangents
+            float tensionFactor = (1f - tension) / 2f;
+            Vector3 m1 = tensionFactor * (p2 - p0);
+            Vector3 m2 = tensionFactor * (p3 - p1);
 
             double t_2 = t * t;
 
@@ -53,9 +59,9 @@ namespace TruckLib
             double h4d = (3 * t_2) - (2 * t);
 
             // interpolation polynomial
-            double x = h1d * p0.X + h3d * m0.X + h2d * p1.X + h4d * m1.X;
-            double y = h1d * p0.Y + h3d * m0.Y + h2d * p1.Y + h4d * m1.Y;
-            double z = h1d * p0.Z + h3d * m0.Z + h2d * p1.Z + h4d * m1.Z;
+            double x = h1d * p1.X + h3d * m1.X + h2d * p2.X + h4d * m2.X;
+            double y = h1d * p1.Y + h3d * m1.Y + h2d * p2.Y + h4d * m2.Y;
+            double z = h1d * p1.Z + h3d * m1.Z + h2d * p2.Z + h4d * m2.Z;
 
             return new Vector3((float)x, (float)y, (float)z);
         }
@@ -65,9 +71,22 @@ namespace TruckLib
         /// <param name="p1">Point 1</param>
         /// <param name="m1">Tangent 1</param>
         /// <returns></returns>
-        public static float ApproximateLength(Vector3 p0, Vector3 m0, Vector3 p1, Vector3 m1)
+        public static float ApproximateLength(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float tension)
         {
-           return MathEx.ApproximateLength(Interpolate, p0, m0, p1, m1);
+            // Gaussian quadrature
+            // see https://medium.com/@all2one/how-to-compute-the-length-of-a-spline-e44f5f04c40
+
+            float sum = 0;
+            int n = 64;
+            for (int i = 0; i < n - 1; i++)
+            {
+                float t = (float)i / n + (1f / (2 * n));
+                Vector3 deriv = Derivative(p0, p1, p2, p3, t, tension);
+                sum += Vector3.Multiply(1f / n, deriv).Length();
+            }
+
+            return (float)sum;
         }
+
     }
 }

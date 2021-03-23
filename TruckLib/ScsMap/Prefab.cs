@@ -395,7 +395,7 @@ namespace TruckLib.ScsMap
                 itemNode.Sectors[0].Map.Nodes.Remove(itemNode.Uid);
             }
 
-            item.Recalculate();
+            item.RecalculateLength();
         }
 
         /// <summary>

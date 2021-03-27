@@ -92,8 +92,9 @@ namespace TruckLib.ScsMap
     public enum QuadVegetation
     {
         Normal = 0,
-        NoDetailVegetation = 1,
-        NoVegetation = 2
+        NoVegetation = 1,
+        LowPolyVegetation = 2,
+        HighPolyVegetation = 3,
     }
 
     /// <summary>

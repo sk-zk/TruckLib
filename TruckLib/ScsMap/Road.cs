@@ -103,53 +103,60 @@ namespace TruckLib.ScsMap
         public byte DlcGuard;
 
         /// <summary>
-        /// Causes the navigation to avoid this road segment.
+        /// Gets or sets if the satnav should avoid this road segment.
         /// </summary>
         public bool GpsAvoid = false;
 
         /// <summary>
-        /// Determines if this road is displayed in the UI map.
+        /// Gets or sets if this road is displayed in the UI map.
         /// </summary>
         public bool ShowInUiMap = true;
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes = false;
 
         /// <summary>
-        /// Determines if the item uses left hand traffic.
+        /// Gets or sets if the item uses left hand traffic.
         /// </summary>
         public bool LeftHandTraffic = false;
 
         /// <summary>
-        /// Determines if only flat textures are used as vegetation.
+        /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
         public bool LowPolyVegetation = false;
 
         /// <summary>
-        /// Determines if AI traffic can use this road.
+        /// Gets or sets if AI traffic can use this road.
         /// <para>If not, AI vehicles will choose a different route.
         /// If there isn't one, they will despawn instead.</para>
         /// </summary>
         public bool AiVehicles = true;
 
         /// <summary>
-        /// Determines if the road has invisible walls on both sides of it.
+        /// Gets or sets if the road has invisible walls on both sides of it.
         /// </summary>
         public bool Boundary = true;
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision = true;
 
         public bool TerrainShadows = true;
 
+        /// <summary>
+        /// Gets or sets if detail vegetation transitions smoothly in places
+        /// where it is affected by brushes.
+        /// </summary>
         public bool SmoothDetailVegetation = true;
 
         [Obsolete]
         public bool StretchTerrain = false;
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection = false;
 

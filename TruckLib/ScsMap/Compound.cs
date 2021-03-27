@@ -37,7 +37,7 @@ namespace TruckLib.ScsMap
         public List<INode> Nodes { get; set; }
 
         /// <summary>
-        /// Determines if the items are reflected on water surfaces.
+        /// Gets or sets if the items are reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -46,7 +46,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the compounded items will render behind a cut plane.
+        /// Gets or sets if the compounded items will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {

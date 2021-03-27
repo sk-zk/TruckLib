@@ -89,7 +89,7 @@ namespace TruckLib.ScsMap
         public List<VegetationSphere> VegetationSpheres { get; set; } 
 
         /// <summary>
-        /// Determines if the prefab is a tunnel. 
+        /// Gets or sets if the prefab is a tunnel. 
         /// This will make AI vehicles turn on their headlights.
         /// </summary>
         public bool IsTunnel
@@ -99,7 +99,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// Gets or sets if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
@@ -109,7 +109,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item uses left hand traffic.
+        /// Gets or sets if the item uses left hand traffic.
         /// </summary>
         public bool LeftHandTraffic
         {
@@ -118,7 +118,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Enables activation points. 
+        /// Gets or sets if activation points are enabled.
         /// </summary>
         public bool Activation
         {
@@ -148,7 +148,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this prefab is displayed in the UI map.
+        /// Gets or sets if this prefab is displayed in the UI map.
         /// </summary>
         public bool ShowInUiMap
         {
@@ -157,7 +157,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this road has invisible walls on its sides.
+        /// Gets or sets if this prefab has invisible walls around roads.
         /// </summary>
         public bool Boundary
         {
@@ -172,7 +172,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if only flat textures are used as vegetation.
+        /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
         public bool LowPolyVegetation
         {
@@ -180,16 +180,8 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[29] = value;
         }
 
-        public bool NoDetailVegetation
-        {
-            get => Kdop.Flags[23];
-            set => Kdop.Flags[23] = value;
-        }
-
         /// <summary>
-        /// Determines if AI traffic can use this road.
-        /// <para>If not, AI vehicles will choose a different route.
-        /// If there isn't one, they will despawn instead.</para>
+        /// Gets or sets if AI traffic can spawn on this prefab.
         /// </summary>
         public bool AiVehicles
         {
@@ -198,7 +190,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {
@@ -216,7 +208,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -224,6 +216,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[24] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[2];

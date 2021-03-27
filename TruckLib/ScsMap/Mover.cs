@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
         public float Speed { get; set; }
 
         /// <summary>
-        /// Sets for how long objects pause at the end of the path, in seconds.
+        /// The duration in seconds a model will pause at the end of the path, in seconds.
         /// </summary>
         public float DelayAtEnd { get; set; }
 
@@ -51,7 +51,7 @@ namespace TruckLib.ScsMap
         public List<Token> Tags { get; set; }
 
         /// <summary>
-        /// Sets the mover to be active when street lamps are off.
+        /// Gets or sets if the mover is active when street lamps are off.
         /// </summary>
         public bool ActiveDuringDay
         {
@@ -60,7 +60,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Sets the mover to be active when street lamps are on.
+        /// Gets or sets if the mover is active when street lamps are on
         /// </summary>
         public bool ActiveDuringNight
         {
@@ -68,12 +68,19 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[2] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if models turn around when they reach the end of the path
+        /// rather than respawning at the start.
+        /// </summary>
         public bool BounceAtEnd
         {
             get => Kdop.Flags[3];
             set => Kdop.Flags[3] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if the rotation of the model follows the path.
+        /// </summary>
         public bool FollowDir
         {
             get => Kdop.Flags[4];
@@ -81,7 +88,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item uses a curved path 
+        /// Gets or sets if the item uses a curved path 
         /// rather than a linear path.
         /// </summary>
         public bool UseCurvedPath
@@ -91,7 +98,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -99,6 +106,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[5] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if sound is enabled.
+        /// </summary>
         public bool UseSound
         {
             get => !Kdop.Flags[9];
@@ -106,7 +116,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {
@@ -133,21 +143,25 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[10] = value;
         }
 
-        /// <summary>
-        /// Enables static animation for moving model if available.
-        /// </summary>
         public bool PreferNonMovableAnimation
         {
             get => Kdop.Flags[12];
             set => Kdop.Flags[12] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if models are evenly spaced.
+        /// </summary>
         public bool UniformItemPlacement
         {
             get => Kdop.Flags[13];
             set => Kdop.Flags[13] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if models keep ther rotation rather than turn 180°
+        /// when <c>BounceAtEnd</c> is enabled.
+        /// </summary>
         public bool KeepOrientationOnBounce
         {
             get => Kdop.Flags[14];

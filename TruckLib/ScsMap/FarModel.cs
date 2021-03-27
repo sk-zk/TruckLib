@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         public INode Node { get; set; }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -115,14 +115,8 @@ namespace TruckLib.ScsMap
 
     public struct FarModelData
     {
-        /// <summary>
-        /// The model.
-        /// </summary>
         public Token Model;
 
-        /// <summary>
-        /// The scale.
-        /// </summary>
         public Vector3 Scale;
 
         /// <summary>

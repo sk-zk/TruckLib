@@ -19,6 +19,7 @@ namespace TruckLib.ScsMap
 
         const int n1Mask = 0x0F;
         const int n2Mask = 0xF0;
+        const byte noDetVegMask = 16;
 
         /// <summary>
         /// Index of the main terrain material of this quad.
@@ -89,16 +90,28 @@ namespace TruckLib.ScsMap
         /// </summary>
         public QuadVegetation Vegetation
         {
-            get => (QuadVegetation)((byte4 & n2Mask) >> 4);
-            set => byte4 |= (byte)((byte)value << 4);
+            get => (QuadVegetation)((byte4 & n2Mask) >> 5);
+            set => byte4 |= (byte)((byte)value << 5);
+        }
+
+        public bool NoDetailVegetation
+        {
+            get => (byte4 & noDetVegMask) == noDetVegMask;
+            set
+            {
+                if (value)
+                    byte4 |= noDetVegMask;
+                else
+                    byte4 &= noDetVegMask ^ 0xFF;
+            }
         }
 
         public void Deserialize(BinaryReader r)
         {
-            var byte1 = r.ReadByte();
-            var byte2 = r.ReadByte();
-            var byte3 = r.ReadByte();
-            var byte4 = r.ReadByte();
+            byte1 = r.ReadByte();
+            byte2 = r.ReadByte();
+            byte3 = r.ReadByte();
+            byte4 = r.ReadByte();
         }
 
         public void Serialize(BinaryWriter w)

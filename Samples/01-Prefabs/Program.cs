@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using TruckLib;
 using System.IO;
-using TruckLib.ScsMap;
 using System.Numerics;
+using TruckLib;
+using TruckLib.ScsMap;
 using TruckLib.Model.Ppd;
 
 namespace Prefabs
@@ -77,10 +75,12 @@ namespace Prefabs
             road = road.Append(crossing.Nodes[0].Position);
             crossing.Attach(road);
 
+
             // Save the map
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var userMapFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod/user_map/map/");
             map.Save(userMapFolder, true);
+            
 
             // Remember to hit F8 after loading it in the editor for the first time.
         }

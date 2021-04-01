@@ -14,9 +14,9 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, sound);
 
             sound.Name = r.ReadToken();
-            sound.FullIntensityDistance = r.ReadSingle();
-            sound.ActivationDistance = r.ReadSingle();      
-            sound.SoundFlags = new FlagField(r.ReadUInt32());
+            sound.Reverb = r.ReadToken();
+            sound.AreaWidth = r.ReadSingle();
+            sound.AreaHeight = r.ReadSingle();
             sound.Node = new UnresolvedNode(r.ReadUInt64());
 
             return sound;
@@ -27,9 +27,9 @@ namespace TruckLib.ScsMap.Serialization
             var sound = item as Sound;
             WriteKdopItem(w, sound);
             w.Write(sound.Name);
-            w.Write(sound.FullIntensityDistance);
-            w.Write(sound.ActivationDistance);
-            w.Write(sound.SoundFlags.Bits);
+            w.Write(sound.Reverb);
+            w.Write(sound.AreaWidth);
+            w.Write(sound.AreaHeight);
             w.Write(sound.Node.Uid);
         }
     }

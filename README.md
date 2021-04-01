@@ -1,13 +1,14 @@
 # TruckLib
 
 **TruckLib** is a C# library for working with the map format of Euro Truck Simulator 2 / American Truck Simulator.
-It also handles various other things, but mapping is the primary focus.
+Programmatic map creation is the primary focus of this library, so it also handles various other tasks needed for this purpuse, such as reading ppd files.
 
-The library currently supports map version 884 (game version 1.39).
+The library currently supports map version 888 (game version 1.40).
 
-(It's all still fairly experimental and half-finished, so you'll probably run into some issues sooner or later.)
+(This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later.)
 
-Proper documentation will follow eventually™. Until then, you can find some sample code in the Samples folder, or you can check out my tool [DlcCheck](https://github.com/sk-zk/DlcCheck) and my weird experimental thing [OsmProto](https://github.com/sk-zk/OsmProto) for some more existing code.
+Proper documentation will follow ~~eventually™~~ probably never. You know how it is.  
+You can find some sample code in the Samples folder, or you can check out my tool [DlcCheck](https://github.com/sk-zk/DlcCheck) and my weird experimental thing [OsmProto](https://github.com/sk-zk/OsmProto) for some more existing code.
 
 TruckLib is not affiliated with SCS Software.
 
@@ -25,10 +26,13 @@ but that's about it at the moment.
 Also contains a (binary) .tobj de/serializer.
 
 **TruckLib.HashFs**:  
-A reader for HashFS (.scs) files.
+A reader for HashFS (.scs) files, the asset archive format of the game.
 
 ## Known issues and limitations
-* The library does not calculate the bounding box of items, so you'll need to recalculate the map (F8) on load.
+* The library does not calculate the bounding boxes of items, so you'll need to recalculate the map (F8) on load.
+* I've yet to figure out how the game calculates the length of roads etc. What I've come up with is
+accurate enough to not be too annoying, but you'll notice while editing one of these items that they will slightly
+change their path as the game recalculates its length.
 * Anything to do with prefabs may or may not break in unexpected ways.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
  fixed by recalculating.

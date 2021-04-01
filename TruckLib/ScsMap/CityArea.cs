@@ -29,6 +29,9 @@ namespace TruckLib.ScsMap
 
         public float Height { get; set; }
 
+        /// <summary>
+        /// Gets or sets if entering this area can trigger the "first visit" message.
+        /// </summary>
         public bool TriggerVisit
         {
             get => !Kdop.Flags[1];
@@ -36,7 +39,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the city name is displayed on UI maps.
+        /// Gets or sets if the city name is displayed on UI maps.
         /// </summary>
         public bool ShowInUi
         {

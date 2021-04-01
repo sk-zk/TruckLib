@@ -58,9 +58,6 @@ namespace TruckLib.ScsMap
 
         public Railings Railings { get; set; } 
 
-        /// <summary>
-        /// The random seed which determines the placement of vegetation models.
-        /// </summary>
         public uint RandomSeed { get; set; }
 
         /// <summary>
@@ -73,17 +70,17 @@ namespace TruckLib.ScsMap
         public Vector3 ForwardNodeOffset { get; set; }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection = false;
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets  if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes = false;
 
         /// <summary>
-        /// Determines if only flat textures are used as vegetation.
+        /// Gets or sets  if only flat textures are used as vegetation.
         /// </summary>
         public bool LowPolyVegetation = false;
 
@@ -91,14 +88,21 @@ namespace TruckLib.ScsMap
         public bool StretchTerrain = false;
 
         /// <summary>
-        /// Determines if the terrain has invisible walls on both sides of it.
+        /// Gets or sets  if the terrain has invisible walls on both sides of it.
         /// </summary>
         public bool Boundary = true;
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision = true;
 
         public bool TerrainShadows = true;
 
+        /// <summary>
+        /// Gets or sets if detail vegetation transitions smoothly in places
+        /// where it is affected by brushes.
+        /// </summary>
         public bool SmoothDetailVegetation = false;
 
         public Terrain() : base() { }

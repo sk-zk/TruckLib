@@ -32,12 +32,12 @@ namespace TruckLib.ScsMap
         public RoadVegetation[] Vegetation { get; set; }
 
         /// <summary>
-        /// Determines if vegetation has collision.
+        /// Gets or sets if vegetation has collision.
         /// </summary>
         public bool VegetationCollision;
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// Gets or sets if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation;

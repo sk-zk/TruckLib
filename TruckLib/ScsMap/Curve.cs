@@ -54,12 +54,17 @@ namespace TruckLib.ScsMap
         public float Scale { get; set; }
 
         /// <summary>
+        /// UV rotation of terrain textures.
+        /// </summary>
+        public float TerrainRotation { get; set; }
+
+        /// <summary>
         /// Height offsets for individual elements of the curve.
         /// </summary>
         public List<float> HeightOffsets { get; set; }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -68,7 +73,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {
@@ -76,6 +81,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[1] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[2];
@@ -91,12 +99,20 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[3] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if elements of a sloped item are rendered like stair steps
+        /// rather than being stretched along the path.
+        /// </summary>
         public bool SteppedGeometry
         {
             get => Kdop.Flags[4];
             set => Kdop.Flags[4] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if vertices of the model are covered in a random tint noise.<br />
+        /// That's what the editor tooltip says, anyway. I don't really see any difference.
+        /// </summary>
         public bool PerlinNoise
         {
             get => Kdop.Flags[5];
@@ -104,7 +120,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item casts shadows.
+        /// Gets or sets if the item casts shadows.
         /// </summary>
         public bool Shadows
         {
@@ -113,7 +129,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item is visible in mirrors.
+        /// Gets or sets if this item is visible in mirrors.
         /// </summary>
         public bool MirrorReflection
         {
@@ -128,7 +144,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if only flat textures are used as vegetation.
+        /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
         public bool LowPolyVegetation
         {
@@ -146,7 +162,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// Gets or sets if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation

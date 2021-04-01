@@ -42,8 +42,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Variant { get; set; }
 
-        private int colorVariantPos = 8;
-        private int colorVariantLength = 4;
+        private const int colorVariantPos = 8;
+        private const int colorVariantLength = 4;
         /// <summary>
         /// The color variant.
         /// </summary>
@@ -69,16 +69,17 @@ namespace TruckLib.ScsMap
 
         public Color TerrainColor { get; set; }
 
-        private int staticLodPos = 4;
-        private int staticLodLength = 2;
         /// <summary>
-        /// Forces the game to display a lower LOD of the model, 
-        /// no matter where the camera is.
+        /// UV rotation of terrain textures.
         /// </summary>
-        public StaticLod StaticLod
+        public float TerrainRotation { get; set; }
+
+        private const int lodPos = 4;
+        private const int lodLength = 2;
+        public ModelLod Lod
         {
-            get => (StaticLod)Kdop.Flags.GetBitString(staticLodPos, staticLodLength);
-            set => Kdop.Flags.SetBitString(staticLodPos, staticLodLength, (uint)value);
+            get => (ModelLod)Kdop.Flags.GetBitString(lodPos, lodLength);
+            set => Kdop.Flags.SetBitString(lodPos, lodLength, (uint)value);
         }
 
         public bool ModelHookups
@@ -88,7 +89,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {
@@ -97,7 +98,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -115,7 +116,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// Gets or sets if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
@@ -124,6 +125,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[12] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[13];
@@ -131,7 +135,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item casts shadows.
+        /// Gets or sets if the item casts shadows.
         /// </summary>
         public bool Shadows
         {
@@ -140,7 +144,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item is visible in mirrors.
+        /// Gets or sets if this item is visible in mirrors.
         /// </summary>
         public bool MirrorReflection
         {

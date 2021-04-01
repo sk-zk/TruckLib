@@ -309,6 +309,12 @@ namespace TruckLib.ScsMap.Serialization
 
             road.Left.AdditionalParts = ReadObjectList<Token>(r);
             road.Right.AdditionalParts = ReadObjectList<Token>(r);
+
+            road.Left.EdgeOverrides = ReadObjectList<EdgeOverride>(r);
+            road.Right.EdgeOverrides = ReadObjectList<EdgeOverride>(r);
+
+            road.Left.VariantOverrides = ReadObjectList<VariantOverride>(r);
+            road.Right.VariantOverrides = ReadObjectList<VariantOverride>(r);
         }
 
         public void SerializeDataPayload(BinaryWriter w, MapItem item)
@@ -360,6 +366,12 @@ namespace TruckLib.ScsMap.Serialization
 
             WriteObjectList(w, road.Left.AdditionalParts);
             WriteObjectList(w, road.Right.AdditionalParts);
+
+            WriteObjectList(w, road.Left.EdgeOverrides);
+            WriteObjectList(w, road.Right.EdgeOverrides);
+            
+            WriteObjectList(w, road.Left.VariantOverrides);
+            WriteObjectList(w, road.Right.VariantOverrides);
         }
     }
 }

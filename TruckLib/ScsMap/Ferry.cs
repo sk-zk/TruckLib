@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
         public IMapItem PrefabLink { get; set; }
 
         /// <summary>
-        /// Determines if the item is actually a train transport.
+        /// Gets or sets if the item is actually a train transport.
         /// </summary>
         public bool TrainTransport
         {

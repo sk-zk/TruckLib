@@ -21,6 +21,9 @@ namespace TruckLib.ScsMap
 
         public float RoadHeightOffset { get; set; }
 
+        /// <summary>
+        /// Gets or sets if visual details in shoulders cannot spawn on this side.
+        /// </summary>
         public bool ShoulderBlocked = false;
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace TruckLib.ScsMap
         public RoadVegetation[] Vegetation { get; set; }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
+        /// Gets or sets if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation = true;
@@ -47,7 +50,7 @@ namespace TruckLib.ScsMap
         public float NoDetailVegetationTo { get; set; }
 
         /// <summary>
-        /// Determines if vegetation has collision.
+        /// Gets or sets if vegetation has collision.
         /// </summary>
         public bool VegetationCollision = false;
 
@@ -57,11 +60,15 @@ namespace TruckLib.ScsMap
         public RoadModel[] Models { get; set; }
 
         /// <summary>
-        /// Railings on or on the side of road.
+        /// Railings on the side of road.
         /// </summary>
         public RoadRailings Railings { get; set; } = new RoadRailings();
 
         public List<Token> AdditionalParts { get; set; } = new List<Token>();
+
+        public List<EdgeOverride> EdgeOverrides { get; set; }
+
+        public List<VariantOverride> VariantOverrides { get; set; }
 
         public RoadSide()
         {
@@ -86,23 +93,28 @@ namespace TruckLib.ScsMap
         protected void Init()
         {
             Terrain = new RoadTerrain();
+            EdgeOverrides = new List<EdgeOverride>();
+            VariantOverrides = new List<VariantOverride>();
         }
 
         public RoadSide Clone()
         {
-            var rs = (RoadSide)MemberwiseClone();
-            rs.Terrain = Terrain.Clone();
+            var cloned = (RoadSide)MemberwiseClone();
+            cloned.Terrain = Terrain.Clone();
+            cloned.Sidewalk = Sidewalk.Clone();
             for(int i = 0; i < Vegetation.Length; i++)
             {
-                rs.Vegetation[i] = Vegetation[i].Clone();
+                cloned.Vegetation[i] = Vegetation[i].Clone();
             }
             for (int i = 0; i < Models.Length; i++)
             {
-                rs.Models[i] = Models[i].Clone();
+                cloned.Models[i] = Models[i].Clone();
             }
-            rs.Railings = Railings.Clone();
-            rs.AdditionalParts = new List<Token>(AdditionalParts);
-            return rs;
+            cloned.Railings = Railings.Clone();
+            cloned.AdditionalParts = new List<Token>(AdditionalParts);
+            cloned.EdgeOverrides = new List<EdgeOverride>(EdgeOverrides);
+            cloned.VariantOverrides = new List<VariantOverride>(VariantOverrides);
+            return cloned;
         }
     }
 

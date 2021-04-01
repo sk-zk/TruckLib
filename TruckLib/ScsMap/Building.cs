@@ -49,9 +49,6 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags.SetByte(2, value);
         }
 
-        /// <summary>
-        /// The seed for this building.
-        /// </summary>
         public uint RandomSeed { get; set; }
 
         /// <summary>
@@ -64,6 +61,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<float> HeightOffsets { get; set; }
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[3];
@@ -71,7 +71,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -89,7 +89,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Enables or disables accessories.
+        /// Gets or sets if accessories are enabled.
         /// </summary>
         public bool Acc
         {
@@ -98,7 +98,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item casts shadows.
+        /// Gets or sets if the item casts shadows.
         /// </summary>
         public bool Shadows
         {
@@ -107,7 +107,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item is visible in mirrors.
+        /// Gets or sets if this item is visible in mirrors.
         /// </summary>
         public bool MirrorReflection
         {

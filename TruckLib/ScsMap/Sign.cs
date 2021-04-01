@@ -67,7 +67,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -75,6 +75,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[26] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if this item will render behind a cut plane.
+        /// </summary>
         public bool IgnoreCutPlanes
         {
             get => Kdop.Flags[27];

@@ -62,7 +62,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the item is reflected on water surfaces.
+        /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection
         {
@@ -71,7 +71,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
         public bool IgnoreCutPlanes
         {
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if only flat textures are used as vegetation.
+        /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
         public bool LowPolyVegetation
         {
@@ -89,8 +89,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if detail vegetation (small clumps of grass etc.) is rendered
-        /// if the selected terrain material supports it.
+        /// Gets or sets if detail vegetation (small clumps of grass etc.)
+        /// is rendered if the selected terrain material supports it.
         /// </summary>
         public bool DetailVegetation
         {
@@ -98,6 +98,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[4] = !value;
         }
 
+        /// <summary>
+        /// Gets or sets if collision is enabled.
+        /// </summary>
         public bool Collision
         {
             get => !Kdop.Flags[6];
@@ -110,6 +113,10 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[7] = !value;
         }
 
+        /// <summary>
+        /// Gets or sets if detail vegetation transitions smoothly in places
+        /// where it is affected by brushes.
+        /// </summary>
         public bool SmoothDetailVegetation
         {
             get => Kdop.Flags[9];
@@ -117,7 +124,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Determines if the player can collide with vegetation.
+        /// Gets or sets if the player can collide with vegetation.
         /// </summary>
         public bool VegetationCollision
         {
@@ -126,7 +133,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// If true, vegetation is only placed inside vegetation spheres.
+        /// Gets or sets if vegetation spheres are inverted, only placing vegetation
+        /// inside rather than outisde of them.
         /// </summary>
         public bool InnerVegetationSphereSpace
         {

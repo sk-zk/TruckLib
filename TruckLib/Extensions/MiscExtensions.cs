@@ -78,7 +78,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="q">The quaternion.</param>
         /// <returns>Euler angles in radians.</returns>
-        internal static Vector3 ToEuler(this Quaternion q)
+        public static Vector3 ToEuler(this Quaternion q)
         {
             // via https://stackoverflow.com/a/56055813
 
@@ -118,7 +118,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="q">The quaternion.</param>
         /// <returns>Euler angles in degrees.</returns>
-        internal static Vector3 ToEulerDeg(this Quaternion q)
+        public static Vector3 ToEulerDeg(this Quaternion q)
         {
             var rad = q.ToEuler();
             rad.X = (float)(rad.X * MathEx.RadToDeg);

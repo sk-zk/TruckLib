@@ -20,5 +20,7 @@ namespace TruckLib.ScsMap
         /// The size of the sidewalk.
         /// </summary>
         public SidewalkSize Size { get; set; }
+
+        public Sidewalk Clone() => (Sidewalk)MemberwiseClone();
     }
 }

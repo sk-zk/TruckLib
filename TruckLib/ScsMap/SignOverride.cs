@@ -30,15 +30,12 @@ namespace TruckLib.ScsMap
 
         public void Deserialize(BinaryReader r)
         {
-            // id
             Id = r.ReadUInt32();
-
-            // area name
             AreaName = r.ReadToken();
 
             // attributes
             var attributeCount = r.ReadUInt32();
-            for(int i = 0; i < attributeCount; i++)
+            for (int i = 0; i < attributeCount; i++)
             {
                 var type = (AttributeType)r.ReadUInt16();
                 ISignOverrideAttribute attrib;
@@ -132,7 +129,7 @@ namespace TruckLib.ScsMap
             if (type == typeof(float)) return AttributeType.Float;
             if (type == typeof(string)) return AttributeType.String;
 
-            throw new NotImplementedException($"No matching enum entry for type {type.ToString()}");
+            throw new NotImplementedException($"No matching enum entry for type {type}");
         }
 
         protected enum AttributeType

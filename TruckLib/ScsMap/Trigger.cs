@@ -24,11 +24,12 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; } 
 
-        public List<TriggerAction> Actions { get; set; } 
+        public List<TriggerAction> Actions { get; set; }
 
         /// <summary>
         /// Legacy parameter. Do not use.
         /// </summary>
+        [Obsolete]
         public float Range { get; set; }
 
         public byte DlcGuard
@@ -54,6 +55,7 @@ namespace TruckLib.ScsMap
             get => Kdop.Flags[3];
             set => Kdop.Flags[3] = value;
         } 
+
         public bool DisconnectedTrailerActivation
         {
             get => Kdop.Flags[4];

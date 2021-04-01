@@ -24,6 +24,7 @@ namespace TruckLib.ScsMap.Serialization
            
             model.TerrainMaterial = r.ReadToken();
             model.TerrainColor = r.ReadColor();
+            model.TerrainRotation = r.ReadSingle();
 
             return model;
         }
@@ -45,6 +46,7 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(model.TerrainMaterial);
             w.Write(model.TerrainColor);
+            w.Write(model.TerrainRotation);
         }
     }
 }

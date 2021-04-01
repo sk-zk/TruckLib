@@ -80,9 +80,8 @@ namespace Example
 
             // Save the map
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var modFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod");
-            var modName = "example";
-            map.Save(Path.Combine(modFolder, modName, "map"), true);
+            var userMapFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod/user_map/map/");
+            map.Save(userMapFolder, true);
 
             // Remember to hit F8 after loading it in the editor for the first time.
         }

@@ -27,6 +27,7 @@ namespace TruckLib.ScsMap.Serialization
  
             curve.TerrainMaterial = r.ReadToken();
             curve.TerrainColor = r.ReadColor();
+            curve.TerrainRotation = r.ReadSingle();
  
             curve.FirstPart = r.ReadToken();
             curve.LastPart = r.ReadToken();
@@ -59,6 +60,7 @@ namespace TruckLib.ScsMap.Serialization
  
             w.Write(curve.TerrainMaterial);
             w.Write(curve.TerrainColor);
+            w.Write(curve.TerrainRotation);
  
             w.Write(curve.FirstPart);
             w.Write(curve.LastPart);

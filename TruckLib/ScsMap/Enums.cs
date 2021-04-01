@@ -51,7 +51,8 @@ namespace TruckLib.ScsMap
     public enum ItemFile
     {
         Base,
-        Aux
+        Aux,
+        Snd
     }
 
     /// <summary>
@@ -116,13 +117,6 @@ namespace TruckLib.ScsMap
         Percent60to100 = 1,
         Percent50to80 = 2,
         Percent100to140 = 3
-    }
-
-    public enum StaticLod
-    {
-        Default = 0,
-        LodFrom50m = 1,
-        LodFrom100m = 2
     }
 
     /// <summary>
@@ -210,6 +204,26 @@ namespace TruckLib.ScsMap
         Recruitment = 5,
         WeighStation = 7,
         WeighStationCat = 8,
+    }
+
+    public enum CutsceneType
+    {
+        Viewpoint = 0,
+        Event = 1
+    }
+
+    public enum ModelLod
+    {
+        Dynamic = 0,
+        LodFrom100m = 1,
+        LodFrom200m = 2
+    }
+
+    public enum SoundType
+    {
+        ThreeDSound = 0,
+        AmbientArea = 1,
+        ReverbArea = 2
     }
 
 }

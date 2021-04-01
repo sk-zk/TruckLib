@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Sets if the cut plane is active in one direction only.
+        /// Gets or sets if the cut plane is active in one direction only.
         /// </summary>
         public bool OneSideOnly
         {

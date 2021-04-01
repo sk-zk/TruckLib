@@ -17,13 +17,10 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The item_type used as identifier in the map format.
         /// </summary>
-        public abstract ItemType ItemType
-        {
-            get;
-        }
+        public abstract ItemType ItemType { get; }
 
         /// <summary>
-        /// Whether the item goes to .base or .aux.
+        /// Which sector file the item is written to.
         /// </summary>
         protected ItemFile itemFile;
         public virtual ItemFile ItemFile
@@ -55,7 +52,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// View distance of an item in meters.
+        /// View distance of the item in meters.
         /// </summary>
         protected ushort ViewDistance
         {
@@ -63,6 +60,9 @@ namespace TruckLib.ScsMap
             set => Kdop.ViewDistance = value;
         }
 
+        /// <summary>
+        /// The default view distance of the item.
+        /// </summary>
         protected abstract ushort DefaultViewDistance { get; }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace TruckLib.ScsMap
         internal abstract void UpdateNodeReferences(Dictionary<ulong, INode> allNodes);
 
         /// <summary>
-        /// Returns all external nodes this item references.
+        /// Returns all external nodes which this item references.
         /// </summary>
         /// <returns></returns>
         internal abstract IEnumerable<INode> GetItemNodes();

@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap
         public Token CityName { get; set; }
 
         /// <summary>
-        /// Sets if the point is the buy point of the garage (1) or not (0).
+        /// Determines if the point is the buy point of the garage (1) or not (0).
         /// </summary>
         public uint BuyMode { get; set; }
 

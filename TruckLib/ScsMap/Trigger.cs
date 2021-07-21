@@ -74,6 +74,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[8] = value;
         }
 
+        public bool FarViewDistance
+        {
+            get => Kdop.Flags[17];
+            set => Kdop.Flags[17] = value;
+        }
+
         public Trigger() : base() { }
 
         internal Trigger(bool initFields) : base(initFields)

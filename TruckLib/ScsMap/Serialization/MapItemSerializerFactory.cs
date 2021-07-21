@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap.Serialization
             {
                 ItemType.AnimatedModel => new AnimatedModelSerializer(),
                 ItemType.BezierPatch => new BezierPatchSerializer(),
-                ItemType.Building => new BuildingSerializer(),
+                ItemType.Buildings => new BuildingsSerializer(),
                 ItemType.BusStop => new BusStopSerializer(),
                 ItemType.CameraPath => new CameraPathSerializer(),
                 ItemType.CameraPoint => new CameraPointSerializer(),

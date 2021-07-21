@@ -5,11 +5,11 @@ using System.Text;
 
 namespace TruckLib.ScsMap.Serialization
 {
-    class BuildingSerializer : MapItemSerializer
+    class BuildingsSerializer : MapItemSerializer
     {
         public override MapItem Deserialize(BinaryReader r)
         {
-            var bld = new Building(false);
+            var bld = new Buildings(false);
             ReadKdopItem(r, bld);
 
             bld.Name = r.ReadToken();
@@ -28,7 +28,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public override void Serialize(BinaryWriter w, MapItem item)
         {
-            var bld = item as Building;
+            var bld = item as Buildings;
             WriteKdopItem(w, bld);
 
             w.Write(bld.Name);

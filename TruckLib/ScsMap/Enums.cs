@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Item type IDs in .base/.aux files.
+    /// Item type IDs in .base/.aux/.snd files.
     /// </summary>
     public enum ItemType
     {
         Terrain = 0x01,
-        Building = 0x02,
+        Buildings = 0x02,
         Road = 0x03,
         Prefab = 0x04,
         Model = 0x05,

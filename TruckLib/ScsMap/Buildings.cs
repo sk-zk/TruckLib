@@ -13,9 +13,9 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// A building segment.
     /// </summary>
-    public class Building : PolylineItem
+    public class Buildings : PolylineItem
     {
-        public override ItemType ItemType => ItemType.Building;
+        public override ItemType ItemType => ItemType.Buildings;
 
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
@@ -115,9 +115,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[5] = !value;
         }
 
-        public Building() : base() { }
+        public Buildings() : base() { }
 
-        internal Building(bool initFields) : base(initFields)
+        internal Buildings(bool initFields) : base(initFields)
         {
             if (initFields) Init();
         }
@@ -138,9 +138,9 @@ namespace TruckLib.ScsMap
         /// <param name="backwardPos">The position of the backward (red) node.</param>
         /// <param name="forwardPos">The position of the forward (green) node.</param>
         /// <returns>The newly created building.</returns>
-        public static Building Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token name, Token look)
+        public static Buildings Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token name, Token look)
         {
-            var building = Add<Building>(map, backwardPos, forwardPos);
+            var building = Add<Buildings>(map, backwardPos, forwardPos);
             building.InitFromAddOrAppend(name, look, backwardPos, forwardPos);
             return building;
         }
@@ -160,7 +160,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="position">The position of the ForwardNode of the new building.</param>
         /// <returns>The newly created building.</returns>
-        public Building Append(Vector3 position, bool cloneSettings = true)
+        public Buildings Append(Vector3 position, bool cloneSettings = true)
         {
             if (!cloneSettings)
             {
@@ -172,7 +172,7 @@ namespace TruckLib.ScsMap
             return b;
         }
 
-        private void CopySettingsTo(Building b)
+        private void CopySettingsTo(Buildings b)
         {
             b.Kdop.Flags = Kdop.Flags;
             b.ViewDistance = ViewDistance;
@@ -188,9 +188,9 @@ namespace TruckLib.ScsMap
         /// <param name="name">The unit name.</param>
         /// <param name="look">The look.</param>
         /// <returns>The newly created building.</returns>
-        public Building Append(Vector3 position, Token name, Token look)
+        public Buildings Append(Vector3 position, Token name, Token look)
         {
-            var building = Append<Building>(position);
+            var building = Append<Buildings>(position);
             building.InitFromAddOrAppend(name, look, ForwardNode.Position, position);
             return building;
         }

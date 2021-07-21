@@ -13,6 +13,7 @@ namespace TruckLib.ScsMap
         bool FreeRotation { get; set; }
         bool IsCountryBorder { get; set; }
         bool IsRed { get; set; }
+        bool Locked { get; set; }
         Vector3 Position { get; set; }
         Quaternion Rotation { get; set; }
         Sector[] Sectors { get; set; }

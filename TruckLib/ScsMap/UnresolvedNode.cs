@@ -31,6 +31,7 @@ namespace TruckLib.ScsMap
         public bool FreeRotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public bool IsCountryBorder { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public bool IsRed { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public bool Locked { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public Vector3 Position { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public Quaternion Rotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public Sector[] Sectors { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }

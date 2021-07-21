@@ -96,6 +96,15 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Defines if this node can be moved/deleted in the editor.
+        /// </summary>
+        public bool Locked
+        {
+            get => Flags[26];
+            set => Flags[26] = value;
+        }
+
+        /// <summary>
         /// The country of the backward item if this node is a country border.
         /// </summary>
         public byte BackwardCountry

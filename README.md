@@ -29,7 +29,7 @@ Also contains a (binary) .tobj de/serializer.
 A reader for HashFS (.scs) files, the asset archive format of the game.
 
 ## Known issues and limitations
-* The library does not calculate the bounding boxes of items, so you'll need to recalculate the map (F8) on load.
+* The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map > Recompute map).
 * I've yet to figure out how the game calculates the length of roads etc. What I've come up with is
 accurate enough to not be too annoying, but you'll notice while editing one of these items that they will slightly
 change their path as the game recalculates its length.

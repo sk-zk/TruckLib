@@ -80,9 +80,11 @@ namespace Prefabs
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var userMapFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod/user_map/map/");
             map.Save(userMapFolder, true);
-            
 
-            // Remember to hit F8 after loading it in the editor for the first time.
+
+            // Remember to recalculate (Map > Recompute map) after loading it in the editor for the first time.
+            // SCS removed the keyboard shortcut for this function in 1.41 and 
+            // I have to admit that I'm a little salty about it.
         }
     }
 }

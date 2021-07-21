@@ -257,9 +257,7 @@ namespace TruckLib.ScsMap.Serialization
         {
             var road = item as Road;
 
-            // Overlay Scheme
-            // TODO: What is this?
-            road.OverlayScheme = r.ReadToken();
+            road.Overlay = r.ReadToken();
 
             foreach (var side in new[] { road.Right, road.Left }) // repeated for both sides of the road
             {
@@ -322,7 +320,7 @@ namespace TruckLib.ScsMap.Serialization
             var road = item as Road;
 
             // overlay scheme
-            w.Write(road.OverlayScheme);
+            w.Write(road.Overlay);
 
             foreach (var side in new[] { road.Right, road.Left }) // repeated for both sides of the road
             {

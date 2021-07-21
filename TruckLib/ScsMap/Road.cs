@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint RandomSeed { get; set; }
 
-        public Token OverlayScheme { get; set; }
+        public Token Overlay { get; set; }
 
         /// <summary>
         /// The vegetation spheres on this road.
@@ -227,7 +227,7 @@ namespace TruckLib.ScsMap
             r.CenterMaterialColor = CenterMaterialColor;
             r.CenterVegetation = CenterVegetation.Clone();
             r.Material = Material;
-            r.OverlayScheme = OverlayScheme;
+            r.Overlay = Overlay;
             r.RandomSeed = RandomSeed;
             r.Resolution = Resolution;
             r.VegetationSpheres = new List<VegetationSphere>(VegetationSpheres);

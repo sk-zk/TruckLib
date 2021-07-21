@@ -16,6 +16,9 @@ namespace TruckLib.ScsMap.Serialization
  
             curve.Node = new UnresolvedNode(r.ReadUInt64());
             curve.ForwardNode = new UnresolvedNode(r.ReadUInt64());
+            // 0 twice, why?
+            r.ReadUInt64();
+            r.ReadUInt64();
  
             curve.Length = r.ReadSingle();
  
@@ -49,6 +52,8 @@ namespace TruckLib.ScsMap.Serialization
  
             w.Write(curve.Node.Uid);
             w.Write(curve.ForwardNode.Uid);
+            w.Write(0UL);
+            w.Write(0UL);
 
             w.Write(curve.Length);
  

@@ -16,6 +16,8 @@ namespace TruckLib.ScsMap
 
         public List<INode> TrackNodes { get; set; }
 
+        public List<INode> CurveControlNodes { get; set; }
+
         public List<Keyframe> Keyframes { get; set; }
 
         public float CameraSpeed { get; set; }

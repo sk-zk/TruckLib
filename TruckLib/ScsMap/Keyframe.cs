@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Text;
 
 namespace TruckLib.ScsMap
 {
     public class Keyframe : IBinarySerializable
     {
-        public EasingFunction SpeedChange { get; set; }
+        public EasingFunction SpeedChange { get; set; } = EasingFunction.EaseInOutSine;
 
-        public EasingFunction RotationChange { get; set; }
+        public EasingFunction RotationChange { get; set; } = EasingFunction.EaseInOutSine;
 
         public float SpeedCoefficient { get; set; } = 1;
 
         public float Fov { get; set; } = 60;
 
-        public float ForwardTangentLength { get; set; }
+        public Vector3 ForwardTangentPosition { get; set; }
 
-        public float BackwardTangentLength { get; set; }
+        public Vector3 BackwardTangentPosition { get; set; }
 
         public void Deserialize(BinaryReader r)
         {
@@ -25,8 +26,8 @@ namespace TruckLib.ScsMap
             RotationChange = (EasingFunction)r.ReadInt32();
             SpeedCoefficient = r.ReadSingle();
             Fov = r.ReadSingle();
-            ForwardTangentLength = r.ReadSingle();
-            BackwardTangentLength = r.ReadSingle();
+            BackwardTangentPosition = r.ReadVector3();
+            ForwardTangentPosition = r.ReadVector3();
         }
 
         public void Serialize(BinaryWriter w)
@@ -35,8 +36,8 @@ namespace TruckLib.ScsMap
             w.Write((int)RotationChange);
             w.Write(SpeedCoefficient);
             w.Write(Fov);
-            w.Write(ForwardTangentLength);
-            w.Write(BackwardTangentLength);
+            w.Write(BackwardTangentPosition);
+            w.Write(ForwardTangentPosition);
         }
     }
 

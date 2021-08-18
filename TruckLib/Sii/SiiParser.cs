@@ -114,8 +114,44 @@ namespace TruckLib.Sii
             string line;
             while ((line = sr.ReadLine()) != null)
             {
-                line = StringUtils.RemoveStartingAtPattern(line, "#");
-                line = StringUtils.RemoveStartingAtPattern(line, "//");
+                bool inString = false;
+                int slashes = 0;
+                int commentStart = -1;
+                for (int i = 0; i < line.Length; i++)
+                {
+                    var character = line[i];
+
+                    if (character == '"')
+                    {
+                        inString = !inString;
+                    }
+                    if (inString)
+                    {
+                        continue;
+                    }
+
+                    if (character == '#')
+                    {
+                        commentStart = i;
+                        break;
+                    }
+
+                    if (character == '/')
+                    {
+                        slashes++;
+                        if (slashes > 1)
+                        {
+                            commentStart = i - 1;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        slashes = 0;
+                    }
+                }
+
+                line = commentStart > -1 ? line.Remove(commentStart) : line;
                 siiNoComments.AppendLine(line);
             }
             return siiNoComments.ToString();

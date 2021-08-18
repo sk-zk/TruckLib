@@ -10,21 +10,6 @@ namespace TruckLib
     internal static class StringUtils
     {
         /// <summary>
-        /// Removes the specified pattern and everything after it. 
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="pattern"></param>
-        /// <returns></returns>
-        public static string RemoveStartingAtPattern(string str, string pattern)
-        {
-            var patternIdx = str.IndexOf(pattern);
-            if (patternIdx < 0)
-                return str;
-            str = str.Remove(patternIdx);
-            return str;
-        }
-
-        /// <summary>
         /// Checks if a string contains a number in a format used by Sii files.
         /// </summary>
         /// <param name="str"></param>

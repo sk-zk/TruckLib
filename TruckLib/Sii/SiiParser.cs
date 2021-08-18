@@ -151,17 +151,9 @@ namespace TruckLib.Sii
                 }
 
                 var (Name, Value) = ParseAttribute(line);
-                if (Name.EndsWith("[]")) // list type
+                if (Name.EndsWith("]")) // list or fixed-length array type
                 {
-                    var arrName = Name[0..^2];
-                    if (unit.Attributes.TryGetValue(arrName, out var existingAttrib))
-                        (existingAttrib as List<dynamic>).Add(Value);
-                    else
-                        AddAttribute(unit, arrName, new List<dynamic> { Value });
-                }
-                else if(Name.EndsWith("]")) // check for array type with specified index
-                {
-                    ParseArrayAttribute(unit, Name, Value);
+                    ParseListOrArrayAttribute(unit, Name, Value);
                 }
                 else
                 {
@@ -194,26 +186,47 @@ namespace TruckLib.Sii
             return (attributeName, value);
         }
 
-        private void ParseArrayAttribute(Unit unit, string Name, dynamic Value)
+        private void ParseListOrArrayAttribute(Unit unit, string Name, dynamic Value)
         {
-            var match = Regex.Match(Name, @"^(.+)\[(\d+)\]$");
+            var match = Regex.Match(Name, @"^(.+)\[(.*)\]$");
             if (!match.Success)
                 return;
 
             var arrName = match.Groups[1].Value;
-            var arrIndex = int.Parse(match.Groups[2].Value);
+            var hasIndex = int.TryParse(match.Groups[2].Value, out int arrIndex);
 
-            dynamic[] arr;
-            if (unit.Attributes.TryGetValue(arrName, out var val))
+            // figure out if this is a fixed-length array entry or a list entry
+            // and create the thing if it doesn't exist yet
+            bool isFixedLengthArray;
+            if (unit.Attributes.TryGetValue(arrName, out var whatsAllThisThen))
             {
+                isFixedLengthArray = whatsAllThisThen is int || whatsAllThisThen is Array;
+            } 
+            else
+            {
+                isFixedLengthArray = hasIndex;
+                if (isFixedLengthArray)
+                {
+                    int initSize = arrIndex + 1;
+                    var arr = new dynamic[initSize];
+                    AddAttribute(unit, arrName, arr);
+                } 
+                else
+                {
+                    AddAttribute(unit, arrName, new List<dynamic>());
+                }
+            }
+
+            // insert the value
+            if (isFixedLengthArray)
+            {
+                var val = unit.Attributes[arrName];
+                dynamic[] arr;
                 if (val is int)
                 {
-                    // some files declare the length of the array at the top,
-                    // e.g.:
-                    //    boards: 2
-                    //    boards[0]: _nameless.572.9550
-                    //    boards[1]: _nameless.573.3230
-                    // this block is here to handle that case.
+                    // existing val is int => it's a fixed-length array
+                    // where the length has been read in, and now we need to
+                    // create the actual array
                     arr = new dynamic[val];
                     unit.Attributes[arrName] = arr;
                 }
@@ -221,19 +234,18 @@ namespace TruckLib.Sii
                 {
                     arr = val;
                 }
+
+                if (arr.Length < arrIndex + 1)
+                {
+                    Array.Resize(ref arr, arrIndex + 1);
+                    unit.Attributes[arrName] = arr;
+                }
+                arr[arrIndex] = Value;
             }
             else
             {
-                arr = new dynamic[arrIndex + 1];
-                AddAttribute(unit, arrName, arr);
+                unit.Attributes[arrName].Add(Value);
             }
-
-            if (arr.Length < arrIndex + 1)
-            {
-                Array.Resize(ref arr, arrIndex + 1);
-                unit.Attributes[arrName] = arr;
-            }
-            arr[arrIndex] = Value;
         }
 
         private dynamic ParseAttributeValue(string valueStr)

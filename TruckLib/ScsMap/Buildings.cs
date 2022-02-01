@@ -91,7 +91,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Gets or sets if accessories are enabled.
         /// </summary>
-        public bool Acc
+        public bool Accessories
         {
             get => !Kdop.Flags[0];
             set => Kdop.Flags[0] = !value;

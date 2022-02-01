@@ -124,7 +124,7 @@ namespace TruckLib.ScsMap
         private void ReadBase(string path)
         {
             using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-            this.header = new Header();
+            header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
             ReadNodes(r);
@@ -275,6 +275,7 @@ namespace TruckLib.ScsMap
                 }
             }
         }
+
         private void ReadVisArea(BinaryReader r)
         {
             var visAreaChildCount = r.ReadUInt32();
@@ -379,15 +380,13 @@ namespace TruckLib.ScsMap
         {
             using var stream = new FileStream(descFilename, FileMode.Create);
             using var w = new BinaryWriter(stream);
-            w.Write(SectorDescVersion);
 
+            w.Write(SectorDescVersion);
             w.Write((int)(MinBoundary.X * boundaryFactor));
             w.Write((int)(MinBoundary.Y * boundaryFactor));
             w.Write((int)(MaxBoundary.X * boundaryFactor));
             w.Write((int)(MaxBoundary.Y * boundaryFactor));
-
             w.Write(Flags.Bits);
-
             w.Write(Climate);
         }
 

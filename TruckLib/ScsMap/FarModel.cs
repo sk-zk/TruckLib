@@ -17,12 +17,12 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Width of the area in which the model is visible.
+        /// Width of the area in which the models are visible.
         /// </summary>
         public float Width { get; set; }
 
         /// <summary>
-        /// Height of the area in which the model is visible.
+        /// Height of the area in which the models are visible.
         /// </summary>
         public float Height { get; set; }
 

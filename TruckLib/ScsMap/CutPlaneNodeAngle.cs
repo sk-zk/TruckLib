@@ -33,5 +33,18 @@ namespace TruckLib.ScsMap
 
         public override string ToString() 
             => (InternalValue * factor).ToString();
+
+        public override int GetHashCode() =>
+            InternalValue.GetHashCode();
+
+        public override bool Equals(object obj) =>
+            obj is CutPlaneNodeAngle angle && angle.InternalValue == this.InternalValue;
+
+        public static bool operator ==(CutPlaneNodeAngle left, CutPlaneNodeAngle right) => 
+            left.Equals(right);
+
+        public static bool operator !=(CutPlaneNodeAngle left, CutPlaneNodeAngle right) => 
+            !(left == right);
+
     }
 }

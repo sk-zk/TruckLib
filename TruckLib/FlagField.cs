@@ -111,5 +111,14 @@ namespace TruckLib
             if (i > max || i < min)
                 throw new IndexOutOfRangeException();
         }
+
+        public override bool Equals(object obj) =>
+            obj is FlagField flagField && flagField.Bits == this.Bits;
+
+        public static bool operator ==(FlagField left, FlagField right) => 
+            left.Equals(right);
+
+        public static bool operator !=(FlagField left, FlagField right) => 
+            !(left == right);
     }
 }

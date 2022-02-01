@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TruckLib
 {
-    public class CardinalSpline
+    public static class CardinalSpline
     {
         /// <param name="p0">Point 0</param>
         /// <param name="m0">Tangent 0</param>

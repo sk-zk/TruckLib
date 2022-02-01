@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap
                 var type = (AttributeType)r.ReadUInt16();
                 ISignOverrideAttribute attrib;
 
-                switch(type)
+                switch (type)
                 {
                     case AttributeType.SByte:
                         attrib = new SignOverrideAttribute<sbyte>();
@@ -93,30 +93,28 @@ namespace TruckLib.ScsMap
 
                 w.Write(attrib.Index);
 
-                object value = attrib.GetValue();
-                if (value is sbyte)
+                switch (attrib.GetValue())
                 {
-                    w.Write((sbyte)value);
-                }
-                else if (value is int)
-                {
-                    w.Write((int)value);
-                }
-                else if (value is uint)
-                {
-                    w.Write((uint)value);
-                }
-                else if (value is float)
-                {
-                    w.Write((float)value);
-                }
-                else if (value is string)
-                {
-                    w.WritePascalString((string)value);
-                }
-                else if (value is ulong)
-                {
-                    w.Write((ulong)value);
+                    case sbyte value:
+                        w.Write(value);
+                        break;
+                    case int value:
+                        w.Write(value);
+                        break;
+                    case uint value:
+                        w.Write(value);
+                        break;
+                    case float value:
+                        w.Write(value);
+                        break;
+                    case string value:
+                        w.WritePascalString(value);
+                        break;
+                    case ulong value:
+                        w.Write(value);
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
             }
         }

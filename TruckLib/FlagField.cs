@@ -25,13 +25,13 @@ namespace TruckLib
         {
             get
             {
-                ErrorIfNotInRange(index, 0, 31);
+                AssertInRange(index, 0, 31);
                 var mask = 1U << index;
                 return (bits & mask) == mask;
             }
             set
             {
-                ErrorIfNotInRange(index, 0, 31);
+                AssertInRange(index, 0, 31);
                 var mask = 1U << index;
                 if (value)
                     bits |= mask;
@@ -42,14 +42,14 @@ namespace TruckLib
 
         public byte GetByte(int index)
         {
-            ErrorIfNotInRange(index, 0, 3);
+            AssertInRange(index, 0, 3);
             var mask = byteMask << index * byteSize;
             return (byte)((bits & mask) >> index * byteSize);
         }
 
         public void SetByte(int index, byte value)
         {
-            ErrorIfNotInRange(index, 0, 3);
+            AssertInRange(index, 0, 3);
             var mask = byteMask << index * byteSize;
             bits &= ~mask; // clear
             bits |= (uint)value << index * byteSize; // set
@@ -70,8 +70,8 @@ namespace TruckLib
         public uint GetBitString(int start, int length)
         {
             if (length == 0) return 0;
-            ErrorIfNotInRange(start, 0, 31);
-            ErrorIfNotInRange(length, 0, 31);
+            AssertInRange(start, 0, 31);
+            AssertInRange(length, 0, 31);
 
             if ((start + length) > 32)
                 throw new IndexOutOfRangeException();
@@ -85,8 +85,8 @@ namespace TruckLib
             if (length == 0)
                 return;
 
-            ErrorIfNotInRange(start, 0, 31);
-            ErrorIfNotInRange(length, 0, 31);
+            AssertInRange(start, 0, 31);
+            AssertInRange(length, 0, 31);
 
             if ((start + length) > 32)
                 throw new IndexOutOfRangeException();
@@ -106,7 +106,7 @@ namespace TruckLib
         public override int GetHashCode() =>
             bits.GetHashCode();
 
-        private void ErrorIfNotInRange(int i, int min, int max)
+        private void AssertInRange(int i, int min, int max)
         {
             if (i > max || i < min)
                 throw new IndexOutOfRangeException();

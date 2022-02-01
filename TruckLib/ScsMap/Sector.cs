@@ -128,6 +128,7 @@ namespace TruckLib.ScsMap
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
             ReadNodes(r);
+            ReadVisArea(r);
         }
 
         /// <summary>
@@ -141,6 +142,7 @@ namespace TruckLib.ScsMap
             header.Deserialize(r);
             ReadItems(r, ItemFile.Aux);
             ReadNodes(r);
+            ReadVisArea(r);
         }
 
         /// <summary>
@@ -185,6 +187,7 @@ namespace TruckLib.ScsMap
             header.Deserialize(r);
             ReadItems(r, ItemFile.Snd);
             ReadNodes(r);
+            ReadVisArea(r);
         }
 
         private const float boundaryFactor = 256f;
@@ -272,6 +275,14 @@ namespace TruckLib.ScsMap
                 }
             }
         }
+        private void ReadVisArea(BinaryReader r)
+        {
+            var visAreaChildCount = r.ReadUInt32();
+            if (visAreaChildCount > 0)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <summary>
         /// Saves the sector as binary files to the specified directory.
@@ -286,7 +297,7 @@ namespace TruckLib.ScsMap
             WriteDesc(GetFilename(DescExtension));
 
             string GetFilename(string ext) => 
-                Path.Combine(sectorDirectory, $"{ToString()}.{ext}");           
+                Path.Combine(sectorDirectory, $"{ToString()}.{ext}");
         }
 
         /// <summary>
@@ -302,6 +313,7 @@ namespace TruckLib.ScsMap
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Base, w);
             WriteNodes(w, ItemFile.Base, sectorNodes);
+            WriteVisArea(w);
         }
 
         /// <summary>
@@ -317,6 +329,7 @@ namespace TruckLib.ScsMap
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Aux, w);
             WriteNodes(w, ItemFile.Aux, sectorNodes);
+            WriteVisArea(w);
         }
 
         /// <summary>
@@ -332,6 +345,7 @@ namespace TruckLib.ScsMap
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Snd, w);
             WriteNodes(w, ItemFile.Snd, sectorNodes);
+            WriteVisArea(w);
         }
 
         /// <summary>
@@ -425,6 +439,11 @@ namespace TruckLib.ScsMap
                     .Get(item.Value.ItemType);
                 serializer.Serialize(w, item.Value);
             }
+        }
+
+        private void WriteVisArea(BinaryWriter w)
+        {
+            throw new NotImplementedException();
         }
 
         internal void GetSectorCoordsFromBasePath(string basePath)

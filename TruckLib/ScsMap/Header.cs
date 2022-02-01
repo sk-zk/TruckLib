@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Header : IBinarySerializable
     {
-        private const int supportedVer = 889;
+        private const int supportedVer = 891;
         /// <summary>
         /// Version number of the map format.
         /// </summary>

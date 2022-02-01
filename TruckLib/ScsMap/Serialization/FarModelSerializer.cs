@@ -25,13 +25,12 @@ namespace TruckLib.ScsMap.Serialization
                 fm.Models[i].Scale = r.ReadVector3();
             }
 
-            // nodes
-            // first node is the object node, the other nodes are the perspective nodes
+            // first node is the object node, the rest are the model nodes
             var nodeCount = r.ReadUInt32();
             fm.Node = new UnresolvedNode(r.ReadUInt64());
             for (int i = 1; i < nodeCount; i++)
             {
-                fm.Models[i - 1].PerspectiveNode = new UnresolvedNode(r.ReadUInt64());
+                fm.Models[i - 1].Node = new UnresolvedNode(r.ReadUInt64());
             }
 
             return fm;
@@ -57,7 +56,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(fm.Node.Uid);
             foreach (var model in notNullModels)
             {
-                w.Write(model.PerspectiveNode.Uid);
+                w.Write(model.Node.Uid);
             }
         }
     }

@@ -41,15 +41,13 @@ namespace TruckLib.ScsMap
 
         public FarModel() : base()
         {
-            Models = new FarModelData[4].Select(
-                h => new FarModelData()).ToArray();
+            Models = new FarModelData[4].Select(h => new FarModelData()).ToArray();
         }
 
         internal FarModel(bool initFields) : base(initFields)
         {
             if (initFields) Init();
-            Models = new FarModelData[4].Select(
-                h => new FarModelData()).ToArray();
+            Models = new FarModelData[4].Select(h => new FarModelData()).ToArray();
         }
 
         protected override void Init()
@@ -57,20 +55,13 @@ namespace TruckLib.ScsMap
             base.Init();
         }
 
-        public static FarModel Add(IItemContainer map, Token model, float width, float height,
-            Vector3 position, Vector3 perspPosition)
+        public static FarModel Add(IItemContainer map, Vector3 position, float width, float height)
         {
             var farModel = new FarModel();
 
             var node = map.AddNode(position, true);
             farModel.Node = node;
             node.ForwardItem = farModel;
-
-            var perspNode = map.AddNode(perspPosition, true);
-            perspNode.ForwardItem = farModel;
-            farModel.Models[0].PerspectiveNode = perspNode;
-
-            farModel.Models[0].Model = model;
             farModel.Width = width;
             farModel.Height = height;
 
@@ -88,12 +79,12 @@ namespace TruckLib.ScsMap
             Node.Move(Node.Position + translation);
             foreach (var model in Models)
             {
-                model.PerspectiveNode?.Move(model.PerspectiveNode.Position + translation);
+                model.Node?.Move(model.Node.Position + translation);
             }
         }
 
         internal override IEnumerable<INode> GetItemNodes() =>
-            Models.Select(x => x.PerspectiveNode).Prepend(Node);
+            Models.Select(x => x.Node).Prepend(Node);
 
         internal override INode GetMainNode() => Node;
 
@@ -103,11 +94,10 @@ namespace TruckLib.ScsMap
 
             for (int i = 0; i < Models.Length; i++)
             {
-                if (Models[i].PerspectiveNode is UnresolvedNode 
-                    && allNodes.TryGetValue(Models[i].PerspectiveNode.Uid, 
-                    out var resolvedPerspNode))
+                if (Models[i].Node is UnresolvedNode &&
+                    allNodes.TryGetValue(Models[i].Node.Uid, out var resolvedModelNode))
                 {
-                    Models[i].PerspectiveNode = resolvedPerspNode;
+                    Models[i].Node = resolvedModelNode;
                 }
             }
         }
@@ -120,8 +110,8 @@ namespace TruckLib.ScsMap
         public Vector3 Scale;
 
         /// <summary>
-        /// This node defines where the model will be rendered (I think).
+        /// This node defines the position and rotation of the model.
         /// </summary>
-        public INode PerspectiveNode;
+        public INode Node;
     }
 }

@@ -443,7 +443,7 @@ namespace TruckLib.ScsMap
 
         private void WriteVisArea(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(0);
         }
 
         internal void GetSectorCoordsFromBasePath(string basePath)

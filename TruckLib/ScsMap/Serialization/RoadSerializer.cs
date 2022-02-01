@@ -282,6 +282,7 @@ namespace TruckLib.ScsMap.Serialization
 
             road.CenterMaterial = r.ReadToken();
             road.CenterMaterialColor = r.ReadColor();
+            road.CenterMaterialRotation = r.ReadUInt16();
 
             road.RandomSeed = r.ReadUInt32();
             road.CenterVegetation = new CenterVegetation
@@ -345,6 +346,7 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(road.CenterMaterial);
             w.Write(road.CenterMaterialColor);
+            w.Write(road.CenterMaterialRotation);
             w.Write(road.RandomSeed);
             w.Write(road.CenterVegetation.Name);
             w.Write((ushort)(road.CenterVegetation.Density * centerVegDensityFactor));

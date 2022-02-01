@@ -75,6 +75,8 @@ namespace TruckLib.ScsMap
 
         public Color CenterMaterialColor { get; set; }
 
+        public ushort CenterMaterialRotation { get; set; }
+
         /// <summary>
         /// The seed which determines the placement of vegetation models.
         /// </summary>

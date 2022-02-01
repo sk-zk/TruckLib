@@ -15,19 +15,20 @@ namespace TruckLib.ScsMap.Serialization
             va.Node = new UnresolvedNode(r.ReadUInt64());
             va.Width = r.ReadSingle();
             va.Height = r.ReadSingle();
-
-            var childrenCount = r.ReadUInt32();
-            if (childrenCount > 0)
-            {
-                throw new NotImplementedException();
-            }
+            va.Children = ReadItemRefList(r);
 
             return va;
         }
 
         public override void Serialize(BinaryWriter w, MapItem item)
         {
-            throw new NotImplementedException();
+            var va = item as VisibilityArea;
+            WriteKdopItem(w, va);
+
+            w.Write(va.Node.Uid);
+            w.Write(va.Width);
+            w.Write(va.Height);
+            WriteItemRefList(w, va.Children);
         }
     }
 }

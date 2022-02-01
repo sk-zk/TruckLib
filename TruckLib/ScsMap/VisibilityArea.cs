@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TruckLib.ScsMap
 {
-    public class VisibilityArea : SingleNodeItem
+    public class VisibilityArea : SingleNodeItem, IItemReferences
     {
         public override ItemType ItemType => ItemType.VisibilityArea;
 
@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
 
         public float Height { get; set; }
 
-        // TODO Children
+        public List<IMapItem> Children { get; set; }
 
         public VisibilityArea() : base() { }
 
@@ -38,6 +38,19 @@ namespace TruckLib.ScsMap
             base.Init();
             Width = 20;
             Height = 20;
+            Children = new List<IMapItem>();
+        }
+
+        public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
+        {
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i] is UnresolvedItem 
+                    && allItems.TryGetValue(Children[i].Uid, out var resolvedItem))
+                {
+                    Children[i] = resolvedItem;
+                }
+            }
         }
     }
 }

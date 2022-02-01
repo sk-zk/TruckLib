@@ -43,6 +43,7 @@ namespace TruckLib.ScsMap
         Curve = 0x2C,
         CameraPath = 0x2D,
         Cutscene = 0x2E,
+        Hookup = 0x2F,
         VisibilityArea = 0x30,
     };
 

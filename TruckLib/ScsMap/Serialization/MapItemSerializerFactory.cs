@@ -44,6 +44,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.FuelPump => new ServiceSerializer(),
                 ItemType.Garage => new GarageSerializer(),
                 ItemType.Hinge => new HingeSerializer(),
+                ItemType.Hookup => new HookupSerializer(),
                 ItemType.MapArea => new MapAreaSerializer(),
                 ItemType.MapOverlay => new MapOverlaySerializer(),
                 ItemType.Model => new ModelSerializer(),

@@ -259,7 +259,7 @@ namespace TruckLib.ScsMap
         /// <param name="r">The reader. (Position must be the start of the footer)</param>
         private void ReadNodes(BinaryReader r)
         {
-            var nodeCount = r.ReadInt32();
+            var nodeCount = r.ReadUInt32();
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);

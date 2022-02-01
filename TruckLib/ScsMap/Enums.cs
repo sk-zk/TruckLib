@@ -43,6 +43,7 @@ namespace TruckLib.ScsMap
         Curve = 0x2C,
         CameraPath = 0x2D,
         Cutscene = 0x2E,
+        VisibilityArea = 0x30,
     };
 
     /// <summary>
@@ -224,6 +225,13 @@ namespace TruckLib.ScsMap
         ThreeDSound = 0,
         AmbientArea = 1,
         ReverbArea = 2
+    }
+
+    public enum VisibilityAreaBehavior
+    {
+        ShowHiddenObjects = 0,
+        HideObjects = 1,
+        ShowObjects = 2
     }
 
 }

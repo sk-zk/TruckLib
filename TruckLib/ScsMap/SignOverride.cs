@@ -87,14 +87,14 @@ namespace TruckLib.ScsMap
             w.Write(AreaName);
 
             w.Write(Attributes.Count);
-            foreach(var attrib in Attributes)
+            foreach (var attrib in Attributes)
             {
                 w.Write((ushort)TypeToEnum(attrib.Type));
 
                 w.Write(attrib.Index);
 
                 object value = attrib.GetValue();
-                if(value is sbyte)
+                if (value is sbyte)
                 {
                     w.Write((sbyte)value);
                 }
@@ -114,7 +114,7 @@ namespace TruckLib.ScsMap
                 {
                     w.WritePascalString((string)value);
                 }
-                else if(value is ulong)
+                else if (value is ulong)
                 {
                     w.Write((ulong)value);
                 }
@@ -128,6 +128,7 @@ namespace TruckLib.ScsMap
             if (type == typeof(uint)) return AttributeType.UInt32;
             if (type == typeof(float)) return AttributeType.Float;
             if (type == typeof(string)) return AttributeType.String;
+            if (type == typeof(ulong)) return AttributeType.UInt64;
 
             throw new NotImplementedException($"No matching enum entry for type {type}");
         }
@@ -138,7 +139,7 @@ namespace TruckLib.ScsMap
             Int32 = 2,
             UInt32 = 3,
             Float = 4,
-            String = 5,   
+            String = 5,
             UInt64 = 6
         }
 

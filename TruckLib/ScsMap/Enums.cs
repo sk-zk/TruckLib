@@ -228,10 +228,24 @@ namespace TruckLib.ScsMap
         ReverbArea = 2
     }
 
+    /// <summary>
+    /// The rendering behavior of a Visibility Area.
+    /// </summary>
     public enum VisibilityAreaBehavior
     {
+        /// <summary>
+        /// Ignores cut planes for child objects.
+        /// </summary>
         ShowHiddenObjects = 0,
+
+        /// <summary>
+        /// Child objects are invisible inside the area.
+        /// </summary>
         HideObjects = 1,
+
+        /// <summary>
+        /// Child objects are only visible inside the area.
+        /// </summary>
         ShowObjects = 2
     }
 

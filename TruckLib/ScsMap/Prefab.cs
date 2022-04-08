@@ -438,10 +438,10 @@ namespace TruckLib.ScsMap
             // the Intersect call returns the
             // nodes of this prefab which will replace the corresponding newPf nodes.
             var overlappingNodes = Nodes.Intersect(p2.Nodes, new NodePositionComparer()).ToList();
-            if (overlappingNodes.Count() == 0)
+            if (overlappingNodes.Count == 0)
                 throw new NotImplementedException("No overlapping node found - can't attach prefab");
 
-            for (var i = 0; i < overlappingNodes.Count(); i++)
+            for (var i = 0; i < overlappingNodes.Count; i++)
             {
                 var p1Node = overlappingNodes[i];
                 var p1NodeIdx = Nodes.IndexOf(p1Node);

@@ -225,6 +225,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[2] = !value;
         }
 
+        public bool Secret
+        {
+            get => Kdop.Flags[5];
+            set => Kdop.Flags[5] = value;
+        }
+
         public Prefab() : base() 
         {
             Init();

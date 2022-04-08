@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; }
 
-        public List<INode> TrackNodes { get; set; }
+        public List<INode> TrackPoints { get; set; }
 
         public List<INode> CurveControlNodes { get; set; }
 
@@ -33,7 +33,7 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Tags = new List<Token>();
-            TrackNodes = new List<INode>();
+            TrackPoints = new List<INode>();
             Keyframes = new List<Keyframe>();
             CameraSpeed = 1f;
         }
@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
-            ResolveNodeReferences(TrackNodes, allNodes);
+            ResolveNodeReferences(TrackPoints, allNodes);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The header of this sector.
         /// </summary>
-        private Header header = new Header();
+        private Header header = new();
 
         // Always 2 in both ETS2 and ATS.
         private uint SectorDescVersion = 2;
@@ -59,7 +59,7 @@ namespace TruckLib.ScsMap
 
         public Vector2 MaxBoundary { get; set; } = new Vector2(4000, 4000);
 
-        internal FlagField Flags = new FlagField();
+        internal FlagField Flags = new();
 
         /// <summary>
         /// EOF marker of a .data file.
@@ -400,13 +400,13 @@ namespace TruckLib.ScsMap
             var nodes = new List<INode>(32);
             foreach (var node in sectorNodes)
             {
-                if (!(node.ForwardItem is UnresolvedItem)
+                if (node.ForwardItem is not UnresolvedItem
                     && node.ForwardItem is MapItem fwItem
                     && fwItem.ItemFile == file)
                 {
                     nodes.Add(node);
                 }
-                else if (!(node.BackwardItem is UnresolvedItem)
+                else if (node.BackwardItem is not UnresolvedItem
                     && node.BackwardItem is MapItem bwItem
                     && bwItem.ItemFile == file)
                 {
@@ -414,7 +414,7 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            w.Write(nodes.Count());
+            w.Write(nodes.Count);
             foreach (var node in nodes)
             {
                 node.Serialize(w);

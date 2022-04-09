@@ -27,7 +27,7 @@ namespace TruckLib.HashFs
         private uint EntriesCount;
         private uint StartOffset;
 
-        private Dictionary<ulong, Entry> entries = new Dictionary<ulong, Entry>();
+        private Dictionary<ulong, Entry> entries = new();
 
         /// <summary>
         /// Opens a HashFS file.
@@ -36,9 +36,11 @@ namespace TruckLib.HashFs
         /// <returns></returns>
         public static HashFsReader Open(string path)
         {
-            var hfr = new HashFsReader();
-            hfr.Path = path;
-            hfr.reader = new BinaryReader(new FileStream(path, FileMode.Open));
+            var hfr = new HashFsReader
+            {
+                Path = path,
+                reader = new BinaryReader(new FileStream(path, FileMode.Open))
+            };
             hfr.ParseHeader();
             hfr.CacheEntryHeaders();
             return hfr;
@@ -53,7 +55,7 @@ namespace TruckLib.HashFs
         {
             path = RemoveTrailingSlash(path);
             var hash = HashPath(path);
-            if(entries.TryGetValue(hash, out var entry))
+            if (entries.TryGetValue(hash, out var entry))
             {
                 return entry.IsDirectory
                     ? EntryType.Directory
@@ -192,7 +194,7 @@ namespace TruckLib.HashFs
                 {
                     if (filesOnly)
                         continue;
-                    var subPath = dirEntries[i].Substring(1) + "/";
+                    var subPath = dirEntries[i][1..] + "/";
                     subdirs.Add(subPath);
                 }
                 // is file
@@ -237,7 +239,7 @@ namespace TruckLib.HashFs
         private ulong HashPath(string path)
         {
             if(path != "")
-                path = path.Substring(1);
+                path = path[1..];
 
             if (Salt != 0)
                 path = Salt + path;

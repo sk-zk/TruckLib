@@ -7,7 +7,6 @@ The currently supported map version is 891 (game version 1.43).
 
 (This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later.)
 
-
 ## What's all this then
 **TruckLib.ScsMap**:  
 Create or modify ETS2 and ATS maps.
@@ -22,6 +21,16 @@ Also contains a (binary) .tobj de/serializer.
 
 **TruckLib.HashFs**:  
 A reader for HashFS (.scs) files, the asset archive format of the game.
+
+## Minimal example
+```
+using System.Numerics;
+using TruckLib.ScsMap;
+
+var map = new Map("example");
+Model.Add(map, new Vector3(10, 0, 10), 0, "dlc_no_471", "brick", "default");
+map.Save(@"<ETS2 folder>\mod\user_map\map");
+```
 
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map > Recompute map).

@@ -306,8 +306,8 @@ namespace TruckLib.ScsMap
         public Road AppendRoad(IItemContainer map, ushort node, Vector3 forwardPos,
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
-            if(node > Nodes.Count)
-                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
+            if (node > Nodes.Count)
+                throw new ArgumentOutOfRangeException(nameof(node), $"This prefab only has {Nodes.Count} nodes.");
 
             INode backwardNode;
             INode forwardNode;
@@ -371,7 +371,7 @@ namespace TruckLib.ScsMap
         public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
         {
             if (prefabNodeIdx > Nodes.Count)
-                throw new ArgumentOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
+                throw new ArgumentOutOfRangeException(nameof(prefabNodeIdx), $"This prefab only has {Nodes.Count} nodes.");
 
             if (itemNode.BackwardItem is null)
             {
@@ -410,7 +410,7 @@ namespace TruckLib.ScsMap
             float shortestDist = float.MaxValue;
             INode closestPrefabNode = null;
             INode closestItemNode = null;
-            foreach(var node in Nodes)
+            foreach (var node in Nodes)
             {
                 foreach (var itemNode in new[] { item.ForwardNode, item.Node })
                 {

@@ -128,7 +128,7 @@ namespace TruckLib.ScsMap
             var p2 = ForwardNode;
 
             if (ForwardItem != null) // there's already an item attached
-                throw new ArgumentOutOfRangeException("Can't append item: ForwardItem is not null");
+                throw new InvalidOperationException("Can't append item: ForwardItem is not null");
 
             var p3 = p2.Sectors[0].Map.AddNode(position, false);
             var newItem = new T
@@ -166,7 +166,7 @@ namespace TruckLib.ScsMap
             var p2 = ForwardNode;
 
             if (BackwardItem != null) // there's already an item attached
-                throw new ArgumentOutOfRangeException("Can't prepend item: BackwardItem is not null");
+                throw new InvalidOperationException("Can't prepend item: BackwardItem is not null");
 
             var p0 = p1.Sectors[0].Map.AddNode(position, true);
             var newItem = new T

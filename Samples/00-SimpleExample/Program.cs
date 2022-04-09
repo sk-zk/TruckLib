@@ -22,7 +22,7 @@ namespace Example
             var r = Road.Add(map,
                 new Vector3(19, 0, 19.5f), // position of backward (red) node
                 new Vector3(65, 0, 23),    // position of forward (green) node
-                "ger1",  // unit name of the road
+                "ger1",  // unit name of the road model
                 80, 80   // terrain size on the left and right side
                 );
 
@@ -38,7 +38,7 @@ namespace Example
 
             // Terrain properties:
             // Define what the terrain will look like.
-            // We'll set all of the following properties on the right side only
+            // We'll first set all of the following properties for the right side
             // and then clone them to the left side.
             r.Right.Terrain.QuadData.BrushMaterials[0] = new Material("34"); // "grass_ger_main"
             r.Right.Terrain.Profile = "profile12"; // "hills2"
@@ -53,7 +53,7 @@ namespace Example
             r.Right.Vegetation[0].To = 80;
 
             // Road models:
-            // Let's add some reflector posts as well.
+            // Let's add some bollards as well.
             r.Right.Models[0].Name = "219"; // "reflective post"
             r.Right.Models[0].Distance = 50;
             r.Right.Models[0].Offset = 6;
@@ -84,8 +84,6 @@ namespace Example
             map.Save(userMapFolder, true);
 
             // Remember to recalculate (Map > Recompute map) after loading it in the editor for the first time.
-            // SCS removed the keyboard shortcut for this function in 1.41 and 
-            // I have to admit that I'm a little salty about it.
         }
     }
 }

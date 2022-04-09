@@ -50,7 +50,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Editor start position. TODO: Figure out these values
         /// </summary>
-        private Vector3 StartPlacementPosition = new Vector3(0, 0, 0);
+        private Vector3 StartPlacementPosition = new(0, 0, 0);
 
         /// <summary>
         /// Editor start position. TODO: Figure out these values
@@ -77,7 +77,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The map's header.
         /// </summary>
-        private Header header = new Header();
+        private Header header = new();
 
         /// <summary>
         /// The size of a sector in in-game units (= meters).

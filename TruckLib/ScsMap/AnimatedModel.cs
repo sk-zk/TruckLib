@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; }
 
-        public Token Model { get; set; } = new Token();
+        public Token Model { get; set; }
      
         public bool InitHidden
         {

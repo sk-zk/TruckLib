@@ -238,7 +238,7 @@ namespace TruckLib.ScsMap
             var first = (PolylineItem)FindFirstItem();
             var initialRot = MathEx.GetNodeRotation(first.Node.Position, first.ForwardNode.Position);
 
-            if (!(first.BackwardItem is Prefab))
+            if (first.BackwardItem is not Prefab)
                 first.Node.Rotation = initialRot;
             first.ForwardNode.Rotation = initialRot;
 
@@ -249,7 +249,7 @@ namespace TruckLib.ScsMap
                 var p2 = next.ForwardNode;
                 var p3 = fw.ForwardNode;
 
-                if (!(p3.ForwardItem is Prefab))
+                if (p3.ForwardItem is not Prefab)
                     p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
                 SetMiddleRotation(p1, p2, p3);
                 next = fw;

@@ -156,7 +156,7 @@ namespace TruckLib
         }
 
         public static implicit operator Token(ulong v) 
-            => new Token(v);
+            => new(v);
 
         public static implicit operator Token(int v)
         {

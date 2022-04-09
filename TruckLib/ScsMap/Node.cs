@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap
         // memory overhead
         public Sector[] Sectors { get; set; }
 
-        private Vector3 position = Vector3.Zero;
+        private Vector3 position;
         /// <summary>
         /// Position of the node. Note that this will be serialized as fixed point values.
         /// </summary>

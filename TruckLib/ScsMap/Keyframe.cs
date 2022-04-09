@@ -40,29 +40,4 @@ namespace TruckLib.ScsMap
             w.Write(ForwardTangentPosition);
         }
     }
-
-    public enum EasingFunction
-    {
-        Custom = 0,
-
-        EaseInCubic = 9,
-        EaseInExpo = 11,
-        EaseInQuad = 8,
-        EaseInQuart = 10,
-        EaseInSine = 7,
-
-        EaseInOutCubic = 4,
-        EaseInOutExpo = 6,
-        EaseInOutQuad = 3,
-        EaseInOutQuart = 5,
-        EaseInOutSine = 2,
-
-        EaseOutCubic = 14,
-        EaseOutExpo = 16,
-        EaseOutQuad = 13,
-        EaseOutQuart = 15,
-        EaseOutSine = 12,
-
-        Linear = 1
-    }
 }

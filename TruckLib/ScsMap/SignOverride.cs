@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap
                 var type = (AttributeType)r.ReadUInt16();
                 ISignOverrideAttribute attrib;
 
-                switch(type)
+                switch (type)
                 {
                     case AttributeType.SByte:
                         attrib = new SignOverrideAttribute<sbyte>();
@@ -87,36 +87,34 @@ namespace TruckLib.ScsMap
             w.Write(AreaName);
 
             w.Write(Attributes.Count);
-            foreach(var attrib in Attributes)
+            foreach (var attrib in Attributes)
             {
                 w.Write((ushort)TypeToEnum(attrib.Type));
 
                 w.Write(attrib.Index);
 
-                object value = attrib.GetValue();
-                if(value is sbyte)
+                switch (attrib.GetValue())
                 {
-                    w.Write((sbyte)value);
-                }
-                else if (value is int)
-                {
-                    w.Write((int)value);
-                }
-                else if (value is uint)
-                {
-                    w.Write((uint)value);
-                }
-                else if (value is float)
-                {
-                    w.Write((float)value);
-                }
-                else if (value is string)
-                {
-                    w.WritePascalString((string)value);
-                }
-                else if(value is ulong)
-                {
-                    w.Write((ulong)value);
+                    case sbyte value:
+                        w.Write(value);
+                        break;
+                    case int value:
+                        w.Write(value);
+                        break;
+                    case uint value:
+                        w.Write(value);
+                        break;
+                    case float value:
+                        w.Write(value);
+                        break;
+                    case string value:
+                        w.WritePascalString(value);
+                        break;
+                    case ulong value:
+                        w.Write(value);
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
             }
         }
@@ -128,6 +126,7 @@ namespace TruckLib.ScsMap
             if (type == typeof(uint)) return AttributeType.UInt32;
             if (type == typeof(float)) return AttributeType.Float;
             if (type == typeof(string)) return AttributeType.String;
+            if (type == typeof(ulong)) return AttributeType.UInt64;
 
             throw new NotImplementedException($"No matching enum entry for type {type}");
         }
@@ -138,7 +137,7 @@ namespace TruckLib.ScsMap
             Int32 = 2,
             UInt32 = 3,
             Float = 4,
-            String = 5,   
+            String = 5,
             UInt64 = 6
         }
 

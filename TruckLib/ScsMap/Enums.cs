@@ -43,6 +43,8 @@ namespace TruckLib.ScsMap
         Curve = 0x2C,
         CameraPath = 0x2D,
         Cutscene = 0x2E,
+        Hookup = 0x2F,
+        VisibilityArea = 0x30,
     };
 
     /// <summary>
@@ -224,6 +226,52 @@ namespace TruckLib.ScsMap
         ThreeDSound = 0,
         AmbientArea = 1,
         ReverbArea = 2
+    }
+
+    /// <summary>
+    /// The rendering behavior of a Visibility Area.
+    /// </summary>
+    public enum VisibilityAreaBehavior
+    {
+        /// <summary>
+        /// Ignores cut planes for child objects.
+        /// </summary>
+        ShowHiddenObjects = 0,
+
+        /// <summary>
+        /// Child objects are invisible inside the area.
+        /// </summary>
+        HideObjects = 1,
+
+        /// <summary>
+        /// Child objects are only visible inside the area.
+        /// </summary>
+        ShowObjects = 2
+    }
+
+    public enum EasingFunction
+    {
+        Custom = 0,
+
+        EaseInCubic = 9,
+        EaseInExpo = 11,
+        EaseInQuad = 8,
+        EaseInQuart = 10,
+        EaseInSine = 7,
+
+        EaseInOutCubic = 4,
+        EaseInOutExpo = 6,
+        EaseInOutQuad = 3,
+        EaseInOutQuart = 5,
+        EaseInOutSine = 2,
+
+        EaseOutCubic = 14,
+        EaseOutExpo = 16,
+        EaseOutQuad = 13,
+        EaseOutQuart = 15,
+        EaseOutSine = 12,
+
+        Linear = 1
     }
 
 }

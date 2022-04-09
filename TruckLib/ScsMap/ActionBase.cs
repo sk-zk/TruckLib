@@ -10,15 +10,15 @@ namespace TruckLib.ScsMap
 {
     public abstract class ActionBase : IBinarySerializable
     {
-        public List<float> NumParams { get; set; } = new List<float>();
+        public List<float> NumParams { get; set; } = new();
 
-        public List<string> StringParams { get; set; } = new List<string>();
+        public List<string> StringParams { get; set; } = new();
 
-        public List<Token> TargetTags { get; set; } = new List<Token>();
+        public List<Token> TargetTags { get; set; } = new();
 
         public float TargetRange { get; set; }
 
-        protected FlagField actionFlags = new FlagField();
+        protected FlagField actionFlags = new();
 
         private const uint NoParamsMarker = uint.MaxValue;
 

@@ -32,7 +32,7 @@ namespace TruckLib
             const string hexPrefix = "&";
             return str.StartsWith(hexPrefix)
                 && str.Length == (hexPrefix.Length + 8)
-                && IsHexadecimal(str.Substring(1));
+                && IsHexadecimal(str[1..]);
         }
 
         /// <summary>

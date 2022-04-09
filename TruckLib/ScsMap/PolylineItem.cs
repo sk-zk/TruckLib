@@ -128,7 +128,7 @@ namespace TruckLib.ScsMap
             var p2 = ForwardNode;
 
             if (ForwardItem != null) // there's already an item attached
-                throw new ArgumentOutOfRangeException("Can't append item: ForwardItem is not null");
+                throw new InvalidOperationException("Can't append item: ForwardItem is not null");
 
             var p3 = p2.Sectors[0].Map.AddNode(position, false);
             var newItem = new T
@@ -166,7 +166,7 @@ namespace TruckLib.ScsMap
             var p2 = ForwardNode;
 
             if (BackwardItem != null) // there's already an item attached
-                throw new ArgumentOutOfRangeException("Can't prepend item: BackwardItem is not null");
+                throw new InvalidOperationException("Can't prepend item: BackwardItem is not null");
 
             var p0 = p1.Sectors[0].Map.AddNode(position, true);
             var newItem = new T
@@ -238,7 +238,7 @@ namespace TruckLib.ScsMap
             var first = (PolylineItem)FindFirstItem();
             var initialRot = MathEx.GetNodeRotation(first.Node.Position, first.ForwardNode.Position);
 
-            if (!(first.BackwardItem is Prefab))
+            if (first.BackwardItem is not Prefab)
                 first.Node.Rotation = initialRot;
             first.ForwardNode.Rotation = initialRot;
 
@@ -249,7 +249,7 @@ namespace TruckLib.ScsMap
                 var p2 = next.ForwardNode;
                 var p3 = fw.ForwardNode;
 
-                if (!(p3.ForwardItem is Prefab))
+                if (p3.ForwardItem is not Prefab)
                     p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
                 SetMiddleRotation(p1, p2, p3);
                 next = fw;

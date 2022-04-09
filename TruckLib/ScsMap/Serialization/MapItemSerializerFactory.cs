@@ -6,21 +6,19 @@ namespace TruckLib.ScsMap.Serialization
 {
     internal class MapItemSerializerFactory
     {
-        // don't create a new object every single time
-        // because it's not necessary
-        private static Dictionary<ItemType, MapItemSerializer> cached 
+        private static readonly Dictionary<ItemType, MapItemSerializer> cache
             = new Dictionary<ItemType, MapItemSerializer>();
 
         public static MapItemSerializer Get(ItemType type)
         {
-            if (cached.TryGetValue(type, out var obj))
+            if (cache.TryGetValue(type, out var cached))
             {
-                return obj;
+                return cached;
             }
             else
             {
                 var serializer = Create(type);
-                cached.Add(type, serializer);
+                cache.Add(type, serializer);
                 return serializer;
             }
         }
@@ -46,6 +44,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.FuelPump => new ServiceSerializer(),
                 ItemType.Garage => new GarageSerializer(),
                 ItemType.Hinge => new HingeSerializer(),
+                ItemType.Hookup => new HookupSerializer(),
                 ItemType.MapArea => new MapAreaSerializer(),
                 ItemType.MapOverlay => new MapOverlaySerializer(),
                 ItemType.Model => new ModelSerializer(),
@@ -60,6 +59,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.TrafficArea => new TrafficAreaSerializer(),
                 ItemType.Trajectory => new TrajectorySerializer(),
                 ItemType.Trigger => new TriggerSerializer(),
+                ItemType.VisibilityArea => new VisibilityAreaSerializer(),
                 ItemType.Walker => new WalkerSerializer(),
                 _ => throw new NotImplementedException($"Item type {type} is not supported."),
             };

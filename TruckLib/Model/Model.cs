@@ -182,7 +182,7 @@ namespace TruckLib.Model
                 Looks[i].Materials.AddRange(
                     materials.GetRange(i * (int)materialCount, (int)materialCount)
                     );
-            }       
+            }
         }
 
         private void ReadPmg(BinaryReader r)

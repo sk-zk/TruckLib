@@ -162,8 +162,7 @@ namespace TruckLib.ScsMap
         /// <typeparam name="T"></typeparam>
         /// <param name="type"></param>
         /// <returns></returns>
-        private T CreateSlaveItem<T>(SpawnPointType type)
-            where T : PrefabSlaveItem, new()
+        private T CreateSlaveItem<T>(SpawnPointType type) where T : PrefabSlaveItem, new()
         {
             var first = clonedPoints.First(x => x.Type == type);
             var item = CreateSlaveItem<T>(first);
@@ -177,8 +176,7 @@ namespace TruckLib.ScsMap
         /// <typeparam name="T"></typeparam>
         /// <param name="spawnPoint"></param>
         /// <returns></returns>
-        private T CreateSlaveItem<T>(SpawnPoint spawnPoint)
-            where T : PrefabSlaveItem, new()
+        private T CreateSlaveItem<T>(SpawnPoint spawnPoint) where T : PrefabSlaveItem, new()
         {
             var pos = GetAbsolutePosition(spawnPoint.Position);
 

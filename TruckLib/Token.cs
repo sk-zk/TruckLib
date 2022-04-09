@@ -156,7 +156,7 @@ namespace TruckLib
         }
 
         public static implicit operator Token(ulong v) 
-            => new Token(v);
+            => new(v);
 
         public static implicit operator Token(int v)
         {
@@ -167,15 +167,14 @@ namespace TruckLib
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, obj)) 
-                return true;
-
             return obj switch
             {
                 null =>         false,
                 Token token2 => Value == token2.Value,
                 ulong ul =>     Value == ul,
-                int i =>        Value == (ulong)i,
+                long l =>       l >= 0 && Value == (ulong)l,
+                uint ui =>      Value == ui,
+                int i =>        i >= 0 && Value == (ulong)i,
                 string str =>   String == str,
                 _ => false,
             };

@@ -26,8 +26,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         internal FlagField Flags;
 
-        private static ushort MinDistance = 10;
-        private static ushort MaxDistance = 1500;
+        private const ushort MinDistance = 10;
+        private const ushort MaxDistance = 1500;
         private ushort viewDistance = ViewDistanceClose;
         /// <summary>
         /// View distance of an item in meters.

@@ -8,7 +8,7 @@ namespace TruckLib.ScsMap.Lookup
 {
     public sealed class DlcGuard
     {
-        public static byte None = 0;
+        public static readonly byte None = 0;
 
         // ETS2
         public static readonly byte East = 1;
@@ -40,5 +40,9 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte Colorado = 13;
         public static readonly byte ColoradoAndNewMexico = 14;
         public static readonly byte ColoradoAndUtah = 15;
+        public static readonly byte Wyoming = 16;
+        public static readonly byte ColoradoAndWyoming = 17;
+        public static readonly byte IdahoAndWyoming = 18;
+        public static readonly byte UtahAndWyoming = 19;
     }
 }

@@ -225,6 +225,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[2] = !value;
         }
 
+        public bool Secret
+        {
+            get => Kdop.Flags[5];
+            set => Kdop.Flags[5] = value;
+        }
+
         public Prefab() : base() 
         {
             Init();
@@ -300,8 +306,8 @@ namespace TruckLib.ScsMap
         public Road AppendRoad(IItemContainer map, ushort node, Vector3 forwardPos,
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
-            if(node > Nodes.Count)
-                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
+            if (node > Nodes.Count)
+                throw new ArgumentOutOfRangeException(nameof(node), $"This prefab only has {Nodes.Count} nodes.");
 
             INode backwardNode;
             INode forwardNode;
@@ -365,7 +371,7 @@ namespace TruckLib.ScsMap
         public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
         {
             if (prefabNodeIdx > Nodes.Count)
-                throw new ArgumentOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
+                throw new ArgumentOutOfRangeException(nameof(prefabNodeIdx), $"This prefab only has {Nodes.Count} nodes.");
 
             if (itemNode.BackwardItem is null)
             {
@@ -404,7 +410,7 @@ namespace TruckLib.ScsMap
             float shortestDist = float.MaxValue;
             INode closestPrefabNode = null;
             INode closestItemNode = null;
-            foreach(var node in Nodes)
+            foreach (var node in Nodes)
             {
                 foreach (var itemNode in new[] { item.ForwardNode, item.Node })
                 {
@@ -432,10 +438,10 @@ namespace TruckLib.ScsMap
             // the Intersect call returns the
             // nodes of this prefab which will replace the corresponding newPf nodes.
             var overlappingNodes = Nodes.Intersect(p2.Nodes, new NodePositionComparer()).ToList();
-            if (overlappingNodes.Count() == 0)
+            if (overlappingNodes.Count == 0)
                 throw new NotImplementedException("No overlapping node found - can't attach prefab");
 
-            for (var i = 0; i < overlappingNodes.Count(); i++)
+            for (var i = 0; i < overlappingNodes.Count; i++)
             {
                 var p1Node = overlappingNodes[i];
                 var p1NodeIdx = Nodes.IndexOf(p1Node);

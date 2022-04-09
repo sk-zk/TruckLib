@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         // sector boundaries are written to both sectors, and doing this was
         // the best way I could think of to prevent two instances of 
         // the same node.
-        public Dictionary<ulong, INode> Nodes { get; set; } 
+        public Dictionary<ulong, INode> Nodes { get; set; }
             = new Dictionary<ulong, INode>();
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Editor start position. TODO: Figure out these values
         /// </summary>
-        private Vector3 StartPlacementPosition = new Vector3(0, 0, 0);
+        private Vector3 StartPlacementPosition = new(0, 0, 0);
 
         /// <summary>
         /// Editor start position. TODO: Figure out these values
@@ -77,7 +77,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The map's header.
         /// </summary>
-        private Header header = new Header();
+        private Header header = new();
 
         /// <summary>
         /// The size of a sector in in-game units (= meters).
@@ -208,7 +208,7 @@ namespace TruckLib.ScsMap
             var allItems = new Dictionary<ulong, MapItem>();
             foreach (var sectorKvp in Sectors)
             {
-                foreach(var itemKvp in sectorKvp.Value.MapItems)
+                foreach (var itemKvp in sectorKvp.Value.MapItems)
                 {
                     allItems.Add(itemKvp.Key, itemKvp.Value);
                 }
@@ -275,7 +275,7 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item from all sectors
-            foreach(var sectorKvp in Sectors)
+            foreach (var sectorKvp in Sectors)
             {
                 sectorKvp.Value.MapItems.Remove(item.Uid);
             }
@@ -300,9 +300,9 @@ namespace TruckLib.ScsMap
             }
 
             // delete dependent items
-            if(item is Prefab pf)
+            if (item is Prefab pf)
             {
-                foreach(var slaveItem in pf.SlaveItems)
+                foreach (var slaveItem in pf.SlaveItems)
                 {
                     if (slaveItem is MapItem mapItem)
                         Delete(mapItem);
@@ -382,7 +382,6 @@ namespace TruckLib.ScsMap
 
             StartPlacementRotation = r.ReadQuaternion();
 
-            // TODO: What is this?
             gameTag = r.ReadUInt32();
 
             NormalScale = r.ReadSingle();
@@ -404,7 +403,7 @@ namespace TruckLib.ScsMap
             // this is so we have references to the sectors
             // before we read them to deal with sectors containing
             // nodes from other sectors
-            foreach(var baseFile in baseFiles)
+            foreach (var baseFile in baseFiles)
             {
                 if (!SectorShouldBeLoaded(baseFile))
                     continue;
@@ -416,7 +415,7 @@ namespace TruckLib.ScsMap
             var sectorList = Sectors.ToList();
             foreach (var sectorKvp in sectorList)
             {
-                Trace.WriteLine($"Reading sector {sectorKvp.Value.ToString()}");
+                Trace.WriteLine($"Reading sector {sectorKvp.Value}");
                 sectorKvp.Value.Read();
             }
 
@@ -462,20 +461,20 @@ namespace TruckLib.ScsMap
         {
             var sectorDirectory = Path.Combine(mapDirectory, Name);
             Directory.CreateDirectory(sectorDirectory);
-            if(cleanDir)
+            if (cleanDir)
             {
                 new DirectoryInfo(sectorDirectory).GetFiles().ToList()
                     .ForEach(f => f.Delete());
             }
 
             var sectorNodes = new Dictionary<Sector, List<INode>>();
-            foreach(var sectorKvp in Sectors)
+            foreach (var sectorKvp in Sectors)
             {
                 sectorNodes.Add(sectorKvp.Value, new List<INode>());
             }
-            foreach(var nodeKvp in Nodes)
+            foreach (var nodeKvp in Nodes)
             {
-                foreach(var sector in nodeKvp.Value.Sectors)
+                foreach (var sector in nodeKvp.Value.Sectors)
                 {
                     sectorNodes[sector].Add(nodeKvp.Value);
                 }
@@ -483,7 +482,7 @@ namespace TruckLib.ScsMap
 
             foreach (var sectorKvp in Sectors)
             {
-                Trace.WriteLine($"Writing sector {sectorKvp.Value.ToString()}");
+                Trace.WriteLine($"Writing sector {sectorKvp.Value}");
                 sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value]);
             }
 

@@ -121,5 +121,21 @@ namespace TruckLib.ScsMap
             w.Write(byte3);
             w.Write(byte4);
         }
+
+        public override int GetHashCode() =>
+            (byte1, byte2, byte3, byte4).GetHashCode();
+
+        public override bool Equals(object obj) =>
+            obj is TerrainQuad quad
+            && quad.byte1 == this.byte1
+            && quad.byte2 == this.byte2
+            && quad.byte3 == this.byte3
+            && quad.byte4 == this.byte4;
+
+        public static bool operator ==(TerrainQuad left, TerrainQuad right) =>
+            left.Equals(right);
+
+        public static bool operator !=(TerrainQuad left, TerrainQuad right) =>
+            !(left == right);
     }
 }

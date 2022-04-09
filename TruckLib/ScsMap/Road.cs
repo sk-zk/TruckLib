@@ -35,7 +35,7 @@ namespace TruckLib.ScsMap
             _ => 3.75f,
         };
 
-        public float MaxLength => 1000f;
+        public static readonly float MaxLength = 1000f;
 
         public new ushort ViewDistance
         {
@@ -161,6 +161,8 @@ namespace TruckLib.ScsMap
         /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
         public bool WaterReflection = false;
+
+        public bool Secret = false;
 
         public Road() : base() { }
 

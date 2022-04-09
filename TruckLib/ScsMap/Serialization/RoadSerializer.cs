@@ -49,6 +49,7 @@ namespace TruckLib.ScsMap.Serialization
 
             var kflag3 = r.ReadByte();
             var karr3 = new BitArray(new[] { kflag3 });
+            road.Secret = karr3[0];
             road.Right.Railings.InvertRailing = karr3[1];
             road.Left.Railings.InvertRailing = karr3[2];
             road.IsCityRoad = karr3[3];
@@ -164,7 +165,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(kflag2);
 
             byte kflag3 = 0;
-            // bit 0: obsolete Terrain Only flag
+            kflag3 |= road.Secret.ToByte();
             kflag3 |= (byte)(road.Right.Railings.InvertRailing.ToByte() << 1);
             kflag3 |= (byte)(road.Left.Railings.InvertRailing.ToByte() << 2);
             kflag3 |= (byte)(road.IsCityRoad.ToByte() << 3);

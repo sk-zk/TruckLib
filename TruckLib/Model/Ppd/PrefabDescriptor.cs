@@ -41,10 +41,27 @@ namespace TruckLib.Model.Ppd
 
         public List<uint[]> Unknown { get; set; } = new List<uint[]>();
 
+
+        /// <summary>
+        /// Reads a .ppd file from disk.
+        /// </summary>
         public static PrefabDescriptor Open(string path)
         {
             var ppd = new PrefabDescriptor();
-            using(var r = new BinaryReader(new FileStream(path, FileMode.Open)))
+            using (var r = new BinaryReader(new FileStream(path, FileMode.Open)))
+            {
+                ppd.Deserialize(r);
+            }
+            return ppd;
+        }
+
+        /// <summary>
+        /// Reads a .ppd file from memory.
+        /// </summary>
+        public static PrefabDescriptor Load(byte[] file)
+        {
+            var ppd = new PrefabDescriptor();
+            using (var r = new BinaryReader(new MemoryStream(file)))
             {
                 ppd.Deserialize(r);
             }

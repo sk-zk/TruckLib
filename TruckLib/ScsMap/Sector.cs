@@ -62,15 +62,16 @@ namespace TruckLib.ScsMap
         internal FlagField Flags = new();
 
         /// <summary>
-        /// EOF marker of a .data file.
+        /// EOF marker of .data and .layer files.
         /// </summary>
-        private const ulong dataEof = ulong.MaxValue;
+        private const ulong EofMarker = ulong.MaxValue;
 
         private const string BaseExtension = "base";
         private const string DataExtension = "data";
         private const string SndExtension = "snd";
         private const string AuxExtenstion = "aux";
         private const string DescExtension = "desc";
+        private const string LayerExtension = "layer";
 
         public Sector() { }
 
@@ -115,6 +116,7 @@ namespace TruckLib.ScsMap
             ReadAux(Path.ChangeExtension(basePath, AuxExtenstion));
             ReadSnd(Path.ChangeExtension(basePath, SndExtension));
             ReadDesc(Path.ChangeExtension(basePath, DescExtension));
+            ReadLayer(Path.ChangeExtension(basePath, LayerExtension));
         }
 
         /// <summary>
@@ -161,11 +163,12 @@ namespace TruckLib.ScsMap
             while (r.BaseStream.Position < r.BaseStream.Length)
             {
                 var uid = r.ReadUInt64();
-                if (uid == dataEof) break;
+                if (uid == EofMarker)
+                    break;
 
                 if (!MapItems.TryGetValue(uid, out MapItem item))
                 {
-                    throw new KeyNotFoundException($"{ToString()}.data contains " +
+                    throw new KeyNotFoundException($"{ToString()}.{DataExtension} contains " +
                         $"unknown UID {uid} - can't continue.");
                 }
                 var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
@@ -221,6 +224,29 @@ namespace TruckLib.ScsMap
             Flags = new FlagField(r.ReadUInt32());
 
             Climate = r.ReadToken();
+        }
+
+        private void ReadLayer(string path)
+        {
+            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+
+            var header = new Header();
+            header.Deserialize(r);
+
+            while (r.BaseStream.Position < r.BaseStream.Length)
+            {
+                var uid = r.ReadUInt64();
+                if (uid == EofMarker)
+                    break;
+
+                if (!MapItems.TryGetValue(uid, out MapItem item))
+                {
+                    throw new KeyNotFoundException($"{ToString()}.{LayerExtension} contains " +
+                        $"unknown UID {uid} - can't continue.");
+                }
+                var layer = r.ReadByte();
+                item.Layer = layer;
+            }
         }
 
         /// <summary>
@@ -296,6 +322,7 @@ namespace TruckLib.ScsMap
             WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes);
             WriteSnd(GetFilename(SndExtension), MapItems, sectorNodes);
             WriteDesc(GetFilename(DescExtension));
+            WriteLayer(GetFilename(LayerExtension));
 
             string GetFilename(string ext) => 
                 Path.Combine(sectorDirectory, $"{ToString()}.{ext}");
@@ -369,7 +396,7 @@ namespace TruckLib.ScsMap
                 serializer.SerializeDataPayload(w, item);
             }
 
-            w.Write(dataEof);
+            w.Write(EofMarker);
         }
 
         /// <summary>
@@ -388,6 +415,23 @@ namespace TruckLib.ScsMap
             w.Write((int)(MaxBoundary.Y * boundaryFactor));
             w.Write(Flags.Bits);
             w.Write(Climate);
+        }
+
+        private void WriteLayer(string filename)
+        {
+            using var stream = new FileStream(filename, FileMode.Create);
+            using var w = new BinaryWriter(stream);
+
+            header.Serialize(w);
+            foreach (var item in MapItems)
+            {
+                if (item.Value.Layer != 0)
+                {
+                    w.Write(item.Value.Uid);
+                    w.Write(item.Value.Layer);
+                }
+            }
+            w.Write(EofMarker);
         }
 
         /// <summary>

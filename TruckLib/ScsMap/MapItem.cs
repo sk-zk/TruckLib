@@ -65,6 +65,12 @@ namespace TruckLib.ScsMap
         /// </summary>
         protected abstract ushort DefaultViewDistance { get; }
 
+        public byte layer = 0;
+        public byte Layer {
+            get => layer;
+            set { layer = Utils.SetIfInRange(value, (byte)0, (byte)8); }
+        }
+
         /// <summary>
         /// Creates a new item and generates a UID for it.
         /// </summary>

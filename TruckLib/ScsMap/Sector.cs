@@ -331,12 +331,13 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Writes the .base part of this sector.
         /// </summary>
-        /// <param name="baseFilename">The path of the output file.</param>
+        /// <param name="path">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
-        private void WriteBase(string baseFilename, Dictionary<ulong, MapItem> allItems,
+        /// <param name="sectorNodes">A list of all nodes in the sector.</param>
+        private void WriteBase(string path, Dictionary<ulong, MapItem> allItems,
             List<INode> sectorNodes)
         {
-            using var stream = new FileStream(baseFilename, FileMode.Create);
+            using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Base, w);
@@ -347,12 +348,13 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Writes the .aux part of the sector.
         /// </summary>
-        /// <param name="auxFilename">The path of the output file.</param>
+        /// <param name="path">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
-        private void WriteAux(string auxFilename, Dictionary<ulong, MapItem> allItems,
+        /// <param name="sectorNodes">A list of all nodes in the sector.</param>
+        private void WriteAux(string path, Dictionary<ulong, MapItem> allItems,
             List<INode> sectorNodes)
         {
-            using var stream = new FileStream(auxFilename, FileMode.Create);
+            using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Aux, w);
@@ -363,12 +365,13 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Writes the .snd part of the sector.
         /// </summary>
-        /// <param name="sndFilename">The path of the output file.</param>
+        /// <param name="path">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
-        private void WriteSnd(string sndFilename, Dictionary<ulong, MapItem> allItems,
+        /// <param name="sectorNodes">A list of all nodes in the sector.</param>
+        private void WriteSnd(string path, Dictionary<ulong, MapItem> allItems,
             List<INode> sectorNodes)
         {
-            using var stream = new FileStream(sndFilename, FileMode.Create);
+            using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Snd, w);
@@ -379,11 +382,11 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Writes the .data part of this sector.
         /// </summary>
-        /// <param name="dataFilename">The path of the output file.</param>
+        /// <param name="path">The path of the output file.</param>
         /// <param name="allItems">A list of all items in the sector.</param>
-        private void WriteData(string dataFilename, Dictionary<ulong, MapItem> allItems)
+        private void WriteData(string path, Dictionary<ulong, MapItem> allItems)
         {
-            using var stream = new FileStream(dataFilename, FileMode.Create);
+            using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
 
             header.Serialize(w);
@@ -402,10 +405,10 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Writes the .desc part of the sector.
         /// </summary>
-        /// <param name="descFilename">The path of the output file.</param>
-        private void WriteDesc(string descFilename)
+        /// <param name="path">The path of the output file.</param>
+        private void WriteDesc(string path)
         {
-            using var stream = new FileStream(descFilename, FileMode.Create);
+            using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
 
             w.Write(SectorDescVersion);
@@ -417,9 +420,13 @@ namespace TruckLib.ScsMap
             w.Write(Climate);
         }
 
-        private void WriteLayer(string filename)
+        /// <summary>
+        /// Writes the .layer part of the sector.
+        /// </summary>
+        /// <param name="path">The path of the output file.</param>
+        private void WriteLayer(string path)
         {
-            using var stream = new FileStream(filename, FileMode.Create);
+            using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
 
             header.Serialize(w);
@@ -500,10 +507,8 @@ namespace TruckLib.ScsMap
         /// Returns the name of this sector as used in filenames and the editor's map overlay.
         /// </summary>
         /// <returns>The name of this sector.</returns>
-        public override string ToString()
-        {
-            return $"sec{X:+0000;-0000;+0000}{Z:+0000;-0000;+0000}";
-        }
+        public override string ToString() => 
+            $"sec{X:+0000;-0000;+0000}{Z:+0000;-0000;+0000}";
 
     }
 }

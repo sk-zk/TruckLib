@@ -28,6 +28,15 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Gets or sets if a viewpoint is only displayed in the UI map once discovered.
+        /// </summary>
+        public bool SecretViewpoint
+        {
+            get => Kdop.Flags[20];
+            set => Kdop.Flags[20] = value;
+        }
+
         public Cutscene() : base() { }
 
         internal Cutscene(bool initFields) : base(initFields)

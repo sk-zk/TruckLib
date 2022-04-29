@@ -52,7 +52,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Gets or sets if this area is only visible in the UI map once discovered.
         /// </summary>
-        public bool SecretArea
+        public bool Secret
         {
             get => Kdop.Flags[4];
             set => Kdop.Flags[4] = value;

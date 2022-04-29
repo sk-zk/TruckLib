@@ -84,6 +84,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the item's properties to its default values (which are, for the most part, derived from the editor).
+        /// </summary>
         protected virtual void Init()
         {
             Kdop = new KdopItem(Utils.GenerateUuid());

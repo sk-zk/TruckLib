@@ -162,6 +162,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool WaterReflection = false;
 
+        /// <summary>
+        /// Gets or sets if this road is only visible in the UI map once discovered.
+        /// </summary>
         public bool Secret = false;
 
         public Road() : base() { }

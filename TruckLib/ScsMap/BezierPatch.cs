@@ -47,18 +47,18 @@ namespace TruckLib.ScsMap
 
         public Vegetation[] Vegetation { get; set; }
 
-        public List<VegetationSphere> VegetationSpheres { get; set; } 
+        public List<VegetationSphere> VegetationSpheres { get; set; }
 
-        static readonly ushort DefaultQuadRows = 5;
-        static readonly ushort DefaultQuadCols = 5;
+        private static readonly ushort DefaultQuadRows = 5;
+        private static readonly ushort DefaultQuadCols = 5;
         public TerrainQuadData QuadData { get; set; }
 
-        private readonly int noisePowerStart = 2;
-        private readonly int noisePowerLength = 2;
+        private readonly int NoisePowerStart = 2;
+        private readonly int NoisePowerLength = 2;
         public TerrainNoise NoisePower
         {
-            get => (TerrainNoise)Kdop.Flags.GetBitString(noisePowerStart, noisePowerLength);
-            set => Kdop.Flags.SetBitString(noisePowerStart, noisePowerLength, (uint)value);
+            get => (TerrainNoise)Kdop.Flags.GetBitString(NoisePowerStart, NoisePowerLength);
+            set => Kdop.Flags.SetBitString(NoisePowerStart, NoisePowerLength, (uint)value);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[8] = value;
         }
 
-        public BezierPatch() : base() 
+        public BezierPatch() : base()
         {
             Vegetation = (new Vegetation[3]).Select
                 (h => new Vegetation()).ToArray();
@@ -151,8 +151,7 @@ namespace TruckLib.ScsMap
         internal BezierPatch(bool initFields) : base(initFields)
         {
             if (initFields) Init();
-            Vegetation = (new Vegetation[3]).Select
-                (h => new Vegetation()).ToArray();
+            Vegetation = (new Vegetation[3]).Select(h => new Vegetation()).ToArray();
         }
 
         protected override void Init()
@@ -174,7 +173,7 @@ namespace TruckLib.ScsMap
             VegetationSpheres = new List<VegetationSphere>();
             QuadData = new TerrainQuadData();
         }
-         
+
         public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints)
         {
             var bezier = Add<BezierPatch>(map, position);
@@ -182,7 +181,7 @@ namespace TruckLib.ScsMap
             bezier.ControlPoints = controlPoints;
             bezier.QuadData.Cols = DefaultQuadCols;
             bezier.QuadData.Rows = DefaultQuadRows;
-            for(int i = 0; i < DefaultQuadCols * DefaultQuadCols; i++)
+            for (int i = 0; i < DefaultQuadCols * DefaultQuadCols; i++)
             {
                 bezier.QuadData.Quads.Add(new TerrainQuad());
             }
@@ -197,12 +196,12 @@ namespace TruckLib.ScsMap
             var thirdWidth = width / 3f;
             var thirdHeight = height / 3f;
 
-            for(int i = 0; i < ControlPointCols; i++)
+            for (int i = 0; i < ControlPointCols; i++)
             {
                 for (int j = 0; j < ControlPointRows; j++)
                 {
-                    var xPos = -width/2 + j * thirdWidth;
-                    var zPos = -height/2 + i * thirdHeight;
+                    var xPos = -width / 2 + j * thirdWidth;
+                    var zPos = -height / 2 + i * thirdHeight;
                     points[i, j] = new Vector3(xPos, 0, zPos);
                 }
             }

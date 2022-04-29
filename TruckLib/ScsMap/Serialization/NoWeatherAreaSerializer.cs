@@ -16,6 +16,7 @@ namespace TruckLib.ScsMap.Serialization
 
             nwa.Width = r.ReadSingle() * sizeFactor;
             nwa.Height = r.ReadSingle() * sizeFactor;
+            nwa.FogBehavior = (FogMask)r.ReadInt32();
             nwa.Node = new UnresolvedNode(r.ReadUInt64());
 
             return nwa;
@@ -27,6 +28,7 @@ namespace TruckLib.ScsMap.Serialization
             WriteKdopItem(w, nwa);
             w.Write(nwa.Width / sizeFactor);
             w.Write(nwa.Height / sizeFactor);
+            w.Write((int)nwa.FogBehavior);
             w.Write(nwa.Node.Uid);
         }
     }

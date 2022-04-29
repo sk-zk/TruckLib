@@ -23,6 +23,8 @@ namespace TruckLib.ScsMap
 
         public float Height { get; set; }
 
+        public FogMask FogBehavior { get; set; }
+
         public NoWeatherArea() : base() { }
 
         internal NoWeatherArea(bool initFields) : base(initFields)

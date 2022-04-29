@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if a viewpoint is only displayed in the UI map once discovered.
+        /// Gets or sets if a viewpoint is only visible in the UI map once discovered.
         /// </summary>
         public bool SecretViewpoint
         {

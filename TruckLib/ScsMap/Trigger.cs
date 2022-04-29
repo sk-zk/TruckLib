@@ -80,6 +80,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[17] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if this trigger's icon, if one exists, is only visible in the UI map once discovered.
+        /// </summary>
+        public bool Secret
+        {
+            get => Kdop.Flags[18];
+            set => Kdop.Flags[18] = value;
+        }
+
         public Trigger() : base() { }
 
         internal Trigger(bool initFields) : base(initFields)

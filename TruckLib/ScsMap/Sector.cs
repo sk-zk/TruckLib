@@ -228,6 +228,9 @@ namespace TruckLib.ScsMap
 
         private void ReadLayer(string path)
         {
+            if (!File.Exists(path))
+                return;
+
             using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
 
             var header = new Header();
@@ -426,17 +429,18 @@ namespace TruckLib.ScsMap
         /// <param name="path">The path of the output file.</param>
         private void WriteLayer(string path)
         {
+            var itemsWithSetLayers = MapItems.Where(x => x.Value.Layer != MapItem.DefaultLayer);
+            if (!itemsWithSetLayers.Any())
+                return;
+
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
 
             header.Serialize(w);
-            foreach (var item in MapItems)
+            foreach (var item in itemsWithSetLayers)
             {
-                if (item.Value.Layer != 0)
-                {
-                    w.Write(item.Value.Uid);
-                    w.Write(item.Value.Layer);
-                }
+                w.Write(item.Value.Uid);
+                w.Write(item.Value.Layer);
             }
             w.Write(EofMarker);
         }

@@ -307,10 +307,11 @@ namespace TruckLib.ScsMap
 
         private void ReadVisArea(BinaryReader r)
         {
+            // I think we can safely ignore this when deserializing
             var visAreaChildCount = r.ReadUInt32();
-            if (visAreaChildCount > 0)
+            for (int i = 0; i < visAreaChildCount; i++)
             {
-                throw new NotImplementedException();
+                r.ReadUInt64();
             }
         }
 
@@ -318,12 +319,12 @@ namespace TruckLib.ScsMap
         /// Saves the sector as binary files to the specified directory.
         /// </summary>
         /// <param name="sectorDirectory">The sector directory.</param>
-        public void Save(string sectorDirectory, List<INode> sectorNodes)
+        public void Save(string sectorDirectory, List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
         {
-            WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes);
+            WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes, visAreaShowObjectsChildren);
             WriteData(GetFilename(DataExtension), MapItems);
-            WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes);
-            WriteSnd(GetFilename(SndExtension), MapItems, sectorNodes);
+            WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes, visAreaShowObjectsChildren);
+            WriteSnd(GetFilename(SndExtension), MapItems, sectorNodes, visAreaShowObjectsChildren);
             WriteDesc(GetFilename(DescExtension));
             WriteLayer(GetFilename(LayerExtension));
 
@@ -338,14 +339,14 @@ namespace TruckLib.ScsMap
         /// <param name="allItems">A list of all items in the sector.</param>
         /// <param name="sectorNodes">A list of all nodes in the sector.</param>
         private void WriteBase(string path, Dictionary<ulong, MapItem> allItems,
-            List<INode> sectorNodes)
+            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Base, w);
             WriteNodes(w, ItemFile.Base, sectorNodes);
-            WriteVisArea(w);
+            WriteVisAreaChildren(w, ItemFile.Base, visAreaShowObjectsChildren);
         }
 
         /// <summary>
@@ -355,14 +356,14 @@ namespace TruckLib.ScsMap
         /// <param name="allItems">A list of all items in the sector.</param>
         /// <param name="sectorNodes">A list of all nodes in the sector.</param>
         private void WriteAux(string path, Dictionary<ulong, MapItem> allItems,
-            List<INode> sectorNodes)
+            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Aux, w);
             WriteNodes(w, ItemFile.Aux, sectorNodes);
-            WriteVisArea(w);
+            WriteVisAreaChildren(w, ItemFile.Aux, visAreaShowObjectsChildren);
         }
 
         /// <summary>
@@ -372,14 +373,14 @@ namespace TruckLib.ScsMap
         /// <param name="allItems">A list of all items in the sector.</param>
         /// <param name="sectorNodes">A list of all nodes in the sector.</param>
         private void WriteSnd(string path, Dictionary<ulong, MapItem> allItems,
-            List<INode> sectorNodes)
+            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
             WriteItems(allItems, ItemFile.Snd, w);
             WriteNodes(w, ItemFile.Snd, sectorNodes);
-            WriteVisArea(w);
+            WriteVisAreaChildren(w, ItemFile.Snd, visAreaShowObjectsChildren);
         }
 
         /// <summary>
@@ -489,15 +490,30 @@ namespace TruckLib.ScsMap
             foreach (var item in items)
             {
                 w.Write((int)item.Value.ItemType);
-                var serializer = MapItemSerializerFactory
-                    .Get(item.Value.ItemType);
+                var serializer = MapItemSerializerFactory.Get(item.Value.ItemType);
                 serializer.Serialize(w, item.Value);
             }
         }
 
-        private void WriteVisArea(BinaryWriter w)
+        private void WriteVisAreaChildren(BinaryWriter w, ItemFile file, HashSet<ulong> visAreaShowObjectsChildren)
         {
-            w.Write(0);
+            if (visAreaShowObjectsChildren.Count == 0)
+                return;
+
+            var uids = new List<ulong>();
+            foreach (var childUid in visAreaShowObjectsChildren)
+            {
+                if (MapItems.TryGetValue(childUid, out var child) && child.ItemFile == file)
+                {
+                    uids.Add(childUid);
+                }
+            }
+
+            w.Write(uids.Count);
+            foreach (var childUid in uids)
+            {
+                w.Write(childUid);
+            }
         }
 
         internal void GetSectorCoordsFromBasePath(string basePath)

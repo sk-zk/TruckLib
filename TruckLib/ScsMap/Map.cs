@@ -282,7 +282,7 @@ namespace TruckLib.ScsMap
            
             // remove item from its nodes, 
             // and delete them if they're orphaned now
-            foreach(var node in item.GetItemNodes())
+            foreach (var node in item.GetItemNodes())
             {
                 if (node.ForwardItem == item)
                 {
@@ -467,27 +467,49 @@ namespace TruckLib.ScsMap
                     .ForEach(f => f.Delete());
             }
 
-            var sectorNodes = new Dictionary<Sector, List<INode>>();
-            foreach (var sectorKvp in Sectors)
-            {
-                sectorNodes.Add(sectorKvp.Value, new List<INode>());
-            }
-            foreach (var nodeKvp in Nodes)
-            {
-                foreach (var sector in nodeKvp.Value.Sectors)
-                {
-                    sectorNodes[sector].Add(nodeKvp.Value);
-                }
-            }
+            var sectorNodes = GetSectorNodes();
+            var visAreaShowObjectsChildren = GetVisAreaShowObjectsChildUids();
 
             foreach (var sectorKvp in Sectors)
             {
                 Trace.WriteLine($"Writing sector {sectorKvp.Value}");
-                sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value]);
+                sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value], visAreaShowObjectsChildren);
             }
 
             var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");
             SaveMbd(mbdPath);
+
+            Dictionary<Sector, List<INode>> GetSectorNodes()
+            {
+                var sectorNodes = new Dictionary<Sector, List<INode>>();
+                foreach (var sectorKvp in Sectors)
+                {
+                    sectorNodes.Add(sectorKvp.Value, new List<INode>());
+                }
+                foreach (var nodeKvp in Nodes)
+                {
+                    foreach (var sector in nodeKvp.Value.Sectors)
+                    {
+                        sectorNodes[sector].Add(nodeKvp.Value);
+                    }
+                }
+
+                return sectorNodes;
+            }
+
+            HashSet<ulong> GetVisAreaShowObjectsChildUids()
+            {
+                var children = new HashSet<ulong>();
+                foreach (var visArea in GetAllItems<VisibilityArea>()
+                    .Where(x => x.Value.Behavior == VisibilityAreaBehavior.ShowObjects))
+                {
+                    foreach (MapItem child in visArea.Value.Children)
+                    {
+                        children.Add(child.Uid);
+                    }
+                }
+                return children;
+            }
         }
 
         /// <summary>

@@ -117,6 +117,13 @@ namespace TruckLib.HashFs
         /// <param name="outputPath">The output path.</param>
         public void ExtractToFile(Entry entry, string outputPath)
         {
+            if (entry.Size == 0)
+            {
+                // create an empty file
+                File.Create(outputPath).Dispose();
+                return;
+            }
+
             reader.BaseStream.Position = (long)entry.Offset;
             using var fileStream = new FileStream(outputPath, FileMode.Create);
             if (entry.IsCompressed)

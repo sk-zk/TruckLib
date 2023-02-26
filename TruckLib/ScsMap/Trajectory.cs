@@ -66,6 +66,18 @@ namespace TruckLib.ScsMap
             set => NavigationFlags[14] = value;
         }
 
+        public Nibble PriorityModifier
+        {
+            get => (Nibble)NavigationFlags.GetBitString(8, 4);
+            set => NavigationFlags.SetBitString(8, 4, (uint)value);
+        }
+
+        public BlinkerType BlinkerType
+        {
+            get => (BlinkerType)NavigationFlags.GetBitString(4, 3);
+            set => NavigationFlags.SetBitString(4, 3, (uint)value);
+        }
+
         public Trajectory() : base() { }
 
         internal Trajectory(bool initFields) : base(initFields)

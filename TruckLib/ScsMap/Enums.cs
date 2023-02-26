@@ -286,4 +286,12 @@ namespace TruckLib.ScsMap
         OpenArea = 4,
     }
 
+    public enum BlinkerType
+    {
+        NoBlinker = 0,
+        NoBlinkerForced = 1,
+        RightBlinker = 2,
+        LeftBlinker = 4,
+    }
+
 }

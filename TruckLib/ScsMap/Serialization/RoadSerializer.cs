@@ -103,6 +103,9 @@ namespace TruckLib.ScsMap.Serialization
 
             road.RoadType = r.ReadToken();
 
+            road.Right.LanesVariant = r.ReadToken();
+            road.Left.LanesVariant = r.ReadToken();
+
             road.Right.Variant = r.ReadToken();
             road.Left.Variant = r.ReadToken();
 
@@ -217,6 +220,9 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(rflag4);
 
             w.Write(road.RoadType);
+
+            w.Write(road.Right.LanesVariant);
+            w.Write(road.Left.LanesVariant);
 
             w.Write(road.Right.Variant);
             w.Write(road.Left.Variant);

@@ -15,6 +15,8 @@ namespace TruckLib.ScsMap
 
         public Token Look { get; set; }
 
+        public Token LanesVariant { get; set; }
+
         public Token RightEdge { get; set; }
 
         public Token LeftEdge { get; set; }

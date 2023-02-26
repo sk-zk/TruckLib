@@ -41,13 +41,13 @@ namespace TruckLib.ScsMap
 
         public FarModel() : base()
         {
-            Models = new FarModelData[4].Select(h => new FarModelData()).ToArray();
+            Models = new FarModelData[5].Select(h => new FarModelData()).ToArray();
         }
 
         internal FarModel(bool initFields) : base(initFields)
         {
             if (initFields) Init();
-            Models = new FarModelData[4].Select(h => new FarModelData()).ToArray();
+            Models = new FarModelData[5].Select(h => new FarModelData()).ToArray();
         }
 
         protected override void Init()

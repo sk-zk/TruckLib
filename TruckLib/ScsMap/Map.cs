@@ -149,7 +149,7 @@ namespace TruckLib.ScsMap
         /// If that sector does not yet exist, it will be created automatically.
         /// </summary>
         /// <param name="position">The position of the node.</param>
-        /// <param name="isRed">Whether or not the node is red.</param>
+        /// <param name="isRed">Whether the node is red.</param>
         /// <returns>The new node.</returns>
         public Node AddNode(Vector3 position, bool isRed)
         {

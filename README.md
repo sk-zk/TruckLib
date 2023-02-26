@@ -9,7 +9,7 @@ The currently supported map version is 893 (game version 1.44).
 
 ## What's all this then
 **TruckLib.ScsMap**:  
-The main namespace of the library.
+The main namespace of the library: classes for de/serializing and working with the games' map format.
 
 **TruckLib.Sii**:  
 Mostly complete de/serializer for .sii and .mat files.

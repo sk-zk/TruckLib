@@ -14,6 +14,7 @@ namespace TruckLib.ScsMap
     /// <para>In the editor, trying to open the properties dialog for this item
     /// will cause it to crash.</para>
     /// </summary>
+    [Obsolete]
     public class Hinge : SingleNodeItem
     {
         public override ItemType ItemType => ItemType.Hinge;

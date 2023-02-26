@@ -25,9 +25,11 @@ namespace TruckLib.ScsMap
         /// rather than flags relating to the bounding box.
         /// </summary>
         internal FlagField Flags;
-
         private const ushort MinDistance = 10;
-        private const ushort MaxDistance = 1500;
+        // The editor only lets you go up to 1500, but there are a few items in europe.mbd that exceed it.
+        // Not sure if this is intentional and the game actually renders it like that, or if someone somehow
+        // set those values by accident and the game caps them to 1500 again when loaded
+        private const ushort MaxDistance = 1700;
         private ushort viewDistance = ViewDistanceClose;
         /// <summary>
         /// View distance of an item in meters.

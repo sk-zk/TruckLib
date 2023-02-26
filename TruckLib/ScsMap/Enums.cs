@@ -211,7 +211,8 @@ namespace TruckLib.ScsMap
     public enum CutsceneType
     {
         Viewpoint = 0,
-        Event = 1
+        Event = 1,
+        MapScene = 2,
     }
 
     public enum ModelLod

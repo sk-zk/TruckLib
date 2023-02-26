@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap
         public List<CutsceneAction> Actions { get; set; }
 
         private const int typeStart = 0;
-        private const int typeLength = 1;
+        private const int typeLength = 2;
         public CutsceneType Type
         {
             get => (CutsceneType)Kdop.Flags.GetBitString(typeStart, typeLength);

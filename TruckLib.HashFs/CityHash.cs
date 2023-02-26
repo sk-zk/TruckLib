@@ -38,7 +38,7 @@
 
 using System;
 
-namespace TruckLib
+namespace TruckLib.HashFs
 {
     public static class CityHash
     {

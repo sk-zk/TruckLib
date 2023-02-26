@@ -15,7 +15,7 @@ The main namespace of the library.
 Mostly complete de/serializer for .sii and .mat files.
 
 **TruckLib.Model**:  
-Some code for working with binary model files (.pm\*). Very basic and hasn't really been maintained lately.
+Some code for working with binary model files (.pm\*). Very basic and hasn't been maintained in ages.
 
 Also contains a (binary) .tobj de/serializer.
 

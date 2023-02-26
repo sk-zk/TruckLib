@@ -28,54 +28,52 @@ namespace TruckLib.ScsMap
 
         public List<Token> Tags { get; set; }
 
-        internal FlagField NavigationFlags;
-
         public bool ForceThisWay
         {
-            get => NavigationFlags[0];
-            set => NavigationFlags[0] = value;
+            get => Kdop.Flags[0];
+            set => Kdop.Flags[0] = value;
         }
 
         public bool LowProbability
         {
-            get => NavigationFlags[1];
-            set => NavigationFlags[1] = value;
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
         }
 
         public bool LimitDisplacement
         {
-            get => NavigationFlags[3];
-            set => NavigationFlags[3] = value;
+            get => Kdop.Flags[3];
+            set => Kdop.Flags[3] = value;
         }
 
         public bool Public
         {
-            get => NavigationFlags[12];
-            set => NavigationFlags[12] = value;
+            get => Kdop.Flags[12];
+            set => Kdop.Flags[12] = value;
         }
 
         public bool ParkingSpot
         {
-            get => NavigationFlags[13];
-            set => NavigationFlags[13] = value;
+            get => Kdop.Flags[13];
+            set => Kdop.Flags[13] = value;
         }
 
         public bool OneWayBonus
         {
-            get => NavigationFlags[14];
-            set => NavigationFlags[14] = value;
+            get => Kdop.Flags[14];
+            set => Kdop.Flags[14] = value;
         }
 
         public Nibble PriorityModifier
         {
-            get => (Nibble)NavigationFlags.GetBitString(8, 4);
-            set => NavigationFlags.SetBitString(8, 4, (uint)value);
+            get => (Nibble)Kdop.Flags.GetBitString(8, 4);
+            set => Kdop.Flags.SetBitString(8, 4, (uint)value);
         }
 
         public BlinkerType BlinkerType
         {
-            get => (BlinkerType)NavigationFlags.GetBitString(4, 3);
-            set => NavigationFlags.SetBitString(4, 3, (uint)value);
+            get => (BlinkerType)Kdop.Flags.GetBitString(4, 3);
+            set => Kdop.Flags.SetBitString(4, 3, (uint)value);
         }
 
         public Trajectory() : base() { }
@@ -92,7 +90,6 @@ namespace TruckLib.ScsMap
             Rules = new List<TrajectoryRule>();
             Checkpoints = new List<TrajectoryCheckpoint>();
             Tags = new List<Token>();
-            NavigationFlags = new FlagField();
         }
     }
 }

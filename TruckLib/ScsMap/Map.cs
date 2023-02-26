@@ -508,7 +508,7 @@ namespace TruckLib.ScsMap
                 foreach (var visArea in GetAllItems<VisibilityArea>()
                     .Where(x => x.Value.Behavior == VisibilityAreaBehavior.ShowObjects))
                 {
-                    foreach (MapItem child in visArea.Value.Children)
+                    foreach (IMapItem child in visArea.Value.Children)
                     {
                         children.Add(child.Uid);
                     }

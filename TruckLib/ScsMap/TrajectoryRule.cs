@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap
             Rule = r.ReadToken();
 
             var paramCount = r.ReadUInt32();
-            for (var i = 0; i < paramCount; i++)
+            for (int i = 0; i < paramCount; i++)
             {
                 RuleParameters.Add(r.ReadSingle());
             }
@@ -35,7 +35,7 @@ namespace TruckLib.ScsMap
             w.Write(Rule);
 
             w.Write(RuleParameters.Count);
-            foreach(var param in RuleParameters)
+            foreach (var param in RuleParameters)
             {
                 w.Write(param);
             }

@@ -152,6 +152,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[15] = !value;
         }
 
+        /// <summary>
+        /// Gets or sets if the terrain part of the model is rendered.
+        /// </summary>
+        public bool ShowTerrain
+        {
+            get => !Kdop.Flags[17];
+            set => Kdop.Flags[17] = !value;
+        }
+
         public Model() : base() { }
 
         internal Model(bool initFields) : base(initFields)

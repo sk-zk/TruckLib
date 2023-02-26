@@ -62,6 +62,21 @@ namespace TruckLib
         }
 
         /// <summary>
+        /// Checks if a number is within the specified range. 
+        /// Returns the number if it is; throws ArgumentException if it isn't.
+        /// </summary>
+        /// <param name="value">The number to check.</param>
+        /// <param name="min">The lower limit.</param>
+        /// <param name="max">The upper limit.</param>
+        /// <returns>The number if it is within range.</returns>
+        public static byte SetIfInRange(byte value, byte min, byte max)
+        {
+            if (value < min || value > max)
+                throw new ArgumentException($"Value must be between {min} and {max}.");
+            return value;
+        }
+
+        /// <summary>
         /// Sets array[x,y] to array[y,x] and vice versa.
         /// </summary>
         /// <param name="arr"></param>

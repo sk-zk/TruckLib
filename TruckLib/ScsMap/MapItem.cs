@@ -65,6 +65,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         protected abstract ushort DefaultViewDistance { get; }
 
+        public const int DefaultLayer = 0;
+        public byte layer = DefaultLayer;
+        public byte Layer {
+            get => layer;
+            set { layer = Utils.SetIfInRange(value, (byte)0, (byte)8); }
+        }
+
         /// <summary>
         /// Creates a new item and generates a UID for it.
         /// </summary>
@@ -78,6 +85,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the item's properties to its default values (which are, for the most part, derived from the editor).
+        /// </summary>
         protected virtual void Init()
         {
             Kdop = new KdopItem(Utils.GenerateUuid());

@@ -72,38 +72,38 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
-        public bool WaterReflection = false;
+        public bool WaterReflection { get; set; } = false;
 
         /// <summary>
         /// Gets or sets  if this item will render behind a cut plane.
         /// </summary>
-        public bool IgnoreCutPlanes = false;
+        public bool IgnoreCutPlanes { get; set; } = false;
 
         /// <summary>
         /// Gets or sets  if only flat textures are used as vegetation.
         /// </summary>
-        public bool LowPolyVegetation = false;
+        public bool LowPolyVegetation { get; set; } = false;
 
         [Obsolete]
-        public bool StretchTerrain = false;
+        public bool StretchTerrain { get; set; } = false;
 
         /// <summary>
         /// Gets or sets  if the terrain has invisible walls on both sides of it.
         /// </summary>
-        public bool Boundary = true;
+        public bool Boundary { get; set; } = true;
 
         /// <summary>
         /// Gets or sets if collision is enabled.
         /// </summary>
-        public bool Collision = true;
+        public bool Collision { get; set; } = true;
 
-        public bool TerrainShadows = true;
+        public bool TerrainShadows { get; set; } = true;
 
         /// <summary>
         /// Gets or sets if detail vegetation transitions smoothly in places
         /// where it is affected by brushes.
         /// </summary>
-        public bool SmoothDetailVegetation = false;
+        public bool SmoothDetailVegetation { get; set; } = false;
 
         public Terrain() : base() { }
 

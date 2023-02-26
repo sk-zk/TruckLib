@@ -225,6 +225,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[2] = !value;
         }
 
+        /// <summary>
+        /// Gets or sets if this prefab is only visible in the UI map once discovered.
+        /// </summary>
         public bool Secret
         {
             get => Kdop.Flags[5];

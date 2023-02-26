@@ -29,12 +29,14 @@ namespace TruckLib.ScsMap
 
         public Token Look { get; set; }
 
+        public Token Variant { get; set; }
+
         public float Speed { get; set; }
 
         /// <summary>
         /// The duration in seconds a model will pause at the end of the path, in seconds.
         /// </summary>
-        public float DelayAtEnd { get; set; }
+        public float EndDelay { get; set; }
 
         /// <summary>
         /// Width of the path.

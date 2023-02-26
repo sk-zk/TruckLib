@@ -38,6 +38,18 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[3] = !value;
         }
 
+        public bool LowPolyOnly
+        {
+            get => Kdop.Flags[4];
+            set => Kdop.Flags[4] = value;
+        }
+
+        public bool Physics
+        {
+            get => !Kdop.Flags[5];
+            set => Kdop.Flags[5] = !value;
+        }
+
         public Hookup() : base() { }
 
         internal Hookup(bool initFields) : base(initFields)

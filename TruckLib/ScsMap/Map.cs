@@ -149,7 +149,7 @@ namespace TruckLib.ScsMap
         /// If that sector does not yet exist, it will be created automatically.
         /// </summary>
         /// <param name="position">The position of the node.</param>
-        /// <param name="isRed">Whether or not the node is red.</param>
+        /// <param name="isRed">Whether the node is red.</param>
         /// <returns>The new node.</returns>
         public Node AddNode(Vector3 position, bool isRed)
         {
@@ -240,8 +240,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Checks if the map contains an item with the given UID.
         /// </summary>
-        /// <param name="uid"></param>
-        /// <returns></returns>
+        /// <param name="uid">The UID to search for.</param>
+        /// <returns>Whether an item with this UID exists.</returns>
         public bool HasItem(ulong uid)
         {
             foreach (var sectorKvp in Sectors)
@@ -255,7 +255,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Returns the item with the given UID.
         /// </summary>
-        /// <param name="uid"></param>
+        /// <param name="uid">The UID to search for.</param>
         /// <returns>Returns the item, or null if it doesn't exist.</returns>
         public MapItem GetItem(ulong uid)
         {
@@ -271,7 +271,7 @@ namespace TruckLib.ScsMap
         /// Deletes an item. Nodes that are only used by this item 
         /// will also be deleted.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">The item to delete.</param>
         public void Delete(MapItem item)
         {
             // delete item from all sectors
@@ -282,7 +282,7 @@ namespace TruckLib.ScsMap
            
             // remove item from its nodes, 
             // and delete them if they're orphaned now
-            foreach(var node in item.GetItemNodes())
+            foreach (var node in item.GetItemNodes())
             {
                 if (node.ForwardItem == item)
                 {
@@ -314,7 +314,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Deletes a node and the items attached to it.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="node">The node to delete.</param>
         public void Delete(INode node)
         {
             Nodes.Remove(node.Uid);
@@ -332,6 +332,11 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Imports the contents of a Selection file into this map.
+        /// </summary>
+        /// <param name="selection">The Selection to import.</param>
+        /// <param name="position">The point relative to which the items will be inserted.</param>
         public void Import(Selection selection, Vector3 position)
         {
             // deep cloning everything the lazy way
@@ -455,8 +460,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Saves the map in binary format.
         /// </summary>
-        /// <param name="mapDirectory">The directory the map will be saved in.</param>
-        /// <param name="cleanDir">If set to true, the sectors folder will be emptied before saving the map.</param>
+        /// <param name="mapDirectory">The directory to save the map to.</param>
+        /// <param name="cleanDir">If true, the sectors folder will be emptied before saving the map.</param>
         public void Save(string mapDirectory, bool cleanDir = true)
         {
             var sectorDirectory = Path.Combine(mapDirectory, Name);
@@ -467,27 +472,49 @@ namespace TruckLib.ScsMap
                     .ForEach(f => f.Delete());
             }
 
-            var sectorNodes = new Dictionary<Sector, List<INode>>();
-            foreach (var sectorKvp in Sectors)
-            {
-                sectorNodes.Add(sectorKvp.Value, new List<INode>());
-            }
-            foreach (var nodeKvp in Nodes)
-            {
-                foreach (var sector in nodeKvp.Value.Sectors)
-                {
-                    sectorNodes[sector].Add(nodeKvp.Value);
-                }
-            }
+            var sectorNodes = GetSectorNodes();
+            var visAreaShowObjectsChildren = GetVisAreaShowObjectsChildUids();
 
             foreach (var sectorKvp in Sectors)
             {
                 Trace.WriteLine($"Writing sector {sectorKvp.Value}");
-                sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value]);
+                sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value], visAreaShowObjectsChildren);
             }
 
             var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");
             SaveMbd(mbdPath);
+
+            Dictionary<Sector, List<INode>> GetSectorNodes()
+            {
+                var sectorNodes = new Dictionary<Sector, List<INode>>();
+                foreach (var sectorKvp in Sectors)
+                {
+                    sectorNodes.Add(sectorKvp.Value, new List<INode>());
+                }
+                foreach (var nodeKvp in Nodes)
+                {
+                    foreach (var sector in nodeKvp.Value.Sectors)
+                    {
+                        sectorNodes[sector].Add(nodeKvp.Value);
+                    }
+                }
+
+                return sectorNodes;
+            }
+
+            HashSet<ulong> GetVisAreaShowObjectsChildUids()
+            {
+                var children = new HashSet<ulong>();
+                foreach (var visArea in GetAllItems<VisibilityArea>()
+                    .Where(x => x.Value.Behavior == VisibilityAreaBehavior.ShowObjects))
+                {
+                    foreach (IMapItem child in visArea.Value.Children)
+                    {
+                        children.Add(child.Uid);
+                    }
+                }
+                return children;
+            }
         }
 
         /// <summary>

@@ -49,6 +49,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if this area is only visible in the UI map once discovered.
+        /// </summary>
+        public bool Secret
+        {
+            get => Kdop.Flags[4];
+            set => Kdop.Flags[4] = value;
+        }
+
         public MapArea() : base() { }
 
         internal MapArea(bool initFields) : base(initFields)

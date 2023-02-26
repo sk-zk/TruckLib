@@ -38,6 +38,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags.SetByte(2, (byte)value);
         }
 
+        /// <summary>
+        /// Gets or sets if this overlay is only visible in the UI map once discovered.
+        /// </summary>
+        public bool Secret
+        {
+            get => Kdop.Flags[19];
+            set => Kdop.Flags[19] = value;
+        }
+
         public MapOverlay() : base() { }
 
         internal MapOverlay(bool initFields) : base(initFields)

@@ -100,69 +100,72 @@ namespace TruckLib.ScsMap
         /// </para>
         /// </summary>
         [Obsolete]
-        public bool IsCityRoad = false;
+        public bool IsCityRoad { get; set; } = false;
 
-        public byte DlcGuard;
+        public byte DlcGuard { get; set; }
 
         /// <summary>
         /// Gets or sets if the satnav should avoid this road segment.
         /// </summary>
-        public bool GpsAvoid = false;
+        public bool GpsAvoid { get; set; } = false;
 
         /// <summary>
         /// Gets or sets if this road is displayed in the UI map.
         /// </summary>
-        public bool ShowInUiMap = true;
+        public bool ShowInUiMap { get; set; } = true;
 
         /// <summary>
         /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
-        public bool IgnoreCutPlanes = false;
+        public bool IgnoreCutPlanes { get; set; } = false;
 
         /// <summary>
         /// Gets or sets if the item uses left hand traffic.
         /// </summary>
-        public bool LeftHandTraffic = false;
+        public bool LeftHandTraffic { get; set; } = false;
 
         /// <summary>
         /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
-        public bool LowPolyVegetation = false;
+        public bool LowPolyVegetation { get; set; } = false;
 
         /// <summary>
         /// Gets or sets if AI traffic can use this road.
         /// <para>If not, AI vehicles will choose a different route.
         /// If there isn't one, they will despawn instead.</para>
         /// </summary>
-        public bool AiVehicles = true;
+        public bool AiVehicles { get; set; } = true;
 
         /// <summary>
         /// Gets or sets if the road has invisible walls on both sides of it.
         /// </summary>
-        public bool Boundary = true;
+        public bool Boundary { get; set; } = true;
 
         /// <summary>
         /// Gets or sets if collision is enabled.
         /// </summary>
-        public bool Collision = true;
+        public bool Collision { get; set; } = true;
 
-        public bool TerrainShadows = true;
+        public bool TerrainShadows { get; set; } = true;
 
         /// <summary>
         /// Gets or sets if detail vegetation transitions smoothly in places
         /// where it is affected by brushes.
         /// </summary>
-        public bool SmoothDetailVegetation = true;
+        public bool SmoothDetailVegetation { get; set; } = true;
 
         [Obsolete]
-        public bool StretchTerrain = false;
+        public bool StretchTerrain { get; set; } = false;
 
         /// <summary>
         /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
-        public bool WaterReflection = false;
+        public bool WaterReflection { get; set; } = false;
 
-        public bool Secret = false;
+        /// <summary>
+        /// Gets or sets if this road is only visible in the UI map once discovered.
+        /// </summary>
+        public bool Secret { get; set; } = false;
 
         public Road() : base() { }
 

@@ -274,4 +274,24 @@ namespace TruckLib.ScsMap
         Linear = 1
     }
 
+    /// <summary>
+    /// Fog behavior in a No Weather Area.
+    /// </summary>
+    public enum FogMask
+    {
+        None = 0,
+        Indoor = 1,
+        Tunnel = 2,
+        Overpass = 3,
+        OpenArea = 4,
+    }
+
+    public enum BlinkerType
+    {
+        NoBlinker = 0,
+        NoBlinkerForced = 1,
+        RightBlinker = 2,
+        LeftBlinker = 4,
+    }
+
 }

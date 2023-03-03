@@ -118,7 +118,11 @@ namespace TruckLib.ScsMap
         Percent80to120 = 0,
         Percent60to100 = 1,
         Percent50to80 = 2,
-        Percent100to140 = 3
+        Percent100to140 = 3,
+        Percent35to50 = 4,
+        Percent100 = 5,
+        Percent80 = 6,
+        Percent60 = 7,
     }
 
     /// <summary>

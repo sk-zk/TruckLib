@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("TruckLibTests")]
 namespace TruckLib
 {
     internal static class Utils
@@ -15,6 +17,8 @@ namespace TruckLib
         /// <returns>An 8 byte UUID.</returns>
         public static ulong GenerateUuid() =>
             BitConverter.ToUInt64(Guid.NewGuid().ToByteArray(), 0);
+
+        // TODO Change these to use generic math at some point
 
         /// <summary>
         /// Checks if a number is within the specified range. 
@@ -80,9 +84,11 @@ namespace TruckLib
         /// Sets array[x,y] to array[y,x] and vice versa.
         /// </summary>
         /// <param name="arr"></param>
-        public static void SwitchXY(object[,] arr)
+        public static T[,] SwitchXY<T>(T[,] input)
         {
-            for (int y = 0; y <= arr.GetUpperBound(0); y++)
+            T[,] arr = Copy2dArray(input);
+
+            for (int y = 0; y <= arr.GetLength(0) - 1; y++)
             {
                 for (int x = 0; x < y; x++)
                 {
@@ -91,36 +97,38 @@ namespace TruckLib
                     arr.SetValue(temp, y, x);
                 }
             }
+
+            return arr;
         }
 
-        public static Vector3[,] MirrorX(Vector3[,] arr)
+        public static T[,] MirrorX<T>(T[,] input)
         {
-            Vector3[,] newArr = Copy2dArray(arr);
+            T[,] arr = Copy2dArray(input);
 
-            var upperBound0 = newArr.GetUpperBound(1) + 1;
-            var halfUpperBound0 = upperBound0 / 2;
-            for (int y = 0; y <= newArr.GetUpperBound(0); y++)
+            var length1 = arr.GetLength(1);
+            var halfLength1 = length1 / 2;
+            for (int y = 0; y <= arr.GetLength(0) - 1; y++)
             {
-                for (int x = 0; x < halfUpperBound0; x++)
+                for (int x = 0; x < halfLength1; x++)
                 {
-                    (newArr[x, y], newArr[upperBound0 - 1 - x, y])
-                        = (newArr[upperBound0 - 1 - x, y], newArr[x, y]);
+                    (arr[x, y], arr[length1 - 1 - x, y])
+                        = (arr[length1 - 1 - x, y], arr[x, y]);
                 }
             }
 
-            return newArr;
+            return arr;
         }
 
         /// <summary>
         /// Creates a copy of a 2D array.
         /// </summary>
-        /// <param name="arr">The array to copy.</param>
+        /// <param name="src">The array to copy.</param>
         /// <returns>A copy of the array.</returns>
-        public static Vector3[,] Copy2dArray(Vector3[,] arr)
+        public static T[,] Copy2dArray<T>(T[,] src)
         {
-            Vector3[,] newArr = new Vector3[arr.GetUpperBound(0) + 1, arr.GetUpperBound(1) + 1];
-            Array.Copy(arr, newArr, (arr.GetUpperBound(0) + 1) * (arr.GetUpperBound(1) + 1));
-            return newArr;
+            T[,] copy = new T[src.GetLength(0), src.GetLength(1)];
+            Array.Copy(src, copy, (src.GetLength(0)) * (src.GetLength(1)));
+            return copy;
         }
     }
 }

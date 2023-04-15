@@ -43,7 +43,15 @@ namespace TruckLib.ScsMap.Serialization
             fm.Node = new UnresolvedNode(r.ReadUInt64());
             for (int i = 1; i < nodeCount; i++)
             {
-                fm.Models[i - 1].Node = new UnresolvedNode(r.ReadUInt64());
+                var uid = r.ReadUInt64();
+                // There are two Far Models in the 1.46 map which have n models
+                // but n+1 model nodes. Which of them is the bugged one that
+                // should be dropped? I don't know, but I hope it's the last one
+                // becasue that's what I'm doing.
+                if (i <= fm.Models.Count)
+                {
+                    fm.Models[i - 1].Node = new UnresolvedNode(uid);
+                }
             }
 
             return fm;

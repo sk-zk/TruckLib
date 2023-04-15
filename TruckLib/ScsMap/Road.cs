@@ -77,6 +77,8 @@ namespace TruckLib.ScsMap
 
         public ushort CenterMaterialRotation { get; set; }
 
+        public bool CenterDetailVegetation { get; set; }
+
         /// <summary>
         /// The seed which determines the placement of vegetation models.
         /// </summary>
@@ -183,6 +185,7 @@ namespace TruckLib.ScsMap
             CenterMaterial = "0";
             CenterMaterialColor = Color.FromArgb(0xffffff);
             CenterVegetation = new CenterVegetation();
+            CenterDetailVegetation = true;
             VegetationSpheres = new List<VegetationSphere>();
             // set to HighPoly by default since you probably aren't creating
             // non-template roads, so the road is HighPoly no matter what, 

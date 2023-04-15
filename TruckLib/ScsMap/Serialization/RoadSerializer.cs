@@ -100,6 +100,7 @@ namespace TruckLib.ScsMap.Serialization
             road.Left.Railings.CenterPartOnly = rarr4[2];
             road.Right.Railings.CenterPartOnly = rarr4[3];
             road.GpsAvoid = rarr4[4];
+            road.CenterDetailVegetation = !rarr4[7];
 
             road.RoadType = r.ReadToken();
 
@@ -217,6 +218,7 @@ namespace TruckLib.ScsMap.Serialization
             rflag4 |= (byte)(road.Left.Railings.CenterPartOnly.ToByte() << 2);
             rflag4 |= (byte)(road.Right.Railings.CenterPartOnly.ToByte() << 3);
             rflag4 |= (byte)(road.GpsAvoid.ToByte() << 4);
+            rflag4 |= (byte)((!road.CenterDetailVegetation).ToByte() << 7);
             w.Write(rflag4);
 
             w.Write(road.RoadType);

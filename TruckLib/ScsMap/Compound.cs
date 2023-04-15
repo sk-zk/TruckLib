@@ -54,6 +54,24 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[1] = value;
         }
 
+        public bool Collision
+        {
+            get => !Kdop.Flags[4];
+            set => Kdop.Flags[4] = !value;
+        }
+
+        public bool Shadows
+        {
+            get => !Kdop.Flags[5];
+            set => Kdop.Flags[5] = !value;
+        }
+
+        public bool MirrorReflection
+        {
+            get => !Kdop.Flags[6];
+            set => Kdop.Flags[6] = !value;
+        }
+
         public Compound() : base() { }
 
         internal Compound(bool initFields) : base(initFields)

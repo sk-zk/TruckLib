@@ -23,7 +23,7 @@ Also contains a (binary) .tobj de/serializer.
 A reader for HashFS (.scs) files, the asset archive format of the game.
 
 ## Minimal example
-```
+```csharp
 using System.Numerics;
 using TruckLib.ScsMap;
 

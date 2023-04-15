@@ -18,13 +18,26 @@ namespace TruckLib.ScsMap.Serialization
             fm.Width = r.ReadSingle() * sizeFactor;
             fm.Height = r.ReadSingle() * sizeFactor;
 
+            // models
+            fm.Models = new List<FarModelData>();
             var modelCount = r.ReadUInt32();
             for (int i = 0; i < modelCount; i++)
             {
-                fm.Models[i].Model = r.ReadToken();
-                fm.Models[i].Scale = r.ReadVector3();
+                var model = new FarModelData();
+                model.Model = r.ReadToken();
+                model.Scale = r.ReadVector3();
+                fm.Models.Add(model);
             }
 
+            // map items
+            fm.Children = new List<IMapItem>();
+            var childCount = r.ReadUInt32();
+            for (int i = 0; i < childCount; i++)
+            {
+                fm.Children.Add(new UnresolvedItem(r.ReadUInt64()));
+            }
+
+            // node_uids
             // first node is the object node, the rest are the model nodes
             var nodeCount = r.ReadUInt32();
             fm.Node = new UnresolvedNode(r.ReadUInt64());
@@ -44,17 +57,25 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(fm.Width / sizeFactor);
             w.Write(fm.Height / sizeFactor);
 
-            var notNullModels = fm.Models.Where(x => x.Model != 0);
-            w.Write(notNullModels.Count());
-            foreach (var model in notNullModels)
+            // models
+            w.Write(fm.Models.Count);
+            foreach (var model in fm.Models)
             {
                 w.Write(model.Model);
                 w.Write(model.Scale);
             }
 
-            w.Write(notNullModels.Count() + 1);
+            // map items
+            w.Write(fm.Children.Count);
+            foreach (var child in fm.Children)
+            {
+                w.Write(child.Uid);
+            }
+
+            // node_uids
+            w.Write(fm.Models.Count + 1);
             w.Write(fm.Node.Uid);
-            foreach (var model in notNullModels)
+            foreach (var model in fm.Models)
             {
                 w.Write(model.Node.Uid);
             }

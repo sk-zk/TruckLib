@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
-    public class FarModel : MapItem
+    public class FarModel : MapItem, IItemReferences
     {
         public override ItemType ItemType => ItemType.FarModel;
 
@@ -26,7 +26,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public float Height { get; set; }
 
-        public FarModelData[] Models { get; set; }
+        public List<FarModelData> Models { get; set; }
+
+        public List<IMapItem> Children { get; set; }
+
 
         public INode Node { get; set; }
 
@@ -39,20 +42,26 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
+        public bool UseMapItems
+        {
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
+        }
+
         public FarModel() : base()
         {
-            Models = new FarModelData[5].Select(h => new FarModelData()).ToArray();
         }
 
         internal FarModel(bool initFields) : base(initFields)
         {
             if (initFields) Init();
-            Models = new FarModelData[5].Select(h => new FarModelData()).ToArray();
         }
 
         protected override void Init()
         {
             base.Init();
+            Models = new List<FarModelData>();
+            Children = new List<IMapItem>();
         }
 
         public static FarModel Add(IItemContainer map, Vector3 position, float width, float height)
@@ -92,7 +101,7 @@ namespace TruckLib.ScsMap
         {
             Node = ResolveNodeReference(Node, allNodes);
 
-            for (int i = 0; i < Models.Length; i++)
+            for (int i = 0; i < Models.Count; i++)
             {
                 if (Models[i].Node is UnresolvedNode &&
                     allNodes.TryGetValue(Models[i].Node.Uid, out var resolvedModelNode))
@@ -101,9 +110,21 @@ namespace TruckLib.ScsMap
                 }
             }
         }
+
+        public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
+        {
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i] is UnresolvedItem
+                    && allItems.TryGetValue(Children[i].Uid, out var resolved))
+                {
+                    Children[i] = resolved;
+                }
+            }
+        }
     }
 
-    public struct FarModelData
+    public class FarModelData
     {
         public Token Model;
 

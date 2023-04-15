@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("TruckLibTests")]
 namespace TruckLib
 {
     internal static class StringUtils
     {
         /// <summary>
-        /// Checks if a string contains a number in a format used by Sii files.
+        /// Checks if a string contains a number in a format used by .sii files.
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -25,7 +27,7 @@ namespace TruckLib
 
         /// <summary>
         /// Checks if a string contains a float written as hex bytes as used in .sii files,
-        /// e.g. "&3f800000".
+        /// e.g. "&amp;3f800000".
         /// </summary>
         public static bool IsHexNotationFloat(string str)
         {
@@ -63,8 +65,7 @@ namespace TruckLib
         /// <returns></returns>
         public static List<string> CStringBytesToList(byte[] bytes, Encoding encoding = null)
         {
-            if (encoding is null)
-                encoding = Encoding.ASCII;
+            encoding ??= Encoding.ASCII;
 
             var strings = new List<string>();
             int lastNull = -1;
@@ -72,9 +73,7 @@ namespace TruckLib
             {
                 if (bytes[i] == 0)
                 {
-                    strings.Add(encoding.GetString(bytes,
-                        lastNull + 1,
-                        i - lastNull - 1));
+                    strings.Add(encoding.GetString(bytes, lastNull + 1, i - lastNull - 1));
                     lastNull = i;
                 }
             }
@@ -83,8 +82,7 @@ namespace TruckLib
 
         public static List<byte[]> ListToCStringByteList(List<string> strings, Encoding encoding = null)
         {
-            if (encoding is null)
-                encoding = Encoding.ASCII;
+            encoding ??= Encoding.ASCII;
 
             var bytes = new List<byte[]>(strings.Count);
             foreach (var str in strings)

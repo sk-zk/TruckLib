@@ -126,13 +126,6 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[6] = value;
         }
 
-        [Obsolete]
-        public bool IgnoreBoundingVolume
-        {
-            get => Kdop.Flags[7];
-            set => Kdop.Flags[7] = value;
-        }
-
         public bool ActiveDuringBadWeather
         {
             get => Kdop.Flags[11];

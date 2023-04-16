@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TruckLib.HashFs\TruckLib.HashFs.csproj" />
     <ProjectReference Include="..\TruckLib\TruckLib.csproj" />
   </ItemGroup>
 

@@ -21,6 +21,10 @@ namespace TruckLib
             this.bits = bits;
         }
 
+        /// <summary>
+        /// Gets or sets one field of the flag field as bool.
+        /// </summary>
+        /// <param name="index"></param>
         public bool this[int index]
         {
             get
@@ -40,6 +44,10 @@ namespace TruckLib
             }
         }
 
+        /// <summary>
+        /// Returns a byte of the flag field.
+        /// </summary>
+        /// <param name="index">Index of the byte, where 0 is the LSB.</param>
         public byte GetByte(int index)
         {
             AssertInRange(index, 0, 3);
@@ -47,6 +55,11 @@ namespace TruckLib
             return (byte)((bits & mask) >> index * byteSize);
         }
 
+        /// <summary>
+        /// Sets a byte of the flag field.
+        /// </summary>
+        /// <param name="index">Index of the byte, where 0 is the LSB.</param>
+        /// <param name="value">The value to set.</param>
         public void SetByte(int index, byte value)
         {
             AssertInRange(index, 0, 3);
@@ -55,11 +68,14 @@ namespace TruckLib
             bits |= (uint)value << index * byteSize; // set
         }
 
+        /// <summary>
+        /// Converts the flag field to a bool array.
+        /// </summary>
         public bool[] ToBoolArray()
         {
             var arr = new bool[32];
             var mask = 1U;
-            for(int i = 0; i < 32; i++)
+            for (int i = 0; i < 32; i++)
             {
                 arr[i] = (bits & mask) == mask;
                 mask <<= 1;
@@ -67,9 +83,17 @@ namespace TruckLib
             return arr;
         }
 
+        /// <summary>
+        /// Returns a sub-bitstring of the flag field.
+        /// </summary>
+        /// <param name="start">Index of the first bit, where 0 is the LSB.</param>
+        /// <param name="length">The length in bits.</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public uint GetBitString(int start, int length)
         {
-            if (length == 0) return 0;
+            if (length == 0)
+                return 0;
+
             AssertInRange(start, 0, 31);
             AssertInRange(length, 0, 31);
 
@@ -80,6 +104,13 @@ namespace TruckLib
             return (bits & mask) >> start;
         }
 
+        /// <summary>
+        /// Sets a sub-bitstring of the flag field.
+        /// </summary>
+        /// <param name="start">Index of the first bit, where 0 is the LSB.</param>
+        /// <param name="length">The length in bits.</param>
+        /// <param name="value">The value to set.</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public void SetBitString(int start, int length, uint value)
         {
             if (length == 0)

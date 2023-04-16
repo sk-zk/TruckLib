@@ -15,24 +15,22 @@ namespace TruckLib
         private static readonly Encoding StringEncoding = Encoding.UTF8;
 
         public static Vector2 ReadVector2(this BinaryReader r) =>
-            new Vector2(r.ReadSingle(), r.ReadSingle());
+            new(r.ReadSingle(), r.ReadSingle());
 
         public static Vector3 ReadVector3(this BinaryReader r) =>
-            new Vector3(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
+            new(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
         public static Vector4 ReadVector4(this BinaryReader r) =>
-            new Vector4(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
+            new(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
         public static Matrix4x4 ReadMatrix4x4(this BinaryReader r) =>
-            new Matrix4x4(
-                    r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                    r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                    r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
-                    r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle()
-                );
+            new(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
+                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
+                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
+                r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
         public static Token ReadToken(this BinaryReader r) =>
-            new Token(r.ReadUInt64());
+            new(r.ReadUInt64());
 
         /// <summary>
         /// Reads a string in the format used in SCS's binary formats.

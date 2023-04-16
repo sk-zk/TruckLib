@@ -28,20 +28,17 @@ namespace TruckLib
         /// </summary>
         public static T Clone<T>(this T obj) where T : IBinarySerializable, new()
         {
-            T cloned = new T();
-            using (var stream = new MemoryStream())
-            using (var writer = new BinaryWriter(stream))
-            {
-                obj.Serialize(writer);
-                stream.Position = 0;
+            T cloned = new();
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
 
-                using (var reader = new BinaryReader(stream))
-                {
-                    cloned.Deserialize(reader);
-                }
-            }
+            obj.Serialize(writer);
+            stream.Position = 0;
 
-            return cloned;   
+            using var reader = new BinaryReader(stream);
+            cloned.Deserialize(reader);
+
+            return cloned;
         }
 
         public static T CloneItem<T>(this T item) where T : MapItem
@@ -50,24 +47,21 @@ namespace TruckLib
 
             var serializer = MapItemSerializerFactory.Get(item.ItemType);
 
-            using (var stream = new MemoryStream())
-            using (var writer = new BinaryWriter(stream))
-            {
-                serializer.Serialize(writer, item);
-                if (serializer is IDataPayload)
-                {
-                    (serializer as IDataPayload).SerializeDataPayload(writer, item);
-                }
-                stream.Position = 0;
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
 
-                using (var reader = new BinaryReader(stream))
-                {
-                    cloned = (T)serializer.Deserialize(reader);
-                    if (serializer is IDataPayload)
-                    {
-                        (serializer as IDataPayload).DeserializeDataPayload(reader, cloned);
-                    }
-                }
+            serializer.Serialize(writer, item);
+            if (serializer is IDataPayload)
+            {
+                (serializer as IDataPayload).SerializeDataPayload(writer, item);
+            }
+            stream.Position = 0;
+
+            using var reader = new BinaryReader(stream);
+            cloned = (T)serializer.Deserialize(reader);
+            if (serializer is IDataPayload)
+            {
+                (serializer as IDataPayload).DeserializeDataPayload(reader, cloned);
             }
 
             return cloned;
@@ -120,11 +114,11 @@ namespace TruckLib
         /// <returns>Euler angles in degrees.</returns>
         public static Vector3 ToEulerDeg(this Quaternion q)
         {
-            var rad = q.ToEuler();
-            rad.X = (float)(rad.X * MathEx.RadToDeg);
-            rad.Y = (float)(rad.Y * MathEx.RadToDeg);
-            rad.Z = (float)(rad.Z * MathEx.RadToDeg);
-            return rad;
+            var euler = q.ToEuler();
+            euler.X = (float)(euler.X * MathEx.RadToDeg);
+            euler.Y = (float)(euler.Y * MathEx.RadToDeg);
+            euler.Z = (float)(euler.Z * MathEx.RadToDeg);
+            return euler;
         }
 
         /// <summary>

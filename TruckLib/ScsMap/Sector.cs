@@ -498,7 +498,10 @@ namespace TruckLib.ScsMap
         private void WriteVisAreaChildren(BinaryWriter w, ItemFile file, HashSet<ulong> visAreaShowObjectsChildren)
         {
             if (visAreaShowObjectsChildren.Count == 0)
+            {
+                w.Write(0L);
                 return;
+            }
 
             var uids = new List<ulong>();
             foreach (var childUid in visAreaShowObjectsChildren)

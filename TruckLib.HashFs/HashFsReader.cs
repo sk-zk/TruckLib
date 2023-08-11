@@ -117,6 +117,11 @@ namespace TruckLib.HashFs
         /// <param name="outputPath">The output path.</param>
         public void ExtractToFile(Entry entry, string outputPath)
         {
+            if (entry.IsDirectory)
+            {
+                throw new ArgumentException("This is a directory.", nameof(entry));
+            }
+
             if (entry.Size == 0)
             {
                 // create an empty file

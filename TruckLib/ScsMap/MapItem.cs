@@ -77,11 +77,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         protected MapItem()
         {
+            itemFile = DefaultItemFile;
             Init();
         }
 
         internal MapItem(bool initFields)
         {
+            itemFile = DefaultItemFile;
             if (initFields) Init();
         }
 
@@ -92,7 +94,6 @@ namespace TruckLib.ScsMap
         {
             Kdop = new KdopItem(Utils.GenerateUuid());
             Kdop.ViewDistance = DefaultViewDistance;
-            itemFile = DefaultItemFile;
         }
 
         /// <summary>

@@ -306,7 +306,30 @@ namespace TruckLib.ScsMap
     {
         TriggerActivated = 0,
         AlwaysOpen = 1,
-        AlwaysClosed = 2
+        AlwaysClosed = 2,
+    }
+
+    public enum HookupNodeAlignment
+    {
+        None = 0,
+        Front = 1,
+        Rear = 2,
+    }
+
+    public enum HookupSpawnProbability
+    {
+        Default = 0,
+        Percent25 = 1,
+        Percent50 = 2,
+        Percent75 = 3,
+    }
+
+    public enum HookupModelDetail
+    {
+        Default = 0,
+        Average = 1,
+        Low = 2,
+        VeryLow = 3,
     }
 
 }

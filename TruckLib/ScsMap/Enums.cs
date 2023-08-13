@@ -45,6 +45,7 @@ namespace TruckLib.ScsMap
         Cutscene = 0x2E,
         Hookup = 0x2F,
         VisibilityArea = 0x30,
+        Gate = 0x31,
     };
 
     /// <summary>
@@ -299,6 +300,13 @@ namespace TruckLib.ScsMap
         NoBlinkerForced = 1,
         RightBlinker = 2,
         LeftBlinker = 4,
+    }
+
+    public enum GateType
+    {
+        TriggerActivated = 0,
+        AlwaysOpen = 1,
+        AlwaysClosed = 2
     }
 
 }

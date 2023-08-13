@@ -26,6 +26,10 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte Russia = 13;
         public static readonly byte BalticAndRussia = 14;
         public static readonly byte Krone = 15;
+        public static readonly byte WestBalkans = 16;
+        public static readonly byte WestBalkansAndEast = 17;
+        public static readonly byte WestBalkansAndBlackSea = 18;
+        public static readonly byte Feldbinder = 19;
 
         // ATS
         public static readonly byte Nevada = 1;

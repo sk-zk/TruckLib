@@ -17,7 +17,6 @@ namespace TruckLib.ScsMap.Serialization
             trj.AccessRule = r.ReadToken();
             trj.Rules = ReadObjectList<TrajectoryRule>(r);
             
-            // checkpoints
             var checkpointCount = r.ReadUInt32();
             trj.Checkpoints = new List<TrajectoryCheckpoint>((int)checkpointCount);
             for (int i = 0; i < checkpointCount; i++)

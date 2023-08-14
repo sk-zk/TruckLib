@@ -89,6 +89,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[18] = value;
         }
 
+        public bool CollisionActivation
+        {
+            get => Kdop.Flags[5];
+            set => Kdop.Flags[5] = value;
+        }
+
         public Trigger() : base() { }
 
         internal Trigger(bool initFields) : base(initFields)

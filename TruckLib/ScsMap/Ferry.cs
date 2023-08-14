@@ -32,6 +32,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
+        public bool Cutscene
+        {
+            get => Kdop.Flags[1];
+            set => Kdop.Flags[1] = value;
+        }
+
         public Ferry() : base() { }
 
         internal Ferry(bool initFields) : base(initFields)

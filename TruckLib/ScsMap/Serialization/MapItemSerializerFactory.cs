@@ -43,6 +43,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.Ferry => new FerrySerializer(),
                 ItemType.FuelPump => new ServiceSerializer(),
                 ItemType.Garage => new GarageSerializer(),
+                ItemType.Gate => new GateSerializer(),
                 ItemType.Hinge => new HingeSerializer(),
                 ItemType.Hookup => new HookupSerializer(),
                 ItemType.MapArea => new MapAreaSerializer(),

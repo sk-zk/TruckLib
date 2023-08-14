@@ -45,6 +45,7 @@ namespace TruckLib.ScsMap
         Cutscene = 0x2E,
         Hookup = 0x2F,
         VisibilityArea = 0x30,
+        Gate = 0x31,
     };
 
     /// <summary>
@@ -299,6 +300,36 @@ namespace TruckLib.ScsMap
         NoBlinkerForced = 1,
         RightBlinker = 2,
         LeftBlinker = 4,
+    }
+
+    public enum GateType
+    {
+        TriggerActivated = 0,
+        AlwaysOpen = 1,
+        AlwaysClosed = 2,
+    }
+
+    public enum HookupNodeAlignment
+    {
+        None = 0,
+        Front = 1,
+        Rear = 2,
+    }
+
+    public enum HookupSpawnProbability
+    {
+        Default = 0,
+        Percent25 = 1,
+        Percent50 = 2,
+        Percent75 = 3,
+    }
+
+    public enum HookupModelDetail
+    {
+        Default = 0,
+        Average = 1,
+        Low = 2,
+        VeryLow = 3,
     }
 
 }

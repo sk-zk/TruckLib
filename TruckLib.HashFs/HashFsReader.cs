@@ -194,7 +194,7 @@ namespace TruckLib.HashFs
         public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             Entry entry, bool filesOnly = false)
         {        
-            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split("\n");
+            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split(new[] { '\r', '\n' });
 
             const string dirMarker = "*";
             var subdirs = new List<string>();
@@ -250,7 +250,7 @@ namespace TruckLib.HashFs
         /// <returns></returns>
         public ulong HashPath(string path, uint? salt = null)
         {
-            if (path != "")
+            if (path != "" && path.StartsWith("/"))
                 path = path[1..];
 
             salt ??= Salt;

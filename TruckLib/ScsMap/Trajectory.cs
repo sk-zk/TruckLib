@@ -64,6 +64,22 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[14] = value;
         }
 
+        public bool Spawning
+        {
+            get => Kdop.Flags[15];
+            set => Kdop.Flags[15] = value;
+        }
+
+        /// <summary>
+        /// Gets or sets if this item will render behind a cut plane.
+        /// </summary>
+        public bool IgnoreCutPlanes
+        {
+            get => Kdop.Flags[16];
+            set => Kdop.Flags[16] = value;
+        }
+
+
         public Nibble PriorityModifier
         {
             get => (Nibble)Kdop.Flags.GetBitString(8, 4);

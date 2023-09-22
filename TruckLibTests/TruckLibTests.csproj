@@ -25,4 +25,37 @@
     <ProjectReference Include="..\TruckLib\TruckLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\ModelSerializerTest\sec+0000+0000.aux">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\sec+0000+0000.base">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\sec+0000+0000.data">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\sec+0000+0000.desc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\test.mbd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.aux">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.base">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.data">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.desc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.layer">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

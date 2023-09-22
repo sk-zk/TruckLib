@@ -34,7 +34,7 @@ namespace TruckLib.HashFs
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static HashFsReader Open(string path)
+        public static HashFsReader Open(string path, bool forceEntryHeadersAtEnd = false)
         {
             var hfr = new HashFsReader
             {
@@ -42,7 +42,7 @@ namespace TruckLib.HashFs
                 reader = new BinaryReader(new FileStream(path, FileMode.Open))
             };
             hfr.ParseHeader();
-            hfr.CacheEntryHeaders();
+            hfr.CacheEntryHeaders(forceEntryHeadersAtEnd);
             return hfr;
         }
 
@@ -281,9 +281,16 @@ namespace TruckLib.HashFs
             StartOffset = reader.ReadUInt32();
         }
 
-        private void CacheEntryHeaders()
+        private void CacheEntryHeaders(bool forceEntryHeadersAtEnd)
         {
-            reader.BaseStream.Position = reader.BaseStream.Length - (EntriesCount * 32);
+            if (forceEntryHeadersAtEnd)
+            {
+                reader.BaseStream.Position = reader.BaseStream.Length - (EntriesCount * 32);
+            } 
+            else
+            {
+                reader.BaseStream.Position = StartOffset;
+            }
 
             for (int i = 0; i < EntriesCount; i++)
             {

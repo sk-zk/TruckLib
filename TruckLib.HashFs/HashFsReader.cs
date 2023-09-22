@@ -248,13 +248,14 @@ namespace TruckLib.HashFs
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private ulong HashPath(string path)
+        public ulong HashPath(string path, uint? salt = null)
         {
-            if(path != "")
+            if (path != "")
                 path = path[1..];
 
-            if (Salt != 0)
-                path = Salt + path;
+            salt ??= Salt;
+            if (salt != 0)
+                path = salt + path;
 
             var hash = CityHash.CityHash64(Encoding.ASCII.GetBytes(path), (ulong)path.Length);
             return hash;

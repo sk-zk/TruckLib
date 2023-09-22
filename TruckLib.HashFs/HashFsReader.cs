@@ -13,7 +13,7 @@ namespace TruckLib.HashFs
     public class HashFsReader : IDisposable
     {
         public string Path { get; private set; }
-        public int EntryCount => entries.Count;
+        public int EntryCount => Entries.Count;
 
         private const uint Magic = 0x23534353; // as ascii: "SCS#"
         private const ushort SupportedVersion = 1;
@@ -27,7 +27,7 @@ namespace TruckLib.HashFs
         private uint EntriesCount;
         private uint StartOffset;
 
-        private Dictionary<ulong, Entry> entries = new();
+        public Dictionary<ulong, Entry> Entries { get; private set; } = new();
 
         /// <summary>
         /// Opens a HashFS file.
@@ -55,7 +55,7 @@ namespace TruckLib.HashFs
         {
             path = RemoveTrailingSlash(path);
             var hash = HashPath(path);
-            if (entries.TryGetValue(hash, out var entry))
+            if (Entries.TryGetValue(hash, out var entry))
             {
                 return entry.IsDirectory
                     ? EntryType.Directory
@@ -66,7 +66,7 @@ namespace TruckLib.HashFs
 
         public Dictionary<ulong, Entry> GetEntries()
         {
-            return new Dictionary<ulong, Entry>(entries);
+            return new Dictionary<ulong, Entry>(Entries);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace TruckLib.HashFs
         /// <returns></returns>
         public byte[] Extract(Entry entry)
         {
-            if (!entries.ContainsValue(entry))
+            if (!Entries.ContainsValue(entry))
                 throw new FileNotFoundException();
 
             return GetEntryContent(entry);
@@ -239,7 +239,7 @@ namespace TruckLib.HashFs
         private Entry GetEntryHeader(string path)
         {
             ulong hash = HashPath(path);
-            var entry = entries[hash];
+            var entry = Entries[hash];
             return entry;
         }
 
@@ -283,7 +283,7 @@ namespace TruckLib.HashFs
 
         private void CacheEntryHeaders()
         {
-            reader.BaseStream.Position = StartOffset;
+            reader.BaseStream.Position = reader.BaseStream.Length - (EntriesCount * 32);
 
             for (int i = 0; i < EntriesCount; i++)
             {
@@ -296,7 +296,7 @@ namespace TruckLib.HashFs
                     Size = reader.ReadUInt32(),
                     CompressedSize = reader.ReadUInt32()
                 };
-                entries.Add(entry.Hash, entry);
+                Entries.Add(entry.Hash, entry);
             }
         }
 

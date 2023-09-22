@@ -64,11 +64,6 @@ namespace TruckLib.HashFs
             return EntryType.NotFound;
         }
 
-        public Dictionary<ulong, Entry> GetEntries()
-        {
-            return new Dictionary<ulong, Entry>(Entries);
-        }
-
         /// <summary>
         /// Extracts and decompresses an entry to memory.
         /// </summary>

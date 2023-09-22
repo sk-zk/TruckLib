@@ -14,6 +14,8 @@ namespace TruckLib.HashFs
     {
         public string Path { get; private set; }
         public int EntryCount => Entries.Count;
+        public ushort Salt { get; set; }
+
 
         private const uint Magic = 0x23534353; // as ascii: "SCS#"
         private const ushort SupportedVersion = 1;
@@ -22,7 +24,6 @@ namespace TruckLib.HashFs
 
         private BinaryReader reader;
 
-        private ushort Salt;
         private string HashMethod;
         private uint EntriesCount;
         private uint StartOffset;

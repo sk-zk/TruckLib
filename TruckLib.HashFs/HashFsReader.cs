@@ -130,7 +130,14 @@ namespace TruckLib.HashFs
             if (entry.IsCompressed)
             {
                 var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
-                zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+                try
+                {
+                    zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+                }
+                catch (ZlibException)
+                {
+                    throw;
+                }
             }
             else
             {

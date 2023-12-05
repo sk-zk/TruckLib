@@ -260,7 +260,8 @@ namespace TruckLib.HashFs
             if (salt != 0)
                 path = salt + path;
 
-            var hash = CityHash.CityHash64(Encoding.ASCII.GetBytes(path), (ulong)path.Length);
+            var bytes = Encoding.UTF8.GetBytes(path);
+            var hash = CityHash.CityHash64(bytes, (ulong)bytes.Length);
             return hash;
         }
 

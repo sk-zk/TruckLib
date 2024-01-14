@@ -6,6 +6,9 @@ using System.Text;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Represents the properties of a keyframe of a camera path.
+    /// </summary>
     public class Keyframe : IBinarySerializable
     {
         public EasingFunction SpeedChange { get; set; } = EasingFunction.EaseInOutSine;
@@ -16,9 +19,15 @@ namespace TruckLib.ScsMap
 
         public float Fov { get; set; } = 60;
 
-        public Vector3 ForwardTangentPosition { get; set; }
+        /// <summary>
+        /// Position of the forward control point of the node this keyframe belongs to.
+        /// </summary>
+        public Vector3 ControlPoint1Position { get; set; }
 
-        public Vector3 BackwardTangentPosition { get; set; }
+        /// <summary>
+        /// Position of the backward control point of the subsequent node. 
+        /// </summary>
+        public Vector3 ControlPoint2Position { get; set; }
 
         public void Deserialize(BinaryReader r)
         {
@@ -26,8 +35,8 @@ namespace TruckLib.ScsMap
             RotationChange = (EasingFunction)r.ReadInt32();
             SpeedCoefficient = r.ReadSingle();
             Fov = r.ReadSingle();
-            BackwardTangentPosition = r.ReadVector3();
-            ForwardTangentPosition = r.ReadVector3();
+            ControlPoint2Position = r.ReadVector3();
+            ControlPoint1Position = r.ReadVector3();
         }
 
         public void Serialize(BinaryWriter w)
@@ -36,8 +45,8 @@ namespace TruckLib.ScsMap
             w.Write((int)RotationChange);
             w.Write(SpeedCoefficient);
             w.Write(Fov);
-            w.Write(BackwardTangentPosition);
-            w.Write(ForwardTangentPosition);
+            w.Write(ControlPoint2Position);
+            w.Write(ControlPoint1Position);
         }
     }
 }

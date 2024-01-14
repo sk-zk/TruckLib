@@ -47,7 +47,7 @@ namespace TruckLib.ScsMap
         public float Stretch { get; set; }
 
         /// <summary>
-        /// Specifies at which intervals to repeat the model segment.
+        /// If not 0, forces the model to repeat every n meters, overriding the default. 
         /// </summary>
         public float FixedStep { get; set; }
 

@@ -13,7 +13,9 @@ namespace TruckLib.HashFs
     public class HashFsReader : IDisposable
     {
         public string Path { get; private set; }
-        public int EntryCount => entries.Count;
+        public int EntryCount => Entries.Count;
+        public ushort Salt { get; set; }
+
 
         private const uint Magic = 0x23534353; // as ascii: "SCS#"
         private const ushort SupportedVersion = 1;
@@ -22,19 +24,18 @@ namespace TruckLib.HashFs
 
         private BinaryReader reader;
 
-        private ushort Salt;
         private string HashMethod;
         private uint EntriesCount;
         private uint StartOffset;
 
-        private Dictionary<ulong, Entry> entries = new();
+        public Dictionary<ulong, Entry> Entries { get; private set; } = new();
 
         /// <summary>
         /// Opens a HashFS file.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static HashFsReader Open(string path)
+        public static HashFsReader Open(string path, bool forceEntryHeadersAtEnd = false)
         {
             var hfr = new HashFsReader
             {
@@ -42,7 +43,7 @@ namespace TruckLib.HashFs
                 reader = new BinaryReader(new FileStream(path, FileMode.Open))
             };
             hfr.ParseHeader();
-            hfr.CacheEntryHeaders();
+            hfr.CacheEntryHeaders(forceEntryHeadersAtEnd);
             return hfr;
         }
 
@@ -55,18 +56,13 @@ namespace TruckLib.HashFs
         {
             path = RemoveTrailingSlash(path);
             var hash = HashPath(path);
-            if (entries.TryGetValue(hash, out var entry))
+            if (Entries.TryGetValue(hash, out var entry))
             {
                 return entry.IsDirectory
                     ? EntryType.Directory
                     : EntryType.File;
             }
             return EntryType.NotFound;
-        }
-
-        public Dictionary<ulong, Entry> GetEntries()
-        {
-            return new Dictionary<ulong, Entry>(entries);
         }
 
         /// <summary>
@@ -90,7 +86,7 @@ namespace TruckLib.HashFs
         /// <returns></returns>
         public byte[] Extract(Entry entry)
         {
-            if (!entries.ContainsValue(entry))
+            if (!Entries.ContainsValue(entry))
                 throw new FileNotFoundException();
 
             return GetEntryContent(entry);
@@ -134,7 +130,14 @@ namespace TruckLib.HashFs
             if (entry.IsCompressed)
             {
                 var zlibStream = new ZlibStream(reader.BaseStream, CompressionMode.Decompress);
-                zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+                try
+                {
+                    zlibStream.CopyTo(fileStream, (int)entry.CompressedSize);
+                }
+                catch (ZlibException)
+                {
+                    throw;
+                }
             }
             else
             {
@@ -194,7 +197,7 @@ namespace TruckLib.HashFs
         public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             Entry entry, bool filesOnly = false)
         {        
-            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split("\n");
+            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split(new[] { '\r', '\n' });
 
             const string dirMarker = "*";
             var subdirs = new List<string>();
@@ -239,7 +242,7 @@ namespace TruckLib.HashFs
         private Entry GetEntryHeader(string path)
         {
             ulong hash = HashPath(path);
-            var entry = entries[hash];
+            var entry = Entries[hash];
             return entry;
         }
 
@@ -248,15 +251,17 @@ namespace TruckLib.HashFs
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private ulong HashPath(string path)
+        public ulong HashPath(string path, uint? salt = null)
         {
-            if(path != "")
+            if (path != "" && path.StartsWith("/"))
                 path = path[1..];
 
-            if (Salt != 0)
-                path = Salt + path;
+            salt ??= Salt;
+            if (salt != 0)
+                path = salt + path;
 
-            var hash = CityHash.CityHash64(Encoding.ASCII.GetBytes(path), (ulong)path.Length);
+            var bytes = Encoding.UTF8.GetBytes(path);
+            var hash = CityHash.CityHash64(bytes, (ulong)bytes.Length);
             return hash;
         }
 
@@ -280,9 +285,16 @@ namespace TruckLib.HashFs
             StartOffset = reader.ReadUInt32();
         }
 
-        private void CacheEntryHeaders()
+        private void CacheEntryHeaders(bool forceEntryHeadersAtEnd)
         {
-            reader.BaseStream.Position = StartOffset;
+            if (forceEntryHeadersAtEnd)
+            {
+                reader.BaseStream.Position = reader.BaseStream.Length - (EntriesCount * 32);
+            } 
+            else
+            {
+                reader.BaseStream.Position = StartOffset;
+            }
 
             for (int i = 0; i < EntriesCount; i++)
             {
@@ -295,7 +307,7 @@ namespace TruckLib.HashFs
                     Size = reader.ReadUInt32(),
                     CompressedSize = reader.ReadUInt32()
                 };
-                entries.Add(entry.Hash, entry);
+                Entries.Add(entry.Hash, entry);
             }
         }
 

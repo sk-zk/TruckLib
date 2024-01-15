@@ -5,6 +5,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using TruckLib.Model.Ppd;
 
 namespace TruckLib.ScsMap
 {
@@ -19,29 +21,7 @@ namespace TruckLib.ScsMap
 
         public Token CityName { get; set; }
 
-        /// <summary>
-        /// List of easy difficulty (15 XP) parking spots.
-        /// </summary>
-        public List<INode> UnloadPointsEasy { get; set; }
-
-        /// <summary>
-        /// List of medium difficulty (40 XP) parking spots.
-        /// </summary>
-        public List<INode> UnloadPointsMedium { get; set; }
-
-        /// <summary>
-        /// List of hard difficulty (90 XP) parking spots.
-        /// </summary>
-        public List<INode> UnloadPointsHard { get; set; }
-
-        /// <summary>
-        /// List of trailer spawn points.
-        /// </summary>
-        public List<INode> TrailerSpawnPoints { get; set; }
-
-        public List<INode> Unknown1 { get; set; }
-
-        public List<INode> LongTrailerSpawnPoints { get; set; } 
+        public List<CompanySpawnPoint> SpawnPoints { get; set; }
 
         public Company() : base() { }
 
@@ -53,12 +33,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            UnloadPointsEasy = new List<INode>();
-            UnloadPointsMedium = new List<INode>();
-            UnloadPointsHard = new List<INode>();
-            TrailerSpawnPoints = new List<INode>();
-            Unknown1 = new List<INode>();
-            LongTrailerSpawnPoints = new List<INode>();
+            SpawnPoints = new();
         }
 
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
@@ -75,13 +50,9 @@ namespace TruckLib.ScsMap
         {
             base.Translate(translation);
 
-            var allNodes = UnloadPointsEasy.Concat(UnloadPointsMedium)
-                .Concat(UnloadPointsHard).Concat(TrailerSpawnPoints)
-                .Concat(Unknown1).Concat(LongTrailerSpawnPoints);
-
-            foreach (var node in allNodes)
+            foreach (var spawnPoint in SpawnPoints)
             {
-                node.Move(node.Position + translation);
+                spawnPoint.Node.Move(spawnPoint.Node.Position + translation);
             }
         }
 
@@ -89,12 +60,12 @@ namespace TruckLib.ScsMap
         {
             base.UpdateNodeReferences(allNodes);
 
-            ResolveNodeReferences(UnloadPointsEasy, allNodes);
-            ResolveNodeReferences(UnloadPointsMedium, allNodes);
-            ResolveNodeReferences(UnloadPointsHard, allNodes);
-            ResolveNodeReferences(TrailerSpawnPoints, allNodes);
-            ResolveNodeReferences(Unknown1, allNodes);
-            ResolveNodeReferences(LongTrailerSpawnPoints, allNodes);
+            for (int i = 0; i < SpawnPoints.Count; i++)
+            {
+                var spawnPoint = SpawnPoints[i];
+                spawnPoint.Node = ResolveNodeReference(spawnPoint.Node, allNodes);
+                SpawnPoints[i] = spawnPoint;
+            }
         }
     }
 }

@@ -332,4 +332,24 @@ namespace TruckLib.ScsMap
         VeryLow = 3,
     }
 
+    public enum CompanySpawnPointType
+    {
+        /// <summary>
+        /// Easy difficulty (15 XP) parking spot.
+        /// </summary>
+        UnloadEasy = 1,
+        /// <summary>
+        /// Medium difficulty (40 XP) parking spot.
+        /// </summary>
+        UnloadMedium = 2,
+        /// <summary>
+        /// Hard difficulty (90 XP) parking spot.
+        /// </summary>
+        UnloadHard = 3,
+        /// <summary>
+        /// Trailer spawn point.
+        /// </summary>
+        Trailer = 4,
+    }
+
 }

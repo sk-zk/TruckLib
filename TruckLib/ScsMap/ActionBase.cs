@@ -71,8 +71,7 @@ namespace TruckLib.ScsMap
             w.Write(StringParams.Count);
             foreach (var param in StringParams)
             {
-                w.Write((ulong)param.Length);
-                w.Write(Encoding.Default.GetBytes(param));
+                w.WritePascalString(param);
             }
 
             w.Write(TargetTags.Count);

@@ -511,6 +511,7 @@ namespace TruckLib.ScsMap
                     uids.Add(childUid);
                 }
             }
+            uids.Sort();
 
             w.Write(uids.Count);
             foreach (var childUid in uids)

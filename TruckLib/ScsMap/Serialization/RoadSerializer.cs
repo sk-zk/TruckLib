@@ -56,6 +56,7 @@ namespace TruckLib.ScsMap.Serialization
             road.Right.Models[0].Shift = karr3[4];
             road.Left.Models[0].Shift = karr3[5];
             road.AiVehicles = !karr3[6];
+            road.Unknown = karr3[7];
 
             var kflag4 = r.ReadByte();
             var karr4 = new BitArray(new[] { kflag4 });
@@ -100,6 +101,7 @@ namespace TruckLib.ScsMap.Serialization
             road.Left.Railings.CenterPartOnly = rarr4[2];
             road.Right.Railings.CenterPartOnly = rarr4[3];
             road.GpsAvoid = rarr4[4];
+            road.Unknown2 = rarr4[5];
             road.CenterDetailVegetation = !rarr4[7];
 
             road.RoadType = r.ReadToken();
@@ -176,6 +178,7 @@ namespace TruckLib.ScsMap.Serialization
             kflag3 |= (byte)(road.Right.Models[0].Shift.ToByte() << 4);
             kflag3 |= (byte)(road.Left.Models[0].Shift.ToByte() << 5);
             kflag3 |= (byte)((!road.AiVehicles).ToByte() << 6);
+            kflag3 |= (byte)(road.Unknown.ToByte() << 7);
             w.Write(kflag3);
 
             byte kflag4 = 0;
@@ -218,6 +221,7 @@ namespace TruckLib.ScsMap.Serialization
             rflag4 |= (byte)(road.Left.Railings.CenterPartOnly.ToByte() << 2);
             rflag4 |= (byte)(road.Right.Railings.CenterPartOnly.ToByte() << 3);
             rflag4 |= (byte)(road.GpsAvoid.ToByte() << 4);
+            rflag4 |= (byte)(road.Unknown2.ToByte() << 5);
             rflag4 |= (byte)((!road.CenterDetailVegetation).ToByte() << 7);
             w.Write(rflag4);
 

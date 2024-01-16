@@ -4,9 +4,15 @@ using System.Text;
 
 namespace TruckLib
 {
+    /// <summary>
+    /// Represents a 32 bit flag field.
+    /// </summary>
     public struct FlagField
     {
         private uint bits;
+        /// <summary>
+        /// Gets or sets the underlying value.
+        /// </summary>
         public uint Bits
         {
             get => bits;
@@ -16,15 +22,19 @@ namespace TruckLib
         private const int byteSize = 8;
         private const uint byteMask = 0xFFU;
 
+        /// <summary>
+        /// Creates a new FlagField with the given initial value.
+        /// </summary>
+        /// <param name="bits">The initial value of the FlagField.</param>
         public FlagField(uint bits)
         {
             this.bits = bits;
         }
 
         /// <summary>
-        /// Gets or sets one field of the flag field as bool.
+        /// Gets or sets one flag of the flag field as Boolean.
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">The index of the flag, where 0 is the LSB.</param>
         public bool this[int index]
         {
             get
@@ -47,7 +57,7 @@ namespace TruckLib
         /// <summary>
         /// Returns a byte of the flag field.
         /// </summary>
-        /// <param name="index">Index of the byte, where 0 is the LSB.</param>
+        /// <param name="index">The index of the byte, where 0 is the LSB.</param>
         public byte GetByte(int index)
         {
             AssertInRange(index, 0, 3);
@@ -58,7 +68,7 @@ namespace TruckLib
         /// <summary>
         /// Sets a byte of the flag field.
         /// </summary>
-        /// <param name="index">Index of the byte, where 0 is the LSB.</param>
+        /// <param name="index">The index of the byte, where 0 is the LSB.</param>
         /// <param name="value">The value to set.</param>
         public void SetByte(int index, byte value)
         {
@@ -71,6 +81,7 @@ namespace TruckLib
         /// <summary>
         /// Converts the flag field to a bool array.
         /// </summary>
+        /// <returns>The flag field as bool array.</returns>
         public bool[] ToBoolArray()
         {
             var arr = new bool[32];
@@ -86,7 +97,7 @@ namespace TruckLib
         /// <summary>
         /// Returns a sub-bitstring of the flag field.
         /// </summary>
-        /// <param name="start">Index of the first bit, where 0 is the LSB.</param>
+        /// <param name="start">The index of the first bit, where 0 is the LSB.</param>
         /// <param name="length">The length in bits.</param>
         /// <exception cref="IndexOutOfRangeException"></exception>
         public uint GetBitString(int start, int length)
@@ -107,7 +118,7 @@ namespace TruckLib
         /// <summary>
         /// Sets a sub-bitstring of the flag field.
         /// </summary>
-        /// <param name="start">Index of the first bit, where 0 is the LSB.</param>
+        /// <param name="start">The index of the first bit, where 0 is the LSB.</param>
         /// <param name="length">The length in bits.</param>
         /// <param name="value">The value to set.</param>
         /// <exception cref="IndexOutOfRangeException"></exception>
@@ -131,9 +142,14 @@ namespace TruckLib
             bits |= value << start;
         }
 
+        /// <summary>
+        /// Returns the content of the flag field as a binary string.
+        /// </summary>
+        /// <returns>The content of the flag field as a binary string.</returns>
         public override string ToString() =>
             Convert.ToString(bits, 2).PadLeft(32, '0');
 
+        /// <inheritdoc/>
         public override int GetHashCode() =>
             bits.GetHashCode();
 
@@ -143,6 +159,7 @@ namespace TruckLib
                 throw new IndexOutOfRangeException();
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj) =>
             obj is FlagField flagField && flagField.Bits == this.Bits;
 

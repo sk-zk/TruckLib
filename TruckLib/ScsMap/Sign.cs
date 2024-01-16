@@ -86,13 +86,11 @@ namespace TruckLib.ScsMap
 
         public Sign() : base() 
         {
-            SignBoards = new SignBoard[3];
         }
 
         internal Sign(bool initFields) : base(initFields)
         {
             if (initFields) Init();
-            SignBoards = new SignBoard[3];
         }
 
         protected override void Init()

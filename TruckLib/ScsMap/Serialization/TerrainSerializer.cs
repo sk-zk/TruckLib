@@ -193,25 +193,25 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(t.Left.Edge);
             w.Write(t.Left.EdgeLook);
 
-            void WriteThatTerrainAndVegetationPart(TerrainSide side, TerrainSide bwTerrainSide)
+            void WriteThatTerrainAndVegetationPart(TerrainSide side, TerrainSide bwSide)
             {
                 w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
                 w.Write(side.Terrain.Profile);
                 w.Write(side.Terrain.Coefficient);
 
-                if (bwTerrainSide is null)
+                if (bwSide is null)
                 {
                     // prev profile
                     w.Write(0UL);
                     // prev coef
-                    w.Write(0f);
+                    w.Write(1f);
                 }
                 else
                 {
                     // prev profile
-                    w.Write(bwTerrainSide.Terrain.Profile);
+                    w.Write(bwSide.Terrain.Profile);
                     // prev coef
-                    w.Write(bwTerrainSide.Terrain.Coefficient);
+                    w.Write(bwSide.Terrain.Coefficient);
                 }
 
                 foreach (var veg in side.Vegetation)
@@ -225,4 +225,3 @@ namespace TruckLib.ScsMap.Serialization
         }
     }
 }
-

@@ -171,6 +171,7 @@ namespace TruckLib.ScsMap
 
         public bool Unknown { get; set; } = false;
         public bool Unknown2 { get; set; } = false;
+        public bool Unknown3 { get; set; } = false;
 
         public Road() : base() { }
 

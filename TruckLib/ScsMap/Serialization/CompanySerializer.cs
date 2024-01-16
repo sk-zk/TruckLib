@@ -23,11 +23,9 @@ namespace TruckLib.ScsMap.Serialization
             company.SpawnPoints = new List<CompanySpawnPoint>(spawnPointUids.Count);
             for (int i = 0; i < spawnPointUids.Count; i++)
             {
-                var type = r.ReadUInt32();
+                var flags = r.ReadUInt32();
                 // TODO does the upper nibble do anything?
-                company.SpawnPoints.Add(new CompanySpawnPoint(
-                    spawnPointUids[i], 
-                    (CompanySpawnPointType)(type & 0x0F)));
+                company.SpawnPoints.Add(new CompanySpawnPoint(spawnPointUids[i], flags));
             }
 
             return company;
@@ -52,7 +50,7 @@ namespace TruckLib.ScsMap.Serialization
             }
             foreach (var spawnPoint in company.SpawnPoints)
             {
-                w.Write(0xF0 + (int)spawnPoint.Type);
+                w.Write(spawnPoint.Flags.Bits);
             }
         }
     }

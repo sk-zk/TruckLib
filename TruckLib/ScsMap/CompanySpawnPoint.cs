@@ -9,12 +9,18 @@ namespace TruckLib.ScsMap
     public struct CompanySpawnPoint
     {
         public INode Node { get; set; }
-        public CompanySpawnPointType Type { get; set; }
 
-        public CompanySpawnPoint(INode node, CompanySpawnPointType type)
+        public FlagField Flags { get; set; }
+
+        public CompanySpawnPointType Type {
+            get => (CompanySpawnPointType)Flags.GetBitString(0, 4);
+            set => Flags.SetBitString(0, 4, (byte)value);
+        }
+
+        public CompanySpawnPoint(INode node, uint flags)
         {
             Node = node;
-            Type = type;
+            Flags = new FlagField(flags);
         }
     }
 }

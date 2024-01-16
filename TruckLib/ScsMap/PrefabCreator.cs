@@ -117,23 +117,23 @@ namespace TruckLib.ScsMap
             // create spawn point nodes
             company.SpawnPoints.AddRange(
                 CreateSpawnPointNodes(company, SpawnPointType.UnloadEasy)
-                .Select(x => new CompanySpawnPoint(x, CompanySpawnPointType.UnloadEasy))
+                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.UnloadEasy))
                 .ToList());
             company.SpawnPoints.AddRange(
                 CreateSpawnPointNodes(company, SpawnPointType.UnloadMedium)
-                .Select(x => new CompanySpawnPoint(x, CompanySpawnPointType.UnloadMedium))
+                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.UnloadMedium))
                 .ToList());
             company.SpawnPoints.AddRange(
                 CreateSpawnPointNodes(company, SpawnPointType.UnloadHard)
-                .Select(x => new CompanySpawnPoint(x, CompanySpawnPointType.UnloadHard))
+                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.UnloadHard))
                 .ToList());
             company.SpawnPoints.AddRange(
                 CreateSpawnPointNodes(company, SpawnPointType.Trailer)
-                .Select(x => new CompanySpawnPoint(x, CompanySpawnPointType.Trailer))
+                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.Trailer))
                 .ToList());
             company.SpawnPoints.AddRange(
                 CreateSpawnPointNodes(company, SpawnPointType.LongTrailer)
-                .Select(x => new CompanySpawnPoint(x, CompanySpawnPointType.Trailer))
+                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.Trailer))
                 .ToList());
         }
 

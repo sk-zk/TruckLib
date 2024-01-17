@@ -12,11 +12,11 @@ namespace TruckLib
         /// <summary>
         /// Represents the smallest possible value of a nibble.
         /// </summary>
-        public const int MinValue = 0;
+        public const byte MinValue = 0;
         /// <summary>
         /// Represents the largest possible value of a nibble.
         /// </summary>
-        public const int MaxValue = 15;
+        public const byte MaxValue = 15;
 
         private byte value;
         /// <summary>
@@ -28,7 +28,7 @@ namespace TruckLib
             get => value;
             set
             {
-                this.value = (byte)Utils.SetIfInRange((int)value, MinValue, MaxValue);
+                this.value = Utils.SetIfInRange(value, MinValue, MaxValue);
             }
         }
 

@@ -11,9 +11,9 @@ using System.Collections.Specialized;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// <p>TODO: What even is this?</p>
-    /// <p>Removed from the editor item menu, but it's still in the game and the
-    /// item properties dialog still works.</p>
+    /// <para>TODO: What even is this?</para>
+    /// <para>Removed from the editor item menu, but it's still in the game and the
+    /// item properties dialog still works.</para>
     /// </summary>
     [Obsolete]
     public class AnimatedModel : SingleNodeItem

@@ -13,6 +13,9 @@ namespace TruckLib.ScsMap
     /// </summary>
     public interface IMapObject
     {
+        /// <summary>
+        /// Gets or sets the UID of the object.
+        /// </summary>
         ulong Uid { get; set; }
     }
 }

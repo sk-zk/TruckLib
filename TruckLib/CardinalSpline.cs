@@ -5,14 +5,11 @@ using System.Text;
 
 namespace TruckLib
 {
+    /// <summary>
+    /// Functions for interpolating cardinal splines.
+    /// </summary>
     public static class CardinalSpline
     {
-        /// <param name="p0">Point 0</param>
-        /// <param name="m0">Tangent 0</param>
-        /// <param name="p1">Point 1</param>
-        /// <param name="m1">Tangent 1</param>
-        /// <param name="t">Position</param>
-        /// <returns></returns>
         public static Vector3 Interpolate(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t, float tension)
         {
             // tangents
@@ -37,12 +34,6 @@ namespace TruckLib
             return new Vector3((float)x, (float)y, (float)z);
         }
 
-        /// <param name="p0">Point 0</param>
-        /// <param name="m0">Tangent 0</param>
-        /// <param name="p1">Point 1</param>
-        /// <param name="m1">Tangent 1</param>
-        /// <param name="t">Position</param>
-        /// <returns></returns>
         public static Vector3 Derivative(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t, float tension)
         {
             // tangents
@@ -66,11 +57,6 @@ namespace TruckLib
             return new Vector3((float)x, (float)y, (float)z);
         }
 
-        /// <param name="p0">Point 0</param>
-        /// <param name="m0">Tangent 0</param>
-        /// <param name="p1">Point 1</param>
-        /// <param name="m1">Tangent 1</param>
-        /// <returns></returns>
         public static float ApproximateLength(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float tension)
         {
             // Gaussian quadrature
@@ -87,6 +73,5 @@ namespace TruckLib
 
             return (float)sum;
         }
-
     }
 }

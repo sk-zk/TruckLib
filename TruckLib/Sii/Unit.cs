@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.Sii
 {
     /// <summary>
-    /// Represents a SII unit.
+    /// Represents an SII unit.
     /// </summary>
     public class Unit
     {
@@ -34,13 +34,20 @@ namespace TruckLib.Sii
 
         public override string ToString() => $"{Class} : {Name}";
 
+        /// <summary>
+        /// Instantiates an empty unit.
+        /// </summary>
         public Unit() { }
 
+        /// <summary>
+        /// Instantiates a unit with the given class name and unit name.
+        /// </summary>
+        /// <param name="className">The class name.</param>
+        /// <param name="name">The unit name.</param>
         public Unit(string className, string name)
         {
             Class = className;
             Name = name;
         }
-
     }
 }

@@ -31,21 +31,28 @@ namespace TruckLib.Sii
         public List<string> Includes { get; set; } = new List<string>();
 
         /// <summary>
-        /// Sets if the file has global scope ("SiiNunit {") or not.
+        /// Gets or sets if the file has global scope ("<c>SiiNunit {</c>") or not.
         /// </summary>
         public bool GlobalScope { get; set; } = true;
 
+        /// <summary>
+        /// Instantiates an empty SII file.
+        /// </summary>
         public SiiFile() { }
 
         /// <summary>
         /// Deserializes a string containing a SII file.
         /// </summary>
+        /// <param name="sii">The string containing the SII file.</param>
+        /// <returns>A SiiFile object.</returns>
         public static SiiFile Load(string sii) =>
             new SiiParser().DeserializeFromString(sii);
 
         /// <summary>
-        /// Deserializes a SII file.
+        /// Opens a SII file.
         /// </summary>
+        /// <param name="path">The path of the file.</param>
+        /// <returns>A SiiFile object.</returns>
         public static SiiFile Open(string path) =>
             new SiiParser().DeserializeFromFile(path);
 
@@ -56,7 +63,7 @@ namespace TruckLib.Sii
             new SiiParser().Serialize(this);
 
         /// <summary>
-        /// Serializes this object to a file.
+        /// Serializes this object and writes it to a file.
         /// </summary>
         public void Serialize(string path) =>
             new SiiParser().Serialize(this, path);

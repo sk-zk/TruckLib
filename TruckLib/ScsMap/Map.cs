@@ -425,7 +425,7 @@ namespace TruckLib.ScsMap
             }
 
             bool SectorShouldBeLoaded(string baseFile) =>
-                sectors == null || sectors.Contains(Path.GetFileName(baseFile));          
+                sectors == null || sectors.Contains(Path.GetFileNameWithoutExtension(baseFile));          
         }
 
         /// <summary>

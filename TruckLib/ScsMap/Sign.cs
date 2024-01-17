@@ -19,12 +19,12 @@ namespace TruckLib.ScsMap
 
         public new ItemFile ItemFile
         {
-            get => itemFile;
+            get => base.ItemFile;
             // Most signs go to aux, unless they have a traffic_rule attached to them
             // in the .sii definition, in which case they go to base.
             // This library has no way of knowing that, so it relies on the user
             // to deal with it.
-            set => itemFile = value;
+            set => base.ItemFile = value;
         }
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;

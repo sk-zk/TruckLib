@@ -6,7 +6,7 @@
           "src": "..",
           "files": [
             "TruckLib/*.csproj",
-            "TruckLib./*.csproj",
+            "TruckLib.*/*.csproj",
           ]
         }
       ],

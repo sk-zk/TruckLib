@@ -40,6 +40,10 @@ using System;
 
 namespace TruckLib.HashFs
 {
+    /// <summary>
+    /// Google's <see href="https://opensource.googleblog.com/2011/04/introducing-cityhash.html">CityHash</see>
+    /// function, which is the hash function used by HashFS.
+    /// </summary>
     public static class CityHash
     {
         private class Uint128

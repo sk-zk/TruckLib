@@ -8,14 +8,24 @@ using System.Text;
 namespace TruckLib.HashFs
 {
     /// <summary>
-    /// Simple HashFS reader for extracting data from HashFS containers.
+    /// A simple HashFS reader for extracting files from HashFS containers.
     /// </summary>
     public class HashFsReader : IDisposable
     {
+        /// <summary>
+        /// Gets the path of the HashFS archive which this being read from by this reader.
+        /// </summary>
         public string Path { get; private set; }
-        public int EntryCount => Entries.Count;
-        public ushort Salt { get; set; }
 
+        /// <summary>
+        /// The entries in this archive.
+        /// </summary>
+        public Dictionary<ulong, Entry> Entries { get; private set; } = new();
+
+        /// <summary>
+        /// Gets or sets the salt which is prepended to paths before hashing them.
+        /// </summary>
+        public ushort Salt { get; set; }
 
         private const uint Magic = 0x23534353; // as ascii: "SCS#"
         private const ushort SupportedVersion = 1;
@@ -28,13 +38,12 @@ namespace TruckLib.HashFs
         private uint EntriesCount;
         private uint StartOffset;
 
-        public Dictionary<ulong, Entry> Entries { get; private set; } = new();
 
         /// <summary>
-        /// Opens a HashFS file.
+        /// Opens a HashFS archive.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path to the HashFS archive.</param>
+        /// <returns>A HashFsReader object.</returns>
         public static HashFsReader Open(string path, bool forceEntryHeadersAtEnd = false)
         {
             var hfr = new HashFsReader
@@ -50,8 +59,8 @@ namespace TruckLib.HashFs
         /// <summary>
         /// Checks if an entry exists and returns its type if it does.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path of the entry in the archive.</param>
+        /// <returns>Its type.</returns>
         public EntryType EntryExists(string path)
         {
             path = RemoveTrailingSlash(path);
@@ -68,8 +77,8 @@ namespace TruckLib.HashFs
         /// <summary>
         /// Extracts and decompresses an entry to memory.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path of the entry in the archive.</param>
+        /// <returns>The extracted entry as byte array.</returns>
         public byte[] Extract(string path)
         {
             if (EntryExists(path) == EntryType.NotFound)
@@ -83,7 +92,7 @@ namespace TruckLib.HashFs
         /// Extracts and decompresses an entry to memory.
         /// </summary>
         /// <param name="entry">The entry header of the file to extract.</param>
-        /// <returns></returns>
+        /// <returns>The extracted entry as byte array.</returns>
         public byte[] Extract(Entry entry)
         {
             if (!Entries.ContainsValue(entry))
@@ -95,7 +104,7 @@ namespace TruckLib.HashFs
         /// <summary>
         /// Extracts and decompresses an entry to a file.
         /// </summary>
-        /// <param name="path">The path of the file in the archive.</param>
+        /// <param name="path">The path of the entry in the archive.</param>
         /// <param name="outputPath">The output path.</param>
         public void ExtractToFile(string path, string outputPath)
         {
@@ -150,9 +159,10 @@ namespace TruckLib.HashFs
         /// <summary>
         /// Returns a list of subdirectories and files in the given directory.
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="returnAbsolute"></param>
-        /// <returns></returns>
+        /// <param name="path">The path of the directory in the archive.</param>
+        /// <param name="filesOnly">Whether only files should be returned.</param>
+        /// <param name="returnAbsolute">Whether the returned paths should be made absolute.</param>
+        /// <returns>A list of subdirectories and files in the given directory.</returns>
         public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             string path, bool filesOnly = false, bool returnAbsolute = true)
         {
@@ -191,9 +201,9 @@ namespace TruckLib.HashFs
         /// <summary>
         /// Returns a list of subdirectories and files in the given directory.
         /// </summary>
-        /// <param name="entry"></param>
-        /// <param name="filesOnly"></param>
-        /// <returns></returns>
+        /// <param name="entry">The entry header of the directory.</param>
+        /// <param name="filesOnly">Whether only files should be returned.</param>
+        /// <returns>A list of subdirectories and files in the given directory.</returns>
         public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             Entry entry, bool filesOnly = false)
         {        
@@ -249,8 +259,10 @@ namespace TruckLib.HashFs
         /// <summary>
         /// Hashes a file path.
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path.</param>
+        /// <param name="salt">If set, this salt will be used to hash the path rather than
+        /// the one specified by the archive's header.</param>
+        /// <returns>The hash of the path.</returns>
         public ulong HashPath(string path, uint? salt = null)
         {
             if (path != "" && path.StartsWith("/"))
@@ -318,6 +330,9 @@ namespace TruckLib.HashFs
             return path;
         }
 
+        /// <summary>
+        /// Closes the file stream.
+        /// </summary>
         public void Dispose()
         {
             reader.BaseStream.Dispose();

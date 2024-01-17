@@ -275,7 +275,7 @@ namespace TruckLib.ScsMap
                 }
                 else if (item.DefaultItemFile != file)
                 {
-                    Trace.WriteLine($"{itemType} in {file}?");
+                    Trace.WriteLine($"{itemType} {item.Uid} in {file}?");
                 }
 
                 MapItems.Add(item.Uid, item);

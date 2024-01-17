@@ -4,11 +4,25 @@ using System.Text;
 
 namespace TruckLib
 {
+    /// <summary>
+    /// Represents an unsigned half-byte integer.
+    /// </summary>
     public struct Nibble
     {
+        /// <summary>
+        /// Represents the smallest possible value of a nibble.
+        /// </summary>
         public const int MinValue = 0;
+        /// <summary>
+        /// Represents the largest possible value of a nibble.
+        /// </summary>
         public const int MaxValue = 15;
+
         private byte value;
+        /// <summary>
+        /// Gets or sets the underlying value.
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
         private byte Value
         {
             get => value;
@@ -18,6 +32,10 @@ namespace TruckLib
             }
         }
 
+        /// <summary>
+        /// Instantiates a nibble.
+        /// </summary>
+        /// <param name="value">The initial value.</param>
         public Nibble(byte value)
         {
             this.value = 0;
@@ -71,10 +89,16 @@ namespace TruckLib
         public static explicit operator Nibble(uint i) => new((byte)i);
         public static explicit operator byte(Nibble n) => n.Value;
 
+        /// <inheritdoc/>
         public override bool Equals(object obj) => base.Equals(obj);
 
+        /// <inheritdoc/>
         public override int GetHashCode() => value.GetHashCode();
 
+        /// <summary>
+        /// Converts the nibble to string.
+        /// </summary>
+        /// <returns>The nibble as string.</returns>
         public override string ToString() => value.ToString();
     }
 }

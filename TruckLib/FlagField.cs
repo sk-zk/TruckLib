@@ -23,9 +23,9 @@ namespace TruckLib
         private const uint byteMask = 0xFFU;
 
         /// <summary>
-        /// Creates a new FlagField with the given initial value.
+        /// Initializes a new flag field with the given value.
         /// </summary>
-        /// <param name="bits">The initial value of the FlagField.</param>
+        /// <param name="bits">The initial value of the flag field.</param>
         public FlagField(uint bits)
         {
             this.bits = bits;

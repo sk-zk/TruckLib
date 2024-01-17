@@ -9,9 +9,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Creates pedestrians along a given path.
-    /// <para>This item has been replaced by Movers and will probably be 
-    /// removed from the game at some point.</para>
+    /// Obsolete item for making pedestrians move along a path.
+    /// <para>
+    /// Walkers have been deprecated in 1.36 and replaced with Movers,
+    /// but, as of 1.49, have not yet been removed from the game, despite no longer
+    /// being used in europe.mbd.
+    /// </para>
     /// </summary>
     public class Walker : PathItem, IRecalculatable
     {
@@ -108,6 +111,16 @@ namespace TruckLib.ScsMap
             Angle = 0f;
         }
 
+        public static Walker Add(IItemContainer map, IList<Vector3> positions, Token namePrefix)
+        {
+            var walker = Add<Walker>(map, positions);
+
+            walker.NamePrefix = namePrefix;
+            walker.Recalculate();
+
+            return walker;
+        }
+
         public override void Move(Vector3 newPos)
         {
             base.Move(newPos);
@@ -122,9 +135,11 @@ namespace TruckLib.ScsMap
 
         public void Recalculate()
         {
-            // TODO: Properly calculate lengths
-            Lengths = new List<float>(Nodes.Count);
-            Lengths.ForEach(x => x = 1);
+            Lengths = new List<float>(Nodes.Count - 1);
+            for (int i = 0; i < Nodes.Count - 1; i++)
+            {
+                Lengths.Add((Nodes[i + 1].Position - Nodes[i].Position).Length());
+            }
         }
     }
 }

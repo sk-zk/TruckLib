@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A SCS map.
+    /// A map for Euro Truck Simulator 2 or American Truck Simulator.
     /// </summary>
     public class Map : IItemContainer
     {
@@ -38,12 +38,12 @@ namespace TruckLib.ScsMap
             = new Dictionary<ulong, INode>();
 
         /// <summary>
-        /// Scale of the game outside cities.
+        /// Scale and time compression of the game outside cities.
         /// </summary>
         public float NormalScale { get; set; } = 19;
 
         /// <summary>
-        /// Scale of the game inside cities.
+        /// Scale and time compression of the game inside cities.
         /// </summary>
         public float CityScale { get; set; } = 3;
 
@@ -63,16 +63,16 @@ namespace TruckLib.ScsMap
         private Quaternion StartPlacementRotation = Quaternion.Identity;
 
         /// <summary>
-        /// <para>SCS's Europe map UI corrections.</para>
-        /// <para>Not sure what it does, but it might have something to do
-        /// with the scale of the UK in the official map.</para>
+        /// <para>Gets or sets if SCS's Europe map UI corrections are enabled.</para>
+        /// <para>Nobody seems to know definitively what this does, but it might have
+        /// something to do with the scale of the UK in <c>europe.mbd.</c></para>
         /// </summary>
         public bool EuropeMapUiCorrections { get; set; } = false;
 
         public ulong EditorMapId { get; set; }
 
         // This value is used in both ETS2 and ATS.
-        protected uint gameTag = 2998976734; //TODO: What is this?
+        private uint gameTag = 2998976734; //TODO: What is this?
 
         /// <summary>
         /// The map's header.
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
         private Header header = new();
 
         /// <summary>
-        /// The size of a sector in in-game units (= meters).
+        /// The size of a sector in engine units (= meters).
         /// </summary>
         public static readonly int SectorSize = 4000;
 
@@ -97,8 +97,10 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Opens a map.
         /// </summary>
-        /// <param name="mbdPath">The mbd file of the map.</param>
-        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        /// <param name="mbdPath">Path to the .mbd file of the map.</param>
+        /// <param name="sectors">If set, only the given sectors will be loaded.
+        /// The method expects strings in the same format as the file names of the sectors
+        /// (without the extension), e.g. <c>sec+0001+0002</c>.</param>
         public static Map Open(string mbdPath, string[] sectors = null)
         {
             Trace.WriteLine("Loading map " + mbdPath);
@@ -333,7 +335,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Imports the contents of a Selection file into this map.
+        /// Imports the contents of a Selection (.sbd) file into this map.
         /// </summary>
         /// <param name="selection">The Selection to import.</param>
         /// <param name="position">The point relative to which the items will be inserted.</param>
@@ -370,7 +372,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Reads the .mbd of a map.
+        /// Reads the .mbd file of a map.
         /// </summary>
         /// <param name="mbdPath">The path to the .mbd file.</param>
         private void ReadMbd(string mbdPath)

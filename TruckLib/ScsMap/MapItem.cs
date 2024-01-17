@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets The default location for the item type.
+        /// Gets the default location for the item type.
         /// </summary>
         public abstract ItemFile DefaultItemFile { get; }
 

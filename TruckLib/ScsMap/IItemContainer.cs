@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Interface for classes that hold map items and nodes (meaning Map and Compound).
+    /// Interface for classes that hold map items and nodes: <see cref="Map"/>, <see cref="Compound"/>
+    /// and <see cref="Selection"/>.
     /// </summary>
     public interface IItemContainer
     {

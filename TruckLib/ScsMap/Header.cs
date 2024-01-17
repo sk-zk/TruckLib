@@ -12,11 +12,11 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Header : IBinarySerializable
     {
-        private const int supportedVer = 900;
+        private const int supportedVersion = 900;
         /// <summary>
         /// Version number of the map format.
         /// </summary>
-        public uint CoreMapVersion { get; set; } = supportedVer;
+        public uint CoreMapVersion { get; internal set; } = supportedVersion;
 
         /// <summary>
         /// Game ID token.
@@ -29,19 +29,25 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint GameMapVersion { get; set; } = 3;
 
+        /// <inheritdoc/>
+        /// <exception cref="UnsupportedVersionException"></exception>
         public virtual void Deserialize(BinaryReader r)
         {
             CoreMapVersion = r.ReadUInt32();
+            if (CoreMapVersion != supportedVersion)
+            {
+                throw new UnsupportedVersionException($"Map version {CoreMapVersion} is not supported.");
+            }
             GameId = r.ReadToken();
             GameMapVersion = r.ReadUInt32();
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(CoreMapVersion);
             w.Write(GameId);
             w.Write(GameMapVersion);
         }
-
     }
 }

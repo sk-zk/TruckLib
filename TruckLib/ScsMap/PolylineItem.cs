@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// <para>Parent class for map items which form a polyline with other 
-    /// items, like roads and buildings.</para>
+    /// Parent class for map items which form a polyline with other 
+    /// items of the same type, such as <see cref="Road">roads</see> and
+    /// <see cref="Buildings">buildings</see>.
     /// </summary>
     public abstract class PolylineItem : MapItem, IRecalculatable
     {
@@ -47,8 +48,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets the first item of the polyline chain this item is a part of.
+        /// Returns the first item of the polyline chain this item is a part of.
         /// </summary>
+        /// <returns>The first item of the polyline chain this item is a part of.</returns>
         public MapItem FindFirstItem()
         {
             var first = this;
@@ -58,8 +60,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets the last item of the polyline chain this item is a part of.
+        /// Returns the last item of the polyline chain this item is a part of.
         /// </summary>
+        /// <returns>The last item of the polyline chain this item is a part of.</returns>
         public MapItem FindLastItem()
         {
             var last = this;
@@ -256,12 +259,14 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             Node.Move(newPos);
             Recalculate();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             Node.Move(Node.Position + translation);

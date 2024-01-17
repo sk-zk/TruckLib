@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Base class for <see cref="CutsceneAction"/> and <see cref="TriggerAction"/>.
+    /// </summary>
     public abstract class ActionBase : IBinarySerializable
     {
         public List<float> NumParams { get; set; } = new();
@@ -18,7 +21,7 @@ namespace TruckLib.ScsMap
 
         public float TargetRange { get; set; }
 
-        protected FlagField actionFlags = new();
+        protected FlagField ActionFlags = new();
 
         private const uint NoParamsMarker = uint.MaxValue;
 
@@ -51,7 +54,7 @@ namespace TruckLib.ScsMap
             }
 
             TargetRange = r.ReadSingle();
-            actionFlags = new FlagField(r.ReadUInt32());
+            ActionFlags = new FlagField(r.ReadUInt32());
         }
 
         public virtual void Serialize(BinaryWriter w)
@@ -81,21 +84,12 @@ namespace TruckLib.ScsMap
             }
 
             w.Write(TargetRange);
-            w.Write(actionFlags.Bits);
+            w.Write(ActionFlags.Bits);
         }
 
         private bool HasNoCustomParams() => 
             NumParams.Count == 0 
             && StringParams.Count == 0 
             && TargetTags.Count == 0;
-    }
-
-    public enum ActionType
-    {
-        Default = 0,
-        Condition = 1,
-        Fallback = 2,
-        Mandatory = 3,
-        ConditionRetry = 4
     }
 }

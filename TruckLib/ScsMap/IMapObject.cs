@@ -8,8 +8,8 @@ namespace TruckLib.ScsMap
 {
 
     /// <summary>
-    /// An interface implemented by both types of objects in a map, 
-    /// items (MapItem) and nodes (Node).
+    /// An interface implemented by both types of objects in a map: 
+    /// items (<see cref="MapItem"/>) and nodes (<see cref="Node"/>).
     /// </summary>
     public interface IMapObject
     {

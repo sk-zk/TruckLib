@@ -49,7 +49,7 @@ namespace TruckLib.ScsMap
     };
 
     /// <summary>
-    /// Sector files that can hold an item.
+    /// Sector files that can hold <see cref="MapItem">map items</see>.
     /// </summary>
     public enum ItemFile
     {
@@ -127,7 +127,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Quad resolution of a standalone terrain. 
+    /// Quad resolution of a <see cref="Terrain"/> item.
     /// </summary>
     public enum StepSize
     {
@@ -159,7 +159,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The type of a MapOverlay.
+    /// The type of a <see cref="MapOverlay">Map Overlay</see>.
     /// </summary>
     public enum OverlayType
     {
@@ -185,7 +185,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The type of a MapArea.
+    /// The type of a <see cref="MapArea">Map Area</see>.
     /// </summary>
     public enum MapAreaType
     {
@@ -194,7 +194,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The color of a MapArea.
+    /// The color of a <see cref="MapArea">Map Area</see>.
     /// </summary>
     public enum MapAreaColor
     {
@@ -237,7 +237,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The rendering behavior of a Visibility Area.
+    /// The rendering behavior of a <see cref="VisibilityArea">Visibility Area</see>.
     /// </summary>
     public enum VisibilityAreaBehavior
     {
@@ -257,6 +257,9 @@ namespace TruckLib.ScsMap
         ShowObjects = 2
     }
 
+    /// <summary>
+    /// Easing functions used by <see cref="Keyframe">keyframes</see>.
+    /// </summary>
     public enum EasingFunction
     {
         Custom = 0,
@@ -283,7 +286,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Fog behavior in a No Weather Area.
+    /// Fog behavior in a <see cref="NoWeatherArea">No Weather Area</see>.
     /// </summary>
     public enum FogMask
     {
@@ -294,6 +297,9 @@ namespace TruckLib.ScsMap
         OpenArea = 4,
     }
 
+    /// <summary>
+    /// Blinker type for <see cref="Trajectory"/> items.
+    /// </summary>
     public enum BlinkerType
     {
         NoBlinker = 0,
@@ -350,6 +356,18 @@ namespace TruckLib.ScsMap
         /// Trailer spawn point.
         /// </summary>
         Trailer = 4,
+    }
+
+    /// <summary>
+    /// Action type for <see cref="Trigger">triggers</see>.
+    /// </summary>
+    public enum ActionType
+    {
+        Default = 0,
+        Condition = 1,
+        Fallback = 2,
+        Mandatory = 3,
+        ConditionRetry = 4
     }
 
 }

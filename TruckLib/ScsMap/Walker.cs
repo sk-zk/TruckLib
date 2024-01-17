@@ -16,6 +16,7 @@ namespace TruckLib.ScsMap
     /// being used in europe.mbd.
     /// </para>
     /// </summary>
+    [Obsolete]
     public class Walker : PathItem, IRecalculatable
     {
         public override ItemType ItemType => ItemType.Walker;

@@ -90,6 +90,11 @@ namespace TruckLib.ScsMap
             Init();
         }
 
+        /// <summary>
+        /// Instantiates a new item.
+        /// </summary>
+        /// <param name="initFields">If true, <see cref="MapItem.Init">Init()</see> is called.
+        /// Otherwise, the item's properties are left uninitialized.</param>
         internal MapItem(bool initFields)
         {
             itemFile = DefaultItemFile;
@@ -97,7 +102,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Sets the item's properties to its default values (which are, for the most part, derived from the editor).
+        /// Sets the item's properties to its default values.
         /// </summary>
         protected virtual void Init()
         {

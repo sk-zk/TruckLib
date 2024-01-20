@@ -8,12 +8,19 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Defines a rectangular area which ignores the usual view distance limit of 1500 m
+    /// for specific items if the camera is inside it.
+    /// </summary>
     public class FarModel : MapItem, IItemReferences
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.FarModel;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
@@ -26,11 +33,20 @@ namespace TruckLib.ScsMap
         /// </summary>
         public float Height { get; set; }
 
+        /// <summary>
+        /// Models specific to Far Model items which are only visible inside the Far Model
+        /// area. Used if UseMapItems is false.
+        /// </summary>
         public List<FarModelData> Models { get; set; }
 
+        /// <summary>
+        /// Map items for which the view distance limit is ignored. Used if UseMapItems is true.
+        /// </summary>
         public List<IMapItem> Children { get; set; }
 
-
+        /// <summary>
+        /// The map node of the item.
+        /// </summary>
         public INode Node { get; set; }
 
         /// <summary>
@@ -42,6 +58,12 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[0] = value;
         }
 
+        /// <summary>
+        /// If true, the item affects regular map items referenced in
+        /// <see cref="FarModel.Children">Children</see>.
+        /// If false, the game will place models specific to Far Model items contained in
+        /// <see cref="FarModel.Models">Models</see>.
+        /// </summary>
         public bool UseMapItems
         {
             get => Kdop.Flags[1];
@@ -57,6 +79,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -64,6 +87,14 @@ namespace TruckLib.ScsMap
             Children = new List<IMapItem>();
         }
 
+        /// <summary>
+        /// Adds a Far Model item to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The position of the center node.</param>
+        /// <param name="width">The width of the area.</param>
+        /// <param name="height">The height of the area.</param>
+        /// <returns>The newly created Far Model item.</returns>
         public static FarModel Add(IItemContainer map, Vector3 position, float width, float height)
         {
             var farModel = new FarModel();
@@ -78,11 +109,13 @@ namespace TruckLib.ScsMap
             return farModel;
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             Node.Move(Node.Position + translation);
@@ -92,11 +125,14 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         internal override IEnumerable<INode> GetItemNodes() =>
             Models.Select(x => x.Node).Prepend(Node);
 
+        /// <inheritdoc/>
         internal override INode GetMainNode() => Node;
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);
@@ -111,6 +147,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             for (int i = 0; i < Children.Count; i++)
@@ -124,10 +161,19 @@ namespace TruckLib.ScsMap
         }
     }
 
+    /// <summary>
+    /// Properties of a model specific to <see cref="FarModel">Far Model</see> items.
+    /// </summary>
     public class FarModelData
     {
+        /// <summary>
+        /// Unit name of the model.
+        /// </summary>
         public Token Model;
 
+        /// <summary>
+        /// Relative scale per axis.
+        /// </summary>
         public Vector3 Scale;
 
         /// <summary>

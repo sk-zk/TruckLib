@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A map file header.
+    /// Represents the header of .mbd, .base, .aux, .snd, .data, .layer, and .sbd files.
     /// </summary>
     public class Header : IBinarySerializable
     {
@@ -20,7 +20,8 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Game ID token.
-        /// <para>The ID "euro2" is used for both ETS2 and ATS.</para>
+        /// <para>The ID <c>euro2</c> is used for both Euro Truck Simulator 2
+        /// and American Truck Simulator.</para>
         /// </summary>
         public Token GameId { get; set; } = "euro2";
 

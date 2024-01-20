@@ -77,7 +77,7 @@ namespace TruckLib.ScsMap
         /// Adds a city area to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="position">The position of the new city.</param>
+        /// <param name="position">The position of the center node.</param>
         /// <param name="name">The unit name of the city.</param>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>

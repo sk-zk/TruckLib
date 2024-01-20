@@ -44,7 +44,7 @@ namespace TruckLib.ScsMap
         /// <typeparam name="T">The item type.</typeparam>
         /// <param name="map">The map.</param>
         /// <param name="parent">The prefab this item is linked to.</param>
-        /// <param name="position">The (global) position of the bus stop node.</param>
+        /// <param name="position">The (global) position of the node.</param>
         /// <returns>The newly created prefab slave item.</returns>
         public static T Add<T>(IItemContainer map, Prefab parent, Vector3 position)
             where T : PrefabSlaveItem, new()
@@ -67,11 +67,7 @@ namespace TruckLib.ScsMap
             Node.Move(Node.Position + translation);
         }
 
-        /// <summary>
-        /// Searches a list of all map items for the map items referenced by UID in
-        /// this map item and updates the respective references.
-        /// </summary>
-        /// <param name="allItems">A dictionary of all items in the entire map.</param>
+        /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             if (PrefabLink is UnresolvedItem 

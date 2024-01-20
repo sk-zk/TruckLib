@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Properties of an activation point of a <see cref="Gate"/> item.
+    /// </summary>
     public class GateActivationPoint
     {
         /// <summary>
-        /// Name of the trigger.
+        /// Name of the trigger type.
         /// </summary>
         public string Trigger { get; set; }
 
@@ -19,7 +22,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public INode Node { get; internal set; }
 
-        public GateActivationPoint()
+        internal GateActivationPoint()
         {
         }
 
@@ -29,6 +32,12 @@ namespace TruckLib.ScsMap
             Node = node;
         }
 
+        /// <summary>
+        /// Creates a gate activation point.
+        /// </summary>
+        /// <param name="trigger">Name of the trigger type.</param>
+        /// <param name="position">The position of the activation point.</param>
+        /// <param name="parent">The gate item this point belongs to.</param>
         public GateActivationPoint(string trigger, Vector3 position, Gate parent)
         {
             Trigger = trigger;

@@ -11,7 +11,8 @@ namespace TruckLib.ScsMap
 {
     /// <summary>
     /// Defines a path creating one or more planes perpendicular to the ground plane.
-    /// Items which are fully behind these planes are not rendered.
+    /// Items which are fully behind these planes from the point of view of the camera
+    /// are not rendered.
     /// </summary>
     public class CutPlane : PathItem
     {

@@ -12,9 +12,9 @@ namespace TruckLib
     internal static class Utils
     {
         /// <summary>
-        /// Generates an 8 byte UUID.
+        /// Generates an 8-byte UUID.
         /// </summary>
-        /// <returns>An 8 byte UUID.</returns>
+        /// <returns>An 8-byte UUID.</returns>
         public static ulong GenerateUuid() =>
             BitConverter.ToUInt64(Guid.NewGuid().ToByteArray(), 0);
 
@@ -87,7 +87,8 @@ namespace TruckLib
         /// <summary>
         /// Sets array[x,y] to array[y,x] and vice versa.
         /// </summary>
-        /// <param name="arr"></param>
+        /// <param name="input">The array.</param>
+        /// <typeparam name="T">The type of the array.</typeparam>
         public static T[,] SwitchXY<T>(T[,] input)
         {
             T[,] arr = Copy2dArray(input);
@@ -128,6 +129,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="src">The array to copy.</param>
         /// <returns>A copy of the array.</returns>
+        /// <typeparam name="T">The type of the array.</typeparam>
         public static T[,] Copy2dArray<T>(T[,] src)
         {
             T[,] copy = new T[src.GetLength(0), src.GetLength(1)];

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A Buildings segment.
+    /// A Buildings segment, which repeats one or more models along a path.
     /// </summary>
     public class Buildings : PolylineItem
     {
@@ -64,7 +64,7 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Coefficient for stretching the scheme along the path. For some buildings,
-        /// this stretches the model; for others, it places the elements further apart.
+        /// this stretches the model; for others, it places its elements further apart.
         /// </summary>
         public float Stretch { get; set; }
 

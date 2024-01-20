@@ -59,7 +59,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed terrain noise values for terrain.
+    /// Allowed terrain noise values in percent.
     /// </summary>
     public enum TerrainNoise
     {
@@ -69,7 +69,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed transition values for terrain.
+    /// Allowed transition values for terrain in meters(?).
     /// </summary>
     public enum TerrainTransition
     {
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed values for sidewalk size (in the legacy pre-edge system).
+    /// Allowed values for sidewalk size in meters in the legacy pre-edge system.
     /// </summary>
     public enum SidewalkSize
     {
@@ -112,7 +112,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Scale of vegetation models.
+    /// Scale of vegetation models in percent.
     /// </summary>
     public enum VegetationScale
     {
@@ -138,22 +138,22 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The resolution / step size of a road.
+    /// The resolution / step size of a <see cref="Road">road</see>.
     /// </summary>
     public enum RoadResolution
     {
         /// <summary>
-        /// 15m
+        /// 15 m
         /// </summary>
         Normal, 
 
         /// <summary>
-        /// 5m
+        /// 5 m
         /// </summary>
         HighPoly,
 
         /// <summary>
-        /// 1m (non-template only)
+        /// 1 m (non-template only)
         /// </summary>
         Superfine
     }
@@ -164,7 +164,7 @@ namespace TruckLib.ScsMap
     public enum OverlayType
     {
         /// <summary>
-        /// The item will display an image specified in Look.
+        /// The item will display an image specified in <see cref="MapOverlay.Look">Look</see>.
         /// </summary>
         RoadName = 0,
 
@@ -178,9 +178,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         CityName = 2,
 
-        // TODO: What does this do?
+        // TODO: What do these do?
         UserText = 4,
-
         Landmark = 16,
     }
 
@@ -204,6 +203,9 @@ namespace TruckLib.ScsMap
         Green = 3
     }
 
+    /// <summary>
+    /// The type of a <see cref="Service"/> item.
+    /// </summary>
     public enum ServiceType
     {
         GasStation = 0,
@@ -215,6 +217,9 @@ namespace TruckLib.ScsMap
         WeighStationCat = 8,
     }
 
+    /// <summary>
+    /// The type of a <see cref="Cutscene"/> item.
+    /// </summary>
     public enum CutsceneType
     {
         Viewpoint = 0,
@@ -222,6 +227,9 @@ namespace TruckLib.ScsMap
         MapScene = 2,
     }
 
+    /// <summary>
+    /// The LOD setting of a  <see cref="Model"/> item.
+    /// </summary>
     public enum ModelLod
     {
         Dynamic = 0,
@@ -229,6 +237,9 @@ namespace TruckLib.ScsMap
         LodFrom200m = 2
     }
 
+    /// <summary>
+    /// The type of a <see cref="Sound"/> item.
+    /// </summary>
     public enum SoundType
     {
         ThreeDSound = 0,
@@ -308,6 +319,9 @@ namespace TruckLib.ScsMap
         LeftBlinker = 4,
     }
 
+    /// <summary>
+    /// The behavior of a <see cref="Gate"/>.
+    /// </summary>
     public enum GateType
     {
         TriggerActivated = 0,
@@ -338,6 +352,9 @@ namespace TruckLib.ScsMap
         VeryLow = 3,
     }
 
+    /// <summary>
+    /// The spawn point type of a node belonging to a <see cref="Company"/> item.
+    /// </summary>
     public enum CompanySpawnPointType
     {
         /// <summary>

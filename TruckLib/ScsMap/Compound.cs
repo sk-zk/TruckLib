@@ -11,8 +11,9 @@ using TruckLib.Model;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A compound item, which groups multiple aux items into one, with an additional parent node
-    /// to which they are tethered.
+    /// A compound item, which groups multiple
+    /// <see href="https://github.com/sk-zk/map-docs/wiki/base%2C-aux-and-snd">aux items</see>
+    /// into one, with an additional parent node to which they are tethered.
     /// </summary>
     /// <remarks>
     /// <para>Both the items and the nodes of compounded items are contained within

@@ -10,18 +10,22 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Defines a plane behind which nothing will be rendered.
+    /// Defines a path creating one or more planes perpendicular to the ground plane.
+    /// Items which are fully behind these planes are not rendered.
     /// </summary>
     public class CutPlane : PathItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.CutPlane;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Gets or sets if the cut plane is active in one direction only.
+        /// Gets or sets if the cut plane is only active when looking at it from the back.
         /// </summary>
         public bool OneSideOnly
         {
@@ -57,10 +61,11 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Adds a cut plane to the map.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="nodePositions"></param>
-        /// <param name="oneSideOnly"></param>
-        /// <returns></returns>
+        /// <param name="map">The map.</param>
+        /// <param name="positions">Positions of the nodes of the cut plane.</param>
+        /// <param name="oneSideOnly">Whether the cut plane is only active when looking at
+        /// it from the back.</param>
+        /// <returns>The newly created cut plane.</returns>
         public static CutPlane Add(IItemContainer map, IList<Vector3> positions,
             bool oneSideOnly = false)
         {
@@ -74,7 +79,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Appends a new node to the cut plane.
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="position">The position of the new node.</param>
         public void Append(Vector3 position)
         {
             var node = Nodes[0].Sectors[0].Map.AddNode(position);
@@ -82,7 +87,7 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
-        internal override INode GetMainNode() =>
-            Nodes[^1];
+        /// <inheritdoc/>
+        internal override INode GetMainNode() => Nodes[^1];
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,48 +10,90 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
-    // TODO: Write xmldoc.
+    /// <summary>
+    /// A curve segment, which repeats one or more models along a path.
+    /// </summary>
     public class Curve : PolylineItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Curve;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Minimum length of a Curve item.
+        /// </summary>
         public float MinLength => 0f;
 
+        /// <summary>
+        /// Maximum length of a Curve item.
+        /// </summary>
         public float MaxLength => 1000;
 
+        /// <summary>
+        /// Gets or sets the view distance of the item in meters.
+        /// </summary>
         public new ushort ViewDistance
         {
             get => base.ViewDistance;
             set => base.ViewDistance = value;
         }
 
+        /// <summary>
+        /// Unit name of the curve model, as defined in <c>/def/world/curve_model.sii</c>.
+        /// </summary>
         public Token Model { get; set; }
 
+        /// <summary>
+        /// Unit name of the model look.
+        /// </summary>
         public Token Look { get; set; }
 
+        /// <summary>
+        /// Unit name of the first part, if applicable.
+        /// </summary>
         public Token FirstPart { get; set; }
 
+        /// <summary>
+        /// Unit name of the center part variation.
+        /// </summary>
         public Token CenterPartVariation { get; set; }
 
+        /// <summary>
+        /// Unit name of the last part, if applicable.
+        /// </summary>
         public Token LastPart { get; set; }
 
+        /// <summary>
+        /// Unit name of the terrain material, if applicable.
+        /// </summary>
         public Token TerrainMaterial { get; set; }
 
+        /// <summary>
+        /// Color tint of the terrain.
+        /// </summary>
         public Color TerrainColor { get; set; }
 
         public uint RandomSeed { get; set; }
 
+        /// <summary>
+        /// Coefficient for stretching the scheme along the path. For some curves,
+        /// this stretches the model; for others, it places its elements further apart.
+        /// </summary>
         public float Stretch { get; set; }
 
         /// <summary>
-        /// Specifies at which intervals to repeat the model segment.
+        /// If not 0, this forces the model to repeat every <i>n</i> meters, overriding the default.
         /// </summary>
         public float FixedStep { get; set; }
 
+        /// <summary>
+        /// Scale multiplier for the model.
+        /// </summary>
         public float Scale { get; set; }
 
         /// <summary>
@@ -59,7 +102,10 @@ namespace TruckLib.ScsMap
         public float TerrainRotation { get; set; }
 
         /// <summary>
-        /// Height offsets for individual elements of the curve.
+        /// <para>Height offsets for individual elements of the curve.</para>
+        /// <para>Offsets are applied to elements in order. For instance, if you want
+        /// the third element to have an offset of 5, the content of the list should be
+        /// [0, 0, 5].</para>
         /// </summary>
         public List<float> HeightOffsets { get; set; }
 
@@ -91,7 +137,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Inverts the model by 180 degrees.
+        /// Flips the model on the axis formed by the curve's two nodes.
         /// </summary>
         public bool InvertGeometry
         {
@@ -137,6 +183,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[7] = !value;
         }
 
+        /// <summary>
+        /// 1-indexed color variant of the model. Set to 0 if there aren't any.
+        /// </summary>
         public Nibble ColorVariant
         {
             get => (Nibble)Kdop.Flags.GetBitString(16, 4);
@@ -153,7 +202,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Makes the model follow a linear path rather than a spline.
+        /// Makes the model follow a linear path from backward to forward node
+        /// rather than the curved path created by the spline.
         /// </summary>
         public bool UseLinearPath
         {
@@ -178,6 +228,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -188,6 +239,14 @@ namespace TruckLib.ScsMap
             TerrainColor = Color.White;
         }
 
+        /// <summary>
+        /// Adds a curve to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="backwardPos">Position of the backward (red) node.</param>
+        /// <param name="forwardPos">Position of the forward (green) node.</param>
+        /// <param name="model">Unit name of the curve model.</param>
+        /// <returns>The newly created curve.</returns>
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)
         {
             var curve = Add<Curve>(map, backwardPos, forwardPos);
@@ -197,6 +256,14 @@ namespace TruckLib.ScsMap
             return curve;
         }
 
+        /// <summary>
+        /// Appends a curve segment to the end of this one.
+        /// </summary>
+        /// <param name="position">The position of the <see cref="PolylineItem.ForwardNode">ForwardNode</see>
+        /// of the new curve segment.</param>
+        /// <param name="cloneSettings">Whether the new segment should have the
+        /// same settings as this one. If false, the defaults will be used.</param>
+        /// <returns>The newly created curve segment.</returns>
         public Curve Append(Vector3 position, bool cloneSettings = true)
         {
             if (!cloneSettings)
@@ -209,6 +276,13 @@ namespace TruckLib.ScsMap
             return b;
         }
 
+        /// <summary>
+        /// Appends a curve segment to the end of this one.
+        /// </summary>
+        /// <param name="position">The position of the <see cref="PolylineItem.ForwardNode">ForwardNode</see>
+        /// of the new curve segment.</param>
+        /// <param name="model">Unit name of the curve model.</param>
+        /// <returns>The newly created curve.</returns>
         public Curve Append(Vector3 position, Token model)
         {
             var curve = Append<Curve>(position);

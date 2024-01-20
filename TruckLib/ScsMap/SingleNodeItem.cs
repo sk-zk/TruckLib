@@ -57,11 +57,7 @@ namespace TruckLib.ScsMap
 
         internal override INode GetMainNode() => Node;
 
-        /// <summary>
-        /// Searches a list of all nodes for the node referenced by UID in this map item
-        /// and adds a reference to it in the item's Node field.
-        /// </summary>
-        /// <param name="allNodes">A list of all nodes in the entire map.</param>
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);

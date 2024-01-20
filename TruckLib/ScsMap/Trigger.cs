@@ -11,10 +11,10 @@ namespace TruckLib.ScsMap
 {
     /// <summary>
     /// Defines a trigger area. 
-    /// <para>Note that, if only two nodes are used, the area is a sphere, 
-    /// with the first node defining the center and the second node
-    /// defining the radius. </para>
     /// </summary>
+    /// <remarks>Note that, if only two nodes are used, the area is a sphere, 
+    /// with the first node defining the center and the second node
+    /// defining the radius.</remarks>
     public class Trigger : PolygonItem
     {
         public override ItemType ItemType => ItemType.Trigger;

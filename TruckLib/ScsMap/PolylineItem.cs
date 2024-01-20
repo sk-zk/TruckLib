@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Parent class for map items which form a polyline with other 
+    /// Base class for map items which form a polyline with other 
     /// items of the same type, such as <see cref="Road">roads</see> and
     /// <see cref="Buildings">buildings</see>.
     /// </summary>

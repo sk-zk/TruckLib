@@ -193,7 +193,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a list containing all nodes in the entire map.
+        /// Returns a dictionary containing all nodes in the entire map.
         /// </summary>
         /// <returns>All nodes in the entire map.</returns>
         public Dictionary<ulong, INode> GetAllNodes()
@@ -202,7 +202,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a list containing all map items from all sectors.
+        /// Returns a dictionary containing all map items from all sectors.
         /// </summary>
         /// <returns>All map items in the entire map.</returns>
         public Dictionary<ulong, MapItem> GetAllItems()
@@ -219,7 +219,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a list containing all items of type T from all sectors.
+        /// Returns a dictionary containing all items of type T from all sectors.
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
         /// <returns>All items of this type in the entire map.</returns>

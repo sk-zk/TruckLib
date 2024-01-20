@@ -10,12 +10,12 @@ namespace TruckLib.ScsMap
 {
     /// <summary>
     /// Obsolete item for making pedestrians move along a path.
-    /// <para>
+    /// </summary>
+    /// <remarks>
     /// Walkers have been deprecated in 1.36 and replaced with Movers,
     /// but, as of 1.49, have not yet been removed from the game, despite no longer
     /// being used in europe.mbd.
-    /// </para>
-    /// </summary>
+    /// </remarks>
     [Obsolete]
     public class Walker : PathItem, IRecalculatable
     {

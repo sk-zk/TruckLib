@@ -5,7 +5,7 @@ using System.Text;
 namespace TruckLib
 {
     /// <summary>
-    /// Represents a 32 bit flag field.
+    /// Represents a 32-bit flag field.
     /// </summary>
     public struct FlagField
     {

@@ -12,9 +12,9 @@ namespace TruckLib.ScsMap
 {
     /// <summary>
     /// <para>TODO: What even is this?</para>
-    /// <para>Removed from the editor item menu, but it's still in the game and the
-    /// item properties dialog still works.</para>
     /// </summary>
+    /// <remarks>Removed from the editor item menu, but it's still in the game and the
+    /// item properties dialog still works.</remarks>
     [Obsolete]
     public class AnimatedModel : SingleNodeItem
     {

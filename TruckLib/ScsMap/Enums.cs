@@ -102,7 +102,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Vegetation modes for vegetation spheres.
+    /// Defines the behavior of a vegetation sphere.
     /// </summary>
     public enum VegetationSphereType
     {

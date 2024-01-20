@@ -15,7 +15,7 @@ namespace TruckLib.ScsMap.Serialization
             path.Tags = ReadObjectList<Token>(r);
             path.Nodes = ReadNodeRefList(r);
             path.TrackPoints = ReadNodeRefList(r);
-            path.CurveControlNodes = ReadNodeRefList(r);
+            path.ControlNodes = ReadNodeRefList(r);
             path.Keyframes = ReadObjectList<Keyframe>(r);
             path.CameraSpeed = r.ReadSingle();
 
@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap.Serialization
             WriteObjectList(w, path.Tags);
             WriteNodeRefList(w, path.Nodes);
             WriteNodeRefList(w, path.TrackPoints);
-            WriteNodeRefList(w, path.CurveControlNodes);
+            WriteNodeRefList(w, path.ControlNodes);
             WriteObjectList(w, path.Keyframes);
             w.Write(path.CameraSpeed);
         }

@@ -11,16 +11,27 @@ using TruckLib.Model.Ppd;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Additional data for company prefabs.
+    /// A prefab slave item which is placed for the <c>CompanyPoint</c> spawn point type of company prefabs.
     /// </summary>
+    /// <remarks>Additional nodes are created for parking spots and trailer spawn points.</remarks>
     public class Company : PrefabSlaveItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Company;
 
+        /// <summary>
+        /// Unit name of the company.
+        /// </summary>
         public Token CompanyName { get; set; }
 
+        /// <summary>
+        /// Unit name of the city in which this company is located, as defined in <c>/def/city.sii</c>.
+        /// </summary>
         public Token CityName { get; set; }
 
+        /// <summary>
+        /// Additional nodes placed for parking spots and trailer spawn points.
+        /// </summary>
         public List<CompanySpawnPoint> SpawnPoints { get; set; }
 
         public Company() : base() { }
@@ -30,22 +41,32 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
             SpawnPoints = new();
         }
 
+        /// <summary>
+        /// Adds a new Company item to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="parent">The prefab this item is linked to.</param>
+        /// <param name="position">The position of the item's node.</param>
+        /// <returns>The newly created Company item.</returns>
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<Company>(map, parent, position);
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
@@ -56,6 +77,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);

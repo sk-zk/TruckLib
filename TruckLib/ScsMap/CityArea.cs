@@ -10,14 +10,17 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A rectangular area which marks a city.
+    /// A City item, which declares a rectangular area as belonging to a city.
     /// </summary>
     public class CityArea : SingleNodeItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.CityArea;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceFar;
 
         /// <summary>
@@ -25,8 +28,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Name { get; set; }
 
+        /// <summary>
+        /// The width of the area.
+        /// </summary>
         public float Width { get; set; }
 
+        /// <summary>
+        /// The height of the area.
+        /// </summary>
         public float Height { get; set; }
 
         /// <summary>
@@ -54,6 +63,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -71,7 +81,7 @@ namespace TruckLib.ScsMap
         /// <param name="name">The unit name of the city.</param>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
-        /// <returns>The city area.</returns>
+        /// <returns>The newly created city area.</returns>
         public static CityArea Add(IItemContainer map, Vector3 position, Token name, float width, float height)
         {
             var city = Add<CityArea>(map, position);

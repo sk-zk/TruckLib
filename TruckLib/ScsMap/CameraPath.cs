@@ -4,22 +4,48 @@ using System.Text;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Defines a tracking shot through the map for use in cutscenes.
+    /// </summary>
     public class CameraPath : PathItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.CameraPath;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceFar;
 
+        /// <summary>
+        /// Tags of this item.
+        /// </summary>
         public List<Token> Tags { get; set; }
 
+        /// <summary>
+        /// <para>Track points the camera will look at. If null or empty, it will interpolate between
+        /// the rotations of the nodes instead.</para>
+        /// <para>Note that, while the map format itself supports multiple track points, the game
+        /// does not. Only the first node in this list will be used, and the rest are ignored.</para>
+        /// </summary>
         public List<INode> TrackPoints { get; set; }
 
-        public List<INode> CurveControlNodes { get; set; }
+        /// <summary>
+        /// Control points of the spline. If null or empty, the defaults will be used. If any of them
+        /// need to be different, all nodes must be explicitly created, not just the ones you
+        /// wish to change.
+        /// </summary>
+        public List<INode> ControlNodes { get; set; }
 
+        /// <summary>
+        /// Keyframe properties; one per node.
+        /// </summary>
         public List<Keyframe> Keyframes { get; set; }
 
+        /// <summary>
+        /// The main camera speed.
+        /// </summary>
         public float CameraSpeed { get; set; }
 
         public CameraPath() : base() { }
@@ -29,6 +55,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -38,6 +65,7 @@ namespace TruckLib.ScsMap
             CameraSpeed = 1f;
         }
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);

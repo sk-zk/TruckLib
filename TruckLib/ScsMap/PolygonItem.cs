@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Base class for items which define a polygonal area.
+    /// Base class for map items which define a polygonal area.
     /// </summary>
     public abstract class PolygonItem : MultiNodeItem
     {

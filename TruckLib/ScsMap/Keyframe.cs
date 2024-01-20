@@ -7,7 +7,7 @@ using System.Text;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents the properties of a keyframe of a camera path.
+    /// Represents the properties of one keyframe of a camera path.
     /// </summary>
     public class Keyframe : IBinarySerializable
     {

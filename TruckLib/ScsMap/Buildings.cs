@@ -31,12 +31,12 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The unit name of the building.
+        /// The unit name of the building scheme, as defined in <c>/def/world/building_scheme.sii</c>.
         /// </summary>
         public Token Name { get; set; }
 
         /// <summary>
-        /// The building look.
+        /// The look of the building model.
         /// </summary>
         public Token Look { get; set; }
 

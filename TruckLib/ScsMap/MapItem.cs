@@ -119,7 +119,7 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Searches a list of all nodes for the nodes referenced by UID in this map item
-        /// and adds references to them in the item's Node fields.
+        /// and updates the respective references.
         /// </summary>
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
         internal abstract void UpdateNodeReferences(Dictionary<ulong, INode> allNodes);
@@ -131,12 +131,12 @@ namespace TruckLib.ScsMap
         internal abstract IEnumerable<INode> GetItemNodes();
 
         /// <summary>
-        /// Returns the node which will be used to determine which sector
-        /// will be the parent of the item.
+        /// Returns the node which will be used to determine the sector
+        /// which will be the parent of the item.
         /// </summary>
         /// <returns>
-        /// The node which will be used to determine which sector will be
-        /// the parent of the item.
+        /// The node which will be used to determine the sector
+        /// which will be the parent of the item.
         /// </returns>
         internal abstract INode GetMainNode();
 
@@ -169,10 +169,7 @@ namespace TruckLib.ScsMap
         protected static void ResolveNodeReferences(IList<INode> nodes, Dictionary<ulong, INode> allNodes)
         {
             for (int i = 0; i < nodes.Count; i++)
-            {
                 nodes[i] = ResolveNodeReference(nodes[i], allNodes);
-            }
         }
-
     }
 }

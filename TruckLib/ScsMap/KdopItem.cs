@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents the kdop_item struct in the SCS map format.
+    /// Represents the kdop_item struct.
     /// This class is used to simplify deserialization and should not be
     /// directly exposed in item classes.
     /// </summary>
@@ -25,6 +25,7 @@ namespace TruckLib.ScsMap
         /// rather than flags relating to the bounding box.
         /// </summary>
         internal FlagField Flags;
+
         private const ushort MinDistance = 10;
         // The editor only lets you go up to 1500, but there are items in europe.mbd that exceed it.
         // Not sure if this is intentional and the game actually renders it like that, or if someone somehow
@@ -32,7 +33,7 @@ namespace TruckLib.ScsMap
         private const ushort MaxDistance = 2100;
         private ushort viewDistance = ViewDistanceClose;
         /// <summary>
-        /// View distance of an item in meters.
+        /// Gets or sets the view distance of an item in meters.
         /// </summary>
         public ushort ViewDistance
         {

@@ -7,16 +7,28 @@ using System.Text;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents the properties of one keyframe of a camera path.
+    /// Represents the properties of one keyframe of a <see cref="CameraPath">camera path</see>.
     /// </summary>
     public class Keyframe : IBinarySerializable
     {
+        /// <summary>
+        /// Easing function to use for speed changes between keyframes.
+        /// </summary>
         public EasingFunction SpeedChange { get; set; } = EasingFunction.EaseInOutSine;
 
+        /// <summary>
+        /// Easing function to use for rotation changes between keyframes.
+        /// </summary>
         public EasingFunction RotationChange { get; set; } = EasingFunction.EaseInOutSine;
 
+        /// <summary>
+        /// Multiplier for the main camera speed.
+        /// </summary>
         public float SpeedCoefficient { get; set; } = 1;
 
+        /// <summary>
+        /// FOV of the camera for this keyframe.
+        /// </summary>
         public float Fov { get; set; } = 60;
 
         /// <summary>
@@ -29,6 +41,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Vector3 ControlPoint2Position { get; set; }
 
+        /// <inheritdoc/>
         public void Deserialize(BinaryReader r)
         {
             SpeedChange = (EasingFunction)r.ReadInt32();
@@ -39,6 +52,7 @@ namespace TruckLib.ScsMap
             ControlPoint1Position = r.ReadVector3();
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write((int)SpeedChange);

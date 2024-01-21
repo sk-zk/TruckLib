@@ -5,20 +5,26 @@ using System.Text;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Represents the k-DOP bounding box of a map item.
+    /// </summary>
     public class KdopBounds
     {
         private const int arrSize = 5;
 
         /// <summary>
-        /// Minimums of the kDOP bounding box which is used for rendering and collision detection.
+        /// Minimums of the k-DOP bounding box.
         /// </summary>
         public float[] Minimums { get; set; }
 
         /// <summary>
-        /// Maximums of the kDOP bounding box which is used for rendering and collision detection.
+        /// Maximums of the k-DOP bounding box.
         /// </summary>
         public float[] Maximums { get; set; }
 
+        /// <summary>
+        /// Instantiates a KdopBounds object.
+        /// </summary>
         public KdopBounds()
         {
             Minimums = new float[arrSize];
@@ -35,6 +41,10 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the arrays to safe default values.
+        /// If too many items with all 0s are loaded, the game will crash.
+        /// </summary>
         protected void Init()
         {
             Minimums[0] = 1;

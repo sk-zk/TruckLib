@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
-
     /// <summary>
     /// An interface implemented by both types of objects in a map: 
-    /// items (<see cref="MapItem"/>) and nodes (<see cref="Node"/>).
+    /// <see cref="MapItem">items</see> and <see cref="Node">nodes</see>.
     /// </summary>
     public interface IMapObject
     {

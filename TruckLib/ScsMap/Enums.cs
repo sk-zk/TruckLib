@@ -329,13 +329,28 @@ namespace TruckLib.ScsMap
         AlwaysClosed = 2,
     }
 
+    /// <summary>
+    /// The node alignment of a <see cref="Hookup"/>.
+    /// </summary>
     public enum HookupNodeAlignment
     {
+        /// <summary>
+        /// The model is placed in its default position.
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// The hookup node is the position of the front end of the model.
+        /// </summary>
         Front = 1,
+        /// <summary>
+        /// The hookup node is the position of the rear end of the model.
+        /// </summary>
         Rear = 2,
     }
 
+    /// <summary>
+    /// The likelihood in percent that a <see cref="Hookup"/> will spawn a model.
+    /// </summary>
     public enum HookupSpawnProbability
     {
         Default = 0,
@@ -344,6 +359,9 @@ namespace TruckLib.ScsMap
         Percent75 = 3,
     }
 
+    /// <summary>
+    /// The LOD of the spawned model of a <see cref="Hookup"/>.
+    /// </summary>
     public enum HookupModelDetail
     {
         Default = 0,

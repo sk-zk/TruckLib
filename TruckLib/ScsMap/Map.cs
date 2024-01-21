@@ -258,7 +258,7 @@ namespace TruckLib.ScsMap
         /// Returns the item with the given UID.
         /// </summary>
         /// <param name="uid">The UID to search for.</param>
-        /// <returns>Returns the item, or null if it doesn't exist.</returns>
+        /// <returns>The item, or null if it doesn't exist.</returns>
         public MapItem GetItem(ulong uid)
         {
             foreach (var sectorKvp in Sectors)
@@ -432,7 +432,7 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Fills in the Node and Forward/BackwardItem fields in map item and node objects
-        /// by searching the Node or Item list for the Uid references.
+        /// by searching the Node or Item list for the UID references.
         /// </summary>
         private void UpdateReferences()
         {
@@ -460,15 +460,16 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Saves the map in binary format.
+        /// Saves the map in binary format. If the sector directory does not yet exist, it will be created.
         /// </summary>
-        /// <param name="mapDirectory">The directory to save the map to.</param>
-        /// <param name="cleanDir">If true, the sectors folder will be emptied before saving the map.</param>
-        public void Save(string mapDirectory, bool cleanDir = true)
+        /// <param name="mapDirectory">The path of the directory to save the map into.</param>
+        /// <param name="cleanSectorDirectory">If true, the sector directory will be emptied
+        /// before saving the map.</param>
+        public void Save(string mapDirectory, bool cleanSectorDirectory = true)
         {
             var sectorDirectory = Path.Combine(mapDirectory, Name);
             Directory.CreateDirectory(sectorDirectory);
-            if (cleanDir)
+            if (cleanSectorDirectory)
             {
                 new DirectoryInfo(sectorDirectory).GetFiles().ToList()
                     .ForEach(f => f.Delete());
@@ -520,7 +521,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Writes the mbd of this map.
+        /// Writes the .mbd file of this map.
         /// </summary>
         /// <param name="mbdPath">The path of the .mbd file.</param>
         private void SaveMbd(string mbdPath)

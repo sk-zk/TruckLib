@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         // sector boundaries are written to both sectors, and doing this was
         // the best way I could think of to prevent two instances of 
         // the same node.
-        public Dictionary<ulong, INode> Nodes { get; set; }
+        public Dictionary<ulong, INode> Nodes { get; internal set; }
             = new Dictionary<ulong, INode>();
 
         /// <summary>

@@ -188,7 +188,14 @@ namespace TruckLib.ScsMap
     /// </summary>
     public enum MapAreaType
     {
+        /// <summary>
+        /// The map area will be drawn onto the UI map as a polygon.
+        /// </summary>
         Visual = 0,
+
+        /// <summary>
+        /// TODO: What on earth does this do?
+        /// </summary>
         Navigation = 1
     }
 
@@ -197,9 +204,25 @@ namespace TruckLib.ScsMap
     /// </summary>
     public enum MapAreaColor
     {
+        /// <summary>
+        /// The map area has the same color as roads.
+        /// </summary>
         Road = 0,
+
+        /// <summary>
+        /// The map area is lighter than roads.
+        /// </summary>
         Light = 1,
+
+        /// <summary>
+        /// The map area is darker than roads.
+        /// </summary>
         Dark = 2,
+
+        /// <summary>
+        /// The map area has the same color as <see cref="MapAreaColor.Light">Light</see>
+        /// if undiscovered but is green once discovered.
+        /// </summary>
         Green = 3
     }
 

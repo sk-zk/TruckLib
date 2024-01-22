@@ -77,10 +77,10 @@ namespace TruckLib.ScsMap
         /// Adds a city area to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="position">The position of the center node.</param>
+        /// <param name="position">The position of the center of the area.</param>
         /// <param name="name">The unit name of the city.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="height">The height.</param>
+        /// <param name="width">The width of the area.</param>
+        /// <param name="height">The height of the area.</param>
         /// <returns>The newly created city area.</returns>
         public static CityArea Add(IItemContainer map, Vector3 position, Token name, float width, float height)
         {

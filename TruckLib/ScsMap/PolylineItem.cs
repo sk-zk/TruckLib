@@ -36,7 +36,7 @@ namespace TruckLib.ScsMap
         public INode ForwardNode { get; set; }
 
         /// <summary>
-        /// The length of the item's path.
+        /// Cached length of the item's path.
         /// </summary>
         public float Length { get; set; }
 

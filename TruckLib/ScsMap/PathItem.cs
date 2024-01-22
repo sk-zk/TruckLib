@@ -6,6 +6,10 @@ using System.Text;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Base class for map items which define a path that is fully contained in one item rather than
+    /// forming a polyline.
+    /// </summary>
     public abstract class PathItem : MultiNodeItem
     {
         protected PathItem() : base() { }
@@ -15,6 +19,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();

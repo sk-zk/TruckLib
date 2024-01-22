@@ -15,12 +15,18 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Model : SingleNodeItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Model;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Gets or sets the view distance of the item in meters.
+        /// </summary>
         public new ushort ViewDistance
         {
             get => base.ViewDistance;
@@ -45,7 +51,7 @@ namespace TruckLib.ScsMap
         private const int colorVariantPos = 8;
         private const int colorVariantLength = 4;
         /// <summary>
-        /// The color variant.
+        /// 1-indexed color variant of the model. Set to 0 if there aren't any.
         /// </summary>
         public Nibble ColorVariant
         {
@@ -67,19 +73,28 @@ namespace TruckLib.ScsMap
 
         public Token TerrainMaterial { get; set; }
 
+        /// <summary>
+        /// Color tint of the terrain.
+        /// </summary>
         public Color TerrainColor { get; set; }
 
         /// <summary>
-        /// UV rotation of terrain textures.
+        /// UV rotation of the terrain texture.
         /// </summary>
         public float TerrainRotation { get; set; }
 
         private const int lodPos = 4;
         private const int lodLength = 2;
-        public ModelLod Lod
+        /// <summary>
+        /// LOD setting, if applicable. Must be between 0 and 3. If 0, the LOD of the model
+        /// will change dynamically. The other indices, if supported by the model, will keep
+        /// the model at one specific LOD.
+        /// </summary>
+        public byte Lod
         {
-            get => (ModelLod)Kdop.Flags.GetBitString(lodPos, lodLength);
-            set => Kdop.Flags.SetBitString(lodPos, lodLength, (uint)value);
+            get => (byte)Kdop.Flags.GetBitString(lodPos, lodLength);
+            set => Kdop.Flags.SetBitString(lodPos, lodLength,
+                Utils.SetIfInRange(value, (byte)0, (byte)3));
         }
 
         public bool ModelHookups
@@ -168,16 +183,17 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
             Scale = new Vector3(1f, 1f, 1f);
             AdditionalParts = new List<Token>();
-            TerrainColor = Color.FromArgb(0x00ffffff);
+            TerrainColor = Color.White;
         }
 
         /// <summary>
-        /// Adds a new model to the map. This method will also create a node for the model.
+        /// Adds a model to the map.
         /// </summary>
         /// <param name="map">The map the model will be added to.</param>
         /// <param name="name">The name of the model.</param>
@@ -185,24 +201,15 @@ namespace TruckLib.ScsMap
         /// <param name="look">The look of the model.</param>
         /// <param name="position">The position of the model.</param>
         /// <returns>The newly created model.</returns>
-        public static Model Add(IItemContainer map, Vector3 position, Quaternion rotation,
-            Token name, Token variant, Token look)
+        public static Model Add(IItemContainer map, Vector3 position, Token name, Token variant, Token look)
         {
             var model = Add<Model>(map, position);
 
-            model.Node.Rotation = rotation;
             model.Name = name;
             model.Look = look;
             model.Variant = variant;
 
             return model;
-        }
-
-        public static Model Add(IItemContainer map, Vector3 position, float yRotation,
-            Token name, Token variant, Token look)
-        {
-            var rotation = Quaternion.CreateFromYawPitchRoll(yRotation, 0, 0);
-            return Add(map, position, rotation, name, variant, look);
         }
     }
 }

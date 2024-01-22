@@ -68,15 +68,16 @@ namespace Example
                 .Append(new Vector3(216, 0, 25));
 
             // Finally, let's place two model items:
-            Model.Add(map,
+            var model1 = Model.Add(map,
                 new Vector3(103.75f, -0.3f, 31.73f), // position 
-                -2.99f,       // Y rotation in radians
                 "dlc_no_471", // unit name of "house_01_sc"
                 "brick",      // variant
                 "default"     // look
                 );
-            Model.Add(map, new Vector3(159.64f, -0.1f, 36.91f), 
-                (float)Math.PI / 2, "378", "default", "default"); // "wood_heap1"
+            model1.Node.Rotation = Quaternion.CreateFromYawPitchRoll(-2.99f, 0, 0);
+            var model2 = Model.Add(map, new Vector3(159.64f, -0.1f, 36.91f)
+                , "378", "default", "default"); // "wood_heap1"
+            model2.Node.Rotation = Quaternion.CreateFromYawPitchRoll((float)(Math.PI / 2), 0, 0);
 
             // Save the map
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

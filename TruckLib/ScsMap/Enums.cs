@@ -251,16 +251,6 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The LOD setting of a  <see cref="Model"/> item.
-    /// </summary>
-    public enum ModelLod
-    {
-        Dynamic = 0,
-        LodFrom100m = 1,
-        LodFrom200m = 2
-    }
-
-    /// <summary>
     /// The type of a <see cref="Sound"/> item.
     /// </summary>
     public enum SoundType

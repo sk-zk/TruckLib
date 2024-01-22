@@ -8,8 +8,16 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// A prefab slave item which is placed for the <c>GaragePoint</c> and <c>BuyPoint</c>
+    /// spawn point types of a prefab.
+    /// </summary>
+    /// <remarks>
+    /// <c>GaragePoint</c> items additionally contain one node for each <c>TrailerSpawn</c> spawn point.
+    /// </remarks>
     public class Garage : PrefabSlaveItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Garage;
 
         /// <summary>
@@ -18,10 +26,13 @@ namespace TruckLib.ScsMap
         public Token CityName { get; set; }
 
         /// <summary>
-        /// Determines if the point is the buy point of the garage (1) or not (0).
+        /// Determines if the point is the <c>BuyPoint</c> (1) or the <c>GaragePoint</c> (0).
         /// </summary>
         public uint BuyMode { get; set; }
 
+        /// <summary>
+        /// Nodes representing the <c>TrailerSpawn</c> spawn point type of the prefab.
+        /// </summary>
         public List<INode> TrailerSpawnPoints { get; set; }
 
         public Garage() : base() { }
@@ -31,22 +42,32 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
             TrailerSpawnPoints = new List<INode>();
         }
 
+        /// <summary>
+        /// Adds a garage to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="parent">The prefab this item is linked to.</param>
+        /// <param name="position">The position of the node.</param>
+        /// <returns>The newly created garage.</returns>
         public static Garage Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<Garage>(map, parent, position);
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
@@ -57,6 +78,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);

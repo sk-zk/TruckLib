@@ -3,6 +3,9 @@ using System.Numerics;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Base class for <see cref="PathItem"/> and <see cref="PolygonItem"/>.
+    /// </summary>
     public abstract class MultiNodeItem : MapItem
     {
         /// <summary>
@@ -29,11 +32,11 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates map nodes for this item.
+        /// Creates map nodes for the given item.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="nodePositions"></param>
-        /// <param name="item"></param>
+        /// <param name="map">The map.</param>
+        /// <param name="nodePositions">The positions of the nodes.</param>
+        /// <param name="item">The map item the nodes are for.</param>
         protected static void CreateNodes(IItemContainer map, IList<Vector3> nodePositions, MultiNodeItem item)
         {
             // all nodes have the item as ForwardItem; 
@@ -52,10 +55,13 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         internal override IEnumerable<INode> GetItemNodes() => new List<INode>(Nodes);
 
+        /// <inheritdoc/>
         internal override INode GetMainNode() => Nodes[0];
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);

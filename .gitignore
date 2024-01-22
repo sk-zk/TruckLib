@@ -330,3 +330,7 @@ ASALocalRun/
 
 **/coverage.xml
 coveragereport/
+
+# docfx
+docfx/_site/
+docfx/api/

@@ -49,7 +49,7 @@ namespace TruckLib.ScsMap
     };
 
     /// <summary>
-    /// Sector files that can hold an item.
+    /// Sector files that can hold <see cref="MapItem">map items</see>.
     /// </summary>
     public enum ItemFile
     {
@@ -59,7 +59,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed terrain noise values for terrain.
+    /// Allowed terrain noise values in percent.
     /// </summary>
     public enum TerrainNoise
     {
@@ -69,7 +69,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed transition values for terrain.
+    /// Allowed transition values for terrain in meters(?).
     /// </summary>
     public enum TerrainTransition
     {
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed values for sidewalk size (in the legacy pre-edge system).
+    /// Allowed values for sidewalk size in meters in the legacy pre-edge system.
     /// </summary>
     public enum SidewalkSize
     {
@@ -102,7 +102,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Vegetation modes for vegetation spheres.
+    /// Defines the behavior of a vegetation sphere.
     /// </summary>
     public enum VegetationSphereType
     {
@@ -112,7 +112,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Scale of vegetation models.
+    /// Scale of vegetation models in percent.
     /// </summary>
     public enum VegetationScale
     {
@@ -127,7 +127,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Quad resolution of a standalone terrain. 
+    /// Quad resolution of a <see cref="Terrain"/> item.
     /// </summary>
     public enum StepSize
     {
@@ -138,33 +138,33 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The resolution / step size of a road.
+    /// The resolution / step size of a <see cref="Road">road</see>.
     /// </summary>
     public enum RoadResolution
     {
         /// <summary>
-        /// 15m
+        /// 15 m
         /// </summary>
         Normal, 
 
         /// <summary>
-        /// 5m
+        /// 5 m
         /// </summary>
         HighPoly,
 
         /// <summary>
-        /// 1m (non-template only)
+        /// 1 m (non-template only)
         /// </summary>
         Superfine
     }
 
     /// <summary>
-    /// The type of a MapOverlay.
+    /// The type of a <see cref="MapOverlay">Map Overlay</see>.
     /// </summary>
     public enum OverlayType
     {
         /// <summary>
-        /// The item will display an image specified in Look.
+        /// The item will display an image specified in <see cref="MapOverlay.Look">Look</see>.
         /// </summary>
         RoadName = 0,
 
@@ -174,36 +174,61 @@ namespace TruckLib.ScsMap
         Parking = 1,
 
         /// <summary>
-        /// The item will display the name of a city like a City item.
+        /// The item will display the name of a city specified in <see cref="MapOverlay.Look">Look</see>.
         /// </summary>
         CityName = 2,
 
-        // TODO: What does this do?
+        // TODO: What do these do?
         UserText = 4,
-
         Landmark = 16,
     }
 
     /// <summary>
-    /// The type of a MapArea.
+    /// The type of a <see cref="MapArea">Map Area</see>.
     /// </summary>
     public enum MapAreaType
     {
+        /// <summary>
+        /// The map area will be drawn onto the UI map as a polygon.
+        /// </summary>
         Visual = 0,
+
+        /// <summary>
+        /// TODO: What on earth does this do?
+        /// </summary>
         Navigation = 1
     }
 
     /// <summary>
-    /// The color of a MapArea.
+    /// The color of a <see cref="MapArea">Map Area</see>.
     /// </summary>
     public enum MapAreaColor
     {
+        /// <summary>
+        /// The map area has the same color as roads.
+        /// </summary>
         Road = 0,
+
+        /// <summary>
+        /// The map area is lighter than roads.
+        /// </summary>
         Light = 1,
+
+        /// <summary>
+        /// The map area is darker than roads.
+        /// </summary>
         Dark = 2,
+
+        /// <summary>
+        /// The map area has the same color as <see cref="MapAreaColor.Light">Light</see>
+        /// if undiscovered but is green once discovered.
+        /// </summary>
         Green = 3
     }
 
+    /// <summary>
+    /// The type of a <see cref="Service"/> item.
+    /// </summary>
     public enum ServiceType
     {
         GasStation = 0,
@@ -215,6 +240,9 @@ namespace TruckLib.ScsMap
         WeighStationCat = 8,
     }
 
+    /// <summary>
+    /// The type of a <see cref="Cutscene"/> item.
+    /// </summary>
     public enum CutsceneType
     {
         Viewpoint = 0,
@@ -222,13 +250,9 @@ namespace TruckLib.ScsMap
         MapScene = 2,
     }
 
-    public enum ModelLod
-    {
-        Dynamic = 0,
-        LodFrom100m = 1,
-        LodFrom200m = 2
-    }
-
+    /// <summary>
+    /// The type of a <see cref="Sound"/> item.
+    /// </summary>
     public enum SoundType
     {
         ThreeDSound = 0,
@@ -237,7 +261,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The rendering behavior of a Visibility Area.
+    /// The rendering behavior of a <see cref="VisibilityArea">Visibility Area</see>.
     /// </summary>
     public enum VisibilityAreaBehavior
     {
@@ -257,6 +281,9 @@ namespace TruckLib.ScsMap
         ShowObjects = 2
     }
 
+    /// <summary>
+    /// Easing functions used by <see cref="Keyframe">keyframes</see>.
+    /// </summary>
     public enum EasingFunction
     {
         Custom = 0,
@@ -283,7 +310,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Fog behavior in a No Weather Area.
+    /// Fog behavior in a <see cref="NoWeatherArea">No Weather Area</see>.
     /// </summary>
     public enum FogMask
     {
@@ -294,6 +321,9 @@ namespace TruckLib.ScsMap
         OpenArea = 4,
     }
 
+    /// <summary>
+    /// Blinker type for <see cref="Trajectory"/> items.
+    /// </summary>
     public enum BlinkerType
     {
         NoBlinker = 0,
@@ -302,6 +332,9 @@ namespace TruckLib.ScsMap
         LeftBlinker = 4,
     }
 
+    /// <summary>
+    /// The behavior of a <see cref="Gate"/>.
+    /// </summary>
     public enum GateType
     {
         TriggerActivated = 0,
@@ -309,13 +342,28 @@ namespace TruckLib.ScsMap
         AlwaysClosed = 2,
     }
 
+    /// <summary>
+    /// The node alignment of a <see cref="Hookup"/>.
+    /// </summary>
     public enum HookupNodeAlignment
     {
+        /// <summary>
+        /// The model is placed in its default position.
+        /// </summary>
         None = 0,
+        /// <summary>
+        /// The hookup node is the position of the front end of the model.
+        /// </summary>
         Front = 1,
+        /// <summary>
+        /// The hookup node is the position of the rear end of the model.
+        /// </summary>
         Rear = 2,
     }
 
+    /// <summary>
+    /// The likelihood in percent that a <see cref="Hookup"/> will spawn a model.
+    /// </summary>
     public enum HookupSpawnProbability
     {
         Default = 0,
@@ -324,12 +372,50 @@ namespace TruckLib.ScsMap
         Percent75 = 3,
     }
 
+    /// <summary>
+    /// The LOD of the spawned model of a <see cref="Hookup"/>.
+    /// </summary>
     public enum HookupModelDetail
     {
         Default = 0,
         Average = 1,
         Low = 2,
         VeryLow = 3,
+    }
+
+    /// <summary>
+    /// The spawn point type of a node belonging to a <see cref="Company"/> item.
+    /// </summary>
+    public enum CompanySpawnPointType
+    {
+        /// <summary>
+        /// Easy difficulty (15 XP) parking spot.
+        /// </summary>
+        UnloadEasy = 1,
+        /// <summary>
+        /// Medium difficulty (40 XP) parking spot.
+        /// </summary>
+        UnloadMedium = 2,
+        /// <summary>
+        /// Hard difficulty (90 XP) parking spot.
+        /// </summary>
+        UnloadHard = 3,
+        /// <summary>
+        /// Trailer spawn point.
+        /// </summary>
+        Trailer = 4,
+    }
+
+    /// <summary>
+    /// Action type for <see cref="Trigger">triggers</see>.
+    /// </summary>
+    public enum ActionType
+    {
+        Default = 0,
+        Condition = 1,
+        Fallback = 2,
+        Mandatory = 3,
+        ConditionRetry = 4
     }
 
 }

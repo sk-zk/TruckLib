@@ -1,0 +1,47 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "..",
+          "files": [
+            "TruckLib/*.csproj",
+            "TruckLib.*/*.csproj",
+          ]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+        "default",
+        "modern",
+        "templates/material"
+    ],
+    "globalMetadata": {
+      "_appName": "TruckLib",
+      "_appTitle": "TruckLib",
+      "_enableSearch": true,
+      "pdf": false
+    }
+  }
+}

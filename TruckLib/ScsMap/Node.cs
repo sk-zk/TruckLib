@@ -10,7 +10,7 @@ using System.Collections;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A map node.
+    /// Represents a map node.
     /// </summary>
     public class Node : INode, IItemReferences, IMapObject, IBinarySerializable
     {
@@ -22,8 +22,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The sectors this node is in.
         /// </summary>
-        // This is an array instead of a list to greatly reduce
-        // memory overhead
+        // This is an array instead of a list to greatly reduce memory overhead.
         public Sector[] Sectors { get; set; }
 
         private Vector3 position;
@@ -68,7 +67,7 @@ namespace TruckLib.ScsMap
         protected FlagField Flags;
 
         /// <summary>
-        /// Determines if this node is red or green.
+        /// Gets or sets if this node is red or green.
         /// </summary>
         public bool IsRed
         {
@@ -77,7 +76,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// If true, the game will use whichever rotation is specified without
+        /// Gets or sets if the game will use whichever rotation is specified without
         /// reverting to its default rotation when the node is updated.
         /// </summary>
         public bool FreeRotation
@@ -87,7 +86,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Defines if this node is a country border.
+        /// Gets or sets if this node is a country border.
         /// </summary>
         public bool IsCountryBorder
         {
@@ -96,7 +95,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Defines if this node can be moved/deleted in the editor.
+        /// Gets or sets if this node can be moved or deleted in the editor.
         /// </summary>
         public bool Locked
         {
@@ -123,7 +122,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a new node with a random UID.
+        /// Instantiates a new node with a random UID.
         /// </summary>
         public Node()
         {
@@ -135,6 +134,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the node's properties to its default values.
+        /// </summary>
         protected virtual void Init()
         {
             Uid = Utils.GenerateUuid();
@@ -142,8 +144,16 @@ namespace TruckLib.ScsMap
             Flags = new FlagField();
         }
 
+        /// <summary>
+        /// Returns whether the node has no ForwardItem and no BackwardItem.
+        /// </summary>
+        /// <returns>Whether the node has no ForwardItem and no BackwardItem.</returns>
         public bool IsOrphaned() => ForwardItem is null && BackwardItem is null;
 
+        /// <summary>
+        /// Moves the node to another position.
+        /// </summary>
+        /// <param name="newPos">The new position of the node.</param>
         public void Move(Vector3 newPos)
         {
             // if the node isn't attached to a sector,
@@ -165,6 +175,9 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Recalculates the items attached to this node.
+        /// </summary>
         protected virtual void RecalculateItems()
         {
             // TODO Whenever polyline recalculation changes, 
@@ -176,10 +189,9 @@ namespace TruckLib.ScsMap
 
         private const float positionFactor = 256f;
         /// <summary>
-        /// Reads the node from a BinaryReader.
+        /// Reads the node from a BinaryReader whose position is at the start of the object.
         /// </summary>
-        /// <param name="sector">The sector the node was in.</param>
-        /// <param name="r"></param>
+        /// <param name="r">A BinaryReader whose position is at the start of a Node.</param>
         public void Deserialize(BinaryReader r)
         {
             Uid = r.ReadUInt64();
@@ -207,6 +219,10 @@ namespace TruckLib.ScsMap
             Flags = new FlagField(r.ReadUInt32());
         }
 
+        /// <summary>
+        /// Writes the node to a BinaryWriter.
+        /// </summary>
+        /// <param name="w">A BinaryWriter.</param>
         public void Serialize(BinaryWriter w)
         {
             w.Write(Uid);
@@ -223,15 +239,19 @@ namespace TruckLib.ScsMap
             w.Write(Flags.Bits);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Uid:X16} ({Position.X}|{Position.Y}|{Position.Z})";
         }
 
+        /// <summary>
+        /// Searches a list of all map items for the map items referenced by UID by this node
+        /// and updates the respective references.
+        /// </summary>
+        /// <param name="allItems">A dictionary of all items in the entire map.</param>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            // uses the field instead of the property to not trigger recalc,
-            // which we don't want while loading an existing map
             if (ForwardItem is UnresolvedItem
                 && allItems.TryGetValue(ForwardItem.Uid, out var resolvedFw))
             {
@@ -243,6 +263,5 @@ namespace TruckLib.ScsMap
                 BackwardItem = resolvedBw;
             }
         }
-
     }
 }

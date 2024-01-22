@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap.Lookup
 {
+    /// <summary>
+    /// DLC guard IDs used in ETS2 and ATS.
+    /// </summary>
     public sealed class DlcGuard
     {
         public static readonly byte None = 0;

@@ -8,19 +8,20 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A map file header.
+    /// Represents the header of .mbd, .base, .aux, .snd, .data, .layer, and .sbd files.
     /// </summary>
     public class Header : IBinarySerializable
     {
-        private const int supportedVer = 898;
+        private const int supportedVersion = 900;
         /// <summary>
         /// Version number of the map format.
         /// </summary>
-        public uint CoreMapVersion { get; set; } = supportedVer;
+        public uint CoreMapVersion { get; internal set; } = supportedVersion;
 
         /// <summary>
         /// Game ID token.
-        /// <para>The ID "euro2" is used for both ETS2 and ATS.</para>
+        /// <para>The ID <c>euro2</c> is used for both Euro Truck Simulator 2
+        /// and American Truck Simulator.</para>
         /// </summary>
         public Token GameId { get; set; } = "euro2";
 
@@ -29,19 +30,25 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint GameMapVersion { get; set; } = 3;
 
+        /// <inheritdoc/>
+        /// <exception cref="UnsupportedVersionException"></exception>
         public virtual void Deserialize(BinaryReader r)
         {
             CoreMapVersion = r.ReadUInt32();
+            if (CoreMapVersion != supportedVersion)
+            {
+                throw new UnsupportedVersionException($"Map version {CoreMapVersion} is not supported.");
+            }
             GameId = r.ReadToken();
             GameMapVersion = r.ReadUInt32();
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(CoreMapVersion);
             w.Write(GameId);
             w.Write(GameMapVersion);
         }
-
     }
 }

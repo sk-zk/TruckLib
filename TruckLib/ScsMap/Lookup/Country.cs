@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap.Lookup
 {
     /// <summary>
-    /// SCS' official country IDs. Mods might use other IDs.
+    /// Country IDs as defined by SCS. Mods may use other IDs.
     /// </summary>
     public sealed class CountryId
     {

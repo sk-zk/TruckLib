@@ -11,9 +11,10 @@ namespace TruckLib.ScsMap
 {
     /// <summary>
     /// Defines a trigger area. 
-    /// <para>If only two nodes are used, the area is a sphere, 
-    /// its radius being distance between the two nodes.</para>
     /// </summary>
+    /// <remarks>Note that, if only two nodes are used, the area is a sphere, 
+    /// with the first node defining the center and the second node
+    /// defining the radius.</remarks>
     public class Trigger : PolygonItem
     {
         public override ItemType ItemType => ItemType.Trigger;
@@ -81,7 +82,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if this trigger's icon, if one exists, is only visible in the UI map once discovered.
+        /// Gets or sets if this trigger's icon, if one exists, is only visible
+        /// in the UI map once discovered.
         /// </summary>
         public bool Secret
         {

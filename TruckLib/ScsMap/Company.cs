@@ -5,43 +5,34 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using TruckLib.Model.Ppd;
 
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Additional data for company prefabs.
+    /// A prefab slave item which is placed for the <c>CompanyPoint</c> spawn point type of company prefabs.
     /// </summary>
+    /// <remarks>Additional nodes are created for parking spots and trailer spawn points.</remarks>
     public class Company : PrefabSlaveItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Company;
 
+        /// <summary>
+        /// Unit name of the company.
+        /// </summary>
         public Token CompanyName { get; set; }
 
+        /// <summary>
+        /// Unit name of the city in which this company is located, as defined in <c>/def/city.sii</c>.
+        /// </summary>
         public Token CityName { get; set; }
 
         /// <summary>
-        /// List of easy difficulty (15 XP) parking spots.
+        /// Additional nodes placed for parking spots and trailer spawn points.
         /// </summary>
-        public List<INode> UnloadPointsEasy { get; set; }
-
-        /// <summary>
-        /// List of medium difficulty (40 XP) parking spots.
-        /// </summary>
-        public List<INode> UnloadPointsMedium { get; set; }
-
-        /// <summary>
-        /// List of hard difficulty (90 XP) parking spots.
-        /// </summary>
-        public List<INode> UnloadPointsHard { get; set; }
-
-        /// <summary>
-        /// List of trailer spawn points.
-        /// </summary>
-        public List<INode> TrailerSpawnPoints { get; set; }
-
-        public List<INode> Unknown1 { get; set; }
-
-        public List<INode> LongTrailerSpawnPoints { get; set; } 
+        public List<CompanySpawnPoint> SpawnPoints { get; set; }
 
         public Company() : base() { }
 
@@ -50,51 +41,53 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
-            UnloadPointsEasy = new List<INode>();
-            UnloadPointsMedium = new List<INode>();
-            UnloadPointsHard = new List<INode>();
-            TrailerSpawnPoints = new List<INode>();
-            Unknown1 = new List<INode>();
-            LongTrailerSpawnPoints = new List<INode>();
+            SpawnPoints = new();
         }
 
+        /// <summary>
+        /// Adds a new Company item to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="parent">The prefab this item is linked to.</param>
+        /// <param name="position">The position of the item's node.</param>
+        /// <returns>The newly created Company item.</returns>
         public static Company Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<Company>(map, parent, position);
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
 
-            var allNodes = UnloadPointsEasy.Concat(UnloadPointsMedium)
-                .Concat(UnloadPointsHard).Concat(TrailerSpawnPoints)
-                .Concat(Unknown1).Concat(LongTrailerSpawnPoints);
-
-            foreach (var node in allNodes)
+            foreach (var spawnPoint in SpawnPoints)
             {
-                node.Move(node.Position + translation);
+                spawnPoint.Node.Move(spawnPoint.Node.Position + translation);
             }
         }
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
 
-            ResolveNodeReferences(UnloadPointsEasy, allNodes);
-            ResolveNodeReferences(UnloadPointsMedium, allNodes);
-            ResolveNodeReferences(UnloadPointsHard, allNodes);
-            ResolveNodeReferences(TrailerSpawnPoints, allNodes);
-            ResolveNodeReferences(Unknown1, allNodes);
-            ResolveNodeReferences(LongTrailerSpawnPoints, allNodes);
+            for (int i = 0; i < SpawnPoints.Count; i++)
+            {
+                var spawnPoint = SpawnPoints[i];
+                spawnPoint.Node = ResolveNodeReference(spawnPoint.Node, allNodes);
+                SpawnPoints[i] = spawnPoint;
+            }
         }
     }
 }

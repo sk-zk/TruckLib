@@ -42,6 +42,9 @@ namespace TruckLib.HashFs
         /// </summary>
         public bool IsDirectory => Flags[0];
 
+        /// <summary>
+        /// Whether the file is compressed.
+        /// </summary>
         public bool IsCompressed => Flags[1];
 
         public bool Verify => Flags[2]; // TODO: What is this?

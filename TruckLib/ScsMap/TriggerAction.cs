@@ -16,10 +16,10 @@ namespace TruckLib.ScsMap
         private const int typeLength = 4; // presumably
         public ActionType Type
         {
-            get => (ActionType)actionFlags.GetBitString(typeStart, typeLength);
+            get => (ActionType)ActionFlags.GetBitString(typeStart, typeLength);
             set
             {
-                actionFlags.SetBitString(typeStart, typeLength, (uint)value);
+                ActionFlags.SetBitString(typeStart, typeLength, (uint)value);
             }
         }
 

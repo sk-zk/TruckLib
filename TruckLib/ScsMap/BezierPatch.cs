@@ -20,6 +20,9 @@ namespace TruckLib.ScsMap
 
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Gets or sets the view distance of the item in meters.
+        /// </summary>
         public new ushort ViewDistance
         {
             get => base.ViewDistance;
@@ -43,18 +46,35 @@ namespace TruckLib.ScsMap
         /// </summary>
         public ushort ZTesselation { get; set; }
 
+        /// <summary>
+        /// Gets or sets the seed for the RNG which determines which vegetation models
+        /// to place. The position of the models does not appear to be
+        /// affected by this.
+        /// </summary>
         public uint RandomSeed { get; set; }
 
-        public Vegetation[] Vegetation { get; set; }
+        /// <summary>
+        /// The vegetation on this Bézier patch. A maximum of three vegetation types can be used.
+        /// </summary>
+        public Vegetation[] Vegetation { get; internal set; }
 
+        /// <summary>
+        /// The vegetation spheres on this Bézier patch.
+        /// </summary>
         public List<VegetationSphere> VegetationSpheres { get; set; }
 
         private static readonly ushort DefaultQuadRows = 5;
         private static readonly ushort DefaultQuadCols = 5;
+        /// <summary>
+        /// Gets or sets the terrain quad data of this Bézier patch.
+        /// </summary>
         public TerrainQuadData QuadData { get; set; }
 
         private readonly int NoisePowerStart = 2;
         private readonly int NoisePowerLength = 2;
+        /// <summary>
+        /// Gets or sets the strength of random noise applied to the vertices of the terrain.
+        /// </summary>
         public TerrainNoise NoisePower
         {
             get => (TerrainNoise)Kdop.Flags.GetBitString(NoisePowerStart, NoisePowerLength);
@@ -80,7 +100,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if only flat textures are used as vegetation.
+        /// Gets or sets if vegetation is rendered as flat textures only.
         /// </summary>
         public bool LowPolyVegetation
         {
@@ -136,7 +156,7 @@ namespace TruckLib.ScsMap
         /// Gets or sets if vegetation spheres are inverted, only placing vegetation
         /// inside rather than outisde of them.
         /// </summary>
-        public bool InnerVegetationSphereSpace
+        public bool InvertVegetationSpheres
         {
             get => Kdop.Flags[8];
             set => Kdop.Flags[8] = value;
@@ -174,6 +194,13 @@ namespace TruckLib.ScsMap
             QuadData = new TerrainQuadData();
         }
 
+        /// <summary>
+        /// Adds a new Bézier patch to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The center point of the item.</param>
+        /// <param name="controlPoints">The control points of the item.</param>
+        /// <returns>The newly created Bézier patch.</returns>
         public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints)
         {
             var bezier = Add<BezierPatch>(map, position);
@@ -189,7 +216,21 @@ namespace TruckLib.ScsMap
             return bezier;
         }
 
+        /// <summary>
+        /// Adds a new Bézier patch to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The center point of the item.</param>
+        /// <param name="width">Width of the item.</param>
+        /// <param name="height">Height of the item.</param>
+        /// <returns>The newly created Bézier patch.</returns>
         public static BezierPatch Add(IItemContainer map, Vector3 position, float width, float height)
+        {
+            var points = CreateControlPointsFromDimensions(width, height);
+            return Add(map, position, points);
+        }
+
+        private static Vector3[,] CreateControlPointsFromDimensions(float width, float height)
         {
             var points = new Vector3[ControlPointCols, ControlPointRows];
 
@@ -206,7 +247,7 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            return Add(map, position, points);
+            return points;
         }
     }
 }

@@ -11,10 +11,10 @@ using System.Collections.Specialized;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// <p>TODO: What even is this?</p>
-    /// <p>Removed from the editor item menu, but it's still in the game and the
-    /// item properties dialog still works.</p>
+    /// <para>TODO: What even is this?</para>
     /// </summary>
+    /// <remarks>Removed from the editor item menu, but it's still in the game and the
+    /// item properties dialog still works.</remarks>
     [Obsolete]
     public class AnimatedModel : SingleNodeItem
     {

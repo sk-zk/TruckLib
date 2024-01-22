@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Base class for items which define a polygonal area.
+    /// Base class for map items which define a polygonal area.
     /// </summary>
     public abstract class PolygonItem : MultiNodeItem
     {
@@ -19,6 +19,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -28,7 +29,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Appends a node to the item.
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="position">The position of the new node.</param>
         public void Append(Vector3 position)
         {
             var node = Nodes.First().Sectors[0].Map.AddNode(position);
@@ -36,17 +37,23 @@ namespace TruckLib.ScsMap
             Nodes.Add(node);
         }
 
+        /// <summary>
+        /// Moves the item, where the given position will be the new position
+        /// of the node at index 0, and all other nodes will be moved relative to it.
+        /// </summary>
+        /// <param name="newPos">The new position of the node.</param>
         public override void Move(Vector3 newPos)
         {
             Move(newPos, 0);
         }
 
         /// <summary>
-        /// Moves the item, with the given parameter as the new position
-        /// of the Nth node.
+        /// Moves the item, where the given position will be the new position
+        /// of the node at index <paramref name="n">n/</paramref>, and all other nodes
+        /// will be moved relative to it.
         /// </summary>
-        /// <param name="newPos"></param>
-        /// <param name="n"></param>
+        /// <param name="newPos">The new position of the node.</param>
+        /// <param name="n">The index of the node which will be moved to this position.</param>
         public void Move(Vector3 newPos, int n)
         {
             if (n < 0 || n >= Nodes.Count)
@@ -62,7 +69,7 @@ namespace TruckLib.ScsMap
         /// <param name="translation"></param>
         public override void Translate(Vector3 translation)
         {
-            foreach (Node node in Nodes)
+            foreach (var node in Nodes)
                 node.Move(node.Position + translation);
         }
     }

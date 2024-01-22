@@ -14,12 +14,18 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class MapArea : PolygonItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.MapArea;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// The map area type.
+        /// </summary>
         public MapAreaType Type
         {
             get => Kdop.Flags[3] ? MapAreaType.Navigation : MapAreaType.Visual;
@@ -27,7 +33,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Color of the map area.
+        /// The color of the map area.
         /// </summary>
         public MapAreaColor Color { get; set; }
 
@@ -37,12 +43,18 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags.SetByte(1, value);
         }
 
+        /// <summary>
+        /// TODO: What does this even do?
+        /// </summary>
         public bool DrawOutline
         {
             get => Kdop.Flags[1];
             set => Kdop.Flags[1] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if this map area is drawn on top of other items.
+        /// </summary>
         public bool DrawOver
         {
             get => Kdop.Flags[0];
@@ -65,12 +77,20 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
             Color = MapAreaColor.Road;
         }
 
+        /// <summary>
+        /// Adds a map area to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="nodePositions">The positions of the points of the polygon.</param>
+        /// <param name="type">The map area type.</param>
+        /// <returns>The newly created map area.</returns>
         public static MapArea Add(IItemContainer map, IList<Vector3> nodePositions, MapAreaType type)
         {
             var ma = Add<MapArea>(map, nodePositions);

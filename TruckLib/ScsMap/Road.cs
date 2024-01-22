@@ -169,6 +169,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Secret { get; set; } = false;
 
+        public bool Unknown { get; set; } = false;
+        public bool Unknown2 { get; set; } = false;
+        public bool Unknown3 { get; set; } = false;
+
         public Road() : base() { }
 
         internal Road(bool initFields) : base(initFields)

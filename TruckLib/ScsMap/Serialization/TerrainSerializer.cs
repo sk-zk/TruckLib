@@ -49,6 +49,8 @@ namespace TruckLib.ScsMap.Serialization
             var karr3 = new BitArray(new[] { kflag3 });
             t.TerrainShadows = !karr3[0];
             t.SmoothDetailVegetation = karr3[2];
+            t.Unknown2 = karr3[5];
+            t.Unknown = karr3[7];
 
             var kflag4 = r.ReadByte();
             var karr4 = new BitArray(new[] { kflag4 });
@@ -140,6 +142,8 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(kflag2);
 
             byte kflag3 = 0;
+            kflag3 |= (byte)(t.Unknown.ToByte() << 7);
+            kflag3 |= (byte)(t.Unknown2.ToByte() << 5);
             kflag3 |= (byte)(t.SmoothDetailVegetation.ToByte() << 2);
             kflag3 |= (!t.TerrainShadows).ToByte();
             w.Write(kflag3);
@@ -189,25 +193,25 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(t.Left.Edge);
             w.Write(t.Left.EdgeLook);
 
-            void WriteThatTerrainAndVegetationPart(TerrainSide side, TerrainSide bwTerrainSide)
+            void WriteThatTerrainAndVegetationPart(TerrainSide side, TerrainSide bwSide)
             {
                 w.Write((ushort)(side.Terrain.Size * terrainSizeFactor));
                 w.Write(side.Terrain.Profile);
                 w.Write(side.Terrain.Coefficient);
 
-                if (bwTerrainSide is null)
+                if (bwSide is null)
                 {
                     // prev profile
                     w.Write(0UL);
                     // prev coef
-                    w.Write(0f);
+                    w.Write(1f);
                 }
                 else
                 {
                     // prev profile
-                    w.Write(bwTerrainSide.Terrain.Profile);
+                    w.Write(bwSide.Terrain.Profile);
                     // prev coef
-                    w.Write(bwTerrainSide.Terrain.Coefficient);
+                    w.Write(bwSide.Terrain.Coefficient);
                 }
 
                 foreach (var veg in side.Vegetation)
@@ -221,4 +225,3 @@ namespace TruckLib.ScsMap.Serialization
         }
     }
 }
-

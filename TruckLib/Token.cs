@@ -14,7 +14,7 @@ namespace TruckLib
     public struct Token : IBinarySerializable
     {
         /// <summary>
-        /// The character set.
+        /// The character set of this type.
         /// </summary>
         public static readonly char[] CharacterSet =
         { 
@@ -25,20 +25,29 @@ namespace TruckLib
 
         private static readonly int CharsetLength = CharacterSet.Length; // =38
 
+        /// <summary>
+        /// The maximum number of characters a token can contain.
+        /// </summary>
         public static readonly int MaxLength = 12;
 
+        /// <summary>
+        /// Gets or sets the integer representation of the token.
+        /// </summary>
         public ulong Value { get; set; }
 
+        /// <summary>
+        /// Gets or sets the string representation of the token.
+        /// </summary>
         public string String
-        {
-            get => TokenToString(Value);
+        {   
+            readonly get => TokenToString(Value);
             set => Value = StringToToken(value);
         }
 
         /// <summary>
         /// Creates a new token.
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="token">The integer representation of the token.</param>
         public Token(ulong token)
         {
             Value = token;
@@ -47,19 +56,23 @@ namespace TruckLib
         /// <summary>
         /// Creates a new token from a string.
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="str">The string representation of the token.</param>
         public Token(string str)
         {
             Value = StringToToken(str);
         }
 
+        /// <summary>
+        /// Returns the string representation of the token.
+        /// </summary>
+        /// <returns>The string representation of the token.</returns>
         public override string ToString() => String;
 
         /// <summary>
         /// Converts a string to a token.
         /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>A token.</returns>
+        /// <param name="input">The string representation of the token.</param>
+        /// <returns>The integer representation of the token.</returns>
         public static ulong StringToToken(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -81,8 +94,8 @@ namespace TruckLib
         /// <summary>
         /// Converts a token to string.
         /// </summary>
-        /// <param name="token">The token.</param>
-        /// <returns>The input string.</returns>
+        /// <param name="token">The integer representation of the token.</param>
+        /// <returns>The string representation of the token.</returns>
         public static string TokenToString(ulong token)
         {
             // for empty tokens, return "" rather than "\0"
@@ -113,16 +126,21 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Returns the index of a character.
+        /// Returns the index of a character in the character set.
         /// </summary>
         /// <param name="letter">The character.</param>
-        /// <returns>Its index.</returns>
+        /// <returns>Its index in the character set.</returns>
         private static int GetCharIndex(char letter)
         {
             var index = Array.IndexOf(CharacterSet, letter);
             return index == -1 ? 0 : index;
         }
 
+        /// <summary>
+        /// Returns whether the given string contains a valid token.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <returns>Whether it contains a valid token.</returns>
         public static bool IsValidToken(string str)
         {
             if (str.Length > MaxLength)
@@ -137,11 +155,13 @@ namespace TruckLib
             return true;
         }
 
+        /// <inheritdoc/>
         public void Deserialize(BinaryReader r)
         {
             Value = r.ReadUInt64();
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(Value);
@@ -165,6 +185,7 @@ namespace TruckLib
             return new Token((ulong)v);
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             return obj switch
@@ -180,6 +201,7 @@ namespace TruckLib
             };
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode() =>
             Value.GetHashCode();
 

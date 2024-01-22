@@ -9,16 +9,29 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Overlays an image or text onto the UI map.
+    /// </summary>
     public class MapOverlay : SingleNodeItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.MapOverlay;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Unit name of the image or city.
+        /// </summary>
         public Token Look { get; set; }
 
+        /// <summary>
+        /// Determines which zoom levels the overlay will be visible for. (Not yet implemented;
+        /// will throw <see cref="NotImplementedException"/>.)
+        /// </summary>
         public bool[] HideForZoomLevel
         {
             get => throw new NotImplementedException(); //Kdop.Flags.GetByteAsBools(0);
@@ -32,6 +45,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags.SetByte(1, value);
         }
 
+        /// <summary>
+        /// The overlay type.
+        /// </summary>
         public OverlayType Type
         {
             get => (OverlayType)Kdop.Flags.GetByte(2);
@@ -54,20 +70,24 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
         }
 
-        public static MapOverlay Add(IItemContainer map, Vector3 position, Token look,
-            OverlayType type = OverlayType.RoadName)
+        /// <summary>
+        /// Adds a map overlay to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">Position of the center of the overlay.</param>
+        /// <param name="type">The overlay type.</param>
+        /// <returns>The newly created map overlay.</returns>
+        public static MapOverlay Add(IItemContainer map, Vector3 position, OverlayType type)
         {
             var overlay = Add<MapOverlay>(map, position);
 
-            overlay.Look = look;
             overlay.Type = type;
-            /*overlay.HideForZoomLevel = (hideForZoomLevel == null)
-                ? new bool[8] : hideForZoomLevel;*/
 
             return overlay;
         }

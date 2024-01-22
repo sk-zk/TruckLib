@@ -105,6 +105,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool SmoothDetailVegetation { get; set; } = false;
 
+        public bool Unknown { get; set; } = false;
+        public bool Unknown2 { get; set; } = false;
+
         public Terrain() : base() { }
 
         internal Terrain(bool initFields) : base(initFields)

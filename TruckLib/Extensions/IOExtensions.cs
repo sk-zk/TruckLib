@@ -14,27 +14,60 @@ namespace TruckLib
     {
         private static readonly Encoding StringEncoding = Encoding.UTF8;
 
+        /// <summary>
+        /// Reads a Vector2 from the current stream and advances the current position of the stream
+        /// by eight bytes.
+        /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A Vector2 read from the current stream.</returns>
         public static Vector2 ReadVector2(this BinaryReader r) =>
             new(r.ReadSingle(), r.ReadSingle());
 
+        /// <summary>
+        /// Reads a Vector3 from the current stream and advances the current position of the stream
+        /// by 12 bytes.
+        /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A Vector3 read from the current stream.</returns>
         public static Vector3 ReadVector3(this BinaryReader r) =>
             new(r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
+        /// <summary>
+        /// Reads a Vector4 from the current stream and advances the current position of the stream
+        /// by 16 bytes.
+        /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A Vector4 read from the current stream.</returns>
         public static Vector4 ReadVector4(this BinaryReader r) =>
             new(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
+        /// <summary>
+        /// Reads a Matrix4x4 from the current stream and advances the current position of the stream
+        /// by 64 bytes.
+        /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A Matrix4x4 read from the current stream.</returns>
         public static Matrix4x4 ReadMatrix4x4(this BinaryReader r) =>
             new(r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
                 r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
                 r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle(),
                 r.ReadSingle(), r.ReadSingle(), r.ReadSingle(), r.ReadSingle());
 
+        /// <summary>
+        /// Reads a Token from the current stream and advances the current position of the stream
+        /// by eight bytes.
+        /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A token read from the current stream.</returns>
         public static Token ReadToken(this BinaryReader r) =>
             new(r.ReadUInt64());
 
         /// <summary>
-        /// Reads a string in the format used in SCS's binary formats.
+        /// Reads a string in the format used in SCS's binary formats from the current stream
+        /// and advances the current position of the stream.
         /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A string read from the current stream.</returns>
         public static string ReadPascalString(this BinaryReader r)
         {
             // uint64 for string length - someone's been planning ahead
@@ -45,8 +78,11 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Reads a color in RGBA format.
+        /// Reads a Color in RGBA format from the current stream and advances
+        /// the current position of the stream by four bytes.
         /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A Color read from the current stream.</returns>
         public static Color ReadColor(this BinaryReader r)
         {
             var red = r.ReadByte();
@@ -57,8 +93,11 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Reads a quaternion in WXYZ format.
+        /// Reads a quaternion in WXYZ format from the current stream and advances
+        /// the current position of the stream by 16 bytes.
         /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A quaternion read from the current stream.</returns>
         public static Quaternion ReadQuaternion(this BinaryReader r)
         {
             var w = r.ReadSingle();
@@ -68,6 +107,14 @@ namespace TruckLib
             return new Quaternion(x, y, z, w);
         }
 
+        /// <summary>
+        /// Reads a value of type T from the current stream and advances the current position
+        /// of the stream.
+        /// </summary>
+        /// <typeparam name="T">The type of value to read.</typeparam>
+        /// <param name="r">A BinaryReader.</param>
+        /// <returns>A value of type T read from the current stream.</returns>
+        /// <exception cref="NotImplementedException"></exception>
         internal static object Read<T>(this BinaryReader r)
         {
             // send help.
@@ -92,8 +139,13 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Reads a list of IBinarySerializable objects or various other types.
+        /// Reads a list of IBinarySerializable objects or various other types from the current stream
+        /// and advances the current position of the stream.
         /// </summary>
+        /// <param name="r">A BinaryReader.</param>
+        /// <param name="count">The number of objects to read.</param>
+        /// <typeparam name="T">The type of the list.</typeparam>
+        /// <returns>A list of type T read from the current stream.</returns>
         public static List<T> ReadObjectList<T>(this BinaryReader r, uint count) where T : new()
         {
             var list = new List<T>((int)count);
@@ -155,12 +207,22 @@ namespace TruckLib
             }
         }
 
+        /// <summary>
+        /// Writes a Vector2 to the current stream and advances the stream position by eight bytes.
+        /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="vector">The value to write.</param>
         public static void Write(this BinaryWriter w, Vector2 vector)
         {
             w.Write(vector.X);
             w.Write(vector.Y);
         }
 
+        /// <summary>
+        /// Writes a Vector3 to the current stream and advances the stream position by 12 bytes.
+        /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="vector">The value to write.</param>
         public static void Write(this BinaryWriter w, Vector3 vector)
         {
             w.Write(vector.X);
@@ -168,6 +230,11 @@ namespace TruckLib
             w.Write(vector.Z);
         }
 
+        /// <summary>
+        /// Writes a Vector4 to the current stream and advances the stream position by 16 bytes.
+        /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="vector">The value to write.</param>
         public static void Write(this BinaryWriter w, Vector4 vector)
         {
             w.Write(vector.X);
@@ -176,6 +243,11 @@ namespace TruckLib
             w.Write(vector.W);
         }
 
+        /// <summary>
+        /// Writes a Matrix4x4 to the current stream and advances the stream position by 64 bytes.
+        /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="n">The value to write.</param>
         public static void Write(this BinaryWriter w, Matrix4x4 m)
         {
             w.Write(m.M11); w.Write(m.M12); w.Write(m.M13); w.Write(m.M14);
@@ -184,14 +256,23 @@ namespace TruckLib
             w.Write(m.M41); w.Write(m.M42); w.Write(m.M43); w.Write(m.M44);
         }
 
+        /// <summary>
+        /// Writes a token to the current stream and advances the
+        /// stream position by eight bytes.
+        /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="token">The value to write.</param>
         public static void Write(this BinaryWriter w, Token token)
         {
             w.Write(token.Value);
         }
 
         /// <summary>
-        /// Writes a color in RGBA format.
+        /// Writes a Color in RGBA format to the current stream and advances
+        /// the stream position by four bytes.
         /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="color">The value to write.</param>
         public static void Write(this BinaryWriter w, Color color)
         {
             w.Write(color.R);
@@ -201,8 +282,11 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Writes a string in the format used in SCS's binary formats.
+        /// Writes a string in the format used in SCS's binary formats to the
+        /// current stream and advances the stream position.
         /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="str">The value to write.</param>
         public static void WritePascalString(this BinaryWriter w, string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -218,8 +302,11 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Writes a quaternion in WXYZ format.
+        /// Writes a quaternion in WXYZ format to the current stream and advances
+        /// the stream position by 16 bytes.
         /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="q">The value to write.</param>
         public static void Write(this BinaryWriter w, Quaternion q)
         {
             w.Write(q.W);
@@ -230,8 +317,13 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Writes a list of IBinarySerializable objects or various other types.
+        /// Writes a list of IBinarySerializable objects or various other types to the current stream
+        /// and advances the stream position.
         /// </summary>
+        /// <param name="w">The BinaryWriter.</param>
+        /// <param name="list">The list to write.</param>
+        /// <typeparam name="T">The type of the list.</typeparam>
+        /// <exception cref="NotImplementedException"></exception>
         public static void WriteObjectList<T>(this BinaryWriter w, List<T> list)
         {
             if (list is null || list.Count == 0) 

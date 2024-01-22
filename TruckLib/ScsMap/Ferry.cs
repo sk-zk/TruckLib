@@ -9,18 +9,30 @@ using System.Threading.Tasks;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// The activation point for a ferry.
+    /// </summary>
     public class Ferry : SingleNodeItem, IItemReferences
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Ferry;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Unit name of the port.
+        /// </summary>
         public Token Port { get; set; }
 
         public Vector3 UnloadOffset { get; set; }
 
+        /// <summary>
+        /// The prefab this ferry is linked to, if applicable.
+        /// </summary>
         public IMapItem PrefabLink { get; set; }
 
         /// <summary>
@@ -45,11 +57,19 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
         }
 
+        /// <summary>
+        /// Adds a ferry to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The position of the node.</param>
+        /// <param name="port">Unit name of the port.</param>
+        /// <returns>The newly created ferry.</returns>
         public static Ferry Add(IItemContainer map, Vector3 position, Token port)
         {
             var ferry = Add<Ferry>(map, position);
@@ -57,6 +77,7 @@ namespace TruckLib.ScsMap
             return ferry;
         }
 
+        /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             if (PrefabLink is UnresolvedItem 

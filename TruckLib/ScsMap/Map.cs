@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A SCS map.
+    /// A map for Euro Truck Simulator 2 or American Truck Simulator.
     /// </summary>
     public class Map : IItemContainer
     {
@@ -34,16 +34,16 @@ namespace TruckLib.ScsMap
         // sector boundaries are written to both sectors, and doing this was
         // the best way I could think of to prevent two instances of 
         // the same node.
-        public Dictionary<ulong, INode> Nodes { get; set; }
+        public Dictionary<ulong, INode> Nodes { get; internal set; }
             = new Dictionary<ulong, INode>();
 
         /// <summary>
-        /// Scale of the game outside cities.
+        /// Scale and time compression of the game outside cities.
         /// </summary>
         public float NormalScale { get; set; } = 19;
 
         /// <summary>
-        /// Scale of the game inside cities.
+        /// Scale and time compression of the game inside cities.
         /// </summary>
         public float CityScale { get; set; } = 3;
 
@@ -63,16 +63,16 @@ namespace TruckLib.ScsMap
         private Quaternion StartPlacementRotation = Quaternion.Identity;
 
         /// <summary>
-        /// <para>SCS's Europe map UI corrections.</para>
-        /// <para>Not sure what it does, but it might have something to do
-        /// with the scale of the UK in the official map.</para>
+        /// <para>Gets or sets if SCS's Europe map UI corrections are enabled.</para>
+        /// <para>Nobody seems to know definitively what this does, but it might have
+        /// something to do with the scale of the UK in <c>europe.mbd.</c></para>
         /// </summary>
         public bool EuropeMapUiCorrections { get; set; } = false;
 
         public ulong EditorMapId { get; set; }
 
         // This value is used in both ETS2 and ATS.
-        protected uint gameTag = 2998976734; //TODO: What is this?
+        private uint gameTag = 2998976734; //TODO: What is this?
 
         /// <summary>
         /// The map's header.
@@ -80,7 +80,7 @@ namespace TruckLib.ScsMap
         private Header header = new();
 
         /// <summary>
-        /// The size of a sector in in-game units (= meters).
+        /// The size of a sector in engine units (= meters).
         /// </summary>
         public static readonly int SectorSize = 4000;
 
@@ -97,8 +97,10 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Opens a map.
         /// </summary>
-        /// <param name="mbdPath">The mbd file of the map.</param>
-        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        /// <param name="mbdPath">Path to the .mbd file of the map.</param>
+        /// <param name="sectors">If set, only the given sectors will be loaded.
+        /// The method expects strings in the same format as the file names of the sectors
+        /// (without the extension), e.g. <c>sec+0001+0002</c>.</param>
         public static Map Open(string mbdPath, string[] sectors = null)
         {
             Trace.WriteLine("Loading map " + mbdPath);
@@ -191,7 +193,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a list containing all nodes in the entire map.
+        /// Returns a dictionary containing all nodes in the entire map.
         /// </summary>
         /// <returns>All nodes in the entire map.</returns>
         public Dictionary<ulong, INode> GetAllNodes()
@@ -200,7 +202,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a list containing all map items from all sectors.
+        /// Returns a dictionary containing all map items from all sectors.
         /// </summary>
         /// <returns>All map items in the entire map.</returns>
         public Dictionary<ulong, MapItem> GetAllItems()
@@ -217,7 +219,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a list containing all items of type T from all sectors.
+        /// Returns a dictionary containing all items of type T from all sectors.
         /// </summary>
         /// <typeparam name="T">The item type.</typeparam>
         /// <returns>All items of this type in the entire map.</returns>
@@ -256,7 +258,7 @@ namespace TruckLib.ScsMap
         /// Returns the item with the given UID.
         /// </summary>
         /// <param name="uid">The UID to search for.</param>
-        /// <returns>Returns the item, or null if it doesn't exist.</returns>
+        /// <returns>The item, or null if it doesn't exist.</returns>
         public MapItem GetItem(ulong uid)
         {
             foreach (var sectorKvp in Sectors)
@@ -333,7 +335,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Imports the contents of a Selection file into this map.
+        /// Imports the contents of a Selection (.sbd) file into this map.
         /// </summary>
         /// <param name="selection">The Selection to import.</param>
         /// <param name="position">The point relative to which the items will be inserted.</param>
@@ -370,7 +372,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Reads the .mbd of a map.
+        /// Reads the .mbd file of a map.
         /// </summary>
         /// <param name="mbdPath">The path to the .mbd file.</param>
         private void ReadMbd(string mbdPath)
@@ -425,12 +427,12 @@ namespace TruckLib.ScsMap
             }
 
             bool SectorShouldBeLoaded(string baseFile) =>
-                sectors == null || sectors.Contains(Path.GetFileName(baseFile));          
+                sectors == null || sectors.Contains(Path.GetFileNameWithoutExtension(baseFile));          
         }
 
         /// <summary>
         /// Fills in the Node and Forward/BackwardItem fields in map item and node objects
-        /// by searching the Node or Item list for the Uid references.
+        /// by searching the Node or Item list for the UID references.
         /// </summary>
         private void UpdateReferences()
         {
@@ -458,15 +460,16 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Saves the map in binary format.
+        /// Saves the map in binary format. If the sector directory does not yet exist, it will be created.
         /// </summary>
-        /// <param name="mapDirectory">The directory to save the map to.</param>
-        /// <param name="cleanDir">If true, the sectors folder will be emptied before saving the map.</param>
-        public void Save(string mapDirectory, bool cleanDir = true)
+        /// <param name="mapDirectory">The path of the directory to save the map into.</param>
+        /// <param name="cleanSectorDirectory">If true, the sector directory will be emptied
+        /// before saving the map.</param>
+        public void Save(string mapDirectory, bool cleanSectorDirectory = true)
         {
             var sectorDirectory = Path.Combine(mapDirectory, Name);
             Directory.CreateDirectory(sectorDirectory);
-            if (cleanDir)
+            if (cleanSectorDirectory)
             {
                 new DirectoryInfo(sectorDirectory).GetFiles().ToList()
                     .ForEach(f => f.Delete());
@@ -518,7 +521,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Writes the mbd of this map.
+        /// Writes the .mbd file of this map.
         /// </summary>
         /// <param name="mbdPath">The path of the .mbd file.</param>
         private void SaveMbd(string mbdPath)

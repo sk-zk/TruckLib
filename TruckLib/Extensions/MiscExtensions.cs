@@ -13,6 +13,14 @@ namespace TruckLib
 {
     public static class MiscExtensions
     {
+        /// <summary>
+        /// Increases the size of the given array by one and adds the given item to it.
+        /// If the array is null, a new array will be created.
+        /// </summary>
+        /// <typeparam name="T">The type of the array.</typeparam>
+        /// <param name="arr">The array to append to.</param>
+        /// <param name="item">The object to append.</param>
+        /// <returns>The modified array.</returns>
         internal static T[] Push<T>(this T[] arr, T item)
         {
             if (arr is null)
@@ -24,8 +32,11 @@ namespace TruckLib
         }
 
         /// <summary>
-        /// Clones an object.
+        /// Clones an IBinarySerializable object.
         /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="obj">The object to clone.</param>
+        /// <returns>The clone.</returns>
         public static T Clone<T>(this T obj) where T : IBinarySerializable, new()
         {
             T cloned = new();
@@ -41,6 +52,12 @@ namespace TruckLib
             return cloned;
         }
 
+        /// <summary>
+        /// Clones a MapItem.
+        /// </summary>
+        /// <typeparam name="T">The type of the MapItem.</typeparam>
+        /// <param name="item">The MapItem to clone.</param>
+        /// <returns>The clone.</returns>
         public static T CloneItem<T>(this T item) where T : MapItem
         {
             T cloned;

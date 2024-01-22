@@ -19,12 +19,14 @@ namespace TruckLib.ScsMap.Serialization
 
             company.Node = new UnresolvedNode(r.ReadUInt64());
 
-            company.UnloadPointsEasy = ReadNodeRefList(r);
-            company.UnloadPointsMedium = ReadNodeRefList(r);
-            company.UnloadPointsHard = ReadNodeRefList(r);
-            company.TrailerSpawnPoints = ReadNodeRefList(r);
-            company.Unknown1 = ReadNodeRefList(r);
-            company.LongTrailerSpawnPoints = ReadNodeRefList(r);
+            var spawnPointUids = ReadNodeRefList(r);
+            company.SpawnPoints = new List<CompanySpawnPoint>(spawnPointUids.Count);
+            for (int i = 0; i < spawnPointUids.Count; i++)
+            {
+                var flags = r.ReadUInt32();
+                // TODO does the upper nibble do anything?
+                company.SpawnPoints.Add(new CompanySpawnPoint(spawnPointUids[i], flags));
+            }
 
             return company;
         }
@@ -41,12 +43,15 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(company.Node.Uid);
 
-            WriteNodeRefList(w, company.UnloadPointsEasy);
-            WriteNodeRefList(w, company.UnloadPointsMedium);
-            WriteNodeRefList(w, company.UnloadPointsHard);
-            WriteNodeRefList(w, company.TrailerSpawnPoints);
-            WriteNodeRefList(w, company.Unknown1);
-            WriteNodeRefList(w, company.LongTrailerSpawnPoints);
+            w.Write(company.SpawnPoints.Count);
+            foreach (var spawnPoint in company.SpawnPoints)
+            {
+                w.Write(spawnPoint.Node.Uid);
+            }
+            foreach (var spawnPoint in company.SpawnPoints)
+            {
+                w.Write(spawnPoint.Flags.Bits);
+            }
         }
     }
 }

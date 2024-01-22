@@ -21,7 +21,8 @@ namespace TruckLib.ScsMap.Serialization
             // sign_boards
             // used for legacy signs.
             var boardCount = r.ReadByte();
-            if (boardCount > 0) // yes, this is correct
+            sign.SignBoards = new Sign.SignBoard[boardCount];
+            if (boardCount > 0)
             {
                 for (int i = 0; i < sign.SignBoards.Length; i++)
                 {

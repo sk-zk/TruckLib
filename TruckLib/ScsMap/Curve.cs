@@ -92,12 +92,12 @@ namespace TruckLib.ScsMap
         public float FixedStep { get; set; }
 
         /// <summary>
-        /// Scale multiplier for the model.
+        /// Relative scale of the model.
         /// </summary>
         public float Scale { get; set; }
 
         /// <summary>
-        /// UV rotation of terrain textures.
+        /// UV rotation of the terrain texture.
         /// </summary>
         public float TerrainRotation { get; set; }
 

@@ -174,7 +174,7 @@ namespace TruckLib.ScsMap
         Parking = 1,
 
         /// <summary>
-        /// The item will display the name of a city like a City item.
+        /// The item will display the name of a city specified in <see cref="MapOverlay.Look">Look</see>.
         /// </summary>
         CityName = 2,
 

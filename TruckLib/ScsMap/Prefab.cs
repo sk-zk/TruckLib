@@ -297,7 +297,7 @@ namespace TruckLib.ScsMap
         /// <param name="map">The map.</param>
         /// <param name="node">The index of the prefab node to attach to.</param>
         /// <param name="forwardPos">The position of the road's forward node.</param>
-        /// <param name="type">The road type.</param>
+        /// <param name="type">The unit name of the road.</param>
         /// <param name="leftTerrainSize">The left terrain size.</param>
         /// <param name="rightTerrainSize">The right terrain size.</param>
         /// <returns>The newly created road.</returns>
@@ -363,14 +363,15 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Attaches the ForwardNode of the given polyline item to the specified node of this prefab.
-        /// The polyline's ForwardNode will be deleted.
+        /// The polyline item's ForwardNode will be deleted.
         /// </summary>
         /// <param name="item">The polyline item to attach.</param>
         /// <param name="prefabNodeIdx">The index of the prefab node to attach to.</param>
         public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
         {
             if (prefabNodeIdx > Nodes.Count)
-                throw new ArgumentOutOfRangeException(nameof(prefabNodeIdx), $"This prefab only has {Nodes.Count} nodes.");
+                throw new ArgumentOutOfRangeException(nameof(prefabNodeIdx),
+                    $"This prefab only has {Nodes.Count} nodes.");
 
             if (itemNode.BackwardItem is null)
             {
@@ -400,7 +401,7 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Attaches the ForwardNode of the given polyline item to the closest node of this prefab.
-        /// The polyline's ForwardNode will be deleted.
+        /// The polyline item's ForwardNode will be deleted.
         /// </summary>
         /// <param name="item">The polyline item to attach.</param>
         public void Attach(PolylineItem item)

@@ -7,28 +7,28 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Holds vegetation, terrain, and corner model properties for one corner of a prefab.
+    /// Holds vegetation, terrain, and corner model properties for one node of a prefab.
     /// </summary>
-    public class PrefabCorner
+    public class PrefabNode
     {
         /// <summary>
-        /// The terrain of this corner.
+        /// The terrain of this node.
         /// </summary>
-        public RoadTerrain Terrain { get; set; }
+        public PrefabTerrain Terrain { get; set; }
 
         /// <summary>
-        /// The vegetation of this corner.
+        /// The vegetation of this node.
         /// </summary>
         public RoadVegetation[] Vegetation { get; set; }
 
         /// <summary>
-        /// Distance from the edge of the prefab, in meters, where the band in which detail
+        /// Distance from the edge of the node, in meters, where the band in which detail
         /// vegetation will be placed begins.
         /// </summary>
         public float DetailVegetationFrom { get; set; }
 
         /// <summary>
-        /// Distance from the edge of the prefab, in meters, where the band in which detail
+        /// Distance from the edge of the node, in meters, where the band in which detail
         /// vegetation will be placed ends.
         /// </summary>
         public float DetailVegetationTo { get; set; }
@@ -49,9 +49,9 @@ namespace TruckLib.ScsMap
         public Token Variant { get; set; }
 
         /// <summary>
-        /// Instantiates a PrefabCorner with its default values.
+        /// Instantiates a PrefabNode with its default values.
         /// </summary>
-        public PrefabCorner()
+        public PrefabNode()
         {
             const int vegetationAmnt = 2;
             Vegetation = new RoadVegetation[vegetationAmnt]
@@ -60,7 +60,7 @@ namespace TruckLib.ScsMap
             Init();
         }
 
-        internal PrefabCorner(bool initFields)
+        internal PrefabNode(bool initFields)
         {
             const int vegetationAmnt = 2;
             Vegetation = new RoadVegetation[vegetationAmnt]
@@ -74,7 +74,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         protected void Init()
         {
-            Terrain = new RoadTerrain();
+            Terrain = new PrefabTerrain();
             DetailVegetationFrom = 5;
             DetailVegetationTo = 100;
         }

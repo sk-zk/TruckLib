@@ -52,7 +52,7 @@ namespace TruckLib.ScsMap
         public Token Look { get; set; }
 
         /// <summary>
-        /// The nodes belonging to this prefab.
+        /// The map nodes of this prefab.
         /// </summary>
         public List<INode> Nodes { get; set; }
 
@@ -76,9 +76,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Vegetation and terrain data for each prefab corner.
+        /// Vegetation, terrain, and corner model properties for each prefab node.
         /// </summary>
-        public PrefabCorner[] Corners { get; set; }
+        public PrefabNode[] PrefabNodes { get; set; }
 
         public Token SemaphoreProfile { get; set; }
 
@@ -260,7 +260,7 @@ namespace TruckLib.ScsMap
             }
             else
             {
-                Corners = new PrefabCorner[6].Select(h => new PrefabCorner(false)).ToArray();
+                PrefabNodes = new PrefabNode[6].Select(h => new PrefabNode(false)).ToArray();
             }
         }
 
@@ -268,7 +268,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Corners = new PrefabCorner[6].Select(h => new PrefabCorner()).ToArray();
+            PrefabNodes = new PrefabNode[6].Select(h => new PrefabNode()).ToArray();
             Nodes = new List<INode>(2);
             AdditionalParts = new List<Token>();
             SlaveItems = new List<IMapItem>();

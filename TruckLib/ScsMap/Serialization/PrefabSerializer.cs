@@ -34,15 +34,15 @@ namespace TruckLib.ScsMap.Serialization
 
             pf.Origin = r.ReadUInt16();
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
-                corner.Terrain = new RoadTerrain(false);
+                corner.Terrain = new PrefabTerrain(false);
             }
 
             for (int i = 0; i < pf.Nodes.Count; i++)
             {
-                pf.Corners[i].Terrain.Profile = r.ReadToken();
-                pf.Corners[i].Terrain.Coefficient = r.ReadSingle();
+                pf.PrefabNodes[i].Terrain.Profile = r.ReadToken();
+                pf.PrefabNodes[i].Terrain.Coefficient = r.ReadSingle();
             }
 
             pf.SemaphoreProfile = r.ReadToken();
@@ -55,7 +55,7 @@ namespace TruckLib.ScsMap.Serialization
             var pf = item as Prefab;
             pf.Look = r.ReadToken();
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
                 corner.Terrain.Size = r.ReadUInt16() / terrainSizeFactor;
 
@@ -74,14 +74,14 @@ namespace TruckLib.ScsMap.Serialization
 
             pf.VegetationSpheres = ReadObjectList<VegetationSphere>(r);
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
                 corner.Model = r.ReadToken();
                 corner.Variant = r.ReadToken();
                 corner.Look = r.ReadToken();
             }
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
                 corner.Terrain.QuadData = new TerrainQuadData(false);
                 corner.Terrain.QuadData.Deserialize(r);
@@ -115,8 +115,8 @@ namespace TruckLib.ScsMap.Serialization
 
             for (int i = 0; i < pf.Nodes.Count; i++)
             {
-                w.Write(pf.Corners[i].Terrain.Profile);
-                w.Write(pf.Corners[i].Terrain.Coefficient);
+                w.Write(pf.PrefabNodes[i].Terrain.Profile);
+                w.Write(pf.PrefabNodes[i].Terrain.Coefficient);
             }
 
             w.Write(pf.SemaphoreProfile);
@@ -127,7 +127,7 @@ namespace TruckLib.ScsMap.Serialization
             var pf = item as Prefab;
             w.Write(pf.Look);
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
                 w.Write((ushort)(corner.Terrain.Size * terrainSizeFactor));
 
@@ -146,14 +146,14 @@ namespace TruckLib.ScsMap.Serialization
 
             WriteObjectList(w, pf.VegetationSpheres);
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
                 w.Write(corner.Model);
                 w.Write(corner.Variant);
                 w.Write(corner.Look);
             }
 
-            foreach (var corner in pf.Corners)
+            foreach (var corner in pf.PrefabNodes)
             {
                 corner.Terrain.QuadData.Serialize(w);
             }

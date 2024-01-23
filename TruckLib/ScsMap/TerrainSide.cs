@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Holds terrain and vegetation data for one side of a standalone terrain segment.
+    /// Holds terrain and vegetation properties for one side of a standalone terrain segment.
     /// </summary>
     public class TerrainSide
     {

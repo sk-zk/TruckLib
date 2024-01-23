@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Holds vegetation, terrain and model data for one corner of a prefab.
+    /// Holds vegetation, terrain, and corner model properties for one corner of a prefab.
     /// </summary>
     public class PrefabCorner
     {
@@ -21,8 +21,16 @@ namespace TruckLib.ScsMap
         /// </summary>
         public RoadVegetation[] Vegetation { get; set; }
 
+        /// <summary>
+        /// Distance from the edge of the prefab, in meters, where the band in which detail
+        /// vegetation will be placed begins.
+        /// </summary>
         public float DetailVegetationFrom { get; set; }
 
+        /// <summary>
+        /// Distance from the edge of the prefab, in meters, where the band in which detail
+        /// vegetation will be placed ends.
+        /// </summary>
         public float DetailVegetationTo { get; set; }
 
         /// <summary>
@@ -31,15 +39,18 @@ namespace TruckLib.ScsMap
         public Token Model { get; set; }
 
         /// <summary>
-        /// The corner look.
+        /// The look of the corner model.
         /// </summary>
         public Token Look { get; set; }
 
         /// <summary>
-        /// The corner variant.
+        /// The variant of the corner model.
         /// </summary>
         public Token Variant { get; set; }
 
+        /// <summary>
+        /// Instantiates a PrefabCorner with its default values.
+        /// </summary>
         public PrefabCorner()
         {
             const int vegetationAmnt = 2;
@@ -58,6 +69,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the PrefabCorner's properties to its default values.
+        /// </summary>
         protected void Init()
         {
             Terrain = new RoadTerrain();

@@ -17,7 +17,7 @@ namespace TruckLib.ScsMap
 
         private float size;
         /// <summary>
-        /// Terrain size in meters.
+        /// Terrain size in meters. Must be between 0 and 6500.
         /// </summary>
         public float Size
         {
@@ -26,15 +26,18 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The terrain profile.
+        /// Unit name of the terrain profile.
         /// </summary>
         public Token Profile { get; set; }
 
         /// <summary>
         /// Vertical scale coefficient of the terrain profile.
         /// </summary>
-        public float Coefficient { get; set; } 
+        public float Coefficient { get; set; }
 
+        /// <summary>
+        /// Gets or sets the strength of random noise applied to the vertices of the terrain.
+        /// </summary>
         public TerrainNoise Noise { get; set; }
 
         /// <summary>
@@ -42,8 +45,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public TerrainTransition Transition { get; set; }
 
+        /// <summary>
+        /// Properties of the terrain quads.
+        /// </summary>
         public TerrainQuadData QuadData { get; set; } 
 
+        /// <summary>
+        /// Instantiates a RoadTerrain with its default values.
+        /// </summary>
         public RoadTerrain()
         {
             Init();
@@ -54,6 +63,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the RoadTerrain's properties to its default values.
+        /// </summary>
         protected void Init()
         {
             Profile = "profile0";
@@ -63,9 +75,14 @@ namespace TruckLib.ScsMap
             QuadData = new TerrainQuadData();
         }
 
+        /// <summary>
+        /// Returns the width of a terrain quad row at the given index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>The width of a terrain quad row at that index.</returns>
         public static int GetRowWidthAt(int index)
         {
-            if(index < RowWidthSequence.Length)
+            if (index < RowWidthSequence.Length)
             {
                 return RowWidthSequence[index];
             }
@@ -89,7 +106,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="stepSize">The step size of the standalone terrain.</param>
         /// <param name="length">The length of the standalone terrain.</param>
-        /// <returns>The amount of quad columns</returns>
+        /// <returns>The amount of quad columns.</returns>
         private int CalculateQuadCols(StepSize stepSize, float length)
         {
             int terrainSteps;
@@ -117,8 +134,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Updates the amount of quad columns and rows of this terrain.
         /// </summary>
-        /// <param name="resolution"></param>
-        /// <param name="length"></param>
+        /// <param name="resolution">The resolution of the road.</param>
+        /// <param name="length">The length of the road.</param>
         public void CalculateQuadGrid(RoadResolution resolution, float length)
         {
             QuadData.Cols = (ushort)CalculateQuadCols(resolution, length);
@@ -158,9 +175,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Calculates the amount of quad columns in this terrain.
         /// </summary>
-        /// <param name="resolution"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="resolution">The resolution of the road.</param>
+        /// <param name="length">The length of the road.</param>
+        /// <returns>The amount of quad columns.</returns>
         private int CalculateQuadCols(RoadResolution resolution, float length)
         {
             int interval;
@@ -213,6 +230,10 @@ namespace TruckLib.ScsMap
             return rows;
         }
 
+        /// <summary>
+        /// Makes a deep copy of this object.
+        /// </summary>
+        /// <returns>A deep copy of this object.</returns>
         public RoadTerrain Clone()
         {
             var rt = (RoadTerrain)MemberwiseClone();

@@ -11,18 +11,25 @@ using TruckLib.Model.Ppd;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents a prefab.
+    /// A model with associated game logic which attaches to the road network.
     /// </summary>
     public class Prefab : MapItem, IItemReferences
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Prefab;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         internal override bool HasDataPayload => true;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Gets or sets the view distance of the item in meters.
+        /// </summary>
         public new ushort ViewDistance
         {
             get => base.ViewDistance;
@@ -35,30 +42,30 @@ namespace TruckLib.ScsMap
         public Token Model { get; set; }
 
         /// <summary>
-        /// The prefab variant.
+        /// The model variant.
         /// </summary>
         public Token Variant { get; set; }
 
         /// <summary>
-        /// The prefab look.
+        /// The model look.
         /// </summary>
         public Token Look { get; set; }
 
         /// <summary>
         /// The nodes belonging to this prefab.
         /// </summary>
-        public List<INode> Nodes;
+        public List<INode> Nodes { get; set; }
 
         /// <summary>
         /// The index of the origin node.
         /// <para>This defines which of the ppd nodes is the origin node.
-        /// It is not an index for the Nodes property as the origin node is
-        /// always the 0th node in the list.</para>
+        /// It is not an index for the <see cref="Prefab.Nodes">Nodes</see> property,
+        /// as the origin node is always the first node in that list.</para>
         /// </summary>
         public ushort Origin { get; internal set; }
 
         /// <summary>
-        /// Unit names of additional parts used.
+        /// Unit names of enabled additional parts.
         /// </summary>
         public List<Token> AdditionalParts { get; set; }
 
@@ -73,24 +80,30 @@ namespace TruckLib.ScsMap
         /// </summary>
         public PrefabCorner[] Corners { get; set; }
 
-        /// <summary>
-        /// Semaphore profile for this crossing.
-        /// </summary>
         public Token SemaphoreProfile { get; set; }
 
+        /// <summary>
+        /// The <see cref="Ferry"/> item this prefab is connected to, if applicable.
+        /// </summary>
         public IMapItem FerryLink { get; set; }
 
         public uint RandomSeed { get; set; }
 
+        /// <summary>
+        /// A list of slave items owned by this prefab instance.
+        /// </summary>
         public List<IMapItem> SlaveItems { get; set; }
 
         public List<VegetationPart> VegetationParts { get; set; } 
 
-        public List<VegetationSphere> VegetationSpheres { get; set; } 
+        /// <summary>
+        /// Vegetation spheres of this prefab.
+        /// </summary>
+        public List<VegetationSphere> VegetationSpheres { get; set; }
 
         /// <summary>
         /// Gets or sets if the prefab is a tunnel. 
-        /// This will make AI vehicles turn on their headlights.
+        /// <para>This will make AI vehicles turn on their headlights.</para>
         /// </summary>
         public bool IsTunnel
         {
@@ -109,7 +122,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if the item uses left hand traffic.
+        /// Gets or sets if the prefab uses left hand traffic.
         /// </summary>
         public bool LeftHandTraffic
         {
@@ -138,7 +151,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Previously used to mark the prefab as a state border.
+        /// Obsolete flag which was used to mark the prefab as a state border.
         /// </summary>
         [Obsolete]
         public bool IsStateBorder
@@ -199,7 +212,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// This should be set to true on the last prefab before a ferry.
+        /// Gets or sets if this prefab is the last prefab before a <see cref="Ferry"/>.
         /// </summary>
         public bool IsFerryEntrance
         {
@@ -251,6 +264,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -263,41 +277,22 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a prefab item from a ppd and adds it to the map.
+        /// Creates a prefab item from a prefab descriptor file and adds it to the map.
         /// </summary>
-        /// <param name="map">The map the prefab is added to.</param>
-        /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
+        /// <param name="map">The map.</param>
         /// <param name="unitName">The unit name of the prefab.</param>
-        /// <param name="position">The position of control node 0.</param>
-        /// <returns></returns>
-        public static Prefab Add(IItemContainer map, string unitName, string variant, string look, 
-            PrefabDescriptor ppd, Vector3 position, Quaternion? rotation = null)
+        /// <param name="position">The position of node 0.</param>
+        /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
+        /// <returns>The newly created prefab.</returns>
+        public static Prefab Add(IItemContainer map, string unitName, PrefabDescriptor ppd,
+            Vector3 position, Quaternion? rotation = null)
         {
-            return new PrefabCreator().FromPpd(map, unitName, variant, look, ppd, 
-                position, rotation.GetValueOrDefault(Quaternion.Identity));
-        }
-
-        [Obsolete]
-        public static Prefab Add(IItemContainer map, Token model, IList<Vector3> positions, ushort origin = 0)
-        {
-            var prefab = new Prefab();
-
-            for(int i = 0; i < positions.Count; i++)
-            {
-                var node = map.AddNode(positions[i], i == 0);
-                node.ForwardItem = prefab;
-                prefab.Nodes.Add(node);
-            }
-            
-            prefab.Model = model;
-            prefab.Origin = origin;
-
-            map.AddItem(prefab);
-            return prefab;
+            return new PrefabCreator().FromPpd(map, unitName, ppd, position,
+                rotation ?? Quaternion.Identity);
         }
 
         /// <summary>
-        /// Appends a new road to a prefab.
+        /// Appends a new road segment to a prefab.
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="node">The index of the prefab node to attach to.</param>
@@ -305,12 +300,13 @@ namespace TruckLib.ScsMap
         /// <param name="type">The road type.</param>
         /// <param name="leftTerrainSize">The left terrain size.</param>
         /// <param name="rightTerrainSize">The right terrain size.</param>
-        /// <returns>The new road.</returns>
+        /// <returns>The newly created road.</returns>
         public Road AppendRoad(IItemContainer map, ushort node, Vector3 forwardPos,
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
             if (node > Nodes.Count)
-                throw new ArgumentOutOfRangeException(nameof(node), $"This prefab only has {Nodes.Count} nodes.");
+                throw new ArgumentOutOfRangeException(nameof(node),
+                    $"This prefab only has {Nodes.Count} nodes.");
 
             INode backwardNode;
             INode forwardNode;
@@ -366,7 +362,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Attaches the ForwardNode of a polyline item to the specified node of this prefab.
+        /// Attaches the ForwardNode of the given polyline item to the specified node of this prefab.
         /// The polyline's ForwardNode will be deleted.
         /// </summary>
         /// <param name="item">The polyline item to attach.</param>
@@ -403,10 +399,10 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Attaches the ForwardNode of a polyline item to the closest node of this prefab.
+        /// Attaches the ForwardNode of the given polyline item to the closest node of this prefab.
         /// The polyline's ForwardNode will be deleted.
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">The polyline item to attach.</param>
         public void Attach(PolylineItem item)
         {
             // find closest node
@@ -431,10 +427,10 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Attaches another prefab to a node of this prefab, assuming that
+        /// Attaches the given prefab to a node of this prefab, assuming that
         /// at least one of the nodes has the same position as a node of this prefab.
         /// </summary>
-        /// <param name="p2"></param>
+        /// <param name="p2">The prefab to attach.</param>
         public void Attach(Prefab p2)
         {
             // find overlapping node(s). 
@@ -473,24 +469,35 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Checks if two prefabs are connected to each other at one or more nodes.
+        /// Checks if this and the given prefab are connected to each other at one or more nodes.
         /// </summary>
         /// <param name="p2">The other prefab.</param>
-        /// <returns></returns>
+        /// <returns>Whether this and the given prefab are connected to each other at 
+        /// one or more nodes.</returns>
         public bool IsAttachedTo(Prefab p2) =>
             Nodes.Intersect(p2.Nodes).Any();
 
+        /// <summary>
+        /// Moves the item to a different location.
+        /// </summary>
+        /// <param name="newPos">The new position of node 0.</param>
         public override void Move(Vector3 newPos)
         {
             Move(newPos, 0);
         }
 
+        /// <summary>
+        /// Moves the item to a different location.
+        /// </summary>
+        /// <param name="newPos">The new position of the specified node.</param>
+        /// <param name="nodeIdx">The index of the node which will assume the given position.</param>
         public void Move(Vector3 newPos, ushort nodeIdx)
         {
             var translation = newPos - Nodes[nodeIdx].Position;
             Translate(translation);
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             foreach (var node in Nodes)
@@ -500,6 +507,11 @@ namespace TruckLib.ScsMap
                 (si as PrefabSlaveItem).Translate(translation);
         }
 
+        /// <summary>
+        /// Changes the origin of the prefab.
+        /// </summary>
+        /// <param name="newOrigin">The index of the new origin.</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public void ChangeOrigin(ushort newOrigin)
         {
             if (newOrigin > Nodes.Count)
@@ -514,16 +526,20 @@ namespace TruckLib.ScsMap
             Origin = newOrigin;
         }
 
+        /// <inheritdoc/>
         internal override IEnumerable<INode> GetItemNodes() =>
             new List<INode>(Nodes);
 
+        /// <inheritdoc/>
         internal override INode GetMainNode() => Nodes[0];
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
         }
 
+        /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             if (FerryLink is UnresolvedItem && 
@@ -551,6 +567,4 @@ namespace TruckLib.ScsMap
             public int GetHashCode(INode obj) => 0; // apparently this has to happen for Equals to be called
         }
     }
-
-     
 }

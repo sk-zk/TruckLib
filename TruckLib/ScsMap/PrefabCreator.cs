@@ -19,8 +19,8 @@ namespace TruckLib.ScsMap
         private Prefab prefab;
         private List<SpawnPoint> clonedPoints;
 
-        public Prefab FromPpd(IItemContainer map, string unitName, string variant, string look,
-            PrefabDescriptor ppd, Vector3 pos, Quaternion rot)
+        public Prefab FromPpd(IItemContainer map, string unitName, PrefabDescriptor ppd,
+            Vector3 pos, Quaternion rot)
         {
             this.map = map;
             this.ppd = ppd;
@@ -30,8 +30,6 @@ namespace TruckLib.ScsMap
             prefab = new Prefab
             {
                 Model = unitName,
-                Variant = variant,
-                Look = look
             };
 
             // create map nodes from ppd

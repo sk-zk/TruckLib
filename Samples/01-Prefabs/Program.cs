@@ -40,12 +40,12 @@ namespace Prefabs
 
             var company = Prefab.Add(map,
                 "dlc_fr_14",        // Unit name
-                "bhv_fr",           // Variant
-                "green_fr",         // Look
                 companyDescriptor,  // .ppd
                 companyPos,         // position of node 0
                 companyRot          // optional: rotation
                 );
+            company.Variant = "bhv_fr";
+            company.Look = "green_fr";
 
 
             // 2)
@@ -57,11 +57,11 @@ namespace Prefabs
 
             var crossing = Prefab.Add(map,
                 "387",
-                "shoul_fr_1",
-                "gray_fr",
                 crossingDescriptor,
                 crossingPos
                 );
+            crossing.Variant = "shoul_fr_1";
+            crossing.Look = "gray_fr";
 
             // The T node of this prefab is the origin node, so to connect it
             // to the company prefab's node, which is also red, we'll have to

@@ -14,22 +14,40 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Sound : SingleNodeItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Sound;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Snd;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        ///  Unit name of the sound, as defined in <c>/def/world/sound_item_data.sii</c>.
+        /// </summary>
         public Token Name { get; set; }
 
+        /// <summary>
+        /// Unit name of the reverb type, as defined in <c>/def/world/sound_item_reverb.sii</c>.
+        /// </summary>
         public Token Reverb { get; set; }
 
-        public float AreaWidth { get; set; }
+        /// <summary>
+        /// Width of the area if the sound is an ambient area or reverb area.
+        /// </summary>
+        public float Width { get; set; }
 
-        public float AreaHeight { get; set; }
+        /// <summary>
+        /// Height of the area if the sound is an ambient area or reverb area.
+        /// </summary>
+        public float Height { get; set; }
 
         private const int typeStart = 0;
         private const int typeLength = 2;
+        /// <summary>
+        /// The sound type.
+        /// </summary>
         public SoundType Type
         {
             get => (SoundType)Kdop.Flags.GetBitString(typeStart, typeLength);
@@ -46,13 +64,21 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
-            AreaWidth = 100f;
-            AreaHeight = 100f;
+            Width = 100f;
+            Height = 100f;
         }
 
+        /// <summary>
+        /// Adds a sound to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The center point of the sound.</param>
+        /// <param name="name">The unit name of the sound.</param>
+        /// <returns>The newly created sound.</returns>
         public static Sound Add(IItemContainer map, Vector3 position, Token name)
         {
             var sound = Add<Sound>(map, position);

@@ -15,8 +15,8 @@ namespace TruckLib.ScsMap.Serialization
 
             sound.Name = r.ReadToken();
             sound.Reverb = r.ReadToken();
-            sound.AreaWidth = r.ReadSingle();
-            sound.AreaHeight = r.ReadSingle();
+            sound.Width = r.ReadSingle();
+            sound.Height = r.ReadSingle();
             sound.Node = new UnresolvedNode(r.ReadUInt64());
 
             return sound;
@@ -28,8 +28,8 @@ namespace TruckLib.ScsMap.Serialization
             WriteKdopItem(w, sound);
             w.Write(sound.Name);
             w.Write(sound.Reverb);
-            w.Write(sound.AreaWidth);
-            w.Write(sound.AreaHeight);
+            w.Write(sound.Width);
+            w.Write(sound.Height);
             w.Write(sound.Node.Uid);
         }
     }

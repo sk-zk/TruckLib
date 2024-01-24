@@ -73,7 +73,8 @@ namespace TruckLib.ScsMap
         public List<SignOverride> SignOverrides { get; set; } 
 
         /// <summary>
-        /// Gets or sets if this sign should be rotated to align with the direction of a nearby <see cref="Road"/>.
+        /// Gets or sets if the game will rotate this sign to align with the direction of the closest lane
+        /// of a <see cref="Road">road</see>.
         /// </summary>
         public bool FollowRoadDir
         {

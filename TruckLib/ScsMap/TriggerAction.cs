@@ -5,6 +5,9 @@ using System.Text;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// Action properties of a <see cref="Trigger"/>.
+    /// </summary>
     public class TriggerAction : ActionBase
     {
         /// <summary>
@@ -14,6 +17,9 @@ namespace TruckLib.ScsMap
 
         private const int typeStart = 0;
         private const int typeLength = 4; // presumably
+        /// <summary>
+        /// The type of the action.
+        /// </summary>
         public ActionType Type
         {
             get => (ActionType)ActionFlags.GetBitString(typeStart, typeLength);
@@ -23,12 +29,14 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public override void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
             base.Deserialize(r);
         }
 
+        /// <inheritdoc/>
         public override void Serialize(BinaryWriter w)
         {
             w.Write(Name);

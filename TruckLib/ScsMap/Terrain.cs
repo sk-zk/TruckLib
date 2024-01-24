@@ -14,15 +14,22 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Terrain : PolylineItem
     {
-        // TODO: Use the new KdopItem system.
+        // TODO: Use the KdopItem system.
         // not sure how to implement it while keeping the flexibility
         // of Left/Right objects, RoadTerrain class, Clone() methods etc.
+
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Terrain;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Returns the minimum length of a terrain segment with the current step size setting.
+        /// </summary>
         public float MinLength => StepSize switch
         {
             // step size / 2
@@ -33,8 +40,14 @@ namespace TruckLib.ScsMap
             _ => 8,
         };
 
+        /// <summary>
+        /// The maximum length of a terrain segment.
+        /// </summary>
         public float MaxLength => 99999f;
 
+        /// <summary>
+        /// Gets or sets the view distance of the item in meters.
+        /// </summary>
         public new ushort ViewDistance
         {
             get => base.ViewDistance;
@@ -52,12 +65,20 @@ namespace TruckLib.ScsMap
         public TerrainSide Right { get; set; }
 
         /// <summary>
-        /// The terrain quad density. Roads would do this with hi-poly and superfine flags.
+        /// The terrain quad density.
         /// </summary>
         public StepSize StepSize { get; set; }
 
-        public Railings Railings { get; set; } 
+        /// <summary>
+        /// The railings of this terrain.
+        /// </summary>
+        public Railings Railings { get; set; }
 
+        /// <summary>
+        /// The seed for the RNG which determines which vegetation models
+        /// to place. The position of the models does not appear to be
+        /// affected by this.
+        /// </summary>
         public uint RandomSeed { get; set; }
 
         /// <summary>
@@ -75,12 +96,12 @@ namespace TruckLib.ScsMap
         public bool WaterReflection { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets  if this item will render behind a cut plane.
+        /// Gets or sets if this item will render behind cut planes.
         /// </summary>
         public bool IgnoreCutPlanes { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets  if only flat textures are used as vegetation.
+        /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
         public bool LowPolyVegetation { get; set; } = false;
 
@@ -88,7 +109,7 @@ namespace TruckLib.ScsMap
         public bool StretchTerrain { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets  if the terrain has invisible walls on both sides of it.
+        /// Gets or sets if the terrain has invisible walls on both sides of it.
         /// </summary>
         public bool Boundary { get; set; } = true;
 
@@ -115,6 +136,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -128,13 +150,13 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Adds a single terrain segment to the map.
         /// </summary>
-        /// <param name="map">The map the terrain will be added to.</param>
+        /// <param name="map">The map.</param>
         /// <param name="backwardPos">The position of the backward (red) node.</param>
         /// <param name="forwardPos">The position of the forward (green) node.</param>
-        /// <param name="material">The terrain material.</param>
+        /// <param name="material">The unit name of the terrain material.</param>
         /// <param name="leftSize">The terrain size on the left side.</param>        
         /// <param name="rightSize">The terrain size on the right side.</param>
-        /// <returns>A new terrain.</returns>
+        /// <returns>The newly created terrain segment.</returns>
         public static Terrain Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token material,
             float leftSize, float rightSize)
         {
@@ -146,11 +168,11 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Appends a terrain segment to this terrain.
         /// </summary>
-        /// <param name="position"></param>
-        /// <param name="material"></param>
-        /// <param name="leftSize"></param>
-        /// <param name="rightSize"></param>
-        /// <returns></returns>
+        /// <param name="position">The position of the forward node of the new terrain segment.</param>
+        /// <param name="material">The unit name of the terrain material.</param>
+        /// <param name="leftSize">The terrain size on the left side.</param>        
+        /// <param name="rightSize">The terrain size on the right side.</param>
+        /// <returns>The newly created terrain segment.</returns>
         public Terrain Append(Vector3 position, Token material, float leftSize, float rightSize)
         {
             var terrain = Append<Terrain>(position);
@@ -174,6 +196,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public override void Recalculate()
         {
             base.Recalculate();

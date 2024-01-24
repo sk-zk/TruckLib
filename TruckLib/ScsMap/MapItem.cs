@@ -124,7 +124,8 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Searches a list of all nodes for the nodes referenced by UID in this map item
-        /// and updates the respective references.
+        /// and updates the respective references. This is used for loading a map and
+        /// does not need to be called by the user at any point.
         /// </summary>
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
         internal abstract void UpdateNodeReferences(Dictionary<ulong, INode> allNodes);

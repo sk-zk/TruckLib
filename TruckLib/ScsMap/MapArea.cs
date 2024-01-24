@@ -88,7 +88,7 @@ namespace TruckLib.ScsMap
         /// Adds a map area to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="nodePositions">The positions of the points of the polygon.</param>
+        /// <param name="nodePositions">The points of the polygon.</param>
         /// <param name="type">The map area type.</param>
         /// <returns>The newly created map area.</returns>
         public static MapArea Add(IItemContainer map, IList<Vector3> nodePositions, MapAreaType type)

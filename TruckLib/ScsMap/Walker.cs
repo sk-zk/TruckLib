@@ -19,10 +19,13 @@ namespace TruckLib.ScsMap
     [Obsolete]
     public class Walker : PathItem, IRecalculatable
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Walker;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => 120;
 
         public Token NamePrefix { get; set; } 
@@ -37,6 +40,9 @@ namespace TruckLib.ScsMap
 
         public float Angle { get; set; } 
 
+        /// <summary>
+        /// Cached lengths of the segments.
+        /// </summary>
         public List<float> Lengths { get; set; }
 
         public bool UseCurvedPath
@@ -100,6 +106,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -112,6 +119,13 @@ namespace TruckLib.ScsMap
             Angle = 0f;
         }
 
+        /// <summary>
+        /// Adds a walker to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="positions">The points of the path.</param>
+        /// <param name="namePrefix">The name prefix.</param>
+        /// <returns>The newly created walker.</returns>
         public static Walker Add(IItemContainer map, IList<Vector3> positions, Token namePrefix)
         {
             var walker = Add<Walker>(map, positions);
@@ -122,18 +136,21 @@ namespace TruckLib.ScsMap
             return walker;
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             base.Move(newPos);
             Recalculate();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
             Recalculate();
         }
 
+        /// <inheritdoc/>
         public void Recalculate()
         {
             Lengths = new List<float>(Nodes.Count - 1);

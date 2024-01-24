@@ -220,7 +220,7 @@ namespace TruckLib.ScsMap
         /// Adds a mover to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="positions">Positions of the nodes.</param>
+        /// <param name="positions">The points of the path.</param>
         /// <param name="model">Unit name of the model.</param>
         /// <param name="look">The look of the model.</param>
         /// <param name="variant">The variant of the model.</param>

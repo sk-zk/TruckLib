@@ -17,10 +17,13 @@ namespace TruckLib.ScsMap
     /// defining the radius.</remarks>
     public class Trigger : PolygonItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Trigger;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         public List<Token> Tags { get; set; } 
@@ -63,6 +66,10 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[4] = value;
         }
 
+        /// <summary>
+        /// Gets or sets if the trigger requires a specific orientation to activate(?).
+        /// The orientation for the trigger is defined by the yaw of the 0th node.
+        /// </summary>
         public bool OrientedActivation
         {
             get => Kdop.Flags[1];
@@ -104,6 +111,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -114,6 +122,12 @@ namespace TruckLib.ScsMap
             Actions = new List<TriggerAction>();
         }
 
+        /// <summary>
+        /// Adds a trigger to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="nodePositions">The points of the polygon.</param>
+        /// <returns>The newly created trigger.</returns>
         public static Trigger Add(IItemContainer map, IList<Vector3> nodePositions)
         {
             var trigger = Add<Trigger>(map, nodePositions);

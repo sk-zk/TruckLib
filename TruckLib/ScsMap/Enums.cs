@@ -261,7 +261,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The rendering behavior of a <see cref="VisibilityArea">Visibility Area</see>.
+    /// The rendering behavior of a <see cref="VisibilityArea">visibility area</see>.
     /// </summary>
     public enum VisibilityAreaBehavior
     {

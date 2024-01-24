@@ -10,20 +10,30 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Applies a traffic rule inside a polygonal area.
+    /// Applies a traffic rule inside a polygon.
     /// </summary>
     public class TrafficArea : PolygonItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.TrafficArea;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         public List<Token> Tags { get; set; }
 
+        /// <summary>
+        /// Unit name of the traffic rule.
+        /// </summary>
         public Token Rule { get; set; }
 
+        /// <summary>
+        /// If greater than 0, the traffic area is limited to a polyhedron with this height.
+        /// The polygon created by the nodes of this item are the bottom face.
+        /// </summary>
         public float Range { get; set; }
 
         public bool CrossroadArea
@@ -45,12 +55,20 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
             Tags = new List<Token>();
         }
 
+        /// <summary>
+        /// Adds a traffic area to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="nodePositions">The points of the polygon.</param>
+        /// <param name="rule">The unit name of the traffic rule.</param>
+        /// <returns>The newly created traffic area.</returns>
         public static TrafficArea Add(IItemContainer map, IList<Vector3> nodePositions, Token rule)
         {
             var ta = Add<TrafficArea>(map, nodePositions);

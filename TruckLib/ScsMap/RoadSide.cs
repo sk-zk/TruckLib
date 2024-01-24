@@ -68,12 +68,12 @@ namespace TruckLib.ScsMap
         public bool DetailVegetation { get; set; } = true;
 
         /// <summary>
-        /// The start of the band in meters in which detail vegetation is not rendered.
+        /// The start of the band, in meters, in which detail vegetation is not rendered.
         /// </summary>
         public float NoDetailVegetationFrom { get; set; }
 
         /// <summary>
-        /// The end of the band in meters in which detail vegetation is not rendered.
+        /// The end of the band, in meters, in which detail vegetation is not rendered.
         /// </summary>
         public float NoDetailVegetationTo { get; set; }
 
@@ -130,6 +130,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the object to its default values.
+        /// </summary>
         protected void Init()
         {
             Terrain = new RoadTerrain();

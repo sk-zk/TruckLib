@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Parent class for map items which only have one node.
+    /// Base class for map items which only have one node.
     /// </summary>
     public abstract class SingleNodeItem : MapItem
     {
@@ -27,10 +27,10 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Base method for adding a new SingleNodeItem to the map.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="map"></param>
-        /// <param name="position"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The item type.</typeparam>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The position of the node.</param>
+        /// <returns>The newly created item.</returns>
         internal static T Add<T>(IItemContainer map, Vector3 position) where T : SingleNodeItem, new()
         {
             var node = map.AddNode(position, true);
@@ -43,18 +43,22 @@ namespace TruckLib.ScsMap
             return newItem;
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             Node.Move(newPos);
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             Node.Move(Node.Position + translation);
         }
 
+        /// <inheritdoc/>
         internal override IEnumerable<INode> GetItemNodes() => new[] { Node };
 
+        /// <inheritdoc/>
         internal override INode GetMainNode() => Node;
 
         /// <inheritdoc/>

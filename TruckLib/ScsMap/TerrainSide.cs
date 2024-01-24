@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Holds terrain and vegetation properties for one side of a standalone terrain segment.
+    /// Properties of one side of a terrain item.
     /// </summary>
     public class TerrainSide
     {
         /// <summary>
-        /// The edge model on this side.
+        /// Unit name of the edge model on this side.
         /// </summary>
         public Token Edge { get; set; }
 
@@ -42,10 +42,19 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool DetailVegetation;
 
+        /// <summary>
+        /// The start of the band, in meters, in which detail vegetation is not rendered.
+        /// </summary>
         public float NoDetailVegetationFrom { get; set; }
 
+        /// <summary>
+        /// The end of the band, in meters, in which detail vegetation is not rendered.
+        /// </summary>
         public float NoDetailVegetationTo { get; set; }
 
+        /// <summary>
+        /// Instantiates a new TerrainSide object with default values.
+        /// </summary>
         public TerrainSide()
         {
             const int vegetationCount = 3;
@@ -64,6 +73,9 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <summary>
+        /// Sets the object to its default values.
+        /// </summary>
         protected void Init()
         {
             DetailVegetation = true;

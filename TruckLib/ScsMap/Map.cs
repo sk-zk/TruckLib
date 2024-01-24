@@ -101,6 +101,7 @@ namespace TruckLib.ScsMap
         /// <param name="sectors">If set, only the given sectors will be loaded.
         /// The method expects strings in the same format as the file names of the sectors
         /// (without the extension), e.g. <c>sec+0001+0002</c>.</param>
+        /// <returns>A Map object.</returns>
         public static Map Open(string mbdPath, string[] sectors = null)
         {
             Trace.WriteLine("Loading map " + mbdPath);

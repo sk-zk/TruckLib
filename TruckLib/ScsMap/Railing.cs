@@ -12,11 +12,14 @@ namespace TruckLib.ScsMap
     public struct Railing
     {
         /// <summary>
-        /// The name of the model.
+        /// Unit name of the model.
         /// </summary>
         public Token Model { get; set; }
 
         private float offset;
+        /// <summary>
+        /// Offset from the center of the road, in meters.
+        /// </summary>
         public float Offset
         {
             get => offset;

@@ -8,6 +8,9 @@ using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.ScsMap
 {
+    /// <summary>
+    /// A selection (.sbd) file.
+    /// </summary>
     public class Selection : IItemContainer
     {
         private Header header;
@@ -16,12 +19,20 @@ namespace TruckLib.ScsMap
 
         protected KdopBounds KdopBounds;
 
+        /// <summary>
+        /// Map items in this selection.
+        /// </summary>
         public List<MapItem> Items { get; set; }
 
-
+        /// <summary>
+        /// Nodes in this selection.
+        /// </summary>
         public List<INode> Nodes { get; set; }
 
-
+        /// <summary>
+        /// Adds a node to the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public Node AddNode(Vector3 position, bool isRed)
         {
             var node = new Node
@@ -34,13 +45,17 @@ namespace TruckLib.ScsMap
             return node;
         }
 
+        /// <summary>
+        /// Adds a node to the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public Node AddNode(Vector3 position)
         {
             return AddNode(position, false);
         }
 
         /// <summary>
-        /// Adds an item to the map. This is the final step in the Add() method of an item
+        /// Adds an item to the selection. This is the final step in the Add() method of an item
         /// and should not be called on its own.
         /// </summary>
         /// <param name="item">The item.</param>
@@ -51,6 +66,10 @@ namespace TruckLib.ScsMap
             Items.Add(item);
         }
 
+        /// <summary>
+        /// Deletes an item from the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public void Delete(MapItem item)
         {
             // delete item
@@ -79,6 +98,10 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Deletes a node from the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public void Delete(INode node)
         {
             if (Nodes.Contains(node))
@@ -98,11 +121,20 @@ namespace TruckLib.ScsMap
                 Delete(bw);
             }
         }
+
+        /// <summary>
+        /// Returns a dictionary containing all map items of type T in the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public IEnumerable<T> GetAllItems<T>() where T : MapItem
         {
             return Items.Where(x => x is T).Cast<T>();
         }
 
+        /// <summary>
+        /// Returns a dictionary containing all map items in the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public Dictionary<ulong, MapItem> GetAllItems()
         {
             return Items.ToDictionary(k => k.Uid, v => v);
@@ -113,11 +145,20 @@ namespace TruckLib.ScsMap
             return GetAllItems<T>().ToDictionary(k => k.Uid, v => v);
         }
 
+        /// <summary>
+        /// Returns a dictionary containing all nodes in the selection.
+        /// </summary>
+        /// <inheritdoc/>
         public Dictionary<ulong, INode> GetAllNodes()
         {
             return Nodes.ToDictionary(k => k.Uid, v => v);
         }
 
+        /// <summary>
+        /// Reads a selection file from disk.
+        /// </summary>
+        /// <param name="sbdPath">Path to the .sbd file.</param>
+        /// <returns>A Selection object.</returns>
         public static Selection Open(string sbdPath)
         {
             var s = new Selection();

@@ -15,18 +15,25 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Road : PolylineItem
     {
-        // TODO: Use the new KdopItem system.
+        // TODO: Use the KdopItem system.
         // not sure how to implement it while keeping the flexibility
         // of Left/Right objects, RoadTerrain class, Clone() methods etc.
 
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Road;
 
+        /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
+        /// <inheritdoc/>
         internal override bool HasDataPayload => true;
 
+        /// <inheritdoc/>
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
+        /// <summary>
+        /// Returns the minimum length of a road segment with the current resolution setting.
+        /// </summary>
         public float MinLength => Resolution switch
         {
             RoadResolution.Superfine => 0.40000001f,
@@ -35,8 +42,14 @@ namespace TruckLib.ScsMap
             _ => 3.75f,
         };
 
+        /// <summary>
+        /// The maximum length of a road segment.
+        /// </summary>
         public static readonly float MaxLength = 1000f;
 
+        /// <summary>
+        /// Gets or sets the view distance of the item in meters.
+        /// </summary>
         public new ushort ViewDistance
         {
             get => base.ViewDistance;
@@ -49,7 +62,7 @@ namespace TruckLib.ScsMap
         public Token RoadType { get; set; }
 
         /// <summary>
-        /// The road material.
+        /// The unit name of the road material for legacy, pre-template roads.
         /// </summary>
         public Token Material { get; set; }
 
@@ -64,42 +77,58 @@ namespace TruckLib.ScsMap
         public RoadSide Right { get; set; }
 
         /// <summary>
-        /// The terrain material used in the center of the road.
+        /// Unit name of the terrain material used in the center of dual carriageways.
         /// </summary>
         public Token CenterMaterial { get; set; }
 
         /// <summary>
-        /// The vegetation used in the center of the road.
+        /// Vegetation in the center of dual carriageways.
         /// </summary>
         public CenterVegetation CenterVegetation { get; set; } 
 
+        /// <summary>
+        /// Color tint of the material used in the center of dual carriageways.
+        /// </summary>
         public Color CenterMaterialColor { get; set; }
 
+        /// <summary>
+        /// UV rotation of the material in the center of dual carriageways.
+        /// </summary>
         public ushort CenterMaterialRotation { get; set; }
 
+        /// <summary>
+        /// Gets or sets if detail vegetation is used in the center of dual carriageways.
+        /// </summary>
         public bool CenterDetailVegetation { get; set; }
 
         /// <summary>
-        /// The seed which determines the placement of vegetation models.
+        /// The seed for the RNG which determines which vegetation models
+        /// to place. The position of the models does not appear to be
+        /// affected by this.
         /// </summary>
         public uint RandomSeed { get; set; }
 
+        /// <summary>
+        /// Unit name of the overlay texture.
+        /// </summary>
         public Token Overlay { get; set; }
 
         /// <summary>
-        /// The vegetation spheres on this road.
+        /// Vegetation spheres on this road.
         /// </summary>
-        public List<VegetationSphere> VegetationSpheres { get; set; } 
+        public List<VegetationSphere> VegetationSpheres { get; set; }
 
         /// <summary>
-        /// The segment step size.
+        /// For pre-template roads, this sets the quad step size of the road itself.
+        /// For template roads, only <see cref="RoadResolution.Normal">Normal</see> and
+        /// <see cref="RoadResolution.HighPoly">HighPoly</see> are supported, and it only affects
+        /// the step size of terrain quads.
         /// </summary>
         public RoadResolution Resolution { get; set; }
 
         /// <summary>
-        /// [Legacy roads only]<br/>
-        /// <para>Makes this road a city road and can therefore have a sidewalk.
-        /// </para>
+        /// Legacy only. Gets or sets whether a pre-template road is a city road and
+        /// can therefore have a sidewalk.
         /// </summary>
         [Obsolete]
         public bool IsCityRoad { get; set; } = false;
@@ -133,8 +162,8 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Gets or sets if AI traffic can use this road.
-        /// <para>If not, AI vehicles will choose a different route.
-        /// If there isn't one, they will despawn instead.</para>
+        /// If not, AI vehicles will choose a different route.
+        /// If there isn't one, they will despawn instead.
         /// </summary>
         public bool AiVehicles { get; set; } = true;
 
@@ -180,6 +209,7 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
@@ -197,15 +227,15 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Adds a single road segment to the map.
+        /// Adds a road segment to the map.
         /// </summary>
-        /// <param name="map">The map the road will be added to.</param>
+        /// <param name="map">The map .</param>
         /// <param name="backwardPos">The position of the backward (red) node.</param>
         /// <param name="forwardPos">The position of the forward (green) node.</param>
-        /// <param name="type">Unit name of the road.</param>
-        /// <param name="leftTerrainSize">Terrain size on the left side.</param>
-        /// <param name="rightTerrainSize">Terrain size on the right side.</param>
-        /// <returns>The new road.</returns>
+        /// <param name="type">The unit name of the road.</param>
+        /// <param name="leftTerrainSize">The terrain size on the left side.</param>
+        /// <param name="rightTerrainSize">The terrain size on the right side.</param>
+        /// <returns>The newly created road segment.</returns>
         public static Road Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos,
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
@@ -217,8 +247,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Appends a road segment to this road. 
         /// </summary>
-        /// <param name="position">The position of the ForwardNode of the new building.</param>
-        /// <returns>The new road.</returns>
+        /// <param name="position">The position of the ForwardNode of the new road.</param>
+        /// <param name="cloneSettings">Whether the new segment should have the same settings as this one.</param>
+        /// <returns>The newly created road segment.</returns>
         public Road Append(Vector3 position, bool cloneSettings = true)
         {
             if (!cloneSettings)
@@ -266,10 +297,10 @@ namespace TruckLib.ScsMap
         /// Appends a road segment to this road. 
         /// </summary>
         /// <param name="position">The position of the ForwardNode of the new road.</param>
-        /// <param name="type">The unit name.</param>
-        /// <param name="leftTerrainSize">Terrain size on the left side.</param>
-        /// <param name="rightTerrainSize">Terrain size on the right side.</param>
-        /// <returns>The new road.</returns>
+        /// <param name="type">The unit name of the road.</param>
+        /// <param name="leftTerrainSize">The terrain size on the left side.</param>
+        /// <param name="rightTerrainSize">The terrain size on the right side.</param>
+        /// <returns>The newly created road.</returns>
         public Road Append(Vector3 position, Token type, float leftTerrainSize = 0f, 
             float rightTerrainSize = 0f)
         {
@@ -279,11 +310,24 @@ namespace TruckLib.ScsMap
             return road;
         }
 
+        /// <summary>
+        /// Prepends a road segment to this road.
+        /// </summary>
+        /// <param name="position">The position of the backward node of the new road.</param>
+        /// <returns>The newly created road.</returns>
         public Road Prepend(Vector3 position)
         {
             return Prepend(position, RoadType);
         }
 
+        /// <summary>
+        /// Prepends a road segment to this road.
+        /// </summary>
+        /// <param name="position">The position of the backward node of the new road.</param>
+        /// <param name="type">The unit name of the road.</param>
+        /// <param name="leftTerrainSize">The terrain size on the left side.</param>
+        /// <param name="rightTerrainSize">The terrain size on the right side.</param>
+        /// <returns>The newly created road.</returns>
         public Road Prepend(Vector3 position, Token type, float leftTerrainSize = 0f,
             float rightTerrainSize = 0f)
         {
@@ -311,6 +355,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public override void Recalculate()
         {
             base.Recalculate();

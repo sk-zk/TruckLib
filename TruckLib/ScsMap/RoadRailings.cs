@@ -7,14 +7,26 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Railings of a road segment.
+    /// Represents the railings of a <see cref="Road"/>.
     /// </summary>
     public class RoadRailings : Railings
     {
-        public bool DoubleSided;
+        /// <summary>
+        /// Gets or sets whether a mirrored version of the models is placed on the
+        /// opposite side of the road. Only applies to the first railing.
+        /// </summary>
+        public bool DoubleSided { get; set; }
 
-        public bool CenterPartOnly;
+        /// <summary>
+        /// Gets or sets whether only the center part of the model is placed.
+        /// Only applies to the second railing.
+        /// </summary>
+        public bool CenterPartOnly { get; set; }
 
+        /// <summary>
+        /// Makes a deep copy of this object.
+        /// </summary>
+        /// <returns>A deep copy of this object.</returns>
         public RoadRailings Clone()
         {
             var rr = (RoadRailings)MemberwiseClone();

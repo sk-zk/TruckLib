@@ -12,7 +12,7 @@ using TruckLib.ScsMap.Serialization;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A map sector.
+    /// Represents one sector of a <see cref="Map"/>.
     /// </summary>
     public class Sector
     {
@@ -43,7 +43,7 @@ namespace TruckLib.ScsMap
             = new Dictionary<ulong, MapItem>();
 
         /// <summary>
-        /// The climate of this sector.
+        /// Unit name of the climate profile of this sector.
         /// </summary>
         public Token Climate { get; set; } = "default";
 
@@ -75,7 +75,7 @@ namespace TruckLib.ScsMap
 
         public Sector() { }
 
-        /// <summary></summary>
+        /// <summary>Instantiates a new, empty sector.</summary>
         /// <param name="x">The X coordinate.</param>
         /// <param name="z">The Z coordinate.</param>
         /// <param name="map">The map this sector belongs to.</param>
@@ -86,8 +86,9 @@ namespace TruckLib.ScsMap
             Map = map;
         }
 
-        /// <summary></summary>
-        /// <param name="basePath">The path of the .base file of this sector.</param>
+        /// <summary>Instantiates a new, empty sector.</summary>
+        /// <param name="basePath">The path of the .base file of this sector, from which the
+        /// coordinates of this sector will be parsed.</param>
         /// <param name="map">The map this sector belongs to.</param>
         public Sector(string basePath, Map map)
         {
@@ -97,14 +98,15 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Reads the sector from the specified .base path.
+        /// Reads the sector from disk from the set <see cref="BasePath">BasePath</see>.
         /// </summary>
-        public void Read() => Open(BasePath);
+        internal void Read() => Open(BasePath);
 
         /// <summary>
-        /// Reads the sector.
+        /// Reads the sector from disk.
         /// </summary>
-        /// <param name="basePath">The .base file of the sector.</param>
+        /// <param name="basePath">The path to the .base file of the sector. The paths of the other
+        /// sector files will be derived automatically.</param>
         public void Open(string basePath)
         {
             BasePath = basePath;
@@ -226,6 +228,11 @@ namespace TruckLib.ScsMap
             Climate = r.ReadToken();
         }
 
+        /// <summary>
+        /// Reads the .layer file of the sector.
+        /// </summary>
+        /// <param name="path">The .layer file of the sector.</param>
+        /// <exception cref="KeyNotFoundException"></exception>
         private void ReadLayer(string path)
         {
             if (!File.Exists(path))
@@ -255,7 +262,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Reads items from a .base/.aux/.snd file.
         /// </summary>
-        /// <param name="r">The reader.</param>
+        /// <param name="r">A BinaryReader at the start of the item section.</param>
         /// <param name="file">The file which is being read.</param>
         private void ReadItems(BinaryReader r, ItemFile file)
         {
@@ -285,7 +292,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Reads the node section of a .base/.aux/.snd file.
         /// </summary>
-        /// <param name="r">The reader. (Position must be the start of the footer)</param>
+        /// <param name="r">A BinaryReader at the start of the node section.</param>
         private void ReadNodes(BinaryReader r)
         {
             var nodeCount = r.ReadUInt32();
@@ -305,6 +312,10 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Reads the VisAreaChild section of a .base/.aux/.snd file.
+        /// </summary>
+        /// <param name="r">A BinaryReader at the start of the VisAreaChild section.</param>
         private void ReadVisArea(BinaryReader r)
         {
             // I think we can safely ignore this when deserializing
@@ -316,9 +327,11 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Saves the sector as binary files to the specified directory.
+        /// Saves the sector in binary format to the specified directory.
         /// </summary>
         /// <param name="sectorDirectory">The sector directory.</param>
+        /// <param name="sectorNodes">A dictionary of all nodes in this sector.</param>
+        /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
         public void Save(string sectorDirectory, List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
         {
             WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes, visAreaShowObjectsChildren);
@@ -336,8 +349,8 @@ namespace TruckLib.ScsMap
         /// Writes the .base part of this sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A list of all items in the sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in the sector.</param>
+        /// <param name="allItems">A dictionary of all items in the sector.</param>
+        /// <param name="sectorNodes">A dictionary of all nodes in the sector.</param>
         private void WriteBase(string path, Dictionary<ulong, MapItem> allItems,
             List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
         {
@@ -353,7 +366,7 @@ namespace TruckLib.ScsMap
         /// Writes the .aux part of the sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A list of all items in the sector.</param>
+        /// <param name="allItems">A dictionary of all items in the sector.</param>
         /// <param name="sectorNodes">A list of all nodes in the sector.</param>
         private void WriteAux(string path, Dictionary<ulong, MapItem> allItems,
             List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
@@ -370,7 +383,7 @@ namespace TruckLib.ScsMap
         /// Writes the .snd part of the sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A list of all items in the sector.</param>
+        /// <param name="allItems">A dictionary of all items in the sector.</param>
         /// <param name="sectorNodes">A list of all nodes in the sector.</param>
         private void WriteSnd(string path, Dictionary<ulong, MapItem> allItems,
             List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
@@ -387,7 +400,7 @@ namespace TruckLib.ScsMap
         /// Writes the .data part of this sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A list of all items in the sector.</param>
+        /// <param name="allItems">A dictionary of all items in the sector.</param>
         private void WriteData(string path, Dictionary<ulong, MapItem> allItems)
         {
             using var stream = new FileStream(path, FileMode.Create);
@@ -478,7 +491,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Writes base/aux/snd items to a base/aux/snd file.
+        /// Writes .base/.aux/.snd items to a .base/.aux/.snd file.
         /// </summary>
         /// <param name="allItems">All items in the sector.</param>
         /// <param name="w">The writer.</param>
@@ -495,6 +508,12 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Writes the VisAreaChildren part of a .base/.aux/.snd file.
+        /// </summary>
+        /// <param name="w">A BinaryWriter.</param>
+        /// <param name="file">The item file which is being written.</param>
+        /// <param name="visAreaShowObjectsChildren">UIDs of the map items which need to be written.</param>
         private void WriteVisAreaChildren(BinaryWriter w, ItemFile file, HashSet<ulong> visAreaShowObjectsChildren)
         {
             if (visAreaShowObjectsChildren.Count == 0)

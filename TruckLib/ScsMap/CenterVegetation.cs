@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Vegetation in the center of a road.
+    /// Properties of vegetation in the center of a dual carriageway <see cref="Road">road</see>.
     /// </summary>
     public class CenterVegetation : Vegetation
     {
         private float offset;
         /// <summary>
-        /// Offset from the center of the road.
+        /// Offset from the center of the road, in meters.
         /// </summary>
         public float Offset
         {

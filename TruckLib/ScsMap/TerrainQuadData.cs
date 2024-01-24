@@ -38,13 +38,13 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Terrain quads in this terrain. Indexing begins in the bottom left corner
-        /// in driving direction.
+        /// in forward direction.
         /// </summary>
         public List<TerrainQuad> Quads { get; set; } 
 
         // TODO: Change implementation of this data to be easier to work with
         /// <summary>
-        /// Offsets of terrain vertices, created with the vertex tool.
+        /// Offsets of terrain vertices.
         /// </summary>
         public List<VertexData> Offsets { get; set; }
 

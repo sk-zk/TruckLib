@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Terrain vegetation settings.
+    /// Properties of procedurally placed vegetation.
     /// </summary>
     public class Vegetation
     {
         /// <summary>
-        /// The vegetation type.
+        /// Unit name of the vegetation type.
         /// </summary>
         public Token Name { get; set; }
 

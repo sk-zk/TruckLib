@@ -107,8 +107,8 @@ namespace TruckLib.ScsMap.Serialization
 
             road.RoadType = r.ReadToken();
 
-            road.Right.LanesVariant = r.ReadToken();
-            road.Left.LanesVariant = r.ReadToken();
+            road.Right.TrafficRule = r.ReadToken();
+            road.Left.TrafficRule = r.ReadToken();
 
             road.Right.Variant = r.ReadToken();
             road.Left.Variant = r.ReadToken();
@@ -137,8 +137,8 @@ namespace TruckLib.ScsMap.Serialization
                 road.Left.Railings.Models[i].Offset = r.ReadInt16() / railingOffsetFactor;
             }
 
-            road.Right.RoadHeightOffset = r.ReadInt32() / heightOffsetFactor;
-            road.Left.RoadHeightOffset = r.ReadInt32() / heightOffsetFactor;
+            road.Right.HeightOffset = r.ReadInt32() / heightOffsetFactor;
+            road.Left.HeightOffset = r.ReadInt32() / heightOffsetFactor;
 
             road.Node = new UnresolvedNode(r.ReadUInt64());
             road.ForwardNode = new UnresolvedNode(r.ReadUInt64());
@@ -229,8 +229,8 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(road.RoadType);
 
-            w.Write(road.Right.LanesVariant);
-            w.Write(road.Left.LanesVariant);
+            w.Write(road.Right.TrafficRule);
+            w.Write(road.Left.TrafficRule);
 
             w.Write(road.Right.Variant);
             w.Write(road.Left.Variant);
@@ -259,8 +259,8 @@ namespace TruckLib.ScsMap.Serialization
                 w.Write((short)(road.Left.Railings.Models[i].Offset * railingOffsetFactor));
             }
 
-            w.Write((int)(road.Right.RoadHeightOffset * heightOffsetFactor));
-            w.Write((int)(road.Left.RoadHeightOffset * heightOffsetFactor));
+            w.Write((int)(road.Right.HeightOffset * heightOffsetFactor));
+            w.Write((int)(road.Left.HeightOffset * heightOffsetFactor));
 
             w.Write(road.Node?.Uid ?? 0UL);
             w.Write(road.ForwardNode?.Uid ?? 0UL);

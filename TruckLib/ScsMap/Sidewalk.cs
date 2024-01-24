@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Sidewalk data for legacy roads.
+    /// Sidewalk properties for legacy, pre-template roads.
     /// </summary>
     public class Sidewalk
     {
         /// <summary>
-        /// The name of the sidewalk material.
+        /// Unit name of the sidewalk material.
         /// </summary>
         public Token Material { get; set; }
 
@@ -21,6 +21,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public SidewalkSize Size { get; set; }
 
+        /// <summary>
+        /// Makes a deep copy of this object.
+        /// </summary>
+        /// <returns>A deep copy of this object.</returns>
         public Sidewalk Clone() => (Sidewalk)MemberwiseClone();
     }
 }

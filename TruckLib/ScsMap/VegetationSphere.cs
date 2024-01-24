@@ -36,6 +36,7 @@ namespace TruckLib.ScsMap
         public VegetationSphereType Type { get; set; } 
             = VegetationSphereType.NoVegetation;
 
+        /// <inheritdoc/>
         public void Deserialize(BinaryReader r)
         {
             Position = r.ReadVector3();
@@ -43,6 +44,7 @@ namespace TruckLib.ScsMap
             Type = (VegetationSphereType)r.ReadUInt32();
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(Position);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents the railing section of a Road / Terrain.
+    /// Represents the railings of a <see cref="Terrain"/>.
     /// </summary>
     public class Railings
     {
@@ -16,6 +16,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Railing[] Models { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether the models are mirrored along the road axis.
+        /// Only applies to the first railing.
+        /// </summary>
         public bool InvertRailing { get; set; }
 
         public Railings()

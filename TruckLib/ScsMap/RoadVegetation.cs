@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Vegetation on the terrain on the side of a road.
+    /// Properties of vegetation on the side of a road.
     /// </summary>
     public class RoadVegetation : Vegetation, IBinarySerializable
     {
@@ -40,6 +40,7 @@ namespace TruckLib.ScsMap
         private const float densityFactor = 10f;
         private const float fromToFactor = 10f;
 
+        /// <inheritdoc/>
         public void Deserialize(BinaryReader r)
         {
             Name = r.ReadToken();
@@ -50,6 +51,7 @@ namespace TruckLib.ScsMap
             To = r.ReadUInt16() / fromToFactor;
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(Name);

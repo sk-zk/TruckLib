@@ -3,7 +3,7 @@
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// An interface for storing <see cref="SignOverrideAttribute">SignOverrideAttributes</see>
+    /// An interface for storing <see cref="SignOverrideAttribute{T}">SignOverrideAttributes</see>
     /// of any type in a collection.
     /// </summary>
     public interface ISignOverrideAttribute

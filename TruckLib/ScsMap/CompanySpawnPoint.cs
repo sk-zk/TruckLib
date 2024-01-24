@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents an additional spawn point belonging to a <see cref="Company"/> item.
+    /// Represents a prefab spawn point belonging to a <see cref="Company"/> item.
     /// </summary>
     public struct CompanySpawnPoint
     {

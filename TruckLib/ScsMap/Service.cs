@@ -9,14 +9,18 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Additional data for service prefabs (gas stations, weigh stations etc).
+    /// A prefab slave item which is placed for several spawn point types of a prefab.
     /// </summary>
     public class Service : PrefabSlaveItem
     {
+        /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Service;
 
         public List<INode> Nodes { get; set; }
 
+        /// <summary>
+        /// The spawn point type.
+        /// </summary>
         public ServiceType ServiceType
         {
             get => (ServiceType)Kdop.Flags.GetByte(0);
@@ -30,22 +34,32 @@ namespace TruckLib.ScsMap
             if (initFields) Init();
         }
 
+        /// <inheritdoc/>
         protected override void Init()
         {
             base.Init();
             Nodes = new List<INode>();
         }
 
+        /// <summary>
+        /// Adds a Service item to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="parent">The prefab this item is linked to.</param>
+        /// <param name="position">The position of the node.</param>
+        /// <returns>The newly created Service item.</returns>
         public static Service Add(IItemContainer map, Prefab parent, Vector3 position)
         {
             return PrefabSlaveItem.Add<Service>(map, parent, position);
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
@@ -56,6 +70,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);

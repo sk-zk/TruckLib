@@ -227,7 +227,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The type of a <see cref="Service"/> item.
+    /// The spawn point type of a <see cref="Service"/> item.
     /// </summary>
     public enum ServiceType
     {

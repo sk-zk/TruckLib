@@ -17,6 +17,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint Index { get; set; }
 
+        /// <summary>
+        /// The value which will override the template default.
+        /// </summary>
         public T Value { get; set; }
 
         Type ISignOverrideAttribute.Type { get => typeof(T); }
@@ -26,9 +29,6 @@ namespace TruckLib.ScsMap
             Value = (T)value;
         }
 
-        object ISignOverrideAttribute.GetValue()
-        {
-            return Value;
-        }
+        object ISignOverrideAttribute.GetValue() => Value;
     }
 }

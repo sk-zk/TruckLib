@@ -3,7 +3,8 @@
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Used for deserialization and collections of SignOverrideAttribute objects.
+    /// An interface for storing <see cref="SignOverrideAttribute">SignOverrideAttributes</see>
+    /// of any type in a collection.
     /// </summary>
     public interface ISignOverrideAttribute
     {

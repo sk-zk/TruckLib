@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A single terrain quad.
+    /// Properties of an individual terrain quad.
     /// </summary>
     public struct TerrainQuad : IBinarySerializable
     {
@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Additional material that will be drawn on top with the specified
+        /// An additional material which will be drawn on top with the specified
         /// opacity value.
         /// </summary>
         public Nibble BlendMaterial
@@ -94,6 +94,9 @@ namespace TruckLib.ScsMap
             set => byte4 |= (byte)((byte)value << 5);
         }
 
+        /// <summary>
+        /// Gets or sets whether detail vegetation will not be rendered on this quad. 
+        /// </summary>
         public bool NoDetailVegetation
         {
             get => (byte4 & noDetVegMask) == noDetVegMask;
@@ -106,6 +109,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public void Deserialize(BinaryReader r)
         {
             byte1 = r.ReadByte();
@@ -114,6 +118,7 @@ namespace TruckLib.ScsMap
             byte4 = r.ReadByte();
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(byte1);
@@ -122,9 +127,11 @@ namespace TruckLib.ScsMap
             w.Write(byte4);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode() =>
-            (byte1, byte2, byte3, byte4).GetHashCode();
+            byte1 + (byte2 << 8) + (byte2 << 16) + (byte3 << 24);
 
+        /// <inheritdoc/>
         public override bool Equals(object obj) =>
             obj is TerrainQuad quad
             && quad.byte1 == this.byte1

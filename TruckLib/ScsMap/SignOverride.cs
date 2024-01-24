@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap
     public class SignOverride : IBinarySerializable
     {
         /// <summary>
-        /// The ID of the sign template object. Every sign_template_* object has one.
+        /// The ID of the sign template object.
         /// </summary>
         public uint Id { get; set; }
 
@@ -28,6 +28,7 @@ namespace TruckLib.ScsMap
         public List<ISignOverrideAttribute> Attributes { get; set; } 
             = new List<ISignOverrideAttribute>();
 
+        /// <inheritdoc/>
         public void Deserialize(BinaryReader r)
         {
             Id = r.ReadUInt32();
@@ -78,9 +79,9 @@ namespace TruckLib.ScsMap
 
                 Attributes.Add(attrib);
             }
-
         }
 
+        /// <inheritdoc/>
         public void Serialize(BinaryWriter w)
         {
             w.Write(Id);
@@ -119,7 +120,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        protected AttributeType TypeToEnum(Type type)
+        private AttributeType TypeToEnum(Type type)
         {
             if (type == typeof(sbyte)) return AttributeType.SByte;
             if (type == typeof(int)) return AttributeType.Int32;
@@ -131,7 +132,7 @@ namespace TruckLib.ScsMap
             throw new NotImplementedException($"No matching enum entry for type {type}");
         }
 
-        protected enum AttributeType
+        private enum AttributeType
         {
             SByte = 1,
             Int32 = 2,

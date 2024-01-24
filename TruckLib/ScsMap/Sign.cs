@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// A traffic sign or navigation sign.
     /// </summary>
-    public class Sign : SingleNodeItem
+    public partial class Sign : SingleNodeItem
     {
         /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Sign;
@@ -131,16 +131,5 @@ namespace TruckLib.ScsMap
             sign.SignTemplate = template;
             return sign;
         }
-
-        /// <summary>
-        /// Sign text for legacy navigation signs.
-        /// </summary>
-        public struct SignBoard
-        {
-            public Token Road;
-            public Token City1;
-            public Token City2;
-        }
-
     }
 }

@@ -153,11 +153,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void Recalculate()
         {
-            Lengths = new List<float>(Nodes.Count - 1);
-            for (int i = 0; i < Nodes.Count - 1; i++)
-            {
-                Lengths.Add((Nodes[i + 1].Position - Nodes[i].Position).Length());
-            }
+            Lengths = MapItemUtils.CalculatePathLengths(Nodes, UseCurvedPath);
         }
     }
 }

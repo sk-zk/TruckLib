@@ -20,7 +20,7 @@ namespace TruckLib
         public const double DegToRad = Math.PI / 180.0;
 
         /// <summary>
-        /// Returns the angle between (b - a) and the Z axis as a quaternion.
+        /// Returns the yaw of the angle between (b - a) and the Z axis as a quaternion.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -37,6 +37,11 @@ namespace TruckLib
             var direction = Vector3.Normalize(b - a);
             var angle = AngleOffAroundAxis(direction, -Vector3.UnitZ, Vector3.UnitY, false);
             return angle;
+        }
+
+        public static double GetNodeAngle(Vector3 direction)
+        {
+            return AngleOffAroundAxis(direction, -Vector3.UnitZ, Vector3.UnitY, false);
         }
 
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rot)

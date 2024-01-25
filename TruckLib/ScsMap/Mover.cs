@@ -255,15 +255,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void Recalculate()
         {
-            if (Nodes.Count > 1)
-            {
-                // TODO: Actually calculate lengths
-                Lengths = Enumerable.Repeat(1f, Nodes.Count - 1).ToList();
-            }
-            else
-            {
-                Lengths = new List<float>();
-            }
+            Lengths = MapItemUtils.CalculatePathLengths(Nodes, UseCurvedPath);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace TruckLib.ScsMap
@@ -26,19 +27,23 @@ namespace TruckLib.ScsMap
         internal static T Add<T>(IItemContainer map, IList<Vector3> positions) where T : MultiNodeItem, new()
         {
             var item = new T();
-            CreateNodes(map, positions, item);
+            item.CreateNodes(map, positions);
             map.AddItem(item);
             return item;
         }
 
         /// <summary>
-        /// Creates map nodes for the given item.
+        /// Creates map nodes for this item. 
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="nodePositions">The positions of the nodes.</param>
-        /// <param name="item">The map item the nodes are for.</param>
-        protected static void CreateNodes(IItemContainer map, IList<Vector3> nodePositions, MultiNodeItem item)
+        protected virtual void CreateNodes(IItemContainer map, IList<Vector3> nodePositions)
         {
+            if (Nodes.Count != 0)
+            {
+                throw new InvalidOperationException("Map item already has nodes.");
+            }
+
             // all nodes have the item as ForwardItem; 
             // how the nodes connect is determined by their position in the list only
             for (int i = 0; i < nodePositions.Count; i++)
@@ -50,8 +55,8 @@ namespace TruckLib.ScsMap
                     // without it, the item can't be deleted.
                     node.IsRed = true;
                 }
-                node.ForwardItem = item;
-                item.Nodes.Add(node);
+                node.ForwardItem = this;
+                Nodes.Add(node);
             }
         }
 

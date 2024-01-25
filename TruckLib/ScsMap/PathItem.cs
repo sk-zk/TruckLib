@@ -40,5 +40,20 @@ namespace TruckLib.ScsMap
                 node.Move(node.Position + translation);
         }
 
+        /// <inheritdoc/>
+        protected override void CreateNodes(IItemContainer map, IList<Vector3> nodePositions)
+        {
+            base.CreateNodes(map, nodePositions);
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                var p0 = nodePositions[Math.Max(0, i - 1)];
+                var p1 = nodePositions[i];
+                var p2 = nodePositions[Math.Min(nodePositions.Count - 1, i + 1)];
+                var p3 = nodePositions[Math.Min(nodePositions.Count - 1, i + 2)];
+                var vec = CatmullRomSpline.Derivative(p0, p1, p2, p3, 0);
+                var angle = MathEx.GetNodeAngle(vec);
+                Nodes[i].Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0); ;
+            }
+        }
     }
 }

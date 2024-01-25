@@ -107,5 +107,17 @@ namespace TruckLib.ScsMap
             Checkpoints = new List<TrajectoryCheckpoint>();
             Tags = new List<Token>();
         }
+
+        /// <summary>
+        /// Adds a trajectory to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="positions">The points of the path.</param>
+        /// <returns>The newly created trajectory.</returns>
+        public static Trajectory Add(IItemContainer map, IList<Vector3> positions)
+        {
+            var tj = Add<Trajectory>(map, positions);
+            return tj;
+        }
     }
 }

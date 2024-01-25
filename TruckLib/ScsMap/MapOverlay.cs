@@ -34,8 +34,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool[] HideForZoomLevel
         {
+            // TODO
             get => throw new NotImplementedException(); //Kdop.Flags.GetByteAsBools(0);
-            // TODO: Allow setting values.
             set => throw new NotImplementedException();
         }
 
@@ -50,8 +50,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public OverlayType Type
         {
-            get => (OverlayType)Kdop.Flags.GetByte(2);
-            set => Kdop.Flags.SetByte(2, (byte)value);
+            get => (OverlayType)Kdop.Flags.GetByte(0);
+            set => Kdop.Flags.SetByte(0, (byte)value);
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Secret
         {
-            get => Kdop.Flags[19];
-            set => Kdop.Flags[19] = value;
+            get => Kdop.Flags[16];
+            set => Kdop.Flags[16] = value;
         }
 
         public MapOverlay() : base() { }

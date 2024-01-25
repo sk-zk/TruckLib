@@ -178,9 +178,15 @@ namespace TruckLib.ScsMap
         /// </summary>
         CityName = 2,
 
-        // TODO: What do these do?
-        UserText = 4,
-        Landmark = 16,
+        /// <summary>
+        /// TODO: What does this do?
+        /// </summary>
+        UserText = 3,
+
+        /// <summary>
+        /// TODO: What does this do?
+        /// </summary>
+        Landmark = 4,
     }
 
     /// <summary>

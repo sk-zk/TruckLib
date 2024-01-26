@@ -1,0 +1,43 @@
+SiiNunit
+{
+
+# this is a comment
+# asd asd
+
+curve_model : curve.ibe_1200i
+{
+    model_desc: "/model2/fences/fence_01_ibe.pmd"
+    name: "fence 01 ibe"
+
+    // comment with slashes
+    // asdf ghjh
+
+    variation: 2
+    start_part: 2 /* this is a c-style comment
+    * which extends
+    * over many lines
+    * and contains /* stuff like */ this : aaa { } */
+    end_part: 2
+    variation[0]: "v0 | center1 : 1.0"
+    start_part[0]: "start1"
+    end_part[0]: "end1"
+    variation[1]: "v1 | center2 : 1.0"
+    start_part[1]: "start2"
+    end_part[1]: "end1"
+
+    overlay: 2
+    overlay[0]: "center1 | ovr1 : 1.0"
+    overlay[1]: "start1 | ovr1 : 1.0"
+
+    high_tess: 0  // another comment
+
+    dynamic_lod_desc: 2
+    dynamic_lod_dist: 2
+    dynamic_lod_desc[0]: "/model2/fences/fence_01_ibe_lod1.pmd"
+    dynamic_lod_dist[0]: 15
+    dynamic_lod_desc[1]: "/model2/fences/fence_01_ibe_lod2.pmd"
+    dynamic_lod_dist[1]: 35
+    drop_sun_shadows: 1
+}
+
+}

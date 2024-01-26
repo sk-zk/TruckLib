@@ -56,6 +56,13 @@
     <None Update="Data\ModelSerializerTest\test\sec+0000+0000.layer">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\SiiParserTest\sample.sii">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\SiiParserTest\" />
   </ItemGroup>
 
 </Project>

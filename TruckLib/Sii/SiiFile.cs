@@ -18,7 +18,6 @@ namespace TruckLib.Sii
 
         // TODO:
         // Support placement type (currently unused in the game though (?))
-        // Remove block comments
 
         /// <summary>
         /// Units in this file.

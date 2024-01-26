@@ -5,9 +5,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
+// Do yourself a favor and don't look.
+// I'm as ashamed of this file as you are horrified reading it.
+
+[assembly: InternalsVisibleTo("TruckLibTests")]
 namespace TruckLib.Sii
 {
     /// <summary>
@@ -106,56 +111,14 @@ namespace TruckLib.Sii
             }
         }
 
-        private string RemoveComments(string sii)
-        {
-            // TODO: Remove block comments
-            var siiNoComments = new StringBuilder();
-            using var sr = new StringReader(sii);
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                bool inString = false;
-                int slashes = 0;
-                int commentStart = -1;
-                for (int i = 0; i < line.Length; i++)
-                {
-                    var character = line[i];
-
-                    if (character == '"')
-                    {
-                        inString = !inString;
-                    }
-                    if (inString)
-                    {
-                        continue;
-                    }
-
-                    if (character == '#')
-                    {
-                        commentStart = i;
-                        break;
-                    }
-
-                    if (character == '/')
-                    {
-                        slashes++;
-                        if (slashes > 1)
-                        {
-                            commentStart = i - 1;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        slashes = 0;
-                    }
-                }
-
-                line = commentStart > -1 ? line.Remove(commentStart) : line;
-                siiNoComments.AppendLine(line);
-            }
-            return siiNoComments.ToString();
-        }
+        private string RemoveComments(string sii) =>
+            Regex.Replace(sii,
+                // 🠋 remove C-style comments
+                //           🠋 remove # comments
+                //                      🠋 remove // comments
+                @"\/\*.*\*\/|#[^\n\r]*|\/\/[^\n\r]*",
+                "",
+                RegexOptions.Singleline);
 
         private Unit ParseUnit(string unitStr)
         {

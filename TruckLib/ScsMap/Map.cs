@@ -207,11 +207,11 @@ namespace TruckLib.ScsMap
         public Dictionary<ulong, MapItem> GetAllItems()
         {
             var allItems = new Dictionary<ulong, MapItem>();
-            foreach (var sectorKvp in Sectors)
+            foreach (var (_, sector) in Sectors)
             {
-                foreach (var itemKvp in sectorKvp.Value.MapItems)
+                foreach (var (uid, item) in sector.MapItems)
                 {
-                    allItems.Add(itemKvp.Key, itemKvp.Value);
+                    allItems.Add(uid, item);
                 }
             }
             return allItems;
@@ -225,13 +225,13 @@ namespace TruckLib.ScsMap
         public Dictionary<ulong, T> GetAllItems<T>() where T : MapItem
         {
             var allItems = new Dictionary<ulong, T>();
-            foreach (var sectorKvp in Sectors)
+            foreach (var (_, sector) in Sectors)
             {
-                foreach (var itemKvp in sectorKvp.Value.MapItems)
+                foreach (var (uid, item) in sector.MapItems)
                 {
-                    if (itemKvp.Value is T t)
+                    if (item is T t)
                     {
-                        allItems.Add(itemKvp.Key, t);
+                        allItems.Add(uid, t);
                     }
                 }
             }
@@ -245,9 +245,9 @@ namespace TruckLib.ScsMap
         /// <returns>Whether an item with this UID exists.</returns>
         public bool HasItem(ulong uid)
         {
-            foreach (var sectorKvp in Sectors)
+            foreach (var (_, sector) in Sectors)
             {
-                if (sectorKvp.Value.MapItems.ContainsKey(uid))
+                if (sector.MapItems.ContainsKey(uid))
                     return true;
             }
             return false;
@@ -260,9 +260,9 @@ namespace TruckLib.ScsMap
         /// <returns>The item, or null if it doesn't exist.</returns>
         public MapItem GetItem(ulong uid)
         {
-            foreach (var sectorKvp in Sectors)
+            foreach (var (_, sector) in Sectors)
             {
-                if (sectorKvp.Value.MapItems.TryGetValue(uid, out var item))
+                if (sector.MapItems.TryGetValue(uid, out var item))
                     return item;
             }
             return null;
@@ -276,9 +276,9 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item from all sectors
-            foreach (var sectorKvp in Sectors)
+            foreach (var (_, sector) in Sectors)
             {
-                sectorKvp.Value.MapItems.Remove(item.Uid);
+                sector.MapItems.Remove(item.Uid);
             }
            
             // remove item from its nodes, 
@@ -347,10 +347,8 @@ namespace TruckLib.ScsMap
             var clonedNodes = selection.Nodes.Select(x => (x as Node).Clone())
                 .ToDictionary(k => k.Uid, v => (INode)v);
 
-            foreach (var nodeKvp in clonedNodes)
+            foreach (var (_, node) in clonedNodes)
             {
-                var node = nodeKvp.Value;
-
                 node.Position += position - selection.Origin;
                 node.UpdateItemReferences(clonedItems);
                 var sectorIdx = GetSectorOfCoordinate(node.Position);
@@ -359,10 +357,8 @@ namespace TruckLib.ScsMap
                 Nodes.Add(node.Uid, node);
             }
 
-            foreach (var itemKvp in clonedItems)
+            foreach (var (_, item) in clonedItems)
             {
-                var item = itemKvp.Value;
-
                 item.UpdateNodeReferences(clonedNodes);
                 if (item is IItemReferences itemRefs)
                     itemRefs.UpdateItemReferences(clonedItems);
@@ -439,18 +435,18 @@ namespace TruckLib.ScsMap
 
             // first of all, find map items referenced in nodes
             Trace.WriteLine("Updating item references in nodes");
-            foreach (var kvp in allNodes)
+            foreach (var (_, node) in allNodes)
             {
-                kvp.Value.UpdateItemReferences(allItems);
+                node.UpdateItemReferences(allItems);
             }
 
             // then find nodes referenced in map items
             // and map items referenced in map items
             Trace.WriteLine("Updating node & item references in items");
-            foreach (var item in allItems)
+            foreach (var (_, item) in allItems)
             {
-                item.Value.UpdateNodeReferences(allNodes);
-                if (item.Value is IItemReferences hasItemRef)
+                item.UpdateNodeReferences(allNodes);
+                if (item is IItemReferences hasItemRef)
                 {
                     hasItemRef.UpdateItemReferences(allItems);
                 }
@@ -476,10 +472,10 @@ namespace TruckLib.ScsMap
             var sectorNodes = GetSectorNodes();
             var visAreaShowObjectsChildren = GetVisAreaShowObjectsChildUids();
 
-            foreach (var sectorKvp in Sectors)
+            foreach (var (_, sector) in Sectors)
             {
-                Trace.WriteLine($"Writing sector {sectorKvp.Value}");
-                sectorKvp.Value.Save(sectorDirectory, sectorNodes[sectorKvp.Value], visAreaShowObjectsChildren);
+                Trace.WriteLine($"Writing sector {sector}");
+                sector.Save(sectorDirectory, sectorNodes[sector], visAreaShowObjectsChildren);
             }
 
             var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");
@@ -488,15 +484,15 @@ namespace TruckLib.ScsMap
             Dictionary<Sector, List<INode>> GetSectorNodes()
             {
                 var sectorNodes = new Dictionary<Sector, List<INode>>();
-                foreach (var sectorKvp in Sectors)
+                foreach (var (_, sector) in Sectors)
                 {
-                    sectorNodes.Add(sectorKvp.Value, new List<INode>());
+                    sectorNodes.Add(sector, new List<INode>());
                 }
-                foreach (var nodeKvp in Nodes)
+                foreach (var (_, node) in Nodes)
                 {
-                    foreach (var sector in nodeKvp.Value.Sectors)
+                    foreach (var sector in node.Sectors)
                     {
-                        sectorNodes[sector].Add(nodeKvp.Value);
+                        sectorNodes[sector].Add(node);
                     }
                 }
 
@@ -506,10 +502,10 @@ namespace TruckLib.ScsMap
             HashSet<ulong> GetVisAreaShowObjectsChildUids()
             {
                 var children = new HashSet<ulong>();
-                foreach (var visArea in GetAllItems<VisibilityArea>()
+                foreach (var (_, visArea) in GetAllItems<VisibilityArea>()
                     .Where(x => x.Value.Behavior == VisibilityAreaBehavior.ShowObjects))
                 {
-                    foreach (IMapItem child in visArea.Value.Children)
+                    foreach (IMapItem child in visArea.Children)
                     {
                         children.Add(child.Uid);
                     }

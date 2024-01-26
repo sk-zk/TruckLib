@@ -395,10 +395,9 @@ namespace TruckLib.ScsMap
 
             header.Serialize(w);
 
-            foreach (var itemKvp in allItems.Where(x => x.Value.HasDataPayload))
+            foreach (var (uid, item) in allItems.Where(x => x.Value.HasDataPayload))
             {
-                var item = itemKvp.Value;
-                w.Write(item.Uid);
+                w.Write(uid);
                 var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
                 serializer.SerializeDataPayload(w, item);
             }
@@ -438,10 +437,10 @@ namespace TruckLib.ScsMap
             using var w = new BinaryWriter(stream);
 
             header.Serialize(w);
-            foreach (var item in itemsWithSetLayers)
+            foreach (var (uid, item) in itemsWithSetLayers)
             {
-                w.Write(item.Value.Uid);
-                w.Write(item.Value.Layer);
+                w.Write(uid);
+                w.Write(item.Layer);
             }
             w.Write(EofMarker);
         }
@@ -487,11 +486,11 @@ namespace TruckLib.ScsMap
             var items = allItems.Where(x => x.Value.ItemFile == file);
 
             w.Write(items.Count());
-            foreach (var item in items)
+            foreach (var (_, item) in items)
             {
-                w.Write((int)item.Value.ItemType);
-                var serializer = MapItemSerializerFactory.Get(item.Value.ItemType);
-                serializer.Serialize(w, item.Value);
+                w.Write((int)item.ItemType);
+                var serializer = MapItemSerializerFactory.Get(item.ItemType);
+                serializer.Serialize(w, item);
             }
         }
 

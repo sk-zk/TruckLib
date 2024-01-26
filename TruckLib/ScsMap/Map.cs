@@ -23,8 +23,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The map's sectors.
         /// </summary>
-        public Dictionary<ValueTuple<int, int>, Sector> Sectors { get; set; } 
-            = new Dictionary<ValueTuple<int, int>, Sector>();
+        public Dictionary<(int X, int Z), Sector> Sectors { get; set; } 
+            = new Dictionary<(int X, int Z), Sector>();
 
         /// <summary>
         /// Contains all nodes in this sector.
@@ -98,11 +98,9 @@ namespace TruckLib.ScsMap
         /// Opens a map.
         /// </summary>
         /// <param name="mbdPath">Path to the .mbd file of the map.</param>
-        /// <param name="sectors">If set, only the given sectors will be loaded.
-        /// The method expects strings in the same format as the file names of the sectors
-        /// (without the extension), e.g. <c>sec+0001+0002</c>.</param>
+        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
         /// <returns>A Map object.</returns>
-        public static Map Open(string mbdPath, string[] sectors = null)
+        public static Map Open(string mbdPath, (int,int)[] sectors = null)
         {
             Trace.WriteLine("Loading map " + mbdPath);
             var name = Path.GetFileNameWithoutExtension(mbdPath);
@@ -403,7 +401,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="mapDirectory">The main map directory.</param>
         /// <param name="sectors">If set, only the given sectors will be loaded.</param>
-        private void ReadSectors(string mapDirectory, string[] sectors = null)
+        private void ReadSectors(string mapDirectory, (int X, int Z)[] sectors = null)
         {
             var baseFiles = Directory.GetFiles(mapDirectory, "*.base");
 
@@ -413,22 +411,21 @@ namespace TruckLib.ScsMap
             // nodes from other sectors
             foreach (var baseFile in baseFiles)
             {
-                if (!SectorShouldBeLoaded(baseFile))
+                var coords = Sector.GetSectorCoordsFromSectorFilePath(baseFile);
+                if (sectors != null && !sectors.Contains(coords))
                     continue;
 
-                var sector = new Sector(baseFile, this);
-                Sectors.Add((sector.X, sector.Z), sector);
+                var sector = new Sector(coords.X, coords.Z, this);
+                sector.BasePath = baseFile;
+                Sectors.Add(coords, sector);
             }
 
-            var sectorList = Sectors.ToList();
-            foreach (var sectorKvp in sectorList)
+            // now read in the sectors
+            foreach (var (_, sector) in Sectors)
             {
-                Trace.WriteLine($"Reading sector {sectorKvp.Value}");
-                sectorKvp.Value.Read();
+                Trace.WriteLine($"Reading sector {sector}");
+                sector.Read();
             }
-
-            bool SectorShouldBeLoaded(string baseFile) =>
-                sectors == null || sectors.Contains(Path.GetFileNameWithoutExtension(baseFile));          
         }
 
         /// <summary>

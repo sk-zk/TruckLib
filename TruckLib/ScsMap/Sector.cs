@@ -86,17 +86,6 @@ namespace TruckLib.ScsMap
             Map = map;
         }
 
-        /// <summary>Instantiates a new, empty sector.</summary>
-        /// <param name="basePath">The path of the .base file of this sector, from which the
-        /// coordinates of this sector will be parsed.</param>
-        /// <param name="map">The map this sector belongs to.</param>
-        public Sector(string basePath, Map map)
-        {
-            BasePath = basePath;
-            GetSectorCoordsFromBasePath(basePath);
-            Map = map;
-        }
-
         /// <summary>
         /// Reads the sector from disk from the set <see cref="BasePath">BasePath</see>.
         /// </summary>
@@ -110,8 +99,6 @@ namespace TruckLib.ScsMap
         public void Open(string basePath)
         {
             BasePath = basePath;
-
-            GetSectorCoordsFromBasePath(basePath);
 
             ReadBase(basePath);
             ReadData(Path.ChangeExtension(basePath, DataExtension));
@@ -539,11 +526,17 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal void GetSectorCoordsFromBasePath(string basePath)
+        /// <summary>
+        /// Parses sector coordinates from the path to a sector file.
+        /// </summary>
+        /// <param name="path">The file path.</param>
+        /// <returns>The coordinates of the sector as (X, Z) tuple.</returns>
+        public static (int X, int Z) GetSectorCoordsFromSectorFilePath(string path)
         {
-            var sectorName = Path.GetFileNameWithoutExtension(basePath);
-            X = int.Parse(sectorName.Substring(3, 5));
-            Z = int.Parse(sectorName.Substring(8, 5));
+            var sectorName = Path.GetFileNameWithoutExtension(path);
+            var X = int.Parse(sectorName.Substring(3, 5));
+            var Z = int.Parse(sectorName.Substring(8, 5));
+            return (X, Z);
         }
 
         /// <summary>

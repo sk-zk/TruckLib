@@ -44,7 +44,7 @@ namespace TruckLib.Sii
 
             // get units
             string unitDeclarations = @"[\w]+?\s*:\s*\""?[\w.]+?\""?\s*{"; // don't @ me
-            foreach (Match m in Regex.Matches(sii, unitDeclarations, RegexOptions.Singleline))
+            foreach (var m in Regex.Matches(sii, unitDeclarations, RegexOptions.Singleline).Cast<Match>())
             {
                 // find ending bracket of this unit
                 var start = m.Index;
@@ -128,9 +128,9 @@ namespace TruckLib.Sii
 
             var unit = new Unit
             {
-                Class = unitStr.Substring(0, firstColonPos).Trim(),
+                Class = unitStr[..firstColonPos].Trim(),
                 Name = unitStr.Substring(firstColonPos + 1,
-                openBracketPos - firstColonPos - 1).Trim()
+                    openBracketPos - firstColonPos - 1).Trim()
             };
 
             var attributeLines = unitStr.Substring(openBracketPos + 1,
@@ -179,7 +179,7 @@ namespace TruckLib.Sii
         {
             line = line.Trim();
             var firstColonPos = line.IndexOf(':');
-            var attributeName = line.Substring(0, firstColonPos).Trim();
+            var attributeName = line[..firstColonPos].Trim();
             var valueStr = line.Substring(firstColonPos + 1, line.Length - firstColonPos - 1);
             var value = ParseAttributeValue(valueStr);
             return (attributeName, value);
@@ -285,7 +285,7 @@ namespace TruckLib.Sii
                 return ParseNumber(valueStr);
 
             // unit pointers
-            if (valueStr.Contains("."))
+            if (valueStr.Contains('.'))
                 return valueStr;
 
             // token
@@ -312,7 +312,7 @@ namespace TruckLib.Sii
             var tupleVals = valueStr[1..^1].Split(TupleSeperator);
 
             // determine the type of the tuple
-            var types = new Type[tupleVals.Count()];
+            var types = new Type[tupleVals.Length];
             for (int i = 0; i < tupleVals.Length; i++)
                 types[i] = ParseAttributeValue(tupleVals[i]).GetType();
 
@@ -345,7 +345,7 @@ namespace TruckLib.Sii
                 var bitsAsInt = int.Parse(valueStr[1..], NumberStyles.HexNumber);
                 return BitConverter.Int32BitsToSingle(bitsAsInt);
             }
-            else if (valueStr.Contains(".") || valueStr.Contains("e") || valueStr.Contains("E"))
+            else if (valueStr.Contains('.') || valueStr.Contains('e') || valueStr.Contains('E'))
             {
                 if (float.TryParse(valueStr, NumberStyles.Float | NumberStyles.AllowExponent,
                     culture, out float floatResult))

@@ -1,5 +1,7 @@
 items:
   - name: Creating, opening, and saving maps
     href: create-open-save.md
+  - name: Finding map items and nodes
+    href: finding-objects.md
   - name: Adding and deleting map items
     href: add-delete-items.md

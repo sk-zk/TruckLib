@@ -4,12 +4,12 @@
 To add a map item, call the static `Add` method of the respective item's class. This will construct the object,
 add map nodes for the item, add the item to the map, and then return the object.
 
-Let's [add a Model](xref:TruckLib.ScsMap.Model.Add*) to the map. The first paramater of any `Add` method is the map,
+Let's [add a Model](xref:TruckLib.ScsMap.Model.Add*) to the map. The first parameter of any `Add` method is the map,
 compound or Selection the item will be added to; what follows next depends on the item. In this case, it is the 
 position of the model, the unit name of the model, and its variant and look:
 
 ```cs
-var model = Model.Add(
+Model model = Model.Add(
   map,          // container
   new Vector3(10f, 0f, 10f), // position 
   "dlc_no_471", // unit name of "house_01_sc"

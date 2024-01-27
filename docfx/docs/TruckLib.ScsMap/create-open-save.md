@@ -2,21 +2,21 @@
 
 ## Creating a map
 To create a new, empty map, call the [constructor of `Map`](xref:TruckLib.ScsMap.Map.%23ctor*).
-The `name` parameter is what the .mbd file and the sector directory of the map will be named when it is saved.
+The `name` parameter is what the `.mbd` file and the sector directory of the map will be named when it is saved.
 
 ```cs
 using TruckLib.ScsMap;
 
-var map = new Map("example");
+Map map = new Map("example");
 ```
 
 ## Opening a map
-To load an existing map from disk, call the static [`Map.Open`](xref:TruckLib.ScsMap.Map.Open*) method with the path of the .mbd file.
+To load an existing map from disk, call the static [`Map.Open`](xref:TruckLib.ScsMap.Map.Open*) method with the path of the `.mbd` file.
 
 ```cs
 using TruckLib.ScsMap;
 
-var map = Map.Open(@"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\extracted\map\europe.mbd");
+Map map = Map.Open(@"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\extracted\map\europe.mbd");
 ```
 
 If you would like to only load specific sectors rather than the entire map, use the optional `sectors` parameter.
@@ -26,8 +26,8 @@ It expects an array of sector coordinates as tuples in (X, Z) order.
 To save a map, call the [`Save`](xref:TruckLib.ScsMap.Map.Save*) method of the map object. The map will be written to the given directory.
 
 ```cs
-var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-var userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/");
+string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+string userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/");
 map.Save(userMap, true);
 ```
 

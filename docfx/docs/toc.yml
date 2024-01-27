@@ -1,3 +1,5 @@
 items:
   - name: TruckLib.ScsMap
     href: TruckLib.ScsMap/toc.yml
+  - name: TruckLib.HashFs
+    href: TruckLib.HashFs/toc.yml

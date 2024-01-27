@@ -8,12 +8,12 @@ using System.Text;
 namespace TruckLib.HashFs
 {
     /// <summary>
-    /// A simple HashFS reader for extracting files from HashFS containers.
+    /// A simple HashFS reader for extracting files from HashFS archives.
     /// </summary>
     public class HashFsReader : IDisposable
     {
         /// <summary>
-        /// Gets the path of the HashFS archive which this being read from by this reader.
+        /// Gets the file path of the HashFS archive which this reader is reading from.
         /// </summary>
         public string Path { get; private set; }
 
@@ -43,6 +43,8 @@ namespace TruckLib.HashFs
         /// Opens a HashFS archive.
         /// </summary>
         /// <param name="path">The path to the HashFS archive.</param>
+        /// <param name="forceEntryHeadersAtEnd">If true, the entry headers will be read
+        /// from the end of the file, regardless of where the archive header says they are located.</param>
         /// <returns>A HashFsReader object.</returns>
         public static HashFsReader Open(string path, bool forceEntryHeadersAtEnd = false)
         {
@@ -85,6 +87,7 @@ namespace TruckLib.HashFs
                 throw new FileNotFoundException();
 
             var entry = GetEntryHeader(path);
+
             return GetEntryContent(entry);
         }
 
@@ -249,7 +252,12 @@ namespace TruckLib.HashFs
             return file;
         }
 
-        private Entry GetEntryHeader(string path)
+        /// <summary>
+        /// Retrieves the entry header for the given path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>The entry header.</returns>
+        public Entry GetEntryHeader(string path)
         {
             ulong hash = HashPath(path);
             var entry = Entries[hash];
@@ -345,8 +353,19 @@ namespace TruckLib.HashFs
     /// </summary>
     public enum EntryType
     {
+        /// <summary>
+        /// The path does not exist in the archive.
+        /// </summary>
         NotFound = -1,
+
+        /// <summary>
+        /// The path points to a file.
+        /// </summary>
         File = 0,
+
+        /// <summary>
+        /// The path points to a directory listing.
+        /// </summary>
         Directory = 1
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace TruckLib.ScsMap
@@ -122,6 +123,22 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
+        }
+
+        /// <summary>
+        /// Adds a hookup to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The position of the hookup.</param>
+        /// <param name="name">The name of the model pool.</param>
+        /// <returns>The newly created hookup.</returns>
+        public static Hookup Add(IItemContainer map, Vector3 position, string name)
+        {
+            var hookup = Add<Hookup>(map, position);
+
+            hookup.Name = name;
+
+            return hookup;
         }
     }
 }

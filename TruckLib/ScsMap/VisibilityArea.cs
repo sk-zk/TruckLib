@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace TruckLib.ScsMap
@@ -72,6 +73,27 @@ namespace TruckLib.ScsMap
                     Children[i] = resolvedItem;
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds a visibility area to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The position of the center of the area.</param>
+        /// <param name="behavior">The rendering behavior of the area.</param>
+        /// <param name="width">The width of the area.</param>
+        /// <param name="height">The height of the area.</param>
+        /// <returns>The newly created visibility area.</returns>
+        public static VisibilityArea Add(IItemContainer map, Vector3 position, VisibilityAreaBehavior behavior,
+            float width, float height)
+        {
+            var va = Add<VisibilityArea>(map, position);
+
+            va.Behavior = behavior;
+            va.Width = width;
+            va.Height = height;
+
+            return va;
         }
     }
 }

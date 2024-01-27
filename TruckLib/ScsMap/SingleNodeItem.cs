@@ -46,13 +46,27 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
+            var oldSector = Node.Sectors[0];
             Node.Move(newPos);
+            var newSector = Node.Sectors[0];
+            if (oldSector != newSector)
+            {
+                oldSector.MapItems.Remove(Uid);
+                newSector.MapItems.Add(Uid, this);
+            }
         }
 
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
+            var oldSector = Node.Sectors[0];
             Node.Move(Node.Position + translation);
+            var newSector = Node.Sectors[0];
+            if (oldSector != newSector)
+            {
+                oldSector.MapItems.Remove(Uid);
+                newSector.MapItems.Add(Uid, this);
+            }
         }
 
         /// <inheritdoc/>

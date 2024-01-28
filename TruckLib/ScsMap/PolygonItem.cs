@@ -63,10 +63,7 @@ namespace TruckLib.ScsMap
             Translate(translation);
         }
 
-        /// <summary>
-        /// Translates the item to a different location.
-        /// </summary>
-        /// <param name="translation"></param>
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             foreach (var node in Nodes)

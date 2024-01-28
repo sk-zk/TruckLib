@@ -5,3 +5,5 @@ items:
     href: finding-objects.md
   - name: Adding and deleting map items
     href: add-delete-items.md
+  - name: Moving map items
+    href: move-items.md

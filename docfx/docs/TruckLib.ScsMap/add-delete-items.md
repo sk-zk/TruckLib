@@ -27,7 +27,7 @@ model.WaterReflection = true;
 ```
 
 ## Deleting a map item
-To delete an item from a container, call its [`Delete`](xref:TruckLib.ScsMap.IItemContainer.Delete(TruckLib.ScsMap.MapItem)) method with the item:
+To delete an item from a map, call its [`Delete`](xref:TruckLib.ScsMap.IItemContainer.Delete(TruckLib.ScsMap.MapItem)) method with the item:
 
 ```cs
 map.Delete(model);

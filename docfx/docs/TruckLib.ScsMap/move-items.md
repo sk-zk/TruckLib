@@ -15,15 +15,19 @@ model.Translate(new Vector3(40, 0, 40));
 // The model is now at (50, 0, 50).
 ```
 
-For [single node items](xref:TruckLib.ScsMap.SingleNodeItem) such as [Models](xref:TruckLib.ScsMap.Model), these methods simply move the node.
+The behavior of `Move` and `Translate` differs slightly based on the item type:
 
-For [polyline items](xref:TruckLib.ScsMap.PolylineItem) such as [Roads](xref:TruckLib.ScsMap.Road), both the backward node and the forward node are moved,
-since you are moving the whole item. To move only one of these nodes, call the method on [`Node`](xref:TruckLib.ScsMap.PolylineItem.Node)
+* For [single node items](xref:TruckLib.ScsMap.SingleNodeItem) such as [Models](xref:TruckLib.ScsMap.Model), they simply move the node.
+
+* For [polyline items](xref:TruckLib.ScsMap.PolylineItem) such as [Roads](xref:TruckLib.ScsMap.Road), both the backward node and the forward node are moved,
+since you are moving the whole item. To move only one of its nodes, call the method on the [`Node`](xref:TruckLib.ScsMap.PolylineItem.Node)
 or [`ForwardNode`](xref:TruckLib.ScsMap.PolylineItem.ForwardNode) itself.
 
-For [path items](xref:TruckLib.ScsMap.PathItem) such as [Movers](xref:TruckLib.ScsMap.Mover) and [polygon items](xref:TruckLib.ScsMap.PolygonItem)
+* For [path items](xref:TruckLib.ScsMap.PathItem) such as [Movers](xref:TruckLib.ScsMap.Mover) and [polygon items](xref:TruckLib.ScsMap.PolygonItem)
 such as [Traffic Areas](xref:TruckLib.ScsMap.TrafficArea), the position given to `Move` will be applied to the 0th node, and the other nodes
 of the item will be translated relative to it. If you would like a different node to be the anchor of the `Move` method, use the
 overload `Move(Vector3, int)` to specify its index.
 
-For [prefabs](xref:TruckLib.ScsMap.Prefab), TODO
+* For [compounds](xref:TruckLib.ScsMap.Compound), both the parent node and the contained map items are moved.
+
+* For [prefabs](xref:TruckLib.ScsMap.Prefab), TODO

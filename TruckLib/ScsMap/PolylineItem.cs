@@ -262,15 +262,24 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
-            Node.Move(newPos);
-            Recalculate();
+            DoSomethingThenUpdateSectorMapItems(() =>
+            {
+                var fwNodeOffset = ForwardNode.Position - Node.Position;
+                Node.Move(newPos);
+                ForwardNode.Move(newPos + fwNodeOffset);
+                Recalculate();
+            });
         }
 
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
-            Node.Move(Node.Position + translation);
-            Recalculate();
+            DoSomethingThenUpdateSectorMapItems(() =>
+            {
+                Node.Move(Node.Position + translation);
+                ForwardNode.Move(ForwardNode.Position + translation);
+                Recalculate();
+            });
         }
 
         internal override IEnumerable<INode> GetItemNodes() =>

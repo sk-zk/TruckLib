@@ -37,6 +37,7 @@ namespace TruckLib.ScsMap
         public Sector[] Sectors { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public bool IsOrphaned() => throw new InvalidOperationException();
         public void Move(Vector3 newPos) => throw new InvalidOperationException();
+        public void Translate(Vector3 translation) => throw new InvalidOperationException();
         public void Deserialize(BinaryReader r) => throw new InvalidOperationException();
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems) => throw new InvalidOperationException();
         public void Serialize(BinaryWriter w) => throw new InvalidOperationException();

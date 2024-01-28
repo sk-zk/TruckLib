@@ -176,6 +176,15 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Translates the node by the given vector.
+        /// </summary>
+        /// <param name="translation">The translation vector.</param>
+        public void Translate(Vector3 translation)
+        {
+            Move(Position + translation);
+        }
+
+        /// <summary>
         /// Recalculates the items attached to this node.
         /// </summary>
         protected virtual void RecalculateItems()

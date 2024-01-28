@@ -20,6 +20,7 @@ namespace TruckLib.ScsMap
 
         bool IsOrphaned();
         void Move(Vector3 newPos);
+        void Translate(Vector3 translation);
         void Deserialize(BinaryReader r);
         string ToString();
         void UpdateItemReferences(Dictionary<ulong, MapItem> allItems);

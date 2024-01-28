@@ -277,5 +277,28 @@ namespace TruckLib.ScsMap
                 }
             }
         }
+
+        /// <summary>
+        /// Moves the parent node to a different location and moves the items contained in
+        ///  this compound relative to it.
+        /// </summary>
+        /// <inheritdoc/>
+        public override void Move(Vector3 newPos)
+        {
+            Translate(newPos - Node.Position);
+        }
+
+        /// <summary>
+        /// Translates the parent node and its children by the given vector.
+        /// </summary>
+        /// <inheritdoc/>
+        public override void Translate(Vector3 translation)
+        {
+            base.Translate(translation);
+            foreach (var item in Items)
+            {
+                item.Translate(translation);
+            }
+        }
     }  
 }

@@ -124,13 +124,18 @@ namespace TruckLib.ScsMap
 
         internal void DoSomethingThenUpdateSectorMapItems(Action action)
         {
-            var oldSector = GetMainNode().Sectors[0];
+            var mainNode = GetMainNode();
+            var oldSector = mainNode.Sectors?.Length > 0 
+                ? mainNode.Sectors[0] : null;
+
             action();
-            var newSector = GetMainNode().Sectors[0];
+
+            var newSector = mainNode.Sectors?.Length > 0 
+                ? mainNode.Sectors[0] : null;
             if (oldSector != newSector)
             {
-                oldSector.MapItems.Remove(Uid);
-                newSector.MapItems.Add(Uid, this);
+                oldSector?.MapItems.Remove(Uid);
+                newSector?.MapItems.Add(Uid, this);
             }
         }
 

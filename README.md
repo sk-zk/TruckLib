@@ -44,6 +44,8 @@ change their path as the game recalculates its length.
 * Anything to do with prefabs may or may not break in unexpected ways.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
  fixed by recalculating.
+* When adding a camera path, the positions of the control points in the Keyframe objects are not set to any default values
+and therefore left at (0, 0, 0).
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
  
 ## Dependencies

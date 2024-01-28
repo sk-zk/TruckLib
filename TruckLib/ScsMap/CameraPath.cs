@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace TruckLib.ScsMap
@@ -75,6 +76,19 @@ namespace TruckLib.ScsMap
         protected override void SetNodeRotations()
         {
             return; // Do nothing - camera path nodes are 0y, 0p, 0r by default
+        }
+
+        public static CameraPath Add(IItemContainer map, IList<Vector3> positions)
+        {
+            var path = Add<CameraPath>(map, positions);
+
+            path.Keyframes.EnsureCapacity(positions.Count);
+            for (int i = 0; i < positions.Count; i++)
+            {
+                path.Keyframes.Add(new Keyframe());
+            }
+
+            return path;
         }
     }
 }

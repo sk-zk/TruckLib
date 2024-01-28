@@ -71,5 +71,10 @@ namespace TruckLib.ScsMap
             base.UpdateNodeReferences(allNodes);
             ResolveNodeReferences(TrackPoints, allNodes);
         }
+
+        protected override void SetNodeRotations()
+        {
+            return; // Do nothing - camera path nodes are 0y, 0p, 0r by default
+        }
     }
 }

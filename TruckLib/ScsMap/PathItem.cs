@@ -64,12 +64,21 @@ namespace TruckLib.ScsMap
         protected override void CreateNodes(IItemContainer map, IList<Vector3> nodePositions)
         {
             base.CreateNodes(map, nodePositions);
+            SetNodeRotations();
+        }
+
+        /// <summary>
+        /// Sets the node rotations when creating a path item.
+        /// Called by <see cref="CreateNodes">CreateNodes</see>.
+        /// </summary>
+        protected virtual void SetNodeRotations()
+        {
             for (int i = 0; i < Nodes.Count; i++)
             {
-                var p0 = nodePositions[Math.Max(0, i - 1)];
-                var p1 = nodePositions[i];
-                var p2 = nodePositions[Math.Min(nodePositions.Count - 1, i + 1)];
-                var p3 = nodePositions[Math.Min(nodePositions.Count - 1, i + 2)];
+                var p0 = Nodes[Math.Max(0, i - 1)].Position;
+                var p1 = Nodes[i].Position;
+                var p2 = Nodes[Math.Min(Nodes.Count - 1, i + 1)].Position;
+                var p3 = Nodes[Math.Min(Nodes.Count - 1, i + 2)].Position;
                 var vec = CatmullRomSpline.Derivative(p0, p1, p2, p3, 0);
                 var angle = MathEx.GetNodeAngle(vec);
                 Nodes[i].Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0); ;

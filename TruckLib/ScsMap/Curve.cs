@@ -305,6 +305,7 @@ namespace TruckLib.ScsMap
             c.Look = Look;
             c.TerrainMaterial = TerrainMaterial;
             c.TerrainColor = TerrainColor;
+            c.TerrainRotation = TerrainRotation;
             c.ViewDistance = ViewDistance;
             c.RandomSeed = RandomSeed;
             c.Stretch = Stretch;

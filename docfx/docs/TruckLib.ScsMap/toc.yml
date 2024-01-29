@@ -7,3 +7,5 @@ items:
     href: add-delete-items.md
   - name: Moving map items
     href: move-items.md
+  - name: Working with polyline items
+    href: polyline-items.md

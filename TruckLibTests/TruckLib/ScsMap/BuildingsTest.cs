@@ -61,6 +61,17 @@ namespace TruckLibTests.TruckLib.ScsMap
         }
 
         [Fact]
+        public void DisallowAppendIfForwardItemExists()
+        {
+            var map = new Map("foo");
+            var buildings1 = Buildings.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
+            var buildings2 = buildings1.Append(new Vector3(-10, 0, -10), true);
+
+            Assert.Throws<InvalidOperationException>(
+                () => buildings1.Append(new Vector3(-20, 0, -20)));
+        }
+
+        [Fact]
         public void Move()
         {
             var map = new Map("foo");

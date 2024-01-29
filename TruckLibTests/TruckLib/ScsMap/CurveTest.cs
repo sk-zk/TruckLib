@@ -68,6 +68,17 @@ namespace TruckLibTests.TruckLib.ScsMap
         }
 
         [Fact]
+        public void DisallowAppendIfForwardItemExists()
+        {
+            var map = new Map("foo");
+            var curve1 = Curve.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
+            var curve2 = curve1.Append(new Vector3(-10, 0, -10), true);
+
+            Assert.Throws<InvalidOperationException>(
+                () => curve1.Append(new Vector3(-20, 0, -20)));
+        }
+
+        [Fact]
         public void Move()
         {
             var map = new Map("foo");
@@ -82,7 +93,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));
             Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
         }
-
 
         [Fact]
         public void Translate()

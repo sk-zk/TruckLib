@@ -51,7 +51,7 @@ namespace TruckLib.ScsMap
         /// Returns the first item of the polyline chain this item is a part of.
         /// </summary>
         /// <returns>The first item of the polyline chain this item is a part of.</returns>
-        public MapItem FindFirstItem()
+        public PolylineItem FindFirstItem()
         {
             var first = this;
             while (first.BackwardItem is PolylineItem pli)
@@ -63,7 +63,7 @@ namespace TruckLib.ScsMap
         /// Returns the last item of the polyline chain this item is a part of.
         /// </summary>
         /// <returns>The last item of the polyline chain this item is a part of.</returns>
-        public MapItem FindLastItem()
+        public PolylineItem FindLastItem()
         {
             var last = this;
             while (last.ForwardItem is PolylineItem pli)

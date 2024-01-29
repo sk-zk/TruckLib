@@ -99,7 +99,30 @@ namespace TruckLibTests.TruckLib.Sii
         }
 
         [Fact]
-        public void Includes()
+        public void ParsePlacement()
+        {
+            var unit = @"
+                foo : .bar {
+                    a: (1, 2, 3) (4; 5, 6, 7)
+                    b: (&c6b5d1a7, &41e27800, &c48e31db) (&3f29a17a; 0, &3f3fbb90, 0)
+                }
+            ";
+            var parser = new SiiParser();
+            var file = parser.DeserializeFromString(unit);
+
+            Assert.Equal(new Vector3(1, 2, 3),
+                file.Units[0].Attributes["a"].Position);
+            Assert.Equal(new Quaternion(5, 6, 7, 4),
+                file.Units[0].Attributes["a"].Rotation);
+
+            Assert.Equal(new Vector3(-23272.826f, 28.308594f, -1137.558f),
+                file.Units[0].Attributes["b"].Position);
+            Assert.Equal(new Quaternion(0, 0.74895573f, 0, 0.66262019f),
+                file.Units[0].Attributes["b"].Rotation);
+        }
+
+        [Fact]
+        public void DontInsertIncludes()
         {
             var unit = @"
 @include ""global_include.sui""

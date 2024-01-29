@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -261,6 +262,10 @@ namespace TruckLib.Sii
             if (valueStr.StartsWith(doubleQuote) && valueStr.EndsWith(doubleQuote))
                 return valueStr[1..^1];
 
+            // placement type
+            if (Regex.IsMatch(valueStr, @"\(.+, *.+, *.+\) *\(.+; *.+, *.+, *.+\)"))
+                return ParsePlacement(valueStr);
+
             // expicit quaternion - undocumented but used in a few files
             if (Regex.IsMatch(valueStr, @"\(.+;.+,.+,.+\)"))
                 return ParseQuaternion(valueStr);
@@ -305,6 +310,24 @@ namespace TruckLib.Sii
                 float.Parse(vals[3], culture), // z
                 float.Parse(vals[0], culture)  // w
                 );
+        }
+
+        private dynamic ParsePlacement(string valueStr)
+        {
+            var matches = Regex.Matches(valueStr, @"\((.+), *(.+), *(.+)\) *\((.+); *(.+), *(.+), *(.+)\)");
+            return new Placement(
+                new Vector3(
+                    ParseNumber(matches[0].Groups[1].Value),
+                    ParseNumber(matches[0].Groups[2].Value),
+                    ParseNumber(matches[0].Groups[3].Value)
+                ),
+                new Quaternion(
+                    ParseNumber(matches[0].Groups[5].Value),
+                    ParseNumber(matches[0].Groups[6].Value),
+                    ParseNumber(matches[0].Groups[7].Value),
+                    ParseNumber(matches[0].Groups[4].Value)
+                )
+            );
         }
 
         private dynamic ParseTuple(string valueStr)

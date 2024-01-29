@@ -122,9 +122,9 @@ namespace TruckLib.ScsMap
              * p2 = the current forward node
              * p1 = the current backward node (= Node)
              *
-             *  x--------------x------------x
-             *  p1             p2           p3  <- we're adding this node
-             *  Node        ForwardNode     new node
+             *   x--------------x------------x
+             *   p1             p2           p3   <- we're adding this node
+             *  Node       ForwardNode    new node
              *
              */
             var p1 = Node;
@@ -146,7 +146,7 @@ namespace TruckLib.ScsMap
             SetMiddleRotation(p1, p2, p3);
 
             p2.IsRed = true;
-            p2.Sectors[0].MapItems.Add(newItem.Uid, newItem);
+            p3.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
             RecalculateLength();
 
@@ -160,9 +160,9 @@ namespace TruckLib.ScsMap
              * p1 = the current backward node (= Node)
              * p2 = the current forward node
              *
-             *  x--------------x------------x
-             *  p0             p1           p2 
-             *  new node      Node       ForwardNode
+             *   x--------------x------------x
+             *   p0             p1           p2 
+             *  new node       Node       ForwardNode
              *  ^ we're adding this one
              */
             var p1 = Node;
@@ -182,7 +182,7 @@ namespace TruckLib.ScsMap
 
             newItem.RecalculateRotation();
 
-            p0.Sectors[0].MapItems.Add(newItem.Uid, newItem);
+            p1.Sectors[0].MapItems.Add(newItem.Uid, newItem);
 
             RecalculateLength();
 

@@ -241,7 +241,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Checks if the map contains an item with the given UID.
         /// </summary>
-        /// <param name="uid">The UID to search for.</param>
+        /// <param name="uid">The UID.</param>
         /// <returns>Whether an item with this UID exists.</returns>
         public bool HasItem(ulong uid)
         {
@@ -256,7 +256,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Returns the item with the given UID.
         /// </summary>
-        /// <param name="uid">The UID to search for.</param>
+        /// <param name="uid">The UID.</param>
         /// <returns>The item, or null if it doesn't exist.</returns>
         public MapItem GetItem(ulong uid)
         {
@@ -266,6 +266,27 @@ namespace TruckLib.ScsMap
                     return item;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns the item with the given UID if it exists.
+        /// </summary>
+        /// <param name="uid">The UID.</param>
+        /// <param name="item">Contains the item when the method returns, if it was found;
+        /// otherwise, it is set to <c>null</c>.</param>
+        /// <returns>Whether the item exists in the map.</returns>
+        public bool TryGetItem(ulong uid, out MapItem item)
+        {
+            foreach (var (_, sector) in Sectors)
+            {
+                if (sector.MapItems.TryGetValue(uid, out var _item))
+                {
+                    item = _item;
+                    return true;
+                }
+            }
+            item = null;
+            return false;
         }
 
         /// <summary>

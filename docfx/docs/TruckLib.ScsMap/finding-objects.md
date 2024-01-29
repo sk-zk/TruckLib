@@ -15,6 +15,12 @@ To retrieve the item, call [`GetItem`](xref:TruckLib.ScsMap.Map.GetItem*):
 MapItem item = map.GetItem(0x521CD80FA4000001);
 ```
 
+You can do both at the same time with [`TryGetItem`](xref:TruckLib.ScsMap.Map.TryGetItem*):
+
+```cs
+bool exists = map.TryGetItem(0x521CD80FA4000001, out MapItem item);
+```
+
 ### By type
 To retrieve a dictionary of all map items of a specific type, call [`GetAllItems<T>`](xref:TruckLib.ScsMap.Map.GetAllItems``1):
 

@@ -33,6 +33,34 @@ namespace TruckLibTests.TruckLib.ScsMap
         }
 
         [Fact]
+        public void Append()
+        {
+            var map = new Map("foo");
+            var buildings1 = Buildings.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
+
+            // set some settings we expect to get cloned
+            buildings1.Stretch = 1.5f;
+            buildings1.MirrorReflection = false;
+            buildings1.ColorVariant = 2;
+
+            var buildings2 = buildings1.Append(new Vector3(-10, 0, -10), true);
+
+            Assert.Equal(buildings1.Stretch, buildings2.Stretch);
+            Assert.Equal(buildings1.MirrorReflection, buildings2.MirrorReflection);
+            Assert.Equal(buildings1.ColorVariant, buildings2.ColorVariant);
+
+            Assert.Equal(buildings2.ForwardNode, buildings2.GetMainNode());
+            Assert.True(buildings2.Node.IsRed);
+            Assert.False(buildings2.ForwardNode.IsRed);
+            Assert.Equal(buildings2, buildings2.Node.ForwardItem);
+            Assert.Equal(buildings1, buildings2.Node.BackwardItem);
+            Assert.Equal(buildings2, buildings2.ForwardNode.BackwardItem);
+            Assert.Null(buildings2.ForwardNode.ForwardItem);
+            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(buildings2.Uid));
+            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings2.Uid));
+        }
+
+        [Fact]
         public void Move()
         {
             var map = new Map("foo");
@@ -77,6 +105,23 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings.Uid));
             Assert.False(map.Nodes.ContainsKey(buildings.Node.Uid));
             Assert.False(map.Nodes.ContainsKey(buildings.ForwardNode.Uid));
+        }
+
+        [Fact]
+        public void DeleteInChain()
+        {
+            var map = new Map("foo");
+            var buildings1 = Buildings.Add(map, new Vector3(10, 0, 10), new Vector3(20, 0, 20), "bar");
+            var buildings2 = buildings1.Append(new Vector3(30, 0, 30));
+            var buildings3 = buildings2.Append(new Vector3(40, 0, 40));
+
+            map.Delete(buildings2);
+
+            Assert.False(map.HasItem(buildings2.Uid));
+            Assert.Null(buildings1.ForwardItem);
+            Assert.Null(buildings1.ForwardNode.ForwardItem);
+            Assert.Null(buildings3.BackwardItem);
+            Assert.Null(buildings3.Node.BackwardItem);
         }
     }
 }

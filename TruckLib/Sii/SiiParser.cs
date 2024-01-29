@@ -399,14 +399,14 @@ namespace TruckLib.Sii
             if (siiFile.GlobalScope)
             {
                 sb.AppendLine(SiiHeader);
-                sb.AppendLine("{");
+                sb.AppendLine("{\n");
             }
 
             foreach (var unit in siiFile.Units)
             {
                 sb.AppendLine($"{unit.Class} : {unit.Name} {{");
                 SerializeAttributes(sb, unit);
-                sb.AppendLine("}");
+                sb.AppendLine("}\n");
             }
 
             if (siiFile.GlobalScope)

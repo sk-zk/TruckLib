@@ -1,0 +1,10 @@
+SiiNunit
+{
+
+@include "included1.sui";
+
+foo : .bar {
+	a: 1
+@include "included2.sui"
+	c: 3
+}

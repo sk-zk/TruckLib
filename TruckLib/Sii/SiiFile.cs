@@ -25,11 +25,6 @@ namespace TruckLib.Sii
         public List<Unit> Units { get; set; } = new List<Unit>();
 
         /// <summary>
-        /// Top-level includes in this file.
-        /// </summary>
-        public List<string> Includes { get; set; } = new List<string>();
-
-        /// <summary>
         /// Gets or sets if the file has global scope ("<c>SiiNunit {</c>") or not.
         /// </summary>
         public bool GlobalScope { get; set; } = true;
@@ -43,9 +38,12 @@ namespace TruckLib.Sii
         /// Deserializes a string containing a SII file.
         /// </summary>
         /// <param name="sii">The string containing the SII file.</param>
+        /// <param name="siiDirectory">The path of the directory in which the SII file is located.
+        /// Required for inserting <c>@include</c>s. Can be ommitted if the file is known not to
+        /// have <c>@include</c>s.</param>
         /// <returns>A SiiFile object.</returns>
-        public static SiiFile Load(string sii) =>
-            new SiiParser().DeserializeFromString(sii);
+        public static SiiFile Load(string sii, string siiDirectory = "") =>
+            new SiiParser().DeserializeFromString(sii, siiDirectory);
 
         /// <summary>
         /// Opens a SII file.

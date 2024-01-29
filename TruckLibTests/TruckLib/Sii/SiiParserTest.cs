@@ -16,7 +16,7 @@ namespace TruckLibTests.TruckLib.Sii
         {
             var str = File.ReadAllText("Data/SiiParserTest/sample.sii");
             var parser = new SiiParser();
-            var file = parser.DeserializeFromString(str);
+            var file = parser.DeserializeFromString(str, "Data/SiiParserTest");
 
             Assert.True(file.GlobalScope);
             Assert.True(file.Units.Count == 1);
@@ -122,21 +122,15 @@ namespace TruckLibTests.TruckLib.Sii
         }
 
         [Fact]
-        public void DontInsertIncludes()
+        public void DeserializeIncludes()
         {
-            var unit = @"
-@include ""global_include.sui""
-foo : .bar {
-    some_val: 1
-@include ""unit_include.sui""
-}
-            ";
+            var str = File.ReadAllText("Data/SiiParserTest/includer.sii");
             var parser = new SiiParser();
-            var file = parser.DeserializeFromString(unit);
-            Assert.True(file.Includes.Count == 1);
-            Assert.Equal("global_include.sui", file.Includes[0]);
-            Assert.True(file.Units[0].Includes.Count == 1);
-            Assert.Equal("unit_include.sui", file.Units[0].Includes[0]);
+            var file = parser.DeserializeFromString(str, "Data/SiiParserTest");
+
+            Assert.Equal(2, file.Units.Count);
+            Assert.Equal(".baz", file.Units[0].Name);
+            Assert.Equal(2, file.Units[1].Attributes["b"]);
         }
     }
 }

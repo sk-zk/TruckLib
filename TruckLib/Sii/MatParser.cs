@@ -12,7 +12,8 @@ namespace TruckLib.Sii
             var siiParser = new SiiParser
             {
                 TupleAttribOpen = "{",
-                TupleAttribClose = "}"
+                TupleAttribClose = "}",
+                ShouldCheckForAndInsertIncludes = false
             };
             var sii = siiParser.DeserializeFromString(matStr);
 

@@ -21,6 +21,8 @@ namespace TruckLib.Sii
     /// </summary>
     internal class SiiParser
     {
+        public bool ShouldCheckForAndInsertIncludes { get; set; } = true;
+
         public string Indentation { get; set; } = "    ";
         internal string TupleAttribOpen = "(";
         internal string TupleAttribClose = ")";
@@ -35,11 +37,13 @@ namespace TruckLib.Sii
 
         private readonly CultureInfo culture = CultureInfo.InvariantCulture;
 
-        public SiiFile DeserializeFromString(string sii)
+        public SiiFile DeserializeFromString(string sii, string siiPath = "")
         {
             var siiFile = new SiiFile();
 
             sii = RemoveComments(sii);
+            if (ShouldCheckForAndInsertIncludes)
+                sii = InsertIncludes(sii, siiPath);
 
             siiFile.GlobalScope = sii.StartsWith(SiiHeader);
 
@@ -72,45 +76,40 @@ namespace TruckLib.Sii
                     siiFile.Units.Add(ParseUnit(sii.Substring(start, end.Value - start + 1)));
             }
 
-            // parse top level includes
-            GetTopLevelIncludes(sii, siiFile);
-
             return siiFile;
         }
 
-        public SiiFile DeserializeFromFile(string path) =>
-            DeserializeFromString(File.ReadAllText(path));
-
-        private void GetTopLevelIncludes(string sii, SiiFile siiFile)
+        private string InsertIncludes(string sii, string siiPath)
         {
-            using var sr = new StringReader(sii);
+            var output = new StringBuilder();
 
-            var bracketsStack = 0;
-            // in files that use the global scope SiiNunit { },
-            // ignore first bracket level:
-            if (sii.StartsWith(SiiHeader))
-                bracketsStack = -1;
-
+            using var reader = new StringReader(sii);
             string line;
-            while ((line = sr.ReadLine()) != null)
+            while ((line = reader.ReadLine()) is not null)
             {
-                // only parse top level includes, so
-                // make sure we're not inside a unit
-                foreach (var character in line)
+                if (line.StartsWith(IncludeKeyword))
                 {
-                    if (character == '{')
-                        ++bracketsStack;
-                    else if (character == '}')
-                        --bracketsStack;
-                }
+                    var match = Regex.Match(line, @"@include ""(.*)""");
+                    if (match.Groups.Count > 0)
+                    {
+                        var path = match.Groups[1].Value;
+                        path = Path.Combine(siiPath, path);
+                        if (!File.Exists(path))
+                            throw new FileNotFoundException("Included file was not found.", path);
 
-                if (bracketsStack == 0 && line.StartsWith(IncludeKeyword))
-                {
-                    var include = ParseInclude(line);
-                    siiFile.Includes.Add(include);
+                        var fileContents = File.ReadAllText(path);
+                        output.AppendLine(fileContents);
+                        continue;
+                    }
                 }
+                output.AppendLine(line);
             }
+
+            return output.ToString();
         }
+
+        public SiiFile DeserializeFromFile(string path) =>
+            DeserializeFromString(File.ReadAllText(path), Path.GetDirectoryName(path));
 
         private string RemoveComments(string sii) =>
             Regex.Replace(sii,
@@ -142,13 +141,6 @@ namespace TruckLib.Sii
             {
                 if (string.IsNullOrWhiteSpace(line)) 
                     continue;
-
-                if (line.StartsWith(IncludeKeyword)) // no whitespace allowed
-                {
-                    var include = ParseInclude(line);
-                    unit.Includes.Add(include);
-                    continue;
-                }
 
                 var (Name, Value) = ParseAttribute(line);
                 if (Name.EndsWith("]")) // list or fixed-length array type
@@ -394,14 +386,6 @@ namespace TruckLib.Sii
             return null;
         }
 
-        private string ParseInclude(string line)
-        {
-            var firstQuotePos = line.IndexOf('"');
-            var lastQuotePos = line.LastIndexOf('"');
-            var include = line.Substring(firstQuotePos + 1, lastQuotePos - firstQuotePos - 1);
-            return include;
-        }
-
         public void Serialize(SiiFile siiFile, string path)
         {
             var str = Serialize(siiFile);
@@ -418,13 +402,10 @@ namespace TruckLib.Sii
                 sb.AppendLine("{");
             }
 
-            SerializeIncludes(sb, siiFile.Includes);
-
             foreach (var unit in siiFile.Units)
             {
                 sb.AppendLine($"{unit.Class} : {unit.Name} {{");
                 SerializeAttributes(sb, unit);
-                SerializeIncludes(sb, unit.Includes);
                 sb.AppendLine("}");
             }
 

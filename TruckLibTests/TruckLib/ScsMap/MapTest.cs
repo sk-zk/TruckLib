@@ -11,6 +11,15 @@ namespace TruckLibTests.TruckLib.ScsMap
     public class MapTest
     {
         [Fact]
+        public void ThrowIfNameInvalid()
+        {
+            var map = new Map("foo");
+            Assert.Throws<ArgumentNullException>(() => map.Name = null);
+            Assert.Throws<ArgumentNullException>(() => map.Name = " ");
+            Assert.Throws<ArgumentException>(() => map.Name = "a/b");
+        }
+
+        [Fact]
         public void HasItem()
         {
             var map = new Map("foo");

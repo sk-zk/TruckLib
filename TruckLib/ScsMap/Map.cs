@@ -15,10 +15,28 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Map : IItemContainer
     {
+        private string name;
         /// <summary>
         /// The name of the map, which is used for file and directory names.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get => name;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(nameof(Name),
+                        "The map name must not be null or just whitespace.");
+                }
+                if (value.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+                {
+                    throw new ArgumentException("The map name must not contain characters which are " +
+                        "not allowed in filenames", nameof(Name));
+                }
+                name = value;
+            }
+        }
 
         /// <summary>
         /// The map's sectors.

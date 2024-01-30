@@ -60,9 +60,9 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// If true, the item affects regular map items referenced in
-        /// <see cref="FarModel.Children">Children</see>.
-        /// If false, the game will place models specific to Far Model items contained in
-        /// <see cref="FarModel.Models">Models</see>.
+        /// <see cref="Children">Children</see>.
+        /// If false, the game will place models unique to Far Model items specified in
+        /// <see cref="Models">Models</see>.
         /// </summary>
         public bool UseMapItems
         {

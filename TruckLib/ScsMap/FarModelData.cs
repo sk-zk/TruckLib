@@ -8,7 +8,7 @@ namespace TruckLib.ScsMap
     public struct FarModelData
     {
         /// <summary>
-        /// Unit name of the model.
+        /// Unit name of the model, as defined in <c>/def/world/far_model.sii</c>.
         /// </summary>
         public Token Model;
 

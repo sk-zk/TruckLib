@@ -90,5 +90,11 @@ namespace TruckLib.ScsMap
 
         /// <inheritdoc/>
         internal override INode GetMainNode() => Nodes[^1];
+
+        /// <inheritdoc/>
+        protected override void SetNodeRotations()
+        {
+            return; // Do nothing - cut plane nodes are 0y, 0p, 0r by default
+        }
     }
 }

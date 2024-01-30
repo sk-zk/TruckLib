@@ -142,7 +142,9 @@ namespace TruckLib.ScsMap
                 if (Models[i].Node is UnresolvedNode &&
                     allNodes.TryGetValue(Models[i].Node.Uid, out var resolvedModelNode))
                 {
-                    Models[i].Node = resolvedModelNode;
+                    var farModel = Models[i];
+                    farModel.Node = resolvedModelNode;
+                    Models[i] = farModel;
                 }
             }
         }
@@ -159,26 +161,5 @@ namespace TruckLib.ScsMap
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Properties of a model specific to <see cref="FarModel">Far Model</see> items.
-    /// </summary>
-    public class FarModelData
-    {
-        /// <summary>
-        /// Unit name of the model.
-        /// </summary>
-        public Token Model;
-
-        /// <summary>
-        /// Relative scale per axis.
-        /// </summary>
-        public Vector3 Scale;
-
-        /// <summary>
-        /// This node defines the position and rotation of the model.
-        /// </summary>
-        public INode Node;
     }
 }

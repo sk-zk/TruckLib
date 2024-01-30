@@ -50,7 +50,9 @@ namespace TruckLib.ScsMap.Serialization
                 // becasue that's what I'm doing.
                 if (i <= fm.Models.Count)
                 {
-                    fm.Models[i - 1].Node = new UnresolvedNode(uid);
+                    var farModelData = fm.Models[i-1];
+                    farModelData.Node = new UnresolvedNode(uid);
+                    fm.Models[i-1] = farModelData;
                 }
             }
 

@@ -153,6 +153,17 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Creates a new sector.
+        /// </summary>
+        /// <param name="x">The X coordinate of the sector.</param>
+        /// <param name="z">The Z coordinate of the sector.</param>
+        /// <returns>The new sector.</returns>
+        public Sector AddSector((int X, int Z) coords)
+        {
+            return AddSector(coords.X, coords.Z);
+        }
+
+        /// <summary>
         /// Creates a new node and adds it to its corresponding sector. 
         /// If that sector does not yet exist, it will be created automatically.
         /// </summary>

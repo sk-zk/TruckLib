@@ -37,7 +37,7 @@ namespace TruckLib.ScsMap
         /// Models specific to Far Model items which are only visible inside the Far Model
         /// area. Used if UseMapItems is false.
         /// </summary>
-        public List<FarModelData> Models { get; set; }
+        public FarModelDataList Models { get; set; }
 
         /// <summary>
         /// Map items for which the view distance limit is ignored. Used if UseMapItems is true.
@@ -83,7 +83,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Models = new List<FarModelData>();
+            Models = new FarModelDataList(this);
             Children = new List<IMapItem>();
         }
 

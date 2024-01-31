@@ -19,13 +19,15 @@ namespace TruckLib.ScsMap.Serialization
             fm.Height = r.ReadSingle() * sizeFactor;
 
             // models
-            fm.Models = new List<FarModelData>();
+            fm.Models = new FarModelDataList(fm);
             var modelCount = r.ReadUInt32();
             for (int i = 0; i < modelCount; i++)
             {
-                var model = new FarModelData();
-                model.Model = r.ReadToken();
-                model.Scale = r.ReadVector3();
+                var model = new FarModelData
+                {
+                    Model = r.ReadToken(),
+                    Scale = r.ReadVector3()
+                };
                 fm.Models.Add(model);
             }
 

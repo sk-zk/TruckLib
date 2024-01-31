@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Reperesents a list of Far Item models.
+    /// Reperesents a list of <see cref="FarModel.Models">Far Model models</see>.
     /// </summary>
     public class FarModelDataList : IList<FarModelData>
     {
         /// <summary>
-        /// The Far Model item which parents these models.
+        /// The <see cref="FarModel">Far Model</see> item which parents these models.
         /// </summary>
         public FarModel Parent { get; init; }
 
@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Instantiates an empty list.
         /// </summary>
-        /// <param name="parent">The Far Model item which parents these models.</param>
+        /// <param name="parent">The <see cref="FarModel">Far Model</see> item which parents these models.</param>
         public FarModelDataList(FarModel parent)
         {
             Parent = parent;
@@ -49,8 +49,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a map node at the specified position and adds a FarModelData object with
-        /// the given properties to the end of the list.
+        /// Creates a map node at the specified position and adds a <see cref="FarModelData"/> object
+        /// with the given properties to the end of the list.
         /// </summary>
         /// <param name="position">The position of the node.</param>
         /// <param name="model">The unit name of the model.</param>
@@ -99,10 +99,10 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a map node at the specified position and inserts a FarModelData object with
-        /// the given properties at the specified index.
+        /// Creates a map node at the specified position and inserts a <see cref="FarModelData"/> object
+        /// with the given properties at the specified index.
         /// </summary>
-        /// <param name="index">The index.</param>
+        /// <param name="index">The zero-based index at which the object should be inserted.</param>
         /// <param name="position">The position of the node.</param>
         /// <param name="model">The unit name of the model.</param>
         /// <param name="scale">The scale of the model.</param>

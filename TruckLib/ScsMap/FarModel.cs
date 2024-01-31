@@ -34,18 +34,21 @@ namespace TruckLib.ScsMap
         public float Height { get; set; }
 
         /// <summary>
-        /// Models specific to Far Model items which are only visible inside the Far Model
-        /// area. Used if UseMapItems is false.
+        /// Models specific to Far Model items which are only visible inside the area defined
+        /// by this item.
+        /// Used if <see cref="UseMapItems">UseMapItems</see> is false.
         /// </summary>
         public FarModelDataList Models { get; set; }
 
         /// <summary>
-        /// Map items for which the view distance limit is ignored. Used if UseMapItems is true.
+        /// Regular map items for which the view distance limit is ignored inside the area defined
+        /// by this item.
+        /// Used if <see cref="UseMapItems">UseMapItems</see> is true.
         /// </summary>
         public List<IMapItem> Children { get; set; }
 
         /// <summary>
-        /// The map node of the item.
+        /// The map node of this item.
         /// </summary>
         public INode Node { get; set; }
 

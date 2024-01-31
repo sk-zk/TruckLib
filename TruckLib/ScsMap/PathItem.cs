@@ -87,7 +87,5 @@ namespace TruckLib.ScsMap
                 Nodes[i].Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0); ;
             }
         }
-
-        internal override INode GetMainNode() => Nodes[^1];
     }
 }

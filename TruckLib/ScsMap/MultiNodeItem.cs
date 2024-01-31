@@ -64,7 +64,15 @@ namespace TruckLib.ScsMap
         internal override IEnumerable<INode> GetItemNodes() => new List<INode>(Nodes);
 
         /// <inheritdoc/>
-        internal override INode GetMainNode() => Nodes[0];
+        internal override Vector3 GetCenter()
+        {
+            var acc = Vector3.Zero;
+            foreach (var node in Nodes)
+            {
+                acc += node.Position;
+            }
+            return acc / Nodes.Count;
+        }
 
         /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)

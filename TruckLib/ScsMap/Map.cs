@@ -208,7 +208,9 @@ namespace TruckLib.ScsMap
         /// <param name="item">The item.</param>
         void IItemContainer.AddItem(MapItem item)
         {
-            item.GetMainNode().Sectors[0].MapItems.Add(item.Uid, item);
+            var sectorCoord = GetSectorOfCoordinate(item.GetCenter());
+            var sector = AddSector(sectorCoord.X, sectorCoord.Z);
+            sector.MapItems.Add(item.Uid, item);
         }
 
         /// <summary>

@@ -61,12 +61,12 @@ namespace TruckLib.ScsMap
         internal override IEnumerable<INode> GetItemNodes() => new[] { Node };
 
         /// <inheritdoc/>
-        internal override INode GetMainNode() => Node;
-
-        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);
         }
+
+        /// <inheritdoc/>
+        internal override Vector3 GetCenter() => Node.Position;
     }
 }

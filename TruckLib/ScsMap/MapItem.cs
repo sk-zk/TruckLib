@@ -124,14 +124,14 @@ namespace TruckLib.ScsMap
 
         internal void DoSomethingThenUpdateSectorMapItems(Action action)
         {
-            var mainNode = GetMainNode();
-            var oldSector = mainNode.Sectors?.Length > 0 
-                ? mainNode.Sectors[0] : null;
+            var node = GetItemNodes().First();
+            var oldSector = node.Sectors?.Length > 0 
+                ? node.Sectors[0] : null;
 
             action();
 
-            var newSector = mainNode.Sectors?.Length > 0 
-                ? mainNode.Sectors[0] : null;
+            var newSector = node.Sectors?.Length > 0 
+                ? node.Sectors[0] : null;
             if (oldSector != newSector)
             {
                 oldSector?.MapItems.Remove(Uid);
@@ -154,14 +154,10 @@ namespace TruckLib.ScsMap
         internal abstract IEnumerable<INode> GetItemNodes();
 
         /// <summary>
-        /// Returns the node which will be used to determine the sector
-        /// which will be the parent of the item.
+        /// Returns the center point of the item's nodes.
         /// </summary>
-        /// <returns>
-        /// The node which will be used to determine the sector
-        /// which will be the parent of the item.
-        /// </returns>
-        internal abstract INode GetMainNode();
+        /// <returns>The center point of the item's nodes.</returns>
+        internal abstract Vector3 GetCenter();
 
         /// <summary>
         /// Attempts to resolve the given <see cref="UnresolvedNode"/> and returns

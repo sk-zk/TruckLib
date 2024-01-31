@@ -532,9 +532,6 @@ namespace TruckLib.ScsMap
             new List<INode>(Nodes);
 
         /// <inheritdoc/>
-        internal override INode GetMainNode() => Nodes[0];
-
-        /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
@@ -566,6 +563,16 @@ namespace TruckLib.ScsMap
         {
             public bool Equals(INode x, INode y) => x.Position == y.Position;
             public int GetHashCode(INode obj) => 0; // apparently this has to happen for Equals to be called
+        }
+
+        internal override Vector3 GetCenter()
+        {
+            var acc = Vector3.Zero;
+            foreach (var node in Nodes)
+            {
+                acc += node.Position;
+            }
+            return acc / Nodes.Count;
         }
     }
 }

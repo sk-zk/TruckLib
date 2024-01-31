@@ -133,7 +133,18 @@ namespace TruckLib.ScsMap
             Models.Select(x => x.Node).Prepend(Node);
 
         /// <inheritdoc/>
-        internal override INode GetMainNode() => Node;
+        internal override Vector3 GetCenter()
+        {
+            if (UseMapItems)
+                return Node.Position;
+
+            var acc = Node.Position;
+            foreach (var model in Models)
+            {
+                acc += model.Node.Position;
+            }
+            return acc / (Models.Count + 1);
+        }
 
         /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)

@@ -15,20 +15,20 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void Add()
         {
             var map = new Map("foo");
-            var curve = Curve.Add(map, new Vector3(10, 0, 10), new Vector3(-10, 0, -10), "bar");
+            var curve = Curve.Add(map, new Vector3(-15, 0, 35), new Vector3(35, 0, -15), "bar");
 
             Assert.Equal(curve.Model, "bar");
-            Assert.Equal(28.28f, curve.Length, 0.01f);
+            Assert.Equal(70.71f, curve.Length, 0.01f);
 
-            Assert.Equal(curve.ForwardNode, curve.GetMainNode());
             Assert.True(curve.Node.IsRed);
             Assert.False(curve.ForwardNode.IsRed);
             Assert.Equal(curve, curve.Node.ForwardItem);
             Assert.Null(curve.Node.BackwardItem);
             Assert.Equal(curve, curve.ForwardNode.BackwardItem);
             Assert.Null(curve.ForwardNode.ForwardItem);
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
+            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
+            Assert.False(map.Sectors[(-1, 0)].MapItems.ContainsKey(curve.Uid));
+            Assert.False(map.Sectors[(0, -1)].MapItems.ContainsKey(curve.Uid));
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             curve1.TerrainMaterial = "ddd";
             curve1.TerrainRotation = 2f;
 
-            var curve2 = curve1.Append(new Vector3(-10, 0, -10), true);
+            var curve2 = curve1.Append(new Vector3(-50, 0, -50), true);
 
             Assert.Equal(curve1.Stretch, curve2.Stretch);
             Assert.Equal(curve1.MirrorReflection, curve2.MirrorReflection);
@@ -56,7 +56,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Equal(curve1.TerrainMaterial, curve2.TerrainMaterial);
             Assert.Equal(curve1.TerrainRotation, curve2.TerrainRotation);
 
-            Assert.Equal(curve2.ForwardNode, curve2.GetMainNode());
             Assert.True(curve2.Node.IsRed);
             Assert.False(curve2.ForwardNode.IsRed);
             Assert.Equal(curve2, curve2.Node.ForwardItem);
@@ -82,12 +81,12 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void Move()
         {
             var map = new Map("foo");
-            var curve = Curve.Add(map, new Vector3(10, 0, 10), new Vector3(-10, 0, -10), "bar");
+            var curve = Curve.Add(map, new Vector3(-20, 0, -20), new Vector3(-10, 0, -10), "bar");
 
             curve.Move(new Vector3(30, 0, 30));
 
             Assert.Equal(new Vector3(30, 0, 30), curve.Node.Position);
-            Assert.Equal(new Vector3(10, 0, 10), curve.ForwardNode.Position);
+            Assert.Equal(new Vector3(40, 0, 40), curve.ForwardNode.Position);
             Assert.Equal(0, curve.ForwardNode.Sectors[0].X);
             Assert.Equal(0, curve.ForwardNode.Sectors[0].Z);
             Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));
@@ -98,12 +97,12 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void Translate()
         {
             var map = new Map("foo");
-            var curve = Curve.Add(map, new Vector3(10, 0, 10), new Vector3(-10, 0, -10), "bar");
+            var curve = Curve.Add(map, new Vector3(-20, 0, -20), new Vector3(-10, 0, -10), "bar");
 
-            curve.Translate(new Vector3(20, 0, 20));
+            curve.Translate(new Vector3(30, 0, 30));
 
-            Assert.Equal(new Vector3(30, 0, 30), curve.Node.Position);
-            Assert.Equal(new Vector3(10, 0, 10), curve.ForwardNode.Position);
+            Assert.Equal(new Vector3(10, 0, 10), curve.Node.Position);
+            Assert.Equal(new Vector3(20, 0, 20), curve.ForwardNode.Position);
             Assert.Equal(0, curve.ForwardNode.Sectors[0].X);
             Assert.Equal(0, curve.ForwardNode.Sectors[0].Z);
             Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));

@@ -25,7 +25,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(4, path.Nodes.Count);
             Assert.Equal(new Vector3(-13.11f, 0, 14.21f), path.Nodes[0].Position);
-            Assert.Equal(path.Nodes[^1], path.GetMainNode());
             for (int i = 0; i < path.Nodes.Count; i++)
             {
                 Assert.Equal(path, path.Nodes[i].ForwardItem);

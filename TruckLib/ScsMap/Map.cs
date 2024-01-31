@@ -187,6 +187,21 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Creates a new node and adds it to its corresponding sector. 
+        /// If that sector does not yet exist, it will be created automatically.
+        /// </summary>
+        /// <param name="position">The position of the node.</param>
+        /// <param name="isRed">Whether the node is red.</param>
+        /// <param name="forwardItem">The forward item which the node will be assigned to.</param>
+        /// <returns>The new node.</returns>
+        public Node AddNode(Vector3 position, bool isRed, MapItem forwardItem)
+        {
+            var node = AddNode(position, isRed);
+            node.ForwardItem = forwardItem;
+            return node;
+        }
+
+        /// <summary>
         /// Adds an item to the map. This is the final step in the Add() method of an item
         /// and should not be called on its own.
         /// </summary>

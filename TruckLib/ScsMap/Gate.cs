@@ -49,17 +49,15 @@ namespace TruckLib.ScsMap
                 Kdop.Flags.SetBitString(GateTypeStart, GateTypeLength, (uint)value);
                 if (value != GateType.TriggerActivated)
                 {
-                    ClearTriggers();
+                    ActivationPoints?.Clear();
                 }
             }
         }
 
-        private const int ActivationPointStructAmount = 2;
-        private GateActivationPoint[] activationPoints = new GateActivationPoint[ActivationPointStructAmount];
         /// <summary>
-        /// Activation points of the gate. Only used if <see cref="Gate.Type">Type</see> is <c>TriggerActivated</c>.
+        /// Activation points of the gate. Only used if <see cref="Type">Type</see> is <c>TriggerActivated</c>.
         /// </summary>
-        public GateActivationPoint[] ActivationPoints { get => activationPoints; }
+        public GateActivationPointList ActivationPoints { get; set; }
 
         public Gate() : base()
         {
@@ -75,31 +73,18 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Type = GateType.AlwaysClosed;
+            ActivationPoints = new GateActivationPointList(this);
         }
 
         /// <inheritdoc/>
         internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
-            foreach (var point in ActivationPoints)
+            for (int i = 0; i < ActivationPoints.Count; i++)
             {
-                if (point is not null)
-                {
-                    point.Node = ResolveNodeReference(point.Node, allNodes);
-                }
-            }
-        }
-
-        private void ClearTriggers()
-        {
-            for (int i = 0; i < activationPoints.Length; i++)
-            {
-                if (activationPoints[i] is not null)
-                {
-                    var node = activationPoints[i].Node;
-                    node.Parent.Nodes.Remove(node.Uid);
-                    activationPoints[i] = null;
-                }
+                var point = ActivationPoints[i];
+                point.Node = ResolveNodeReference(point.Node, allNodes);
+                ActivationPoints[i] = point;
             }
         }
 
@@ -117,6 +102,35 @@ namespace TruckLib.ScsMap
             gate.Model = model;
             gate.Type = type;
             return gate;
+        }
+     
+        /// <inheritdoc/>
+        internal override Vector3 GetCenter()
+        {
+            if (Type == GateType.TriggerActivated && ActivationPoints.Count > 0)
+            {
+                var acc = Vector3.Zero;
+                foreach (var point in ActivationPoints)
+                {
+                    acc += point.Node.Position;
+                }
+                return acc / ActivationPoints.Count;
+            } 
+            else
+            {
+                return base.GetCenter();
+            }
+        }
+
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            var nodes = new INode[ActivationPoints.Count + 1];
+            nodes[0] = Node;
+            for (int i = 0; i < ActivationPoints.Count; i++)
+            {
+                nodes[i + 1] = ActivationPoints[i].Node;
+            }
+            return nodes;
         }
     }
 }

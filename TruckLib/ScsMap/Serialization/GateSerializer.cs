@@ -9,8 +9,7 @@ namespace TruckLib.ScsMap.Serialization
 {
     internal class GateSerializer : MapItemSerializer
     {
-        private const int EmptyActivationPointStructSignifier = -1;
-        private const int ActivationPointStructAmount = 2;
+        private const int UnusedActivationPointIndex = -1;
 
         public override MapItem Deserialize(BinaryReader r)
         {
@@ -21,24 +20,25 @@ namespace TruckLib.ScsMap.Serialization
 
             var nodeCount = r.ReadUInt32();
             gate.Node = new UnresolvedNode(r.ReadUInt64());
-            var otherNodes = new UnresolvedNode[nodeCount - 1];
+            var activationPointNodes = new UnresolvedNode[nodeCount - 1];
             for (int i = 1; i < nodeCount; i++)
             {
-                otherNodes[i - 1] = new UnresolvedNode(r.ReadUInt64());
+                activationPointNodes[i - 1] = new UnresolvedNode(r.ReadUInt64());
             }
 
-            for (int i = 0; i < ActivationPointStructAmount; i++)
+            gate.ActivationPoints = new GateActivationPointList(gate);
+            for (int i = 0; i < GateActivationPointList.MaxSize; i++)
             {
                 var trigger = r.ReadPascalString();
                 var nodeIndex = r.ReadInt32();
-                if (nodeIndex != EmptyActivationPointStructSignifier)
+                if (nodeIndex != UnusedActivationPointIndex)
                 {
                     var point = new GateActivationPoint
                     {
                         Trigger = trigger,
-                        Node = otherNodes[nodeIndex - 1]
+                        Node = activationPointNodes[nodeIndex - 1]
                     };
-                    gate.ActivationPoints[i] = point;
+                    gate.ActivationPoints.Add(point, false);
                 }
             }
 
@@ -52,27 +52,23 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(gate.Model);
 
-            var activationPointNodeUids = gate.ActivationPoints.Where(x => x is not null).Select(x => x.Node.Uid).ToArray();
-            var activationPointCount = activationPointNodeUids.Length;
-            w.Write(activationPointCount + 1);
+            w.Write(gate.ActivationPoints.Count + 1);
             w.Write(gate.Node.Uid);
-            foreach (var uid in activationPointNodeUids)
-            {
-                w.Write(uid);
-            }
-
             foreach (var point in gate.ActivationPoints)
             {
-                if (point is null)
-                {
-                    w.WritePascalString("");
-                    w.Write(-1);
-                } 
-                else
-                {
-                    w.WritePascalString(point.Trigger);
-                    w.Write(Array.IndexOf(activationPointNodeUids, gate.Uid) + 1);
-                }
+                w.Write(point.Node.Uid);
+            }
+
+            var listSize = gate.ActivationPoints.Count;
+            for (int i = 0; i < listSize; i++)
+            {
+                w.WritePascalString(gate.ActivationPoints[i].Trigger);
+                w.Write(i + 1);
+            }
+            for (int i = listSize; i < GateActivationPointList.MaxSize; i++)
+            {
+                w.WritePascalString("");
+                w.Write(UnusedActivationPointIndex);
             }
         }
     }

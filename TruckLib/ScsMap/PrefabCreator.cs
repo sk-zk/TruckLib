@@ -263,7 +263,7 @@ namespace TruckLib.ScsMap
         private Quaternion GetNodeRotation(Vector3 nodeDirection)
         {
             // TODO: Fix angle
-            var angle = MathEx.AngleOffAroundAxis(nodeDirection, -Vector3.UnitZ, Vector3.UnitY, false);
+            var angle = MathEx.GetNodeAngle(nodeDirection);
             var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitY, (float)angle);
             rot *= prefabRot;
             return rot;

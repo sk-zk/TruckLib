@@ -168,6 +168,55 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Merges the node <i>n2</i> into this one, if possible, and then deletes <i>n2</i>.
+        /// Note that the flags and rotation of <i>n2</i> will not be preserved.
+        /// </summary>
+        /// <param name="n2">The node to merge into this one.</param>
+        /// <exception cref="InvalidOperationException">Thrown if the nodes can't be merged.</exception>
+        public void Merge(INode n2)
+        {
+            // TODO put some of the prefab stuff in here
+
+            if (BackwardItem is not null && ForwardItem is not null)
+            {
+                throw new InvalidOperationException("Unable to merge: this node is occupied in both directions.");
+            }
+            else if (BackwardItem is not null && n2.BackwardItem is not null)
+            {
+                throw new InvalidOperationException("Unable to merge: both nodes have a backward item");
+            }
+            else if (ForwardItem is not null && n2.ForwardItem is not null)
+            {
+                throw new InvalidOperationException("Unable to merge: both nodes have a forward item");
+            }
+            else if (ForwardItem is null && n2.ForwardItem is PolylineItem)
+            {
+                var item = n2.ForwardItem as PolylineItem;
+                ForwardItem = item;
+                item.Node = this;
+                item.Recalculate();
+                IsRed = true;
+                n2.ForwardItem = null;
+                n2.BackwardItem = null;
+                n2.Parent.Delete(n2);
+            }
+            else if (BackwardItem is null && n2.BackwardItem is PolylineItem)
+            {
+                var item = n2.BackwardItem as PolylineItem;
+                BackwardItem = item;
+                item.ForwardNode = this;
+                item.Recalculate();
+                n2.ForwardItem = null;
+                n2.BackwardItem = null;
+                n2.Parent.Delete(n2);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unable to merge");
+            }
+        }
+
+        /// <summary>
         /// Recalculates the items attached to this node.
         /// </summary>
         protected virtual void RecalculateItems()

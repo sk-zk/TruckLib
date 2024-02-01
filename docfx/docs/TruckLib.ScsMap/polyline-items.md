@@ -22,6 +22,23 @@ In both cases, if there is already an item attached in the direction you wish to
 By default, the properties of item the method is called on are copied to the new item. If you would like it to have its default
 properties instead, set the optional parameter `cloneSettings` to `false`.
 
+## Connecting two polyline items
+To connect two unconnected polyline items where one has a free forward node and one has a free backward node, call
+[`Merge`](xref:TruckLib.ScsMap.Node.Merge*) on the node you wish to keep:
+
+```cs
+// Say you have the following two road items:
+var road1 = Road.Add(map, new Vector3(10, 0, 10), new Vector3(30, 0, 10), "ger1");
+var road2 = Road.Add(map, new Vector3(32, 0, 12), new Vector3(50, 0, 30), "ger1");
+
+// To connect the roads and keep the node at (30, 0, 10), do the following:
+road1.ForwardNode.Merge(road2.Node);
+
+// Alternatively, if you would like to keep the node at (32, 0, 12), call it 
+// the other way around:
+road2.Node.Merge(road1.ForwardNode);
+```
+
 ## First and last item
 
 To find the first or last item of a polyline chain given one of its members, call [`FindFirstItem`](xref:TruckLib.ScsMap.PolylineItem.FindFirstItem*)

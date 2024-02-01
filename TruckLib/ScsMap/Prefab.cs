@@ -305,8 +305,7 @@ namespace TruckLib.ScsMap
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
             if (node > Nodes.Count)
-                throw new ArgumentOutOfRangeException(nameof(node),
-                    $"This prefab only has {Nodes.Count} nodes.");
+                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
             INode backwardNode;
             INode forwardNode;
@@ -370,8 +369,7 @@ namespace TruckLib.ScsMap
         public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
         {
             if (prefabNodeIdx > Nodes.Count)
-                throw new ArgumentOutOfRangeException(nameof(prefabNodeIdx),
-                    $"This prefab only has {Nodes.Count} nodes.");
+                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
             if (itemNode.BackwardItem is null)
             {

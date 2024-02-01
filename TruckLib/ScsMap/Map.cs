@@ -169,8 +169,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a new node and adds it to its corresponding sector. 
-        /// If that sector does not yet exist, it will be created automatically.
+        /// Creates a new node.
         /// </summary>
         /// <param name="position">The position of the node.</param>
         /// <returns>The new node.</returns>
@@ -180,8 +179,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a new node and adds it to its corresponding sector. 
-        /// If that sector does not yet exist, it will be created automatically.
+        /// Creates a new node. 
         /// </summary>
         /// <param name="position">The position of the node.</param>
         /// <param name="isRed">Whether the node is red.</param>
@@ -205,8 +203,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a new node and adds it to its corresponding sector. 
-        /// If that sector does not yet exist, it will be created automatically.
+        /// Creates a new node.
         /// </summary>
         /// <param name="position">The position of the node.</param>
         /// <param name="isRed">Whether the node is red.</param>

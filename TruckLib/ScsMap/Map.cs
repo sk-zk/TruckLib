@@ -241,17 +241,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Returns a dictionary containing all nodes in the entire map.
-        /// </summary>
-        /// <returns>All nodes in the entire map.</returns>
-        public Dictionary<ulong, INode> GetAllNodes()
-        {       
-            return Nodes;
-        }
-
-        /// <summary>
-        /// Deletes an item. Nodes that are only used by this item 
-        /// will also be deleted.
+        /// Deletes an item. Nodes that are only used by this item will also be deleted.
         /// </summary>
         /// <param name="item">The item to delete.</param>
         public void Delete(MapItem item)
@@ -589,11 +579,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         private void UpdateReferences()
         {
-            var allNodes = GetAllNodes();
-
             // first of all, find map items referenced in nodes
             Trace.WriteLine("Updating item references in nodes");
-            foreach (var (_, node) in allNodes)
+            foreach (var (_, node) in Nodes)
             {
                 node.UpdateItemReferences(MapItems);
             }
@@ -603,7 +591,7 @@ namespace TruckLib.ScsMap
             Trace.WriteLine("Updating node & item references in items");
             foreach (var (_, item) in MapItems)
             {
-                item.UpdateNodeReferences(allNodes);
+                item.UpdateNodeReferences(Nodes);
                 if (item is IItemReferences hasItemRef)
                 {
                     hasItemRef.UpdateItemReferences(MapItems);

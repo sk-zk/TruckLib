@@ -15,26 +15,27 @@ namespace TruckLib.ScsMap.Serialization
             comp.Node = new UnresolvedNode(r.ReadUInt64());
 
             var itemCount = r.ReadUInt32();
-            comp.Items = new List<MapItem>((int)itemCount);
+            comp.MapItems = new((int)itemCount);
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();
 
                 var serializer = MapItemSerializerFactory.Get(itemType);
                 var item = serializer.Deserialize(r);
-                comp.Items.Add(item);
+                comp.MapItems.Add(item.Uid, item);
             }
 
             var nodeCount = r.ReadUInt32();
-            comp.Nodes = new List<INode>((int)nodeCount);
+            comp.Nodes = new((int)nodeCount);
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);
                 node.Deserialize(r);
-                if (!comp.Nodes.Contains(node))
+                if (!comp.Nodes.ContainsKey(node.Uid))
                 {
-                    comp.Nodes.Add(node);
+                    comp.Nodes.Add(node.Uid, node);
                 }
+                node.Parent = comp;
             }
 
             comp.UpdateInternalReferences();
@@ -49,8 +50,8 @@ namespace TruckLib.ScsMap.Serialization
 
             w.Write(comp.Node.Uid);
 
-            w.Write(comp.Items.Count);
-            foreach (var compItem in comp.Items)
+            w.Write(comp.MapItems.Count);
+            foreach (var (_, compItem) in comp.MapItems)
             {
                 var itemType = compItem.ItemType;
                 w.Write((int)itemType);
@@ -60,7 +61,7 @@ namespace TruckLib.ScsMap.Serialization
             }
 
             w.Write(comp.Nodes.Count);
-            foreach (var node in comp.Nodes)
+            foreach (var (_, node) in comp.Nodes)
             {
                 node.Serialize(w);
             }

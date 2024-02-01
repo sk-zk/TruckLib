@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap
         public GateActivationPoint(string trigger, Vector3 position, Gate parent)
         {
             Trigger = trigger;
-            Node = parent.Node.Sectors[0].Map.AddNode(position, false);
+            Node = parent.Node.Parent.AddNode(position, false);
             Node.ForwardItem = parent;
         }
     }

@@ -51,10 +51,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(20, 0, 20), path.Nodes[0].Position);
             Assert.Equal(new Vector3(40, 0, 40), path.Nodes[1].Position);
-            Assert.Equal(0, path.Nodes[0].Sectors[0].X);
-            Assert.Equal(0, path.Nodes[0].Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(path.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(path.Uid));
         }
 
         [Fact]
@@ -70,10 +66,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(20, 0, 20), path.Nodes[0].Position);
             Assert.Equal(new Vector3(40, 0, 40), path.Nodes[1].Position);
-            Assert.Equal(0, path.Nodes[0].Sectors[0].X);
-            Assert.Equal(0, path.Nodes[0].Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(path.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(path.Uid));
         }
 
         [Fact]
@@ -89,8 +81,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(path);
 
-            Assert.False(map.HasItem(path.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(path.Uid));
+            Assert.False(map.MapItems.ContainsKey(path.Uid));
             for (int i = 0; i < path.Nodes.Count; i++)
             {
                 Assert.False(map.Nodes.ContainsKey(path.Nodes[i].Uid));

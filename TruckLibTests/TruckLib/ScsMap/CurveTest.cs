@@ -26,9 +26,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Null(curve.Node.BackwardItem);
             Assert.Equal(curve, curve.ForwardNode.BackwardItem);
             Assert.Null(curve.ForwardNode.ForwardItem);
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
-            Assert.False(map.Sectors[(-1, 0)].MapItems.ContainsKey(curve.Uid));
-            Assert.False(map.Sectors[(0, -1)].MapItems.ContainsKey(curve.Uid));
         }
 
         [Fact]
@@ -62,8 +59,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Equal(curve1, curve2.Node.BackwardItem);
             Assert.Equal(curve2, curve2.ForwardNode.BackwardItem);
             Assert.Null(curve2.ForwardNode.ForwardItem);
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve2.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(curve2.Uid));
         }
 
         [Fact]
@@ -87,10 +82,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(30, 0, 30), curve.Node.Position);
             Assert.Equal(new Vector3(40, 0, 40), curve.ForwardNode.Position);
-            Assert.Equal(0, curve.ForwardNode.Sectors[0].X);
-            Assert.Equal(0, curve.ForwardNode.Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
         }
 
         [Fact]
@@ -103,10 +94,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(10, 0, 10), curve.Node.Position);
             Assert.Equal(new Vector3(20, 0, 20), curve.ForwardNode.Position);
-            Assert.Equal(0, curve.ForwardNode.Sectors[0].X);
-            Assert.Equal(0, curve.ForwardNode.Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
         }
 
         [Fact]
@@ -117,9 +104,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(curve);
 
-            Assert.False(map.HasItem(curve.Uid));
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(curve.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(curve.Uid));
+            Assert.False(map.MapItems.ContainsKey(curve.Uid));
             Assert.False(map.Nodes.ContainsKey(curve.Node.Uid));
             Assert.False(map.Nodes.ContainsKey(curve.ForwardNode.Uid));
         }
@@ -134,7 +119,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(curve2);
 
-            Assert.False(map.HasItem(curve2.Uid));
+            Assert.False(map.MapItems.ContainsKey(curve2.Uid));
             Assert.Null(curve1.ForwardItem);
             Assert.Null(curve1.ForwardNode.ForwardItem);
             Assert.Null(curve3.BackwardItem);

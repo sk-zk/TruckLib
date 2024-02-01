@@ -122,23 +122,6 @@ namespace TruckLib.ScsMap
         /// <param name="translation">The translation vector.</param>
         public abstract void Translate(Vector3 translation);
 
-        internal void DoSomethingThenUpdateSectorMapItems(Action action)
-        {
-            var node = GetItemNodes().First();
-            var oldSector = node.Sectors?.Length > 0 
-                ? node.Sectors[0] : null;
-
-            action();
-
-            var newSector = node.Sectors?.Length > 0 
-                ? node.Sectors[0] : null;
-            if (oldSector != newSector)
-            {
-                oldSector?.MapItems.Remove(Uid);
-                newSector?.MapItems.Add(Uid, this);
-            }
-        }
-
         /// <summary>
         /// Searches a list of all nodes for the nodes referenced by UID in this map item
         /// and updates the respective references. This is used for loading a map and

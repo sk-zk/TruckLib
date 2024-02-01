@@ -17,7 +17,6 @@ namespace TruckLib.ScsMap
     internal struct UnresolvedNode : INode
     {
         public ulong Uid { get; set; }
-
         public UnresolvedNode(ulong uid)
         {
             Uid = uid;
@@ -34,7 +33,8 @@ namespace TruckLib.ScsMap
         public bool Locked { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public Vector3 Position { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public Quaternion Rotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
-        public Sector[] Sectors { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
+        public IItemContainer Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public bool IsOrphaned() => throw new InvalidOperationException();
         public void Move(Vector3 newPos) => throw new InvalidOperationException();
         public void Translate(Vector3 translation) => throw new InvalidOperationException();

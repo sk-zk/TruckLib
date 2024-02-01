@@ -385,7 +385,7 @@ namespace TruckLib.ScsMap
                 // now that something is attached to it
                 itemNode.Rotation = Quaternion.Inverse(oldPfNode.Rotation);
                 itemNode.IsRed = true;
-                oldPfNode.Sectors[0].Map.Nodes.Remove(oldPfNode.Uid);
+                oldPfNode.Parent.Nodes.Remove(oldPfNode.Uid);
             }
             else
             {
@@ -393,7 +393,7 @@ namespace TruckLib.ScsMap
                 item.ForwardNode.ForwardItem = this;
                 item.ForwardNode.BackwardItem = item;
                 item.ForwardNode.IsRed = true;
-                itemNode.Sectors[0].Map.Nodes.Remove(itemNode.Uid);
+                itemNode.Parent.Nodes.Remove(itemNode.Uid);
             }
 
             item.RecalculateLength();
@@ -455,7 +455,7 @@ namespace TruckLib.ScsMap
                     p2Node.BackwardItem = this;
                     Nodes[p1NodeIdx] = p2Node;
 
-                    p1Node.Sectors[0].Map.Nodes.Remove(p1Node.Uid);
+                    p1Node.Parent.Nodes.Remove(p1Node.Uid);
                 }
                 else
                 {
@@ -464,7 +464,7 @@ namespace TruckLib.ScsMap
                     p2.Nodes[p2NodeIdx] = p1Node;
 
                     p2Node.ForwardItem = null;
-                    p2Node.Sectors[0].Map.Nodes.Remove(p2Node.Uid);
+                    p2Node.Parent.Nodes.Remove(p2Node.Uid);
                 }
             }
         }

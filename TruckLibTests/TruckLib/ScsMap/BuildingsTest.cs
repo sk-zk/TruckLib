@@ -28,9 +28,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Null(buildings.Node.BackwardItem);
             Assert.Equal(buildings, buildings.ForwardNode.BackwardItem);
             Assert.Null(buildings.ForwardNode.ForwardItem);
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings.Uid));
-            Assert.False(map.Sectors[(-1, 0)].MapItems.ContainsKey(buildings.Uid));
-            Assert.False(map.Sectors[(0, -1)].MapItems.ContainsKey(buildings.Uid));
         }
 
         [Fact]
@@ -56,8 +53,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Equal(buildings1, buildings2.Node.BackwardItem);
             Assert.Equal(buildings2, buildings2.ForwardNode.BackwardItem);
             Assert.Null(buildings2.ForwardNode.ForwardItem);
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(buildings2.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings2.Uid));
         }
 
         [Fact]
@@ -81,10 +76,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(30, 0, 30), buildings.Node.Position);
             Assert.Equal(new Vector3(40, 0, 40), buildings.ForwardNode.Position);
-            Assert.Equal(0, buildings.ForwardNode.Sectors[0].X);
-            Assert.Equal(0, buildings.ForwardNode.Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(buildings.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings.Uid));
         }
 
         [Fact]
@@ -97,10 +88,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(10, 0, 10), buildings.Node.Position);
             Assert.Equal(new Vector3(20, 0, 20), buildings.ForwardNode.Position);
-            Assert.Equal(0, buildings.ForwardNode.Sectors[0].X);
-            Assert.Equal(0, buildings.ForwardNode.Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(buildings.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings.Uid));
         }
 
         [Fact]
@@ -111,9 +98,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(buildings);
 
-            Assert.False(map.HasItem(buildings.Uid));
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(buildings.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(buildings.Uid));
+            Assert.False(map.MapItems.ContainsKey(buildings.Uid));
             Assert.False(map.Nodes.ContainsKey(buildings.Node.Uid));
             Assert.False(map.Nodes.ContainsKey(buildings.ForwardNode.Uid));
         }
@@ -128,7 +113,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(buildings2);
 
-            Assert.False(map.HasItem(buildings2.Uid));
+            Assert.False(map.MapItems.ContainsKey(buildings2.Uid));
             Assert.Null(buildings1.ForwardItem);
             Assert.Null(buildings1.ForwardNode.ForwardItem);
             Assert.Null(buildings3.BackwardItem);

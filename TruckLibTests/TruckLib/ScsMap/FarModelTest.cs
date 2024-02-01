@@ -21,9 +21,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.True(fm.Node.IsRed);
             Assert.Equal(fm, fm.Node.ForwardItem);
             Assert.Null(fm.Node.BackwardItem);
-            Assert.True(fm.Node.Sectors.Length == 1);
-            Assert.Equal(0, fm.Node.Sectors[0].X);
-            Assert.Equal(0, fm.Node.Sectors[0].Z);
         }
 
         [Fact]

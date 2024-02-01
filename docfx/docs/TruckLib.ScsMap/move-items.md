@@ -15,7 +15,7 @@ model.Translate(new Vector3(40, 0, 40));
 // The model is now at (50, 0, 50).
 ```
 
-The behavior of `Move` and `Translate` differs slightly based on the item type:
+The behavior of `Move` and `Translate` differs slightly depending on the item type:
 
 * For [single node items](xref:TruckLib.ScsMap.SingleNodeItem) such as [Models](xref:TruckLib.ScsMap.Model), they simply move the node.
 

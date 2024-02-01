@@ -12,7 +12,7 @@ using TruckLib.ScsMap.Serialization;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Represents one sector of a <see cref="Map"/>.
+    /// Represents metadata of one sector of a <see cref="Map"/>.
     /// </summary>
     public class Sector
     {
@@ -37,12 +37,6 @@ namespace TruckLib.ScsMap
         internal string BasePath { get; set; }
 
         /// <summary>
-        /// A list of all map items in this sector.
-        /// </summary>
-        public Dictionary<ulong, MapItem> MapItems { get; set; }
-            = new Dictionary<ulong, MapItem>();
-
-        /// <summary>
         /// Unit name of the climate profile of this sector.
         /// </summary>
         public Token Climate { get; set; } = "default";
@@ -61,21 +55,16 @@ namespace TruckLib.ScsMap
 
         internal FlagField Flags = new();
 
-        /// <summary>
-        /// EOF marker of .data and .layer files.
-        /// </summary>
-        private const ulong EofMarker = ulong.MaxValue;
-
-        private const string BaseExtension = "base";
-        private const string DataExtension = "data";
-        private const string SndExtension = "snd";
-        private const string AuxExtenstion = "aux";
-        private const string DescExtension = "desc";
-        private const string LayerExtension = "layer";
+        internal const string BaseExtension = "base";
+        internal const string DataExtension = "data";
+        internal const string SndExtension = "snd";
+        internal const string AuxExtenstion = "aux";
+        internal const string DescExtension = "desc";
+        internal const string LayerExtension = "layer";
 
         public Sector() { }
 
-        /// <summary>Instantiates a new, empty sector.</summary>
+        /// <summary>Instantiates a sector with default metadata.</summary>
         /// <param name="x">The X coordinate.</param>
         /// <param name="z">The Z coordinate.</param>
         /// <param name="map">The map this sector belongs to.</param>
@@ -86,109 +75,13 @@ namespace TruckLib.ScsMap
             Map = map;
         }
 
-        /// <summary>
-        /// Reads the sector from disk from the set <see cref="BasePath">BasePath</see>.
-        /// </summary>
-        internal void Read() => Open(BasePath);
-
-        /// <summary>
-        /// Reads the sector from disk.
-        /// </summary>
-        /// <param name="basePath">The path to the .base file of the sector. The paths of the other
-        /// sector files will be derived automatically.</param>
-        public void Open(string basePath)
-        {
-            BasePath = basePath;
-
-            ReadBase(basePath);
-            ReadData(Path.ChangeExtension(basePath, DataExtension));
-            ReadAux(Path.ChangeExtension(basePath, AuxExtenstion));
-            ReadSnd(Path.ChangeExtension(basePath, SndExtension));
-            ReadDesc(Path.ChangeExtension(basePath, DescExtension));
-            ReadLayer(Path.ChangeExtension(basePath, LayerExtension));
-        }
-
-        /// <summary>
-        /// Reads the .base file of the sector.
-        /// </summary>
-        /// <param name="path">The .base file of the sector.</param>
-        private void ReadBase(string path)
-        {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-            header = new Header();
-            header.Deserialize(r);
-            ReadItems(r, ItemFile.Base);
-            ReadNodes(r);
-            ReadVisArea(r);
-        }
-
-        /// <summary>
-        /// Reads the .aux file of the sector.
-        /// </summary>
-        /// <param name="path">The .aux file of the sector.</param>
-        private void ReadAux(string path)
-        {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-            var header = new Header();
-            header.Deserialize(r);
-            ReadItems(r, ItemFile.Aux);
-            ReadNodes(r);
-            ReadVisArea(r);
-        }
-
-        /// <summary>
-        /// Reads the .data file of the sector.
-        /// </summary>
-        /// <param name="path">The .data file of the sector.</param>
-        private void ReadData(string path)
-        {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-
-            // Header
-            var header = new Header();
-            header.Deserialize(r);
-
-            // Items
-            while (r.BaseStream.Position < r.BaseStream.Length)
-            {
-                var uid = r.ReadUInt64();
-                if (uid == EofMarker)
-                    break;
-
-                if (!MapItems.TryGetValue(uid, out MapItem item))
-                {
-                    throw new KeyNotFoundException($"{ToString()}.{DataExtension} contains " +
-                        $"unknown UID {uid} - can't continue.");
-                }
-                var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
-                serializer.DeserializeDataPayload(r, item);
-            }
-        }
-
-        /// <summary>
-        /// Reads the .snd file of the sector.
-        /// </summary>
-        /// <param name="path">The .snd file of the sector.</param>
-        private void ReadSnd(string path)
-        {
-            if (!File.Exists(path))
-                return;
-
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-            var header = new Header();
-            header.Deserialize(r);
-            ReadItems(r, ItemFile.Snd);
-            ReadNodes(r);
-            ReadVisArea(r);
-        }
-
         private const float boundaryFactor = 256f;
 
         /// <summary>
         /// Reads the .desc file of the sector.
         /// </summary>
         /// <param name="path">The .desc file of the sector.</param>
-        private void ReadDesc(string path)
+        internal void ReadDesc(string path)
         {
             // TODO: 
             // - figure out if there are any desc flags (ets2 & ats 
@@ -216,200 +109,10 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Reads the .layer file of the sector.
-        /// </summary>
-        /// <param name="path">The .layer file of the sector.</param>
-        /// <exception cref="KeyNotFoundException"></exception>
-        private void ReadLayer(string path)
-        {
-            if (!File.Exists(path))
-                return;
-
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-
-            var header = new Header();
-            header.Deserialize(r);
-
-            while (r.BaseStream.Position < r.BaseStream.Length)
-            {
-                var uid = r.ReadUInt64();
-                if (uid == EofMarker)
-                    break;
-
-                if (!MapItems.TryGetValue(uid, out MapItem item))
-                {
-                    throw new KeyNotFoundException($"{ToString()}.{LayerExtension} contains " +
-                        $"unknown UID {uid} - can't continue.");
-                }
-                var layer = r.ReadByte();
-                item.Layer = layer;
-            }
-        }
-
-        /// <summary>
-        /// Reads items from a .base/.aux/.snd file.
-        /// </summary>
-        /// <param name="r">A BinaryReader at the start of the item section.</param>
-        /// <param name="file">The file which is being read.</param>
-        private void ReadItems(BinaryReader r, ItemFile file)
-        {
-            var itemCount = r.ReadUInt32();
-            MapItems.EnsureCapacity(MapItems.Count + (int)itemCount);
-            for (int i = 0; i < itemCount; i++)
-            {
-                var itemType = (ItemType)r.ReadInt32();
-
-                var serializer = MapItemSerializerFactory.Get(itemType);
-                var item = serializer.Deserialize(r);
-
-                // deal with signs which can be in aux *and* base
-                if (item is Sign sign && file != sign.DefaultItemFile)
-                {
-                    sign.ItemFile = file;
-                }
-                else if (item.DefaultItemFile != file)
-                {
-                    Trace.WriteLine($"{itemType} {item.Uid} in {file}?");
-                }
-
-                MapItems.Add(item.Uid, item);
-            }
-        }
-
-        /// <summary>
-        /// Reads the node section of a .base/.aux/.snd file.
-        /// </summary>
-        /// <param name="r">A BinaryReader at the start of the node section.</param>
-        private void ReadNodes(BinaryReader r)
-        {
-            var nodeCount = r.ReadUInt32();
-            for (int i = 0; i < nodeCount; i++)
-            {
-                var node = new Node(false);
-                node.Deserialize(r);
-                if (Map is not null && Map.Nodes.TryGetValue(node.Uid, out var existingNode))
-                {
-                    existingNode.Sectors = existingNode.Sectors.Push(this);
-                }
-                else
-                {
-                    node.Sectors = new[] { this };
-                    Map?.Nodes.Add(node.Uid, node);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Reads the VisAreaChild section of a .base/.aux/.snd file.
-        /// </summary>
-        /// <param name="r">A BinaryReader at the start of the VisAreaChild section.</param>
-        private void ReadVisArea(BinaryReader r)
-        {
-            // I think we can safely ignore this when deserializing
-            var visAreaChildCount = r.ReadUInt32();
-            for (int i = 0; i < visAreaChildCount; i++)
-            {
-                r.ReadUInt64();
-            }
-        }
-
-        /// <summary>
-        /// Saves the sector in binary format to the specified directory.
-        /// </summary>
-        /// <param name="sectorDirectory">The sector directory.</param>
-        /// <param name="sectorNodes">A dictionary of all nodes in this sector.</param>
-        /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
-        public void Save(string sectorDirectory, List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
-        {
-            WriteBase(GetFilename(BaseExtension), MapItems, sectorNodes, visAreaShowObjectsChildren);
-            WriteData(GetFilename(DataExtension), MapItems);
-            WriteAux(GetFilename(AuxExtenstion), MapItems, sectorNodes, visAreaShowObjectsChildren);
-            WriteSnd(GetFilename(SndExtension), MapItems, sectorNodes, visAreaShowObjectsChildren);
-            WriteDesc(GetFilename(DescExtension));
-            WriteLayer(GetFilename(LayerExtension));
-
-            string GetFilename(string ext) => 
-                Path.Combine(sectorDirectory, $"{ToString()}.{ext}");
-        }
-
-        /// <summary>
-        /// Writes the .base part of this sector.
-        /// </summary>
-        /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A dictionary of all items in the sector.</param>
-        /// <param name="sectorNodes">A dictionary of all nodes in the sector.</param>
-        private void WriteBase(string path, Dictionary<ulong, MapItem> allItems,
-            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
-        {
-            using var stream = new FileStream(path, FileMode.Create);
-            using var w = new BinaryWriter(stream);
-            header.Serialize(w);
-            WriteItems(allItems, ItemFile.Base, w);
-            WriteNodes(w, ItemFile.Base, sectorNodes);
-            WriteVisAreaChildren(w, ItemFile.Base, visAreaShowObjectsChildren);
-        }
-
-        /// <summary>
-        /// Writes the .aux part of the sector.
-        /// </summary>
-        /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A dictionary of all items in the sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in the sector.</param>
-        private void WriteAux(string path, Dictionary<ulong, MapItem> allItems,
-            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
-        {
-            using var stream = new FileStream(path, FileMode.Create);
-            using var w = new BinaryWriter(stream);
-            header.Serialize(w);
-            WriteItems(allItems, ItemFile.Aux, w);
-            WriteNodes(w, ItemFile.Aux, sectorNodes);
-            WriteVisAreaChildren(w, ItemFile.Aux, visAreaShowObjectsChildren);
-        }
-
-        /// <summary>
-        /// Writes the .snd part of the sector.
-        /// </summary>
-        /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A dictionary of all items in the sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in the sector.</param>
-        private void WriteSnd(string path, Dictionary<ulong, MapItem> allItems,
-            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
-        {
-            using var stream = new FileStream(path, FileMode.Create);
-            using var w = new BinaryWriter(stream);
-            header.Serialize(w);
-            WriteItems(allItems, ItemFile.Snd, w);
-            WriteNodes(w, ItemFile.Snd, sectorNodes);
-            WriteVisAreaChildren(w, ItemFile.Snd, visAreaShowObjectsChildren);
-        }
-
-        /// <summary>
-        /// Writes the .data part of this sector.
-        /// </summary>
-        /// <param name="path">The path of the output file.</param>
-        /// <param name="allItems">A dictionary of all items in the sector.</param>
-        private void WriteData(string path, Dictionary<ulong, MapItem> allItems)
-        {
-            using var stream = new FileStream(path, FileMode.Create);
-            using var w = new BinaryWriter(stream);
-
-            header.Serialize(w);
-
-            foreach (var (uid, item) in allItems.Where(x => x.Value.HasDataPayload))
-            {
-                w.Write(uid);
-                var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
-                serializer.SerializeDataPayload(w, item);
-            }
-
-            w.Write(EofMarker);
-        }
-
-        /// <summary>
         /// Writes the .desc part of the sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        private void WriteDesc(string path)
+        internal void WriteDesc(string path)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
@@ -424,113 +127,11 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Writes the .layer part of the sector.
-        /// </summary>
-        /// <param name="path">The path of the output file.</param>
-        private void WriteLayer(string path)
-        {
-            var itemsWithSetLayers = MapItems.Where(x => x.Value.Layer != MapItem.DefaultLayer);
-            if (!itemsWithSetLayers.Any())
-                return;
-
-            using var stream = new FileStream(path, FileMode.Create);
-            using var w = new BinaryWriter(stream);
-
-            header.Serialize(w);
-            foreach (var (uid, item) in itemsWithSetLayers)
-            {
-                w.Write(uid);
-                w.Write(item.Layer);
-            }
-            w.Write(EofMarker);
-        }
-
-        /// <summary>
-        /// Writes the node part of a .base/.aux/.snd file.
-        /// </summary>
-        /// <param name="w">The writer.</param>
-        private void WriteNodes(BinaryWriter w, ItemFile file, List<INode> sectorNodes)
-        {
-            // get base nodes only || get aux nodes only
-            var nodes = new List<INode>(32);
-            foreach (var node in sectorNodes)
-            {
-                if (node.ForwardItem is not UnresolvedItem
-                    && node.ForwardItem is MapItem fwItem
-                    && fwItem.ItemFile == file)
-                {
-                    nodes.Add(node);
-                }
-                else if (node.BackwardItem is not UnresolvedItem
-                    && node.BackwardItem is MapItem bwItem
-                    && bwItem.ItemFile == file)
-                {
-                    nodes.Add(node);
-                }
-            }
-
-            w.Write(nodes.Count);
-            foreach (var node in nodes)
-            {
-                node.Serialize(w);
-            }
-        }
-
-        /// <summary>
-        /// Writes .base/.aux/.snd items to a .base/.aux/.snd file.
-        /// </summary>
-        /// <param name="allItems">All items in the sector.</param>
-        /// <param name="w">The writer.</param>
-        private void WriteItems(Dictionary<ulong, MapItem> allItems, ItemFile file, BinaryWriter w)
-        {
-            var items = allItems.Where(x => x.Value.ItemFile == file);
-
-            w.Write(items.Count());
-            foreach (var (_, item) in items)
-            {
-                w.Write((int)item.ItemType);
-                var serializer = MapItemSerializerFactory.Get(item.ItemType);
-                serializer.Serialize(w, item);
-            }
-        }
-
-        /// <summary>
-        /// Writes the VisAreaChildren part of a .base/.aux/.snd file.
-        /// </summary>
-        /// <param name="w">A BinaryWriter.</param>
-        /// <param name="file">The item file which is being written.</param>
-        /// <param name="visAreaShowObjectsChildren">UIDs of the map items which need to be written.</param>
-        private void WriteVisAreaChildren(BinaryWriter w, ItemFile file, HashSet<ulong> visAreaShowObjectsChildren)
-        {
-            if (visAreaShowObjectsChildren.Count == 0)
-            {
-                w.Write(0L);
-                return;
-            }
-
-            var uids = new List<ulong>();
-            foreach (var childUid in visAreaShowObjectsChildren)
-            {
-                if (MapItems.TryGetValue(childUid, out var child) && child.ItemFile == file)
-                {
-                    uids.Add(childUid);
-                }
-            }
-            uids.Sort();
-
-            w.Write(uids.Count);
-            foreach (var childUid in uids)
-            {
-                w.Write(childUid);
-            }
-        }
-
-        /// <summary>
         /// Parses sector coordinates from the path to a sector file.
         /// </summary>
         /// <param name="path">The file path.</param>
         /// <returns>The coordinates of the sector as (X, Z) tuple.</returns>
-        public static (int X, int Z) GetSectorCoordsFromSectorFilePath(string path)
+        public static (int X, int Z) SectorCoordsFromSectorFilePath(string path)
         {
             var sectorName = Path.GetFileNameWithoutExtension(path);
             var X = int.Parse(sectorName.Substring(3, 5));
@@ -538,12 +139,15 @@ namespace TruckLib.ScsMap
             return (X, Z);
         }
 
+        public static string SectorFileNameFromSectorCoords((int X, int Z) coords) => 
+            $"sec{coords.X:+0000;-0000;+0000}{coords.Z:+0000;-0000;+0000}";
+
         /// <summary>
         /// Returns the name of this sector as used in filenames and the editor's map overlay.
         /// </summary>
         /// <returns>The name of this sector.</returns>
-        public override string ToString() => 
-            $"sec{X:+0000;-0000;+0000}{Z:+0000;-0000;+0000}";
+        public override string ToString() =>
+            SectorFileNameFromSectorCoords((X, Z));
 
     }
 }

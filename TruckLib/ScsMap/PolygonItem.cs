@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
         /// <param name="position">The position of the new node.</param>
         public void Append(Vector3 position)
         {
-            var node = Nodes.First().Sectors[0].Map.AddNode(position);
+            var node = Nodes[0].Parent.AddNode(position);
             node.ForwardItem = this;
             Nodes.Add(node);
         }

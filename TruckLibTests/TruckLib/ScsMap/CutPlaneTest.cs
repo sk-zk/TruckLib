@@ -51,10 +51,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(20, 0, 20), cutPlane.Nodes[0].Position);
             Assert.Equal(new Vector3(40, 0, 40), cutPlane.Nodes[1].Position);
-            Assert.Equal(0, cutPlane.Nodes[0].Sectors[0].X);
-            Assert.Equal(0, cutPlane.Nodes[0].Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(cutPlane.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(cutPlane.Uid));
         }
 
         [Fact]
@@ -70,10 +66,6 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(new Vector3(20, 0, 20), cutPlane.Nodes[0].Position);
             Assert.Equal(new Vector3(40, 0, 40), cutPlane.Nodes[1].Position);
-            Assert.Equal(0, cutPlane.Nodes[0].Sectors[0].X);
-            Assert.Equal(0, cutPlane.Nodes[0].Sectors[0].Z);
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(cutPlane.Uid));
-            Assert.True(map.Sectors[(0, 0)].MapItems.ContainsKey(cutPlane.Uid));
         }
 
         [Fact]
@@ -89,8 +81,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(cutPlane);
 
-            Assert.False(map.HasItem(cutPlane.Uid));
-            Assert.False(map.Sectors[(-1, -1)].MapItems.ContainsKey(cutPlane.Uid));
+            Assert.False(map.MapItems.ContainsKey(cutPlane.Uid));
             for (int i = 0; i < cutPlane.Nodes.Count; i++)
             {
                 Assert.False(map.Nodes.ContainsKey(cutPlane.Nodes[i].Uid));

@@ -56,11 +56,8 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
-            DoSomethingThenUpdateSectorMapItems(() =>
-            {
-                foreach (var node in Nodes)
-                    node.Move(node.Position + translation);
-            });
+            foreach (var node in Nodes)
+                node.Move(node.Position + translation);
         }
 
         /// <inheritdoc/>

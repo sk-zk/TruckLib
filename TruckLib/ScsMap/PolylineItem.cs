@@ -133,7 +133,7 @@ namespace TruckLib.ScsMap
             if (ForwardItem != null) // there's already an item attached
                 throw new InvalidOperationException("Can't append item: ForwardItem is not null");
 
-            var p3 = p2.Sectors[0].Map.AddNode(position, false);
+            var p3 = p2.Parent.AddNode(position, false);
             var newItem = new T
             {
                 Node = p2,
@@ -146,7 +146,7 @@ namespace TruckLib.ScsMap
             SetMiddleRotation(p1, p2, p3);
 
             p2.IsRed = true;
-            p3.Sectors[0].MapItems.Add(newItem.Uid, newItem);
+            p3.Parent.MapItems.Add(newItem.Uid, newItem);
 
             RecalculateLength();
 
@@ -171,7 +171,7 @@ namespace TruckLib.ScsMap
             if (BackwardItem != null) // there's already an item attached
                 throw new InvalidOperationException("Can't prepend item: BackwardItem is not null");
 
-            var p0 = p1.Sectors[0].Map.AddNode(position, true);
+            var p0 = p1.Parent.AddNode(position, true);
             var newItem = new T
             {
                 Node = p0,
@@ -182,7 +182,7 @@ namespace TruckLib.ScsMap
 
             newItem.RecalculateRotation();
 
-            p1.Sectors[0].MapItems.Add(newItem.Uid, newItem);
+            p1.Parent.MapItems.Add(newItem.Uid, newItem);
 
             RecalculateLength();
 
@@ -262,24 +262,18 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
-            DoSomethingThenUpdateSectorMapItems(() =>
-            {
-                var fwNodeOffset = ForwardNode.Position - Node.Position;
-                Node.Move(newPos);
-                ForwardNode.Move(newPos + fwNodeOffset);
-                Recalculate();
-            });
+            var fwNodeOffset = ForwardNode.Position - Node.Position;
+            Node.Move(newPos);
+            ForwardNode.Move(newPos + fwNodeOffset);
+            Recalculate();
         }
 
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
-            DoSomethingThenUpdateSectorMapItems(() =>
-            {
-                Node.Move(Node.Position + translation);
-                ForwardNode.Move(ForwardNode.Position + translation);
-                Recalculate();
-            });
+            Node.Move(Node.Position + translation);
+            ForwardNode.Move(ForwardNode.Position + translation);
+            Recalculate();
         }
 
         internal override IEnumerable<INode> GetItemNodes() =>

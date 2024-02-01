@@ -142,14 +142,16 @@ namespace TruckLib.ScsMap
 
         private Node CreateNode(Vector3 position)
         {
-            return Parent.Node.Sectors[0].Map.AddNode(position, false, Parent);
+            var node = Parent.Node.Parent.AddNode(position, false);
+            node.ForwardItem = Parent;
+            return node;
         }
 
         private static void GetRidOfTheNode(FarModelData item)
         {
             item.Node.ForwardItem = null;
             if (item.Node.IsOrphaned())
-                item.Node.Sectors[0].Map.Delete(item.Node);
+                item.Node.Parent.Delete(item.Node);
         }
     }
 }

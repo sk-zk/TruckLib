@@ -19,12 +19,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public ulong Uid { get; set; }
 
-        /// <summary>
-        /// The sectors this node is in.
-        /// </summary>
-        // This is an array instead of a list to greatly reduce memory overhead.
-        public Sector[] Sectors { get; set; }
-
         private Vector3 position;
         /// <summary>
         /// Position of the node. Note that this will be serialized as fixed point values.
@@ -122,6 +116,11 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// The map, selection or compound which contains this node.
+        /// </summary>
+        public IItemContainer Parent { get; set; }
+
+        /// <summary>
         /// Instantiates a new node with a random UID.
         /// </summary>
         public Node()
@@ -156,23 +155,7 @@ namespace TruckLib.ScsMap
         /// <param name="newPos">The new position of the node.</param>
         public void Move(Vector3 newPos)
         {
-            // if the node isn't attached to a sector,
-            // just move it
-            if (Sectors is null || Sectors.Length == 0)
-            {
-                Position = newPos;
-            }
-            else
-            {
-                var map = Sectors[0].Map;
-                // check if the new position is still inside 
-                // one of the node's sectors.
-                // if not, set Sectors to the new sector.
-                var newSector = Map.GetSectorOfCoordinate(newPos);
-                map.AddSector(newSector.X, newSector.Z); // just in case
-                Sectors = new Sector[] { map.Sectors[newSector] };
-                Position = newPos;
-            }
+            Position = newPos;
         }
 
         /// <summary>

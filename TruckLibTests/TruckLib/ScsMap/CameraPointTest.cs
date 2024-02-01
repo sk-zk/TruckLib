@@ -17,7 +17,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var map = new Map("foo");
             var point = CameraPoint.Add(map, new Vector3(10, 0, 10), new List<Token> { "bar" });
 
-            Assert.True(map.HasItem(point.Uid));
+            Assert.True(map.MapItems.ContainsKey(point.Uid));
 
             Assert.Equal(new List<Token> { "bar" }, point.Tags);
 
@@ -25,9 +25,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.True(point.Node.IsRed);
             Assert.Equal(point, point.Node.ForwardItem);
             Assert.Null(point.Node.BackwardItem);
-            Assert.True(point.Node.Sectors.Length == 1);
-            Assert.Equal(0, point.Node.Sectors[0].X);
-            Assert.Equal(0, point.Node.Sectors[0].Z);
         }
 
         [Fact]
@@ -39,11 +36,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             point.Move(new Vector3(-10, -20, -30));
 
             Assert.Equal(new Vector3(-10, -20, -30), point.Node.Position);
-            Assert.True(point.Node.Sectors.Length == 1);
-            Assert.Equal(-1, point.Node.Sectors[0].X);
-            Assert.Equal(-1, point.Node.Sectors[0].Z);
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(point.Uid));
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(point.Uid));
         }
 
         [Fact]
@@ -55,11 +47,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             point.Translate(new Vector3(-20, -20, -40));
 
             Assert.Equal(new Vector3(-10, -20, -30), point.Node.Position);
-            Assert.True(point.Node.Sectors.Length == 1);
-            Assert.Equal(-1, point.Node.Sectors[0].X);
-            Assert.Equal(-1, point.Node.Sectors[0].Z);
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(point.Uid));
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(point.Uid));
         }
 
         [Fact]
@@ -70,8 +57,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(point);
 
-            Assert.False(map.HasItem(point.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(point.Uid));
+            Assert.False(map.MapItems.ContainsKey(point.Uid));
             Assert.False(map.Nodes.ContainsKey(point.Node.Uid));
         }
     }

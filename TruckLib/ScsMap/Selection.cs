@@ -22,12 +22,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Map items in this selection.
         /// </summary>
-        public List<MapItem> Items { get; set; }
+        public Dictionary<ulong, MapItem> MapItems { get; set; }
 
         /// <summary>
         /// Nodes in this selection.
         /// </summary>
-        public List<INode> Nodes { get; set; }
+        public Dictionary<ulong, INode> Nodes { get; set; }
 
         /// <summary>
         /// Adds a node to the selection.
@@ -37,11 +37,11 @@ namespace TruckLib.ScsMap
         {
             var node = new Node
             {
-                Sectors = null,
                 Position = position,
-                IsRed = isRed
+                IsRed = isRed,
+                Parent = this,
             };
-            Nodes.Add(node);
+            Nodes.Add(node.Uid, node);
             return node;
         }
 
@@ -63,7 +63,7 @@ namespace TruckLib.ScsMap
         /// contains the item.</param>
         void IItemContainer.AddItem(MapItem item)
         {
-            Items.Add(item);
+            MapItems.Add(item.Uid, item);
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item
-            if (Items.Contains(item))
+            if (MapItems.ContainsKey(item.Uid))
             {
-                Items.Remove(item);
+                MapItems.Remove(item.Uid);
             }
 
             // remove item from its nodes, 
@@ -104,9 +104,9 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void Delete(INode node)
         {
-            if (Nodes.Contains(node))
+            if (Nodes.ContainsKey(node.Uid))
             {
-                Nodes.Remove(node);
+                Nodes.Remove(node.Uid);
             }
 
             if (node.ForwardItem is MapItem fw)
@@ -120,38 +120,6 @@ namespace TruckLib.ScsMap
                 node.BackwardItem = null;
                 Delete(bw);
             }
-        }
-
-        /// <summary>
-        /// Returns a dictionary containing all map items of type T in the selection.
-        /// </summary>
-        /// <inheritdoc/>
-        public IEnumerable<T> GetAllItems<T>() where T : MapItem
-        {
-            return Items.Where(x => x is T).Cast<T>();
-        }
-
-        /// <summary>
-        /// Returns a dictionary containing all map items in the selection.
-        /// </summary>
-        /// <inheritdoc/>
-        public Dictionary<ulong, MapItem> GetAllItems()
-        {
-            return Items.ToDictionary(k => k.Uid, v => v);
-        }
-
-        Dictionary<ulong, T> IItemContainer.GetAllItems<T>()
-        {
-            return GetAllItems<T>().ToDictionary(k => k.Uid, v => v);
-        }
-
-        /// <summary>
-        /// Returns a dictionary containing all nodes in the selection.
-        /// </summary>
-        /// <inheritdoc/>
-        public Dictionary<ulong, INode> GetAllNodes()
-        {
-            return Nodes.ToDictionary(k => k.Uid, v => v);
         }
 
         /// <summary>
@@ -184,21 +152,22 @@ namespace TruckLib.ScsMap
 
         private void ReadNodes(BinaryReader r, uint nodeCount)
         {
-            Nodes = new List<INode>((int)nodeCount);
+            Nodes = new();
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);
                 node.Deserialize(r);
-                if (!Nodes.Contains(node))
+                if (!Nodes.ContainsKey(node.Uid))
                 {
-                    Nodes.Add(node);
+                    Nodes.Add(node.Uid, node);
                 }
+                node.Parent = this;
             }
         }
 
         private void ReadItems(BinaryReader r, uint itemCount)
         {
-            Items = new List<MapItem>((int)itemCount);
+            MapItems = new();
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();
@@ -211,29 +180,26 @@ namespace TruckLib.ScsMap
                     (serializer as IDataPayload).DeserializeDataPayload(r, item);
                 }
 
-                Items.Add(item);
+                MapItems.Add(item.Uid, item);
             }
         }
 
         internal void UpdateInternalReferences()
         {
-            var itemsDict = GetAllItems();
-            var nodesDict = GetAllNodes();
-
             // first of all, find map items referenced in nodes
-            foreach (var node in Nodes)
+            foreach (var (_, node) in Nodes)
             {
-                node.UpdateItemReferences(itemsDict);
+                node.UpdateItemReferences(MapItems);
             }
 
             // then find nodes referenced in map items
             // and map items referenced in map items
-            foreach (var item in Items)
+            foreach (var (_, item) in MapItems)
             {
-                item.UpdateNodeReferences(nodesDict);
+                item.UpdateNodeReferences(Nodes);
                 if (item is IItemReferences hasItemRef)
                 {
-                    hasItemRef.UpdateItemReferences(itemsDict);
+                    hasItemRef.UpdateItemReferences(MapItems);
                 }
             }
         }

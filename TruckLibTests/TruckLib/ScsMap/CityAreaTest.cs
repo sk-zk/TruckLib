@@ -18,7 +18,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var map = new Map("foo");
             var city = CityArea.Add(map, new Vector3(10, 0, 10), "bar", 50, 60);
 
-            Assert.True(map.HasItem(city.Uid));
+            Assert.True(map.MapItems.ContainsKey(city.Uid));
 
             Assert.Equal("bar", city.Name);
             Assert.Equal(50, city.Width);
@@ -28,9 +28,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.True(city.Node.IsRed);
             Assert.Equal(city, city.Node.ForwardItem);
             Assert.Null(city.Node.BackwardItem);
-            Assert.True(city.Node.Sectors.Length == 1);
-            Assert.Equal(0, city.Node.Sectors[0].X);
-            Assert.Equal(0, city.Node.Sectors[0].Z);
         }
 
         [Fact]
@@ -42,11 +39,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             city.Move(new Vector3(-10, -20, -30));
 
             Assert.Equal(new Vector3(-10, -20, -30), city.Node.Position);
-            Assert.True(city.Node.Sectors.Length == 1);
-            Assert.Equal(-1, city.Node.Sectors[0].X);
-            Assert.Equal(-1, city.Node.Sectors[0].Z);
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(city.Uid));
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(city.Uid));
         }
 
         [Fact]
@@ -58,11 +50,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             city.Translate(new Vector3(-20, -20, -40));
 
             Assert.Equal(new Vector3(-10, -20, -30), city.Node.Position);
-            Assert.True(city.Node.Sectors.Length == 1);
-            Assert.Equal(-1, city.Node.Sectors[0].X);
-            Assert.Equal(-1, city.Node.Sectors[0].Z);
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(city.Uid));
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(city.Uid));
         }
 
         [Fact]
@@ -73,8 +60,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(city);
 
-            Assert.False(map.HasItem(city.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(city.Uid));
+            Assert.False(map.MapItems.ContainsKey(city.Uid));
             Assert.False(map.Nodes.ContainsKey(city.Node.Uid));
         }
     }

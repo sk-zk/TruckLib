@@ -18,7 +18,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var map = new Map("foo");
             var va = VisibilityArea.Add(map, new Vector3(10, 0, 10), VisibilityAreaBehavior.HideObjects, 50, 60);
 
-            Assert.True(map.HasItem(va.Uid));
+            Assert.True(map.MapItems.ContainsKey(va.Uid));
 
             Assert.Equal(VisibilityAreaBehavior.HideObjects, va.Behavior);
             Assert.Equal(50, va.Width);
@@ -28,9 +28,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.True(va.Node.IsRed);
             Assert.Equal(va, va.Node.ForwardItem);
             Assert.Null(va.Node.BackwardItem);
-            Assert.True(va.Node.Sectors.Length == 1);
-            Assert.Equal(0, va.Node.Sectors[0].X);
-            Assert.Equal(0, va.Node.Sectors[0].Z);
         }
 
         [Fact]
@@ -42,11 +39,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             va.Move(new Vector3(-10, -20, -30));
 
             Assert.Equal(new Vector3(-10, -20, -30), va.Node.Position);
-            Assert.True(va.Node.Sectors.Length == 1);
-            Assert.Equal(-1, va.Node.Sectors[0].X);
-            Assert.Equal(-1, va.Node.Sectors[0].Z);
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(va.Uid));
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(va.Uid));
         }
 
         [Fact]
@@ -58,11 +50,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             va.Translate(new Vector3(-20, -20, -40));
 
             Assert.Equal(new Vector3(-10, -20, -30), va.Node.Position);
-            Assert.True(va.Node.Sectors.Length == 1);
-            Assert.Equal(-1, va.Node.Sectors[0].X);
-            Assert.Equal(-1, va.Node.Sectors[0].Z);
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(va.Uid));
-            Assert.True(map.Sectors[(-1, -1)].MapItems.ContainsKey(va.Uid));
         }
 
         [Fact]
@@ -73,8 +60,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(va);
 
-            Assert.False(map.HasItem(va.Uid));
-            Assert.False(map.Sectors[(0, 0)].MapItems.ContainsKey(va.Uid));
+            Assert.False(map.MapItems.ContainsKey(va.Uid));
             Assert.False(map.Nodes.ContainsKey(va.Node.Uid));
         }
     }

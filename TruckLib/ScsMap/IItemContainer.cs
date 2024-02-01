@@ -13,28 +13,9 @@ namespace TruckLib.ScsMap
     /// </summary>
     public interface IItemContainer
     {
-        // This interface has to exist because Compounds hold items and nodes
-        // themselves rather than holding references to top level objects (like
-        // every other item in the game).
+        Dictionary<ulong, INode> Nodes { get; }
 
-        /// <summary>
-        /// Returns a dictionary containing all map items in the container.
-        /// </summary>
-        /// <returns>All map items in the container.</returns>
-        Dictionary<ulong, MapItem> GetAllItems();
-
-        /// <summary>
-        /// Returns a dictionary containing all items of type T in the container.
-        /// </summary>
-        /// <typeparam name="T">The item type.</typeparam>
-        /// <returns>All items of this type in the container.</returns>
-        Dictionary<ulong, T> GetAllItems<T>() where T : MapItem;
-
-        /// <summary>
-        /// Returns a dictionary containing all nodes in the container.
-        /// </summary>
-        /// <returns>All nodes in the container.</returns>
-        Dictionary<ulong, INode> GetAllNodes();
+        Dictionary<ulong, MapItem> MapItems { get; }
 
         /// <summary>
         /// Adds a node to the container.

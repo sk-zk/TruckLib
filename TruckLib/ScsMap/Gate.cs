@@ -97,7 +97,7 @@ namespace TruckLib.ScsMap
                 if (activationPoints[i] is not null)
                 {
                     var node = activationPoints[i].Node;
-                    node.Sectors[0].Map.Nodes.Remove(node.Uid);
+                    node.Parent.Nodes.Remove(node.Uid);
                     activationPoints[i] = null;
                 }
             }

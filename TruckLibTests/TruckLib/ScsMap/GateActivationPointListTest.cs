@@ -51,6 +51,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var point = gate.ActivationPoints[0];
             gate.ActivationPoints.RemoveAt(0);
 
+            Assert.Empty(gate.ActivationPoints);
             Assert.False(map.Nodes.ContainsKey(point.Node.Uid));
         }
 
@@ -65,6 +66,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var success = gate.ActivationPoints.Remove(point);
 
             Assert.True(success);
+            Assert.Empty(gate.ActivationPoints);
             Assert.False(map.Nodes.ContainsKey(point.Node.Uid));
         }
 

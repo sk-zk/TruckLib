@@ -39,13 +39,16 @@ for it. You'll find a link to it here soon™.
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map > Recompute map).
 * I've yet to figure out how the game calculates the length of roads etc. What I've come up with is
-accurate enough to not be too annoying, but you'll notice while editing one of these items that they will slightly
-change their path as the game recalculates its length.
+  accurate enough to not be too annoying, but you'll notice while editing one of these items that they will slightly
+  change their path as the game recalculates its length.
 * Anything to do with prefabs may or may not break in unexpected ways.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
- fixed by recalculating.
+  fixed by recalculating.
 * When adding a camera path, the positions of the control points in the Keyframe objects are not set to any default values
-and therefore left at (0, 0, 0).
+  and therefore left at (0, 0, 0).
+* Helper locators of curve items, if used by the model, are not placed automatically by the library because their 
+  coordinates are not known to it. Moving a locator node or a curve node which is tetherd to a locator node will also cause issues.
+  The editor will fix both of these once a curve node is moved or the properties dialog of the curve is closed.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
  
 ## Dependencies

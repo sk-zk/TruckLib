@@ -17,6 +17,7 @@ namespace TruckLib.ScsMap
         Vector3 Position { get; set; }
         Quaternion Rotation { get; set; }
         IItemContainer Parent { get; set; }
+        bool IsCurveLocator { get; set; }
 
         bool IsOrphaned();
         void Move(Vector3 newPos);

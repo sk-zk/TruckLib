@@ -34,6 +34,7 @@ namespace TruckLib.ScsMap
         public Vector3 Position { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public Quaternion Rotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public IItemContainer Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsCurveLocator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool IsOrphaned() => throw new InvalidOperationException();
         public void Move(Vector3 newPos) => throw new InvalidOperationException();

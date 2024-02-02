@@ -89,6 +89,15 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
+        /// Gets or sets if this node represents a curve locator.
+        /// </summary>
+        public bool IsCurveLocator
+        {
+            get => Flags[3];
+            set => Flags[3] = value;
+        }
+
+        /// <summary>
         /// Gets or sets if this node can be moved or deleted in the editor.
         /// </summary>
         public bool Locked

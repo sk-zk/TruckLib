@@ -16,10 +16,15 @@ namespace TruckLib.ScsMap.Serialization
  
             curve.Node = new UnresolvedNode(r.ReadUInt64());
             curve.ForwardNode = new UnresolvedNode(r.ReadUInt64());
-            // 0 twice, why?
-            r.ReadUInt64();
-            r.ReadUInt64();
- 
+
+            curve.Locators = new CurveLocatorList(curve);
+            var locatorUid = r.ReadUInt64();
+            if (locatorUid != 0)
+                curve.Locators.Add(new UnresolvedNode(locatorUid));
+            locatorUid = r.ReadUInt64();
+            if (locatorUid != 0)
+                curve.Locators.Add(new UnresolvedNode(locatorUid));
+
             curve.Length = r.ReadSingle();
  
             curve.RandomSeed = r.ReadUInt32();
@@ -52,8 +57,16 @@ namespace TruckLib.ScsMap.Serialization
  
             w.Write(curve.Node.Uid);
             w.Write(curve.ForwardNode.Uid);
-            w.Write(0UL);
-            w.Write(0UL);
+
+            var listSize = curve.Locators.Count;
+            for (int i = 0; i < listSize; i++)
+            {
+                w.Write(curve.Locators[i].Uid);
+            }
+            for (int i = listSize; i < CurveLocatorList.MaxSize; i++)
+            {
+                w.Write(0UL);
+            }
 
             w.Write(curve.Length);
  

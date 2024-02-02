@@ -109,6 +109,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<float> HeightOffsets { get; set; }
 
+        public CurveLocatorList Locators { get; set; }
+
         /// <summary>
         /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
@@ -237,6 +239,7 @@ namespace TruckLib.ScsMap
             Stretch = 1f;
             Scale = 1f;
             TerrainColor = Color.White;
+            Locators = new CurveLocatorList(this);
         }
 
         /// <summary>
@@ -311,6 +314,17 @@ namespace TruckLib.ScsMap
             c.Stretch = Stretch;
             c.FixedStep = FixedStep;
             c.HeightOffsets = new List<float>(HeightOffsets);
+        }
+
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            var list = new List<INode>(Locators.Count + 2)
+            {
+                Node,
+                ForwardNode,
+            };
+            list.AddRange(Locators);
+            return list;
         }
     }
 }

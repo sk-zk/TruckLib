@@ -38,7 +38,7 @@ namespace TruckLib.ScsMap.Serialization
                         Trigger = trigger,
                         Node = activationPointNodes[nodeIndex - 1]
                     };
-                    gate.ActivationPoints.Add(point, false);
+                    gate.ActivationPoints.Add(point);
                 }
             }
 

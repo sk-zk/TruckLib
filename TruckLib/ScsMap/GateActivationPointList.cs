@@ -56,18 +56,6 @@ namespace TruckLib.ScsMap
             list.Add(item);
         }
 
-        internal void Add(GateActivationPoint item, bool updateSectorMapItems)
-        {
-            if (updateSectorMapItems)
-            {
-                Add(item);
-            } 
-            else
-            {
-                list.Add(item);
-            }
-        }
-
         /// <summary>
         /// Creates a map node at the specified position and adds a <see cref="GateActivationPoint"/> object
         /// with the given properties to the end of the list.

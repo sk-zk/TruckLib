@@ -204,7 +204,7 @@ namespace TruckLib.ScsMap
                 ForwardItem = item;
                 item.Node = this;
                 item.Recalculate();
-                IsRed = true;
+                IsRed = !IsCurveLocator;
                 n2.ForwardItem = null;
                 n2.BackwardItem = null;
                 n2.Parent.Delete(n2);

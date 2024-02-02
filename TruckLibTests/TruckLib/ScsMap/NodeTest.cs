@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.ScsMap;
 using System.Numerics;
+using Newtonsoft.Json.Bson;
 
 namespace TruckLibTests.TruckLib.ScsMap
 {
@@ -66,6 +67,24 @@ namespace TruckLibTests.TruckLib.ScsMap
             var nodeToKeep = road1.ForwardNode;
             var nodeToMerge = road2.ForwardNode;
             Assert.Throws<InvalidOperationException>(() => nodeToKeep.Merge(nodeToMerge));
+        }
+
+        [Fact]
+        public void MergeIntoCurveLocatorNode()
+        {
+            var map = new Map("foo");
+            var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
+
+            curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
+            curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity);
+            var node2 = curve.Locators[1];
+
+            var curve2 = Curve.Add(map, node2.Position, new(34, 0, 4), "baz");
+            node2.Merge(curve2.Node);
+
+            Assert.Equal(node2, curve2.Node);
+            Assert.False(node2.IsRed);
+            Assert.True(node2.IsCurveLocator);
         }
     }
 }

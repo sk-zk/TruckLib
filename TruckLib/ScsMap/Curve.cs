@@ -299,6 +299,25 @@ namespace TruckLib.ScsMap
             Length = Vector3.Distance(backwardPos, forwardPos);
         }
 
+        public override void Move(Vector3 newPos)
+        {
+            var offset = newPos - Node.Position;
+            base.Move(newPos);
+            foreach (var node in Locators)
+            {
+                node.Translate(offset);
+            }
+        }
+
+        public override void Translate(Vector3 translation)
+        {
+            base.Translate(translation);
+            foreach (var node in Locators)
+            {
+                node.Translate(translation);
+            }
+        }
+
         private void CopySettingsTo(Curve c)
         {
             c.Kdop.Flags = Kdop.Flags;

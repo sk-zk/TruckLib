@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap
         private const float fromToFactor = 10f;
 
         /// <inheritdoc/>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Name = r.ReadToken();
             Density = r.ReadUInt16() / densityFactor;

@@ -156,7 +156,7 @@ namespace TruckLib
         }
 
         /// <inheritdoc/>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Value = r.ReadUInt64();
         }

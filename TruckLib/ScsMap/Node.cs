@@ -242,7 +242,7 @@ namespace TruckLib.ScsMap
         /// Reads the node from a BinaryReader whose position is at the start of the object.
         /// </summary>
         /// <param name="r">A BinaryReader whose position is at the start of a Node.</param>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Uid = r.ReadUInt64();
 

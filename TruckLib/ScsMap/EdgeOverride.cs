@@ -42,7 +42,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <inheritdoc/>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Offset = r.ReadUInt16();
             Length = r.ReadUInt16();

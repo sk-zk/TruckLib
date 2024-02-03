@@ -22,7 +22,7 @@ namespace TruckLib.ScsMap
             Rotation = rotation;
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Name = r.ReadToken();
             Rotation = r.ReadUInt16() / 10f;

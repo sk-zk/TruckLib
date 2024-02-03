@@ -15,7 +15,7 @@ namespace TruckLib.Model
 
         public Vector3 End { get; set; }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Start = r.ReadVector3();
             End = r.ReadVector3();

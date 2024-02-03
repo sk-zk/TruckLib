@@ -42,7 +42,7 @@ namespace TruckLib.ScsMap
         public Vector3 ControlPoint2Position { get; set; }
 
         /// <inheritdoc/>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             SpeedChange = (EasingFunction)r.ReadInt32();
             RotationChange = (EasingFunction)r.ReadInt32();

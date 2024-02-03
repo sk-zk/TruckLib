@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap
             = new List<ISignOverrideAttribute>();
 
         /// <inheritdoc/>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Id = r.ReadUInt32();
             AreaName = r.ReadToken();

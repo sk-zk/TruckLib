@@ -23,7 +23,7 @@ namespace TruckLib.ScsMap
         void Move(Vector3 newPos);
         void Translate(Vector3 translation);
         void Merge(INode n2);
-        void Deserialize(BinaryReader r);
+        void Deserialize(BinaryReader r, uint? version = null);
         string ToString();
         void UpdateItemReferences(Dictionary<ulong, MapItem> allItems);
         void Serialize(BinaryWriter w);

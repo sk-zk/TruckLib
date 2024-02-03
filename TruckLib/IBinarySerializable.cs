@@ -16,7 +16,8 @@ namespace TruckLib
         /// Reads the object from a BinaryReader whose position is at the start of the object.
         /// </summary>
         /// <param name="r">A BinaryReader whose position is at the start of the object.</param>
-        void Deserialize(BinaryReader r);
+        /// <param name="version">The version number of the file format.</param>
+        void Deserialize(BinaryReader r, uint? version = null);
 
         /// <summary>
         /// Writes the object to a BinaryWriter.

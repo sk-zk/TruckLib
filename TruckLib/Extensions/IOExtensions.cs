@@ -146,7 +146,7 @@ namespace TruckLib
         /// <param name="count">The number of objects to read.</param>
         /// <typeparam name="T">The type of the list.</typeparam>
         /// <returns>A list of type T read from the current stream.</returns>
-        public static List<T> ReadObjectList<T>(this BinaryReader r, uint count) where T : new()
+        public static List<T> ReadObjectList<T>(this BinaryReader r, uint count, uint? version = null) where T : new()
         {
             var list = new List<T>((int)count);
             if (count == 0) 
@@ -157,7 +157,7 @@ namespace TruckLib
                 ReadList(r =>
                 {
                     var obj = new T() as IBinarySerializable;
-                    obj.Deserialize(r);
+                    obj.Deserialize(r, version);
                     return (T)obj;
                 });
             }

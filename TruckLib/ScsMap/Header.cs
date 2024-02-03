@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
 
         /// <inheritdoc/>
         /// <exception cref="UnsupportedVersionException"></exception>
-        public virtual void Deserialize(BinaryReader r)
+        public virtual void Deserialize(BinaryReader r, uint? version = null)
         {
             CoreMapVersion = r.ReadUInt32();
             if (CoreMapVersion != supportedVersion)

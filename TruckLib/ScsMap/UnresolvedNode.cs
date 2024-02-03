@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap
         public void Move(Vector3 newPos) => throw new InvalidOperationException();
         public void Merge(INode n2) => throw new NotImplementedException();
         public void Translate(Vector3 translation) => throw new InvalidOperationException();
-        public void Deserialize(BinaryReader r) => throw new InvalidOperationException();
+        public void Deserialize(BinaryReader r, uint? version = null) => throw new InvalidOperationException();
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems) => throw new InvalidOperationException();
         public void Serialize(BinaryWriter w) => throw new InvalidOperationException();
 

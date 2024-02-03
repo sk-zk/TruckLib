@@ -25,7 +25,7 @@ namespace TruckLib.ScsMap
 
         private const uint NoParamsMarker = uint.MaxValue;
 
-        public virtual void Deserialize(BinaryReader r)
+        public virtual void Deserialize(BinaryReader r, uint? version = null)
         {
             var numParamCount = r.ReadUInt32();
             // if there are no custom params of any kind,

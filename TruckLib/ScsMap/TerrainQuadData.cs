@@ -72,7 +72,7 @@ namespace TruckLib.ScsMap
             Normals = new List<VertexData>();
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             // the material brushes used on this terrain.
             // first one is the main mat.

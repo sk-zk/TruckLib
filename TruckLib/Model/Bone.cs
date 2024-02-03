@@ -31,7 +31,7 @@ namespace TruckLib.Model
             return Name.String;
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Name = r.ReadToken();
 

@@ -17,7 +17,7 @@ namespace TruckLib.ScsMap
             return $"[{NodeIndex}] {Rule}";
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             NodeIndex = r.ReadUInt32();
             Rule = r.ReadToken();

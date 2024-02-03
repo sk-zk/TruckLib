@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <inheritdoc/>
-        public override void Deserialize(BinaryReader r)
+        public override void Deserialize(BinaryReader r, uint? version = null)
         {
             Name = r.ReadToken();
             base.Deserialize(r);

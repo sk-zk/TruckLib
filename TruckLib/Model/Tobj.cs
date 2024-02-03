@@ -77,7 +77,7 @@ namespace TruckLib.Model
             Serialize(w);
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Version = r.ReadUInt32();
             if (Version != SupportedVersion)

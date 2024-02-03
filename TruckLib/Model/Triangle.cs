@@ -31,7 +31,7 @@ namespace TruckLib.Model
             return $"({A} {B} {C})";
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             A = r.ReadUInt16();
             B = r.ReadUInt16();

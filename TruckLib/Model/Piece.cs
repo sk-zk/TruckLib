@@ -45,7 +45,7 @@ namespace TruckLib.Model
         /// has to jump back and forth a few times.
         /// </summary>
         /// <param name="r"></param>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             var edges = r.ReadUInt32();
             var verts = r.ReadUInt32();

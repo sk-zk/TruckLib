@@ -110,7 +110,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <inheritdoc/>
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             byte1 = r.ReadByte();
             byte2 = r.ReadByte();

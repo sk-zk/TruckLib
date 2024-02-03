@@ -36,8 +36,8 @@ namespace TruckLib.ScsMap
         /// Creates map nodes for this item. 
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="nodePositions">The positions of the nodes.</param>
-        protected virtual void CreateNodes(IItemContainer map, IList<Vector3> nodePositions)
+        /// <param name="positions">The positions of the nodes.</param>
+        protected virtual void CreateNodes(IItemContainer map, IList<Vector3> positions)
         {
             if (Nodes.Count != 0)
             {
@@ -46,9 +46,9 @@ namespace TruckLib.ScsMap
 
             // all nodes have the item as ForwardItem; 
             // how the nodes connect is determined by their position in the list only
-            for (int i = 0; i < nodePositions.Count; i++)
+            for (int i = 0; i < positions.Count; i++)
             {
-                var node = map.AddNode(nodePositions[i]);
+                var node = map.AddNode(positions[i]);
                 if (i == 0)
                 {
                     // one node has to have the red node flag.

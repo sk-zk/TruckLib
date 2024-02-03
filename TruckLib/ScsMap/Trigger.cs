@@ -126,11 +126,11 @@ namespace TruckLib.ScsMap
         /// Adds a trigger to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="nodePositions">The points of the polygon.</param>
+        /// <param name="positions">The points of the polygon.</param>
         /// <returns>The newly created trigger.</returns>
-        public static Trigger Add(IItemContainer map, IList<Vector3> nodePositions)
+        public static Trigger Add(IItemContainer map, IList<Vector3> positions)
         {
-            var trigger = Add<Trigger>(map, nodePositions);
+            var trigger = Add<Trigger>(map, positions);
             return trigger;
         }
     }

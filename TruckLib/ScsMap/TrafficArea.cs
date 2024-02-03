@@ -66,12 +66,12 @@ namespace TruckLib.ScsMap
         /// Adds a traffic area to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="nodePositions">The points of the polygon.</param>
+        /// <param name="positions">The points of the polygon.</param>
         /// <param name="rule">The unit name of the traffic rule.</param>
         /// <returns>The newly created traffic area.</returns>
-        public static TrafficArea Add(IItemContainer map, IList<Vector3> nodePositions, Token rule)
+        public static TrafficArea Add(IItemContainer map, IList<Vector3> positions, Token rule)
         {
-            var ta = Add<TrafficArea>(map, nodePositions);
+            var ta = Add<TrafficArea>(map, positions);
             ta.Rule = rule;
             return ta;
         }

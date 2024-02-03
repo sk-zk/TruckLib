@@ -12,7 +12,8 @@ namespace TruckLib.ScsMap.Serialization
             var area = new MapArea(false);
             ReadKdopItem(r, area);
 
-            area.Nodes = ReadNodeRefList(r);
+            area.Nodes = new PolygonNodeList(area);
+            area.Nodes.AddRange(ReadNodeRefList(r));
             area.Color = (MapAreaColor)r.ReadUInt32();
 
             return area;

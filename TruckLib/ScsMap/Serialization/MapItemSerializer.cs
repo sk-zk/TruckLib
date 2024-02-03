@@ -108,7 +108,7 @@ namespace TruckLib.ScsMap.Serialization
             return ReadObjectList<UnresolvedItem>(r).Cast<IMapItem>().ToList();
         }
 
-        public static void WriteNodeRefList(BinaryWriter w, List<INode> nodeList)
+        public static void WriteNodeRefList(BinaryWriter w, IList<INode> nodeList)
         {
             if (nodeList is null)
             {

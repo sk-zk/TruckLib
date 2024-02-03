@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +11,15 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Base class for map items which define a polygonal area.
     /// </summary>
-    public abstract class PolygonItem : MultiNodeItem
+    public abstract class PolygonItem : MapItem
     {
+        /// <summary>
+        /// The nodes of the item.
+        /// </summary>
+        public PolygonNodeList Nodes { get; set; }
+
+        internal IItemContainer Parent { get; set; }
+
         protected PolygonItem() : base() { }
 
         internal PolygonItem(bool initFields) : base(initFields)
@@ -23,18 +31,22 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<INode>(2);
+            Nodes = new PolygonNodeList(this);
         }
 
         /// <summary>
-        /// Appends a node to the item.
+        /// Base method for adding a new PolygonItem to the map.
         /// </summary>
-        /// <param name="position">The position of the new node.</param>
-        public void Append(Vector3 position)
+        internal static T Add<T>(IItemContainer map, IList<Vector3> positions) where T : PolygonItem, new()
         {
-            var node = Nodes[0].Parent.AddNode(position);
-            node.ForwardItem = this;
-            Nodes.Add(node);
+            var item = new T();
+            item.Parent = map;
+            foreach (var position in positions)
+            {
+                item.Nodes.Add(position);
+            }
+            map.AddItem(item);
+            return item;
         }
 
         /// <summary>
@@ -68,6 +80,18 @@ namespace TruckLib.ScsMap
         {
             foreach (var node in Nodes)
                 node.Move(node.Position + translation);
+        }
+
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            return Nodes;
+        }
+
+        /// <inheritdoc/>
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
+        {
+            ResolveNodeReferences(Nodes, allNodes);
         }
     }
 }

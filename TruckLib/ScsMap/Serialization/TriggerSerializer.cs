@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, trigger);
 
             trigger.Tags = ReadObjectList<Token>(r);
-            trigger.Nodes = ReadNodeRefList(r);
+            trigger.Nodes.AddRange(ReadNodeRefList(r));
             trigger.Actions = ReadObjectList<TriggerAction>(r);
             if (trigger.Nodes.Count == 1)
             {

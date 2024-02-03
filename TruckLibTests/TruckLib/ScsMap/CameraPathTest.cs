@@ -13,22 +13,25 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
-            var path = CameraPath.Add(map, new List<Vector3>() { 
+            var points = new List<Vector3>() {
                 new(-13.11f, 0, 14.21f),
                 new(-4.35f, 0, 3.08f),
                 new(6.25f, 0, 3.16f),
                 new(12.89f, 0, 14.29f)
-            });
+            };
+
+            var map = new Map("foo");
+            var path = CameraPath.Add(map, points);
 
             Assert.Equal(4, path.Keyframes.Count);
 
             Assert.Equal(4, path.Nodes.Count);
-            Assert.Equal(new Vector3(-13.11f, 0, 14.21f), path.Nodes[0].Position);
             for (int i = 0; i < path.Nodes.Count; i++)
             {
+                Assert.Equal(points[i], path.Nodes[i].Position);
                 Assert.Equal(path, path.Nodes[i].ForwardItem);
                 Assert.Null(path.Nodes[i].BackwardItem);
+                Assert.True(map.Nodes.ContainsKey(path.Nodes[i].Uid));
                 Assert.Equal(Quaternion.Identity, path.Nodes[i].Rotation);
             }
             Assert.True(path.Nodes[0].IsRed);

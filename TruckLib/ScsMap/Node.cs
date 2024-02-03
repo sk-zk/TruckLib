@@ -148,7 +148,7 @@ namespace TruckLib.ScsMap
         protected virtual void Init()
         {
             Uid = Utils.GenerateUuid();
-            rotation = new Quaternion(0f, 0f, 0f, 1f);
+            rotation = Quaternion.Identity;
             Flags = new FlagField();
         }
 

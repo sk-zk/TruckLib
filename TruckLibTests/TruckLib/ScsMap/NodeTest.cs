@@ -12,6 +12,14 @@ namespace TruckLibTests.TruckLib.ScsMap
     public class NodeTest
     {
         [Fact]
+        public void Construct()
+        {
+            var node = new Node();
+            Assert.NotEqual(0UL, node.Uid);
+            Assert.Equal(Quaternion.Identity, node.Rotation);
+        }
+
+        [Fact]
         public void MergeRoadsViaFwNodeOfFirst()
         {
             var map = new Map("foo");

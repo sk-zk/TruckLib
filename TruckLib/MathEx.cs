@@ -78,5 +78,10 @@ namespace TruckLib
             return Math.Atan2(Vector3.Dot(v, right), Vector3.Dot(v, forward));
         }
 
+        public static double Mod(double a, double b)
+        {
+            return a - b * Math.Floor(a / b);
+        }
+
     }
 }

@@ -120,7 +120,8 @@ namespace TruckLib.ScsMap
                 var p3 = Nodes[Math.Min(Nodes.Count - 1, i + 2)].Position;
                 var vec = CatmullRomSpline.Derivative(p0, p1, p2, p3, 0);
                 var angle = MathEx.GetNodeAngle(vec);
-                Nodes[i].Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0); ;
+                angle = MathEx.Mod(angle, Math.Tau);
+                Nodes[i].Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0);
             }
         }
 

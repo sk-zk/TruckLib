@@ -15,9 +15,7 @@ The main namespace of the library: classes for working with the map format.
 Mostly complete de/serializer for SII and .mat files.
 
 **TruckLib.Model**:  
-Some code for working with binary model files (.pm\*). Very basic and hasn't been maintained in ages.
-
-Also contains a (binary) .tobj de/serializer.
+Rudimentary support for binary model files (.pm\*), prefab descriptors (.ppd), and binary .tobj files.
 
 **TruckLib.HashFs**:  
 A reader for HashFS (.scs) files, the asset archive format of the game.

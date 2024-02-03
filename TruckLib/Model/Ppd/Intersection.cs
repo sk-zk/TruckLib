@@ -18,9 +18,9 @@ namespace TruckLib.Model.Ppd
 
         public float Radius { get; set; }
 
-        public FlagField Flags;
+        public FlagField Flags { get; set; }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             CurveId = r.ReadUInt32();
             Position = r.ReadSingle();

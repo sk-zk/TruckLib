@@ -23,7 +23,7 @@ namespace TruckLib.Model.Ppd
 
         public Token Part { get; set; }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Name = r.ReadToken();
             Position = r.ReadVector3();

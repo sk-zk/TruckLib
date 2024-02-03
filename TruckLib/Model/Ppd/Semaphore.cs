@@ -37,7 +37,7 @@ namespace TruckLib.Model.Ppd
 
         private uint Unknown1;
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Position = r.ReadVector3();
             Rotation = r.ReadQuaternion();

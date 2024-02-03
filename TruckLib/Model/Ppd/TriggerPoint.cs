@@ -41,15 +41,15 @@ namespace TruckLib.Model.Ppd
 
         public int[] Neighbours { get; set; } = new int[2];
 
-        protected FlagField Flags = new FlagField();
+        private FlagField flags = new();
 
         /// <summary>
         /// Determines if the player has to activate the trigger action manually.
         /// </summary>
         public bool ManualActivation
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => flags[0];
+            set => flags[0] = value;
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool SphereTrigger
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => flags[1];
+            set => flags[1] = value;
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool PartialActivation
         {
-            get => Flags[2];
-            set => Flags[2] = value;
+            get => flags[2];
+            set => flags[2] = value;
         }
 
         /// <summary>
@@ -77,18 +77,18 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool OneTimeActivation
         {
-            get => Flags[3];
-            set => Flags[3] = value;
+            get => flags[3];
+            set => flags[3] = value;
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             TriggerId = r.ReadUInt32();
             Action = r.ReadToken();
             Range = r.ReadSingle();
             ResetDelay = r.ReadSingle();
             ResetDistance = r.ReadSingle();
-            Flags = new FlagField(r.ReadUInt32());
+            flags = new FlagField(r.ReadUInt32());
             Position = r.ReadVector3();
             for (int i = 0; i < Neighbours.Length; i++)
             {

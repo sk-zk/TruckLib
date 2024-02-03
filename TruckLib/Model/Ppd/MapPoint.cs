@@ -19,10 +19,10 @@ namespace TruckLib.Model.Ppd
 
         public int[] Neighbours { get; set; } = new int[6];
 
-        protected FlagField VisFlags = new FlagField();
+        private FlagField visFlags = new();
 
         // TODO: Figure out Assigned Node / Destination Nodes
-        public FlagField NavFlags = new FlagField();
+        private FlagField navFlags = new();
 
         /// <summary>
         /// Mark the approximate location of the prefab exit. 
@@ -30,8 +30,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool PrefabExit
         {
-            get => NavFlags[10];
-            set => NavFlags[10] = value;
+            get => navFlags[10];
+            set => navFlags[10] = value;
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public RoadSize RoadSize
         {
-            get => (RoadSize)VisFlags.GetBitString(8, 4);
-            set => VisFlags.SetBitString(8, 4, (uint)value);
+            get => (RoadSize)visFlags.GetBitString(8, 4);
+            set => visFlags.SetBitString(8, 4, (uint)value);
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public RoadOffset RoadOffset
         {
-            get => (RoadOffset)VisFlags.GetBitString(12, 3);
-            set => VisFlags.SetBitString(12, 3, (uint)value);
+            get => (RoadOffset)visFlags.GetBitString(12, 3);
+            set => visFlags.SetBitString(12, 3, (uint)value);
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public CustomColor Color
         {
-            get => (CustomColor)VisFlags.GetBitString(17, 4);
-            set => VisFlags.SetBitString(17, 4, (uint)value);
+            get => (CustomColor)visFlags.GetBitString(17, 4);
+            set => visFlags.SetBitString(17, 4, (uint)value);
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public byte ExtValue
         {
-            get => VisFlags.GetByte(0);
-            set => VisFlags.SetByte(0, value);
+            get => visFlags.GetByte(0);
+            set => visFlags.SetByte(0, value);
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool RoadOffsetLane
         {
-            get => VisFlags[16];
-            set => VisFlags[16] = value;
+            get => visFlags[16];
+            set => visFlags[16] = value;
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool RoadOver
         {
-            get => VisFlags[17];
-            set => VisFlags[17] = value;
+            get => visFlags[17];
+            set => visFlags[17] = value;
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool Outline
         {
-            get => !VisFlags[21];
-            set => VisFlags[21] = !value;
+            get => !visFlags[21];
+            set => visFlags[21] = !value;
         }
 
         /// <summary>
@@ -106,14 +106,14 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool Arrow
         {
-            get => !VisFlags[22];
-            set => VisFlags[22] = !value;
+            get => !visFlags[22];
+            set => visFlags[22] = !value;
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
-            VisFlags = new FlagField(r.ReadUInt32());
-            NavFlags = new FlagField(r.ReadUInt32());
+            visFlags = new FlagField(r.ReadUInt32());
+            navFlags = new FlagField(r.ReadUInt32());
 
             Position = r.ReadVector3();
             for (int i = 0; i < Neighbours.Length; i++)
@@ -127,11 +127,11 @@ namespace TruckLib.Model.Ppd
 
         public void Serialize(BinaryWriter w)
         {
-            w.Write(VisFlags.Bits);
-            w.Write(NavFlags.Bits);
+            w.Write(visFlags.Bits);
+            w.Write(navFlags.Bits);
             w.Write(Position);
 
-            foreach(var neighbour in Neighbours)
+            foreach (var neighbour in Neighbours)
             {
                 w.Write(neighbour);
             }

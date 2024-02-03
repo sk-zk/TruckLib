@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TruckLib.Model.Ppd.Lookup
 {
-    public sealed class PriorityModifier
+    public static class PriorityModifier
     {
         // Named presets from the Blender tools
 
@@ -17,6 +17,5 @@ namespace TruckLib.Model.Ppd.Lookup
         public static readonly byte MajorRoadLeft = 10;
         public static readonly byte MajorRoadRight = 11;
         public static readonly byte MajorRoadStraight = 12;
-
     }
 }

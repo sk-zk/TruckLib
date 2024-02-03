@@ -15,7 +15,7 @@ namespace TruckLib.Model.Ppd
     { 
         // is this a ref. we can resolve instead of
         // having an index?
-        public uint TerrainPointIdx { get; set; }
+        public uint TerrainPointIndex { get; set; }
 
         // and can we replace this with a property then?
         public uint TerrainPointCount { get; set; }
@@ -32,9 +32,9 @@ namespace TruckLib.Model.Ppd
 
         public int[] OutputLines { get; set; } = new int[8];
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
-            TerrainPointIdx = r.ReadUInt32();
+            TerrainPointIndex = r.ReadUInt32();
             TerrainPointCount = r.ReadUInt32();
 
             VariantIdx = r.ReadUInt32();
@@ -43,7 +43,7 @@ namespace TruckLib.Model.Ppd
             Position = r.ReadVector3();
             Direction = r.ReadVector3();
 
-            for(int i = 0; i < InputLines.Length; i++)
+            for (int i = 0; i < InputLines.Length; i++)
             {
                 InputLines[i] = r.ReadInt32();
             }

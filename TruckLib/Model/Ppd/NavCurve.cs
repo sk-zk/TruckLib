@@ -16,7 +16,7 @@ namespace TruckLib.Model.Ppd
     {
         public Token Name { get; set; }
 
-        public (byte EndNode, byte EndLane, byte StartNode, byte StartLane) LeadsToNodes;
+        public (byte EndNode, byte EndLane, byte StartNode, byte StartLane) LeadsToNodes { get; set; }
 
         public Vector3 StartPosition { get; set; }
 
@@ -42,12 +42,12 @@ namespace TruckLib.Model.Ppd
 
         public uint NewData1Id { get; set; }
 
-        protected FlagField Flags = new FlagField();
+        private FlagField flags = new();
 
         public BlinkerType Blinker
         {
-            get => (BlinkerType)Flags.GetBitString(2, 3);
-            set => Flags.SetBitString(2, 3, (uint)value);
+            get => (BlinkerType)flags.GetBitString(2, 3);
+            set => flags.SetBitString(2, 3, (uint)value);
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public AllowedVehicles AllowedVehicles
         {
-            get => (AllowedVehicles)Flags.GetBitString(5, 2);
-            set => Flags.SetBitString(5, 2, (uint)value);
+            get => (AllowedVehicles)flags.GetBitString(5, 2);
+            set => flags.SetBitString(5, 2, (uint)value);
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool LowProbability
         {
-            get => Flags[13];
-            set => Flags[13] = value;
+            get => flags[13];
+            set => flags[13] = value;
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool LimitDisplacement
         {
-            get => Flags[14];
-            set => Flags[14] = value;
+            get => flags[14];
+            set => flags[14] = value;
         }
 
         /// <summary>
@@ -86,25 +86,40 @@ namespace TruckLib.Model.Ppd
         /// </summary>
         public bool AdditivePriority
         {
-            get => Flags[15];
-            set => Flags[15] = value;
+            get => flags[15];
+            set => flags[15] = value;
         }
 
         public Nibble PriorityModifier
         {
-            get => (Nibble)Flags.GetBitString(16, 4);
-            set => Flags.SetBitString(16, 4, (uint)value);
+            get => (Nibble)flags.GetBitString(16, 4);
+            set => flags.SetBitString(16, 4, (uint)value);
         }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
+        {
+            switch (version)
+            {
+                case 0x15:
+                    Deserialize15(r);
+                    break;
+                case 0x16:
+                    Deserialize16to17(r);
+                    break;
+                case 0x17:
+                    Deserialize16to17(r);
+                    break;
+                default:
+                    throw new NotSupportedException($"Version {version} is not supported.");
+            }
+        }
+
+        public void Deserialize16to17(BinaryReader r) 
         {
             Name = r.ReadToken();
-            Flags = new FlagField(r.ReadUInt32());
+            flags = new FlagField(r.ReadUInt32());
 
-            LeadsToNodes.EndNode = r.ReadByte();
-            LeadsToNodes.EndLane = r.ReadByte();
-            LeadsToNodes.StartNode = r.ReadByte();
-            LeadsToNodes.StartLane = r.ReadByte();
+            LeadsToNodes = (r.ReadByte(), r.ReadByte(), r.ReadByte(), r.ReadByte());
 
             StartPosition = r.ReadVector3();
             EndPosition = r.ReadVector3();
@@ -134,10 +149,43 @@ namespace TruckLib.Model.Ppd
             NewData1Id = r.ReadUInt32();
         }
 
+        public void Deserialize15(BinaryReader r)
+        {
+            Name = r.ReadToken();
+            flags = new FlagField(r.ReadUInt32());
+
+            LeadsToNodes = (r.ReadByte(), r.ReadByte(), r.ReadByte(), r.ReadByte());
+
+            StartPosition = r.ReadVector3();
+            EndPosition = r.ReadVector3();
+
+            StartRotation = r.ReadQuaternion();
+            EndRotation = r.ReadQuaternion();
+
+            Length = r.ReadSingle();
+
+            for (int i = 0; i < NextLines.Length; i++)
+            {
+                NextLines[i] = r.ReadInt32();
+            }
+
+            for (int i = 0; i < PreviousLines.Length; i++)
+            {
+                PreviousLines[i] = r.ReadInt32();
+            }
+
+            CountNext = r.ReadUInt32();
+            CountPrevious = r.ReadUInt32();
+
+            SemaphoreId = r.ReadInt32();
+
+            TrafficRule = r.ReadToken();
+        }
+
+
         public void Serialize(BinaryWriter w)
         {
             throw new NotImplementedException();
         }
     }
 }
-

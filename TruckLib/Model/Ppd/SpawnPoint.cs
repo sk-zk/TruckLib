@@ -19,7 +19,7 @@ namespace TruckLib.Model.Ppd
 
         public SpawnPointType Type { get; set; }
 
-        public void Deserialize(BinaryReader r)
+        public void Deserialize(BinaryReader r, uint? version = null)
         {
             Position = r.ReadVector3();
             Rotation = r.ReadQuaternion();

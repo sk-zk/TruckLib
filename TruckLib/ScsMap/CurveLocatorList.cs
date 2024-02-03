@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Reperesents a list of <see cref="Gate.ActivationPoints">gate activation points.</see>.
+    /// Reperesents a list of <see cref="Curve.Locators">curve locator points</see>.
     /// Has a maximum size of 2.
     /// </summary>
     public class CurveLocatorList : IList<INode>
     {
         /// <summary>
-        /// The <see cref="Curve">Gate</see> item which parents these nodes.
+        /// The <see cref="Curve">Curve</see> item which parents these nodes.
         /// </summary>
         public Curve Parent { get; init; }
 
@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Instantiates an empty list.
         /// </summary>
-        /// <param name="parent">The <see cref="Gate">Gate</see> item which parents these models.</param>
+        /// <param name="parent">The <see cref="Gate">Curve</see> item which parents these models.</param>
         public CurveLocatorList(Curve parent)
         {
             Parent = parent;
@@ -48,6 +48,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public bool IsReadOnly => false;
 
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         /// <inheritdoc/>
         public void Add(INode item)
         {
@@ -59,6 +60,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Creates a locator node at the specified position and adds it to the end of the list.
         /// </summary>
+        /// <param name="position">The position of the node.</param>
+        /// <param name="rotation">The rotation of the node.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         public void Add(Vector3 position, Quaternion rotation)
         {
             if (list.Count >= MaxSize)
@@ -98,6 +102,7 @@ namespace TruckLib.ScsMap
             return list.IndexOf(item);
         }
 
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         /// <inheritdoc/>
         public void Insert(int index, INode item)
         {
@@ -112,7 +117,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="index">The zero-based index at which the object should be inserted.</param>
         /// <param name="position">The position of the node.</param>
-        /// <param name="trigger">The name of the trigger.</param>
+        /// <param name="rotation">The rotation of the node.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         public void Insert(int index, Vector3 position, Quaternion rotation)
         {
             if (list.Count >= MaxSize)

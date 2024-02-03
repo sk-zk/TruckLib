@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Reperesents a list of <see cref="Gate.ActivationPoints">gate activation points.</see>.
+    /// Reperesents a list of <see cref="Gate.ActivationPoints">gate activation points</see>.
     /// Has a maximum size of 2.
     /// </summary>
     public class GateActivationPointList : IList<GateActivationPoint>
@@ -48,6 +48,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public bool IsReadOnly => false;
 
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         /// <inheritdoc/>
         public void Add(GateActivationPoint item)
         {
@@ -62,6 +63,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="position">The position of the node.</param>
         /// <param name="trigger">The name of the trigger.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         public void Add(Vector3 position, string trigger)
         {
             if (list.Count >= MaxSize)
@@ -101,6 +103,7 @@ namespace TruckLib.ScsMap
             return list.IndexOf(item);
         }
 
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         /// <inheritdoc/>
         public void Insert(int index, GateActivationPoint item)
         {
@@ -116,6 +119,7 @@ namespace TruckLib.ScsMap
         /// <param name="index">The zero-based index at which the object should be inserted.</param>
         /// <param name="position">The position of the node.</param>
         /// <param name="trigger">The name of the trigger.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         public void Insert(int index, Vector3 position, string trigger)
         {
             if (list.Count >= MaxSize)

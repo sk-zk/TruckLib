@@ -7,11 +7,16 @@ using System.Text;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Base class for map items which define a path that is fully contained in one item rather than
-    /// forming a polyline.
+    /// Base class for map items which define a polyline or spline that is fully contained
+    /// in one item rather than being one piece of it.
     /// </summary>
-    public abstract class PathItem : MultiNodeItem
+    public abstract class PathItem : MapItem
     {
+        /// <summary>
+        /// The nodes of the item.
+        /// </summary>
+        public List<INode> Nodes { get; set; }
+
         protected PathItem() : base() { }
 
         internal PathItem(bool initFields) : base(initFields)
@@ -24,6 +29,17 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Nodes = new List<INode>(2);
+        }
+
+        /// <summary>
+        /// Base method for adding a new path item to the map.
+        /// </summary>
+        internal static T Add<T>(IItemContainer map, IList<Vector3> positions) where T : PathItem, new()
+        {
+            var item = new T();
+            item.CreateNodes(map, positions);
+            map.AddItem(item);
+            return item;
         }
 
         /// <summary>
@@ -60,10 +76,33 @@ namespace TruckLib.ScsMap
                 node.Move(node.Position + translation);
         }
 
-        /// <inheritdoc/>
-        protected override void CreateNodes(IItemContainer map, IList<Vector3> nodePositions)
+        /// <summary>
+        /// Creates map nodes for this item. 
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="positions">The positions of the nodes.</param>
+        protected void CreateNodes(IItemContainer map, IList<Vector3> positions)
         {
-            base.CreateNodes(map, nodePositions);
+            if (Nodes.Count != 0)
+            {
+                throw new InvalidOperationException("Map item already has nodes.");
+            }
+
+            // all nodes have the item as ForwardItem; 
+            // how the nodes connect is determined by their position in the list only
+            for (int i = 0; i < positions.Count; i++)
+            {
+                var node = map.AddNode(positions[i]);
+                if (i == 0)
+                {
+                    // one node has to have the red node flag.
+                    // without it, the item can't be deleted.
+                    node.IsRed = true;
+                }
+                node.ForwardItem = this;
+                Nodes.Add(node);
+            }
+
             SetNodeRotations();
         }
 
@@ -83,6 +122,15 @@ namespace TruckLib.ScsMap
                 var angle = MathEx.GetNodeAngle(vec);
                 Nodes[i].Rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0, 0); ;
             }
+        }
+
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes() => new List<INode>(Nodes);
+
+        /// <inheritdoc/>
+        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
+        {
+            ResolveNodeReferences(Nodes, allNodes);
         }
     }
 }

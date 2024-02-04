@@ -284,8 +284,8 @@ namespace TruckLib.ScsMap
         /// <param name="position">The position of node 0.</param>
         /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
         /// <returns>The newly created prefab.</returns>
-        public static Prefab Add(IItemContainer map, string unitName, PrefabDescriptor ppd,
-            Vector3 position, Quaternion? rotation = null)
+        public static Prefab Add(IItemContainer map, Vector3 position, string unitName,
+            PrefabDescriptor ppd, Quaternion? rotation = null)
         {
             return new PrefabCreator().FromPpd(map, unitName, ppd, position,
                 rotation ?? Quaternion.Identity);

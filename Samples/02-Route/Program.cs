@@ -16,7 +16,7 @@ namespace Route
         
         static void Main(string[] args)
         {            
-            var map = new Map("example");
+            var map = new Map("route");
             
             // read .csv
             var path = @"C:\Users\worker\Documents\dev\ets2\route.csv"; 

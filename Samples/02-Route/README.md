@@ -13,7 +13,7 @@
 * [gpxeditor](https://sourceforge.net/projects/gpxeditor/)
 
 ## convert "Decimal Degree - Lat,Long" to UTM and copy values to new .csv
-* [/Samples/02-Route/coordiniate_converter.xlsx]()
+* [/Samples/02-Route/coordiniate_converter.xlsx](https://github.com/gsus24/TruckLib/blob/route/Samples/02-Route/coordinate_converter.xlsx)
 
     # recalculate waypoints to relativ path
         = 1st -1st = 0
@@ -24,10 +24,10 @@
     
     # reduce number of waypoints, filter every 10th, reverse direction in y
 
-    * [/Samples/02-Route/route.csv]()
+    * [/Samples/02-Route/route.csv](https://github.com/gsus24/TruckLib/blob/route/Samples/02-Route/route.csv)
 
 ## run Route
-* [/Samples/02-Route/Program.cs]()
+* [/Samples/02-Route/Program.cs](https://github.com/gsus24/TruckLib/blob/route/Samples/02-Route/Program.cs)
 
 ## open map with ETS2 Editor, recalculate map, save
 

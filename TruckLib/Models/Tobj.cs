@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     /// <summary>
     /// Represents a texture object file.

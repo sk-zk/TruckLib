@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     // hi r/badcode
 

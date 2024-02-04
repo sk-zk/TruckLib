@@ -1,40 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace TruckLib.Model.Ppd
+namespace TruckLib.Models
 {
-    /// <summary>
-    /// Represents a point where a sign or other static models will be added at runtime.
-    /// </summary>
-    public class Sign : IBinarySerializable
+    public class Locator : IBinarySerializable
     {
         public Token Name { get; set; }
 
         public Vector3 Position { get; set; }
 
+        public float Scale { get; set; }
+
         public Quaternion Rotation { get; set; }
 
-        public Token Model { get; set; }
+        public int HookupOffset { get; set; }
 
-        public Token Part { get; set; }
+        public override string ToString()
+        {
+            return Name.String;
+        }
 
         public void Deserialize(BinaryReader r, uint? version = null)
         {
             Name = r.ReadToken();
             Position = r.ReadVector3();
+            Scale = r.ReadSingle();
             Rotation = r.ReadQuaternion();
-            Model = r.ReadToken();
-            Part = r.ReadToken();
+            HookupOffset = r.ReadInt32();
         }
 
         public void Serialize(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(Name);
+            w.Write(Position);
+            w.Write(Scale);
+            w.Write(Rotation);
+            w.Write(HookupOffset);
         }
     }
 }

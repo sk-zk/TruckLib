@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     public struct Triangle : IBinarySerializable
     {

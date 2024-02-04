@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
-    public class Part
+    public class Look
     {
         public Token Name { get; set; }
 
-        public List<Piece> Pieces { get; set; } = new List<Piece>();
+        public List<string> Materials { get; set; } = new List<string>();
 
-        public List<Locator> Locators { get; set; } = new List<Locator>();
-
-        public Part()
+        public Look()
         {
-            Name = "untitled";
         }
 
-        public Part(Token name)
+        public Look(Token name)
         {
             Name = name;
         }

@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.Model.Ppd
+namespace TruckLib.Models.Ppd
 {
     /// <summary>
     /// Represents an area that triggers an action, such as a rest area.

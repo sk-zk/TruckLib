@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.Model.Ppd
+namespace TruckLib.Models.Ppd
 {
     /// <summary>
     /// Represents a map point which is used to draw a representation 

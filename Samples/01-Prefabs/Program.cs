@@ -3,7 +3,7 @@ using System.IO;
 using System.Numerics;
 using TruckLib;
 using TruckLib.ScsMap;
-using TruckLib.Model.Ppd;
+using TruckLib.Models.Ppd;
 using TruckLib.HashFs;
 
 namespace Prefabs

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     public class PartAttribute
     {

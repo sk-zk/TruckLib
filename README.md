@@ -14,7 +14,7 @@ The main namespace of the library: classes for working with the map format.
 **TruckLib.Sii**:  
 Mostly complete de/serializer for SII and .mat files.
 
-**TruckLib.Model**:  
+**TruckLib.Models**:  
 Rudimentary support for binary model files (.pm\*), prefab descriptors (.ppd), and binary .tobj files.
 
 **TruckLib.HashFs**:  

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     public class Piece : IBinarySerializable
     {

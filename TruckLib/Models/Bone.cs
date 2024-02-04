@@ -4,7 +4,7 @@ using System.IO;
 using System.Numerics;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     public class Bone : IBinarySerializable
     {

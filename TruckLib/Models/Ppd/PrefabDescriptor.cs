@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.Model.Ppd
+namespace TruckLib.Models.Ppd
 {
     /// <summary>
     /// Represents a prefab descriptor (.ppd) file.
@@ -14,6 +14,8 @@ namespace TruckLib.Model.Ppd
     /// <remarks>This class supports ppd versions 21, 22 and 23.</remarks>
     public class PrefabDescriptor : IBinarySerializable
     {
+        public uint Version { get; private set; }
+
         public List<ControlNode> Nodes { get; set; } = new();
 
         public List<NavCurve> NavCurves { get; set; } = new ();
@@ -37,7 +39,6 @@ namespace TruckLib.Model.Ppd
         public List<Intersection> Intersections { get; set; } = new();
 
         public List<uint[]> Unknown { get; set; } = new();
-
 
         /// <summary>
         /// Reads a .ppd file from disk.
@@ -78,8 +79,8 @@ namespace TruckLib.Model.Ppd
         /// is not supported.</exception>
         public void Deserialize(BinaryReader r, uint? version = null)
         {
-            version = r.ReadUInt32();
-            switch (version)
+            Version = r.ReadUInt32();
+            switch (Version)
             {
                 case 0x15:
                     Deserialize15(r);

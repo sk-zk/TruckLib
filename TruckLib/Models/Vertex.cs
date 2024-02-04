@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Text;
 
-namespace TruckLib.Model
+namespace TruckLib.Models
 {
     public class Vertex
     {

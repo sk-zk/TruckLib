@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.Model.Ppd.Lookup
+namespace TruckLib.Models.Ppd.Lookup
 {
     public static class PriorityModifier
     {

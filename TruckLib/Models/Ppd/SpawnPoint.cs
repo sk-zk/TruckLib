@@ -1,44 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace TruckLib.Model
+namespace TruckLib.Models.Ppd
 {
-    public class Locator : IBinarySerializable
+    /// <summary>
+    /// Represents a locator for various activators and spawn points prefabs use.
+    /// </summary>
+    public class SpawnPoint : IBinarySerializable
     {
-        public Token Name { get; set; }
-
         public Vector3 Position { get; set; }
-
-        public float Scale { get; set; }
 
         public Quaternion Rotation { get; set; }
 
-        public int HookupOffset { get; set; }
-
-        public override string ToString()
-        {
-            return Name.String;
-        }
+        public SpawnPointType Type { get; set; }
 
         public void Deserialize(BinaryReader r, uint? version = null)
         {
-            Name = r.ReadToken();
             Position = r.ReadVector3();
-            Scale = r.ReadSingle();
             Rotation = r.ReadQuaternion();
-            HookupOffset = r.ReadInt32();
+            Type = (SpawnPointType)r.ReadUInt32();
         }
 
         public void Serialize(BinaryWriter w)
         {
-            w.Write(Name);
             w.Write(Position);
-            w.Write(Scale);
             w.Write(Rotation);
-            w.Write(HookupOffset);
+            w.Write((uint)Type);
         }
     }
 }

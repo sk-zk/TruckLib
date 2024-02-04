@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.Model.Ppd
+namespace TruckLib.Models.Ppd
 {
     /// <summary>
     /// Represents a navigation curve, used to define AI traffic paths and GPS navigation.

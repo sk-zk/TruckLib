@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using TruckLib.Model;
 using TruckLib.ScsMap;
 
 namespace TruckLibTests.TruckLib.ScsMap

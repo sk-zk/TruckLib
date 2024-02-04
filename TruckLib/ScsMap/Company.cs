@@ -6,7 +6,6 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using TruckLib.Model.Ppd;
 
 namespace TruckLib.ScsMap
 {

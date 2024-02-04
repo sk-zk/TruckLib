@@ -1,4 +1,6 @@
 items:
+  - name: Introduction
+    href: introduction.md
   - name: TruckLib.ScsMap
     href: TruckLib.ScsMap/toc.yml
   - name: TruckLib.HashFs

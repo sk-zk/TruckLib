@@ -19,7 +19,7 @@ namespace Route
             var map = new Map("example");
             
             // read .csv
-            var path = @"C:\Users\worker\Documents\dev\ets2\test.csv"; 
+            var path = @"C:\Users\worker\Documents\dev\ets2\route.csv"; 
             using (TextFieldParser csvParser = new TextFieldParser(path))
             {
                 // parser options

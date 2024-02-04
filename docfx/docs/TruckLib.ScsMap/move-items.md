@@ -24,7 +24,7 @@ since you are moving the whole item. To move only one of its nodes, call the met
 or [`ForwardNode`](xref:TruckLib.ScsMap.PolylineItem.ForwardNode) itself.
 
 * For [path items](xref:TruckLib.ScsMap.PathItem) such as [Movers](xref:TruckLib.ScsMap.Mover) and [polygon items](xref:TruckLib.ScsMap.PolygonItem)
-such as [Traffic Areas](xref:TruckLib.ScsMap.TrafficArea), the position given to `Move` will be applied to the 0th node, and the other nodes
+such as [Traffic Areas](xref:TruckLib.ScsMap.TrafficArea), the 0th node will be moved to the position given to `Move`, and the other nodes
 of the item will be translated relative to it. If you would like a different node to be the anchor of the `Move` method, use the
 overload `Move(Vector3, int)` to specify its index.
 

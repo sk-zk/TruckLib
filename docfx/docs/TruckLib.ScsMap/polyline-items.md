@@ -17,7 +17,7 @@ Road road2 = road1.Prepend(new Vector3(30, 0, 10));
 
 This will create a new Road item `road2` whose forward node is the backward node of `road1` and whose backward node is at (30, 0, 10).
 
-In both cases, if there is already an item attached in the direction you wish to extend, a `InvalidOperationException` is thrown.
+In both cases, if there is already an item attached in the direction you wish to extend, an `InvalidOperationException` is thrown.
 
 By default, the properties of item the method is called on are copied to the new item. If you would like it to have its default
 properties instead, set the optional parameter `cloneSettings` to `false`.
@@ -28,8 +28,8 @@ To connect two unconnected polyline items where one has a free forward node and 
 
 ```cs
 // Say you have the following two road items:
-var road1 = Road.Add(map, new Vector3(10, 0, 10), new Vector3(30, 0, 10), "ger1");
-var road2 = Road.Add(map, new Vector3(32, 0, 12), new Vector3(50, 0, 30), "ger1");
+Road road1 = Road.Add(map, new Vector3(10, 0, 10), new Vector3(30, 0, 10), "ger1");
+Road road2 = Road.Add(map, new Vector3(32, 0, 12), new Vector3(50, 0, 30), "ger1");
 
 // To connect the roads and keep the node at (30, 0, 10), do the following:
 road1.ForwardNode.Merge(road2.Node);

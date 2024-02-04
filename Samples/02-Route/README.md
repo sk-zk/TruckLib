@@ -15,14 +15,14 @@
 ## convert "Decimal Degree - Lat,Long" to UTM and copy values to new .csv
 * [/Samples/02-Route/coordiniate_converter.xlsx](https://github.com/gsus24/TruckLib/blob/route/Samples/02-Route/coordinate_converter.xlsx)
 
-    # recalculate waypoints to relativ path
+    recalculate waypoints to relativ path
         = 1st -1st = 0
         = 2nd - 1st = ...
         .
         .
         .
     
-    # reduce number of waypoints, filter every 10th, reverse direction in y
+    reduce number of waypoints, filter every 10th, reverse direction in y
 
     * [/Samples/02-Route/route.csv](https://github.com/gsus24/TruckLib/blob/route/Samples/02-Route/route.csv)
 

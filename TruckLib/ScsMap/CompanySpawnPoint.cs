@@ -36,5 +36,17 @@ namespace TruckLib.ScsMap
             Node = node;
             Flags = new FlagField(flags);
         }
+
+        /// <summary>
+        /// Instantiates a new CompanySpawnPoint.
+        /// </summary>
+        /// <param name="node">The node of the spawn point.</param>
+        /// <param name="type">The type of the spawn point.</param>
+        public CompanySpawnPoint(INode node, CompanySpawnPointType type)
+        {
+            Node = node;
+            Flags = new FlagField(0);
+            Type = type;
+        }
     }
 }

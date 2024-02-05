@@ -77,5 +77,13 @@ namespace TruckLib.ScsMap
             ResolveNodeReferences(Nodes, allNodes);
         }
 
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            var nodes = new List<INode>(Nodes.Count + 1) { Node };
+            nodes.AddRange(Nodes);
+            return nodes;
+        }
+
     }
 }

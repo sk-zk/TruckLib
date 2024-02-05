@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TruckLib.Models.Ppd;
 
 namespace TruckLib.ScsMap
 {
@@ -83,6 +84,14 @@ namespace TruckLib.ScsMap
         {
             base.UpdateNodeReferences(allNodes);
             ResolveNodeReferences(TrailerSpawnPoints, allNodes);
+        }
+
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            var nodes = new List<INode>(TrailerSpawnPoints.Count + 1) { Node };
+            nodes.AddRange(TrailerSpawnPoints);
+            return nodes;
         }
     }
 }

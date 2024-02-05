@@ -183,5 +183,23 @@ namespace TruckLibTests.TruckLib.ScsMap
             AssertEx.Equal(new Vector3(81.0938f, 0, 89.9648f), company.Node.Position, 0.01f);
             AssertEx.Equal(new(33.1367f, 0, 124.434f), company.SpawnPoints[0].Node.Position, 0.01f);
         }
+
+        [Fact]
+        public void DeleteCompany()
+        {
+            var ppd = PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
+            var map = new Map("foo");
+
+            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", ppd,
+                Quaternion.CreateFromYawPitchRoll((float)(90 * MathEx.DegToRad), 0, 0));
+
+            map.Delete(prefab);
+
+            Assert.False(map.MapItems.ContainsKey(prefab.Uid));
+            Assert.False(map.Nodes.ContainsKey(prefab.Nodes[0].Uid));
+            Assert.False(map.Nodes.ContainsKey(prefab.Nodes[1].Uid));
+            Assert.False(map.MapItems.ContainsKey(prefab.SlaveItems[0].Uid));
+            Assert.False(map.Nodes.ContainsKey((prefab.SlaveItems[0] as Company).SpawnPoints[0].Node.Uid));
+        }
     }
 }

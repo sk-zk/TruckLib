@@ -36,6 +36,8 @@ namespace TruckLibTests.TruckLib.ScsMap
                 AssertEx.Equal(expectedPositions[i], prefab.Nodes[i].Position, 0.001f);
                 AssertEx.Equal(expectedRotations[i], prefab.Nodes[i].Rotation, 0.001f);
                 Assert.Equal(i == 0, prefab.Nodes[i].IsRed);
+                Assert.Equal(prefab, prefab.Nodes[i].ForwardItem);
+                Assert.Null(prefab.Nodes[i].BackwardItem);
             }
         }
 
@@ -193,6 +195,27 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.False(map.Nodes.ContainsKey(prefab.Nodes[1].Uid));
             Assert.False(map.MapItems.ContainsKey(prefab.SlaveItems[0].Uid));
             Assert.False(map.Nodes.ContainsKey((prefab.SlaveItems[0] as Company).SpawnPoints[0].Node.Uid));
+        }
+
+        [Fact]
+        public void AppendRoad()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
+
+            var road = prefab.AppendRoad(map, 1, new Vector3(55, 0, 10), "blkw1");
+
+            Assert.True(map.MapItems.ContainsKey(road.Uid));
+            Assert.True(map.Nodes.ContainsKey(road.Node.Uid));
+            Assert.True(map.Nodes.ContainsKey(road.ForwardNode.Uid));
+            Assert.Equal(prefab.Nodes[1], road.Node);
+            Assert.True(road.Node.IsRed);
+            Assert.Equal(prefab, road.Node.BackwardItem);
+            Assert.Equal(road, road.Node.ForwardItem);
+            Assert.Equal(new Vector3(55, 0, 10), road.ForwardNode.Position);
+            AssertEx.Equal(new Quaternion(0, 0, 0, -1), road.Node.Rotation, 0.01f);
+            AssertEx.Equal(new Quaternion(0, 0.263698f, 0, 0.964605f), road.ForwardNode.Rotation, 0.01f);
         }
     }
 }

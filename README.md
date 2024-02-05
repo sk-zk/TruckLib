@@ -48,11 +48,6 @@ for it. You'll find a link to it here soon™.
   coordinates are not known to it. Moving a locator node or a curve node which is tethered to a locator node will also cause issues.
   The editor will fix both of these once a curve node is moved or the properties dialog of the curve is closed.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
- 
-## Dependencies
-* [Ionic.Zlib](https://www.nuget.org/packages/Iconic.Zlib.Netstandard/)
-* [Microsoft.CSharp](https://www.nuget.org/packages/Microsoft.CSharp/)
-* [System.Numerics.Vectors](https://www.nuget.org/packages/System.Numerics.Vectors/)
 
 ## License
 TruckLib is licensed under GPL v2 except for `CityHash.cs`.

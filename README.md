@@ -45,7 +45,7 @@ for it. You'll find a link to it here soon™.
 * When adding a camera path, the positions of the control points in the Keyframe objects are not set to any default values
   and therefore left at (0, 0, 0).
 * Helper locators of curve items, if used by the model, are not placed automatically by the library because their 
-  coordinates are not known to it. Moving a locator node or a curve node which is tetherd to a locator node will also cause issues.
+  coordinates are not known to it. Moving a locator node or a curve node which is tethered to a locator node will also cause issues.
   The editor will fix both of these once a curve node is moved or the properties dialog of the curve is closed.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
  

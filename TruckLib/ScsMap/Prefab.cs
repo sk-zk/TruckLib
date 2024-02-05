@@ -292,7 +292,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Appends a new road segment to a prefab.
+        /// Appends a new road segment to a node of this prefab.
+        /// <remarks>If the node is the origin node, it will be prepended instead.</remarks>
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="node">The index of the prefab node to attach to.</param>
@@ -307,32 +308,28 @@ namespace TruckLib.ScsMap
             if (node > Nodes.Count)
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
-            INode backwardNode;
-            INode forwardNode;
-
             // if the node to attach to is the origin node,
             // the road has to be *prepended* instead
-            var prepend = (node == 0);
-            if (prepend)
-            {
-                backwardNode = map.AddNode(forwardPos);
-                forwardNode = Nodes[node];
-            }
-            else
-            {
-                backwardNode = Nodes[node];
-                forwardNode = map.AddNode(forwardPos);
-            }
+            var prepend = node == Origin;
+
+            if (prepend && Nodes[node].ForwardItem is not null)
+                throw new InvalidOperationException("Can't prepend to this node: there is already an item attached to it.");
+            else if (!prepend && Nodes[node].BackwardItem is not null)
+                throw new InvalidOperationException("Can't append to this node: there is already an item attached to it.");
+
+            var backwardNode = prepend ? map.AddNode(forwardPos) : Nodes[node];
+            var forwardNode = prepend ? Nodes[node] : map.AddNode(forwardPos);
          
             var road = new Road
             {
                 Node = backwardNode,
                 ForwardNode = forwardNode
             };
-            road.Node.ForwardItem = road;
-            road.ForwardNode.BackwardItem = road;
+            backwardNode.ForwardItem = road;
+            forwardNode.BackwardItem = road;
             road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type,
                 leftTerrainSize, rightTerrainSize);
+            backwardNode.IsRed = true;
             map.AddItem(road);
             
             // nodes of a prefab that have nothing attached to it
@@ -347,16 +344,11 @@ namespace TruckLib.ScsMap
             }
             else
             {
-                backwardNode.Rotation = (backwardNode.Rotation.IsIdentity)
-                    ? Quaternion.CreateFromAxisAngle(Vector3.UnitY, -3.14159265f)
-                    : backwardNode.Rotation * Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
+                backwardNode.Rotation *= Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
-            }          
+            }
 
             road.Recalculate();
-            
-            backwardNode.IsRed = true;
-            
             return road;
         }
 

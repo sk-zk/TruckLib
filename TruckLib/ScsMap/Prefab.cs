@@ -349,7 +349,7 @@ namespace TruckLib.ScsMap
             {
                 backwardNode.Rotation = (backwardNode.Rotation.IsIdentity)
                     ? Quaternion.CreateFromAxisAngle(Vector3.UnitY, -3.14159265f)
-                    : Quaternion.Inverse(backwardNode.Rotation);
+                    : backwardNode.Rotation * Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
             }          
 

@@ -39,9 +39,9 @@ namespace Prefabs
             var companyRot = Quaternion.CreateFromYawPitchRoll(1.5708f, 0, 0); // 90°
 
             var company = Prefab.Add(map,
-                companyPos,         // position of node 0     
-                "dlc_fr_14",        // Unit name 
-                companyDescriptor,  // .ppd       
+                companyPos,         // position of node 0
+                "dlc_fr_14",        // Unit name
+                companyDescriptor,  // .ppd
                 companyRot          // optional: rotation
                 );
             company.Variant = "bhv_fr";
@@ -55,7 +55,8 @@ namespace Prefabs
 
             var crossingPos = companyPos;
 
-            var crossing = Prefab.Add(map, crossingPos, "387", crossingDescriptor);
+            var crossing = Prefab.Add(map, crossingPos, "387", crossingDescriptor,
+                Quaternion.CreateFromYawPitchRoll(-1.5708f, 0, 0));
             crossing.Variant = "shoul_fr_1";
             crossing.Look = "gray_fr";
 

@@ -217,5 +217,17 @@ namespace TruckLibTests.TruckLib.ScsMap
             AssertEx.Equal(new Quaternion(0, 0, 0, -1), road.Node.Rotation, 0.01f);
             AssertEx.Equal(new Quaternion(0, 0.263698f, 0, 0.964605f), road.ForwardNode.Rotation, 0.01f);
         }
+
+        [Fact]
+        public void AppendRoadThrowsIfNodeNotFree()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
+
+            var road = prefab.AppendRoad(map, 1, new Vector3(55, 0, 10), "blkw1");
+            Assert.Throws<InvalidOperationException>(() => 
+                prefab.AppendRoad(map, 1, new Vector3(69, 0, 69), "blkw1"));
+        }
     }
 }

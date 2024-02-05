@@ -132,9 +132,9 @@ namespace TruckLib
         public static Vector3 ToEulerDeg(this Quaternion q)
         {
             var euler = q.ToEuler();
-            euler.X = (float)(euler.X * MathEx.RadToDeg);
-            euler.Y = (float)(euler.Y * MathEx.RadToDeg);
-            euler.Z = (float)(euler.Z * MathEx.RadToDeg);
+            euler.X = MathEx.Deg(euler.X);
+            euler.Y = MathEx.Deg(euler.Y);
+            euler.Z = MathEx.Deg(euler.Z);
             return euler;
         }
 

@@ -9,15 +9,12 @@ namespace TruckLib
 {
     internal static class MathEx
     {
-        /// <summary>
-        /// Factor for converting radians to degrees.
-        /// </summary>
-        public const double RadToDeg = 180.0 / Math.PI;
 
-        /// <summary>
-        /// Factor for converting degrees to radians.
-        /// </summary>
-        public const double DegToRad = Math.PI / 180.0;
+        public static double Deg(double rad) => rad * (180.0 / Math.PI);
+        public static float Deg(float rad) => (float)(rad * (180.0 / Math.PI));
+
+        public static double Rad(double deg) => deg * (Math.PI / 180.0);
+        public static float Rad(float deg) => (float)(deg * (Math.PI / 180.0));
 
         /// <summary>
         /// Returns the yaw of the angle between (b - a) and the Z axis as a quaternion.

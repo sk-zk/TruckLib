@@ -63,7 +63,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             compound.Move(new Vector3(-10, -20, -30));
 
             Assert.Equal(new Vector3(0, -20, -20), model.Node.Position);
-
             Assert.Equal(new Vector3(-10, -20, -30), compound.Node.Position);
         }
 

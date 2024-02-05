@@ -12,13 +12,16 @@ namespace TruckLibTests.TruckLib.ScsMap
 {
     public class PrefabTest
     {
+        PrefabDescriptor crossingPpd =
+            PrefabDescriptor.Open("Data/PrefabTest/blkw_r1_x_r1_narrow_tmpl.ppd");
+        PrefabDescriptor companyPpd = 
+            PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
+
         [Fact]
         public void AddCrossing()
         {
-            var ppd = PrefabDescriptor.Open("Data/PrefabTest/blkw_r1_x_r1_narrow_tmpl.ppd");
             var map = new Map("foo");
-
-            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", ppd);
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
 
             var expectedPositions = new Vector3[] {
                 new(50, 0, 50), new(32, 0, 32), new(50, 0, 14), new(68, 0, 32)
@@ -39,11 +42,9 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void AddCrossingRotated()
         {
-            var ppd = PrefabDescriptor.Open("Data/PrefabTest/blkw_r1_x_r1_narrow_tmpl.ppd");
             var map = new Map("foo");
-
-            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", ppd, 
-                Quaternion.CreateFromYawPitchRoll((float)(-90 * MathEx.DegToRad), 0, 0));
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd, 
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
             var expectedPositions = new Vector3[] {
                 new(50, 0, 50), new(68, 0, 32), new(86, 0, 50), new(68, 0, 68)
@@ -64,10 +65,8 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void AddCompany()
         {
-            var ppd = PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
             var map = new Map("foo");
-
-            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", ppd);
+            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", companyPpd);
 
             // test prefab item
             var expectedPositions = new Vector3[] {
@@ -115,11 +114,9 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void AddCompanyRotated()
         {
-            var ppd = PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
             var map = new Map("foo");
-
-            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", ppd,
-                Quaternion.CreateFromYawPitchRoll((float)(90 * MathEx.DegToRad), 0, 0));
+            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", companyPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(90f), 0, 0));
 
             // test prefab item
             var expectedPositions = new Vector3[] {
@@ -167,11 +164,9 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void MoveCompany()
         {
-            var ppd = PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
             var map = new Map("foo");
-
-            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", ppd,
-                Quaternion.CreateFromYawPitchRoll((float)(90 * MathEx.DegToRad), 0, 0));
+            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", companyPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(90f), 0, 0));
 
             prefab.Move(new Vector3(90, 0, 90));
 
@@ -187,11 +182,9 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void DeleteCompany()
         {
-            var ppd = PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
             var map = new Map("foo");
-
-            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", ppd,
-                Quaternion.CreateFromYawPitchRoll((float)(90 * MathEx.DegToRad), 0, 0));
+            var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", companyPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(90f), 0, 0));
 
             map.Delete(prefab);
 

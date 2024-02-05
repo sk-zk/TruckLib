@@ -115,30 +115,39 @@ namespace TruckLib.ScsMap
         /// </summary>
         private void CreateCompany()
         {
-            // create company item
             var company = CreateSlaveItem<Company>(SpawnPointType.CompanyPoint);
 
-            // create spawn point nodes
-            company.SpawnPoints.AddRange(
-                CreateSpawnPointNodes(company, SpawnPointType.UnloadEasy)
-                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.UnloadEasy))
-                .ToList());
-            company.SpawnPoints.AddRange(
-                CreateSpawnPointNodes(company, SpawnPointType.UnloadMedium)
-                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.UnloadMedium))
-                .ToList());
-            company.SpawnPoints.AddRange(
-                CreateSpawnPointNodes(company, SpawnPointType.UnloadHard)
-                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.UnloadHard))
-                .ToList());
-            company.SpawnPoints.AddRange(
-                CreateSpawnPointNodes(company, SpawnPointType.Trailer)
-                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.Trailer))
-                .ToList());
-            company.SpawnPoints.AddRange(
-                CreateSpawnPointNodes(company, SpawnPointType.LongTrailer)
-                .Select(x => new CompanySpawnPoint(x, (uint)CompanySpawnPointType.Trailer))
-                .ToList());
+            for (int i = 0; i < clonedPoints.Count; i++)
+            {
+                switch (clonedPoints[i].Type)
+                {
+                    case SpawnPointType.UnloadEasy:
+                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadEasy);
+                        break;
+                    case SpawnPointType.UnloadMedium:
+                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadMedium);
+                        break;
+                    case SpawnPointType.UnloadHard:
+                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadHard);
+                        break;
+                    case SpawnPointType.Trailer:
+                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.Trailer);
+                        break;
+                    case SpawnPointType.LongTrailer:
+                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.Trailer);
+                        break;
+                }
+            }
+
+            int CreateCompanySpawnPoint(Company company, int i, CompanySpawnPointType type)
+            {
+                var node = CreateSpawnPointNode(company, clonedPoints[i]);
+                var spawnPointStruct = new CompanySpawnPoint(node, type);
+                company.SpawnPoints.Add(spawnPointStruct);
+                clonedPoints.RemoveAt(i);
+                i--;
+                return i;
+            }
         }
 
         private void CreateGarage()
@@ -214,20 +223,21 @@ namespace TruckLib.ScsMap
         {
             var selected = clonedPoints.Where(x => x.Type == spawnPointType).ToList();
             var list = new List<INode>(selected.Count);
-            foreach (var spawnPoint in selected)
-            {
-                var spawnPos = GetAbsolutePosition(spawnPoint.Position);
-                var spawnNode = map.AddNode(spawnPos, false);
-                spawnNode.Rotation = Quaternion.Normalize(
-                    spawnPoint.Rotation * prefabRot);
-                spawnNode.ForwardItem = item;
-                list.Add(spawnNode);
-            }
             for (int i = 0; i < selected.Count; i++)
             {
+                list.Add(CreateSpawnPointNode(item, selected[i]));
                 clonedPoints.Remove(selected[i]);
             }
             return list;
+        }
+
+        private Node CreateSpawnPointNode(PrefabSlaveItem item, SpawnPoint spawnPoint)
+        {
+            var spawnPos = GetAbsolutePosition(spawnPoint.Position);
+            var spawnNode = map.AddNode(spawnPos, false);
+            spawnNode.Rotation = new Quaternion(0, 1 ,0, 0) * spawnPoint.Rotation * prefabRot;
+            spawnNode.ForwardItem = item;
+            return spawnNode;
         }
 
         /// <summary>

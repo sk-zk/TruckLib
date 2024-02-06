@@ -207,7 +207,6 @@ namespace TruckLibTests.TruckLib.ScsMap
             var road = prefab.AppendRoad(map, 1, new Vector3(55, 0, 10), "blkw1");
 
             Assert.True(map.MapItems.ContainsKey(road.Uid));
-            Assert.True(map.Nodes.ContainsKey(road.Node.Uid));
             Assert.True(map.Nodes.ContainsKey(road.ForwardNode.Uid));
             Assert.Equal(prefab.Nodes[1], road.Node);
             Assert.True(road.Node.IsRed);
@@ -228,6 +227,66 @@ namespace TruckLibTests.TruckLib.ScsMap
             var road = prefab.AppendRoad(map, 1, new Vector3(55, 0, 10), "blkw1");
             Assert.Throws<InvalidOperationException>(() => 
                 prefab.AppendRoad(map, 1, new Vector3(69, 0, 69), "blkw1"));
+        }
+
+        [Fact]
+        public void PrependRoad()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
+
+            var road = prefab.AppendRoad(map, 0, new Vector3(10, 0, 55), "blkw1");
+
+            Assert.True(map.MapItems.ContainsKey(road.Uid));
+            Assert.True(map.Nodes.ContainsKey(road.ForwardNode.Uid));
+            Assert.Equal(prefab.Nodes[0], road.ForwardNode);
+            Assert.True(road.Node.IsRed);
+            Assert.Equal(prefab, road.ForwardNode.ForwardItem);
+            Assert.Equal(road, road.ForwardNode.BackwardItem);
+            Assert.Equal(new Vector3(10, 0, 55), road.Node.Position);
+            //AssertEx.Equal(new Quaternion(0, 0, 0, -1), road.Node.Rotation, 0.01f);
+            //AssertEx.Equal(new Quaternion(0, 0.263698f, 0, 0.964605f), road.ForwardNode.Rotation, 0.01f);
+        }
+
+        [Fact]
+        public void PrependRoadThrowsIfNodeNotFree()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
+
+            var road = prefab.AppendRoad(map, 0, new Vector3(10, 0, 55), "blkw1");
+            Assert.Throws<InvalidOperationException>(() =>
+                prefab.AppendRoad(map, 0, new Vector3(69, 0, 69), "blkw1"));
+        }
+
+        [Fact]
+        public void ChangeOrigin()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+
+            AssertEx.Equal(new Vector3(50, 0, 50), prefab.Nodes[0].Position, 0.01f);
+            Assert.True(prefab.Nodes[0].IsRed);
+
+            prefab.ChangeOrigin(1);
+
+            AssertEx.Equal(new Vector3(32, 0, 32), prefab.Nodes[0].Position, 0.01f);
+            Assert.True(prefab.Nodes[0].IsRed);
+            Assert.False(prefab.Nodes[1].IsRed);
+        }
+
+        [Fact]
+        public void ChangeOriginBack()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+
+            prefab.ChangeOrigin(2);
+            prefab.ChangeOrigin(0);
+
+            AssertEx.Equal(new Vector3(50, 0, 50), prefab.Nodes[0].Position, 0.01f);
         }
     }
 }

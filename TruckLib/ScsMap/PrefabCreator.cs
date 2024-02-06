@@ -22,7 +22,7 @@ namespace TruckLib.ScsMap
         private Prefab prefab;
         private List<SpawnPoint> clonedPoints;
 
-        public Prefab FromPpd(IItemContainer map, string unitName, PrefabDescriptor ppd,
+        public Prefab FromPpd(IItemContainer map, Token unitName, PrefabDescriptor ppd,
             Vector3 position, Quaternion rotation)
         {
             this.map = map;
@@ -36,10 +36,7 @@ namespace TruckLib.ScsMap
             this.inherentRot = GetNodeRotation(ppd.Nodes[0].Direction);
             this.prefabRot = Quaternion.Inverse(inherentRot) * rotation;
 
-            prefab = new Prefab
-            {
-                Model = unitName,
-            };
+            prefab = new Prefab { Model = unitName };
 
             CreateMapNodes();
 

@@ -8,12 +8,16 @@ using System.Numerics;
 using Newtonsoft.Json.Bson;
 using TruckLib.Models.Ppd;
 
-namespace TruckLibTests.TruckLib.ScsMap
-{
+namespace TruckLibTests.TruckLib.ScsMap {
+
+    [Collection("Prefab collection")]
     public class NodeTest
     {
-        PrefabDescriptor crossingPpd =
-            PrefabDescriptor.Open("Data/PrefabTest/blkw_r1_x_r1_narrow_tmpl.ppd");
+        PrefabFixture fixture;
+        public NodeTest(PrefabFixture fixture)
+        {
+            this.fixture = fixture;
+        }
 
         [Fact]
         public void Construct()
@@ -103,7 +107,7 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void MergeRoadBwNodeIntoPrefab()
         {
             var map = new Map("foo");
-            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var road = Road.Add(map, new Vector3(30, 0, 30), new Vector3(10, 0, 30), "blkw1");
 
             prefab.Nodes[1].Merge(road.Node);
@@ -119,7 +123,7 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void MergeRoadFwNodeIntoPrefabOrigin()
         {
             var map = new Map("foo");
-            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var road = Road.Add(map, new Vector3(50, 0, 70), new Vector3(55, 0, 55), "blkw1");
 
             prefab.Nodes[0].Merge(road.ForwardNode);
@@ -135,7 +139,7 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void MergeRoadFwNodeIntoPrefab()
         {
             var map = new Map("foo");
-            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var road = Road.Add(map, new Vector3(80, 0, 32), new Vector3(70, 0, 35), "blkw1");
 
             prefab.Nodes[3].Merge(road.ForwardNode);
@@ -151,7 +155,7 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void MergeRoadBwNodeIntoPrefabOriginThrows()
         {
             var map = new Map("foo");
-            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var road = Road.Add(map, new Vector3(55, 0, 55), new Vector3(50, 0, 70), "blkw1");
 
             Assert.Throws<InvalidOperationException>(() => prefab.Nodes[0].Merge(road.Node));

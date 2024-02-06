@@ -295,7 +295,6 @@ namespace TruckLib.ScsMap
         /// Appends a new road segment to a node of this prefab.
         /// <remarks>If the node is the origin node, it will be prepended instead.</remarks>
         /// </summary>
-        /// <param name="map">The map.</param>
         /// <param name="node">The index of the prefab node 
         /// (in <see cref="Nodes"/>, not the .ppd file) to attach to.</param>
         /// <param name="forwardPos">The position of the road's forward node.</param>
@@ -303,8 +302,8 @@ namespace TruckLib.ScsMap
         /// <param name="leftTerrainSize">The left terrain size.</param>
         /// <param name="rightTerrainSize">The right terrain size.</param>
         /// <returns>The newly created road.</returns>
-        public Road AppendRoad(IItemContainer map, ushort node, Vector3 forwardPos,
-            Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
+        public Road AppendRoad(ushort node, Vector3 forwardPos, Token type,
+            float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
             if (node > Nodes.Count)
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
@@ -318,8 +317,9 @@ namespace TruckLib.ScsMap
             else if (!prepend && Nodes[node].BackwardItem is not null)
                 throw new InvalidOperationException("Can't append to this node: there is already an item attached to it.");
 
-            var backwardNode = prepend ? map.AddNode(forwardPos) : Nodes[node];
-            var forwardNode = prepend ? Nodes[node] : map.AddNode(forwardPos);
+            var theNewNode = Nodes[0].Parent.AddNode(forwardPos);
+            var backwardNode = prepend ? theNewNode : Nodes[node];
+            var forwardNode = prepend ? Nodes[node] : theNewNode;
          
             var road = new Road
             {
@@ -331,7 +331,7 @@ namespace TruckLib.ScsMap
             road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type,
                 leftTerrainSize, rightTerrainSize);
             backwardNode.IsRed = true;
-            map.AddItem(road);
+            Nodes[0].Parent.AddItem(road);
             
             // nodes of a prefab that have nothing attached to it
             // always have the prefab as ForwardItem, but they will be

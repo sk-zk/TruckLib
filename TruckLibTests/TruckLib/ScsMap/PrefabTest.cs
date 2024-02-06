@@ -204,7 +204,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
-            var road = prefab.AppendRoad(map, 1, new Vector3(55, 0, 10), "blkw1");
+            var road = prefab.AppendRoad(1, new Vector3(55, 0, 10), "blkw1");
 
             Assert.True(map.MapItems.ContainsKey(road.Uid));
             Assert.True(map.Nodes.ContainsKey(road.ForwardNode.Uid));
@@ -224,9 +224,9 @@ namespace TruckLibTests.TruckLib.ScsMap
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
-            var road = prefab.AppendRoad(map, 1, new Vector3(55, 0, 10), "blkw1");
+            var road = prefab.AppendRoad(1, new Vector3(55, 0, 10), "blkw1");
             Assert.Throws<InvalidOperationException>(() => 
-                prefab.AppendRoad(map, 1, new Vector3(69, 0, 69), "blkw1"));
+                prefab.AppendRoad(1, new Vector3(69, 0, 69), "blkw1"));
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
-            var road = prefab.AppendRoad(map, 0, new Vector3(10, 0, 55), "blkw1");
+            var road = prefab.AppendRoad(0, new Vector3(10, 0, 55), "blkw1");
 
             Assert.True(map.MapItems.ContainsKey(road.Uid));
             Assert.True(map.Nodes.ContainsKey(road.ForwardNode.Uid));
@@ -256,9 +256,9 @@ namespace TruckLibTests.TruckLib.ScsMap
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
-            var road = prefab.AppendRoad(map, 0, new Vector3(10, 0, 55), "blkw1");
+            var road = prefab.AppendRoad(0, new Vector3(10, 0, 55), "blkw1");
             Assert.Throws<InvalidOperationException>(() =>
-                prefab.AppendRoad(map, 0, new Vector3(69, 0, 69), "blkw1"));
+                prefab.AppendRoad(0, new Vector3(69, 0, 69), "blkw1"));
         }
 
         [Fact]
@@ -295,7 +295,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var map = new Map("foo");
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
 
-            prefab.AppendRoad(map, 2, new Vector3(10, 0, 10), "ger1");
+            prefab.AppendRoad(2, new Vector3(10, 0, 10), "ger1");
             Assert.Throws<InvalidOperationException>(() => prefab.ChangeOrigin(2));
         }
     }

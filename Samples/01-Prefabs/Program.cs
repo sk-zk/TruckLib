@@ -71,7 +71,7 @@ namespace Prefabs
 
             // 3)
             // Finally, let's connect the other ends of the prefab with a road.
-            var road = crossing.AppendRoad(map, 1, new Vector3(100, 0, 88), "ger1")
+            var road = crossing.AppendRoad(1, new Vector3(100, 0, 88), "ger1")
                 .Append(new Vector3(100, 0, 52))
                 .Append(crossing.Nodes[0].Position);
             crossing.Attach(road);

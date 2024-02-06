@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.IO;
 using System.Collections;
+using System.Xml.Linq;
 
 namespace TruckLib.ScsMap
 {
@@ -194,7 +195,7 @@ namespace TruckLib.ScsMap
             {
                 throw new InvalidOperationException("Unable to merge: both nodes have a backward item");
             }
-            else if (ForwardItem is not null && n2.ForwardItem is not null)
+            else if (ForwardItem is not null && ForwardItem is not Prefab && n2.ForwardItem is not null)
             {
                 throw new InvalidOperationException("Unable to merge: both nodes have a forward item");
             }
@@ -214,6 +215,27 @@ namespace TruckLib.ScsMap
                 var item = n2.BackwardItem as PolylineItem;
                 BackwardItem = item;
                 item.ForwardNode = this;
+                if (ForwardItem is not Prefab)
+                    item.Recalculate();
+                n2.ForwardItem = null;
+                n2.BackwardItem = null;
+                n2.Parent.Delete(n2);
+            }
+            // attach backward node of polyline item to non-origin prefab node
+            else if (ForwardItem is Prefab && n2.ForwardItem is PolylineItem)
+            {
+                var item = n2.ForwardItem as PolylineItem;
+                var prefab = ForwardItem as Prefab;
+                if (IsRed)
+                {
+                    throw new InvalidOperationException("Unable to merge: can't connect the backward node " +
+                        "of a polyline item with the origin node of a prefab");
+                }
+                item.Node = this;
+                Rotation = Quaternion.Inverse(Rotation);
+                BackwardItem = prefab;
+                ForwardItem = item;
+                IsRed = true;
                 item.Recalculate();
                 n2.ForwardItem = null;
                 n2.BackwardItem = null;

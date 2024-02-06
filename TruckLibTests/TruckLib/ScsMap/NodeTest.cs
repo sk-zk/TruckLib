@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using TruckLib.ScsMap;
 using System.Numerics;
 using Newtonsoft.Json.Bson;
+using TruckLib.Models.Ppd;
 
 namespace TruckLibTests.TruckLib.ScsMap
 {
     public class NodeTest
     {
+        PrefabDescriptor crossingPpd =
+            PrefabDescriptor.Open("Data/PrefabTest/blkw_r1_x_r1_narrow_tmpl.ppd");
+
         [Fact]
         public void Construct()
         {
@@ -93,6 +97,64 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Equal(node2, curve2.Node);
             Assert.False(node2.IsRed);
             Assert.True(node2.IsCurveLocator);
+        }
+
+        [Fact]
+        public void MergeRoadBwNodeIntoPrefab()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var road = Road.Add(map, new Vector3(30, 0, 30), new Vector3(10, 0, 30), "blkw1");
+
+            prefab.Nodes[1].Merge(road.Node);
+
+            Assert.Equal(road.Node, prefab.Nodes[1]);
+            Assert.Equal(prefab, road.Node.BackwardItem);
+            Assert.Equal(road, road.Node.ForwardItem);
+            AssertEx.Equal(new Quaternion(0, -0.707107f, 0, -0.707107f), road.Node.Rotation, 0.01f);
+            Assert.True(road.Node.IsRed);
+        }
+
+        [Fact]
+        public void MergeRoadFwNodeIntoPrefabOrigin()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var road = Road.Add(map, new Vector3(50, 0, 70), new Vector3(55, 0, 55), "blkw1");
+
+            prefab.Nodes[0].Merge(road.ForwardNode);
+
+            Assert.Equal(road.ForwardNode, prefab.Nodes[0]);
+            Assert.Equal(prefab, road.ForwardNode.ForwardItem);
+            Assert.Equal(road, road.ForwardNode.BackwardItem);
+            AssertEx.Equal(Quaternion.Identity, road.ForwardNode.Rotation, 0.01f);
+            Assert.True(road.Node.IsRed);
+        }
+
+        [Fact]
+        public void MergeRoadFwNodeIntoPrefab()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var road = Road.Add(map, new Vector3(80, 0, 32), new Vector3(70, 0, 35), "blkw1");
+
+            prefab.Nodes[3].Merge(road.ForwardNode);
+
+            Assert.Equal(road.ForwardNode, prefab.Nodes[3]);
+            Assert.Equal(prefab, road.ForwardNode.ForwardItem);
+            Assert.Equal(road, road.ForwardNode.BackwardItem);
+            AssertEx.Equal(new Quaternion(0, 0.707107f, 0, 0.707107f), road.ForwardNode.Rotation, 0.01f);
+            Assert.True(road.Node.IsRed);
+        }
+
+        [Fact]
+        public void MergeRoadBwNodeIntoPrefabOriginThrows()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+            var road = Road.Add(map, new Vector3(55, 0, 55), new Vector3(50, 0, 70), "blkw1");
+
+            Assert.Throws<InvalidOperationException>(() => prefab.Nodes[0].Merge(road.Node));
         }
     }
 }

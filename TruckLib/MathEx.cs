@@ -80,5 +80,10 @@ namespace TruckLib
             return a - b * Math.Floor(a / b);
         }
 
+        public static int Mod(int a, int b)
+        {
+            return a - b * (int)Math.Floor((double)a / b);
+        }
+
     }
 }

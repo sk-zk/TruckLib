@@ -52,14 +52,14 @@ namespace TruckLib.ScsMap
         public Token Look { get; set; }
 
         /// <summary>
-        /// The map nodes of this prefab.
+        /// The map nodes of this prefab. The origin node will always be the first entry in this list.
         /// </summary>
         public List<INode> Nodes { get; set; }
 
         /// <summary>
         /// The index of the origin node.
         /// <para>This defines which of the ppd nodes is the origin node.
-        /// It is not an index for the <see cref="Prefab.Nodes">Nodes</see> property,
+        /// It is not an index for the <see cref="Nodes">Nodes</see> property,
         /// as the origin node is always the first node in that list.</para>
         /// </summary>
         public ushort Origin { get; internal set; }
@@ -296,7 +296,8 @@ namespace TruckLib.ScsMap
         /// <remarks>If the node is the origin node, it will be prepended instead.</remarks>
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="node">The index of the prefab node to attach to.</param>
+        /// <param name="node">The index of the prefab node 
+        /// (in <see cref="Nodes"/>, not the .ppd file) to attach to.</param>
         /// <param name="forwardPos">The position of the road's forward node.</param>
         /// <param name="type">The unit name of the road.</param>
         /// <param name="leftTerrainSize">The left terrain size.</param>
@@ -310,9 +311,9 @@ namespace TruckLib.ScsMap
 
             // if the node to attach to is the origin node,
             // the road has to be *prepended* instead
-            var prepend = node == Origin;
+            var prepend = node == 0;
 
-            if (prepend && Nodes[node].ForwardItem is not null)
+            if (prepend && Nodes[node].BackwardItem is not null)
                 throw new InvalidOperationException("Can't prepend to this node: there is already an item attached to it.");
             else if (!prepend && Nodes[node].BackwardItem is not null)
                 throw new InvalidOperationException("Can't append to this node: there is already an item attached to it.");
@@ -501,19 +502,18 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Changes the origin of the prefab.
         /// </summary>
-        /// <param name="newOrigin">The index of the new origin.</param>
+        /// <param name="newOrigin">The index (in the ppd file, not <see cref="Nodes"/> of the new origin.</param>
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void ChangeOrigin(ushort newOrigin)
         {
             if (newOrigin > Nodes.Count)
                 throw new IndexOutOfRangeException();
 
-            Nodes[newOrigin].IsRed = 
-                Nodes[Origin].IsRed && Nodes[Origin].BackwardItem == null;
+            var newOriginIdxInList = MathEx.Mod(newOrigin - Origin, Nodes.Count);
+            Nodes[newOriginIdxInList].IsRed = 
+                Nodes[0].IsRed && Nodes[0].BackwardItem == null;
 
-            Nodes = Nodes.Skip(newOrigin)
-                .Concat(Nodes.Take(newOrigin))
-                .ToList();
+            Nodes = Utils.Rotate(Nodes, newOrigin - Origin);
             Origin = newOrigin;
         }
 

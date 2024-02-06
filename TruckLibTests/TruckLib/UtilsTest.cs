@@ -60,5 +60,23 @@ namespace TruckLibTests.TruckLib
                 Utils.SetIfInRange(1f, 0f, 0.5f);
             });
         }
+
+        [Fact]
+        public void Rotate2()
+        {
+            var input = new List<int>() { 0, 1, 2, 3, 4 };
+            var expected = new List<int>() { 2, 3, 4, 0, 1 };
+            var actual = Utils.Rotate(input, 2);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void RotateMinus2()
+        {
+            var input = new List<int>() { 2, 3, 4, 0, 1 };
+            var expected = new List<int>() { 0, 1, 2, 3, 4 };
+            var actual = Utils.Rotate(input, -2);
+            Assert.Equal(expected, actual);
+        }
     }
 }

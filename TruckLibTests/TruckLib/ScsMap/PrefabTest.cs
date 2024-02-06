@@ -288,5 +288,15 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             AssertEx.Equal(new Vector3(50, 0, 50), prefab.Nodes[0].Position, 0.01f);
         }
+
+        [Fact]
+        public void ChangeOriginThrowsIfNodeOccupied()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", crossingPpd);
+
+            prefab.AppendRoad(map, 2, new Vector3(10, 0, 10), "ger1");
+            Assert.Throws<InvalidOperationException>(() => prefab.ChangeOrigin(2));
+        }
     }
 }

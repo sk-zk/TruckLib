@@ -503,13 +503,20 @@ namespace TruckLib.ScsMap
         /// Changes the origin of the prefab.
         /// </summary>
         /// <param name="newOrigin">The index (in the ppd file, not <see cref="Nodes"/> of the new origin.</param>
-        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the index exceeds the number of nodes.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if one or both of the nodes which would be
+        /// affected by the opertation already have an item attached to them.</exception>
         public void ChangeOrigin(ushort newOrigin)
         {
             if (newOrigin > Nodes.Count)
                 throw new IndexOutOfRangeException();
 
             var newOriginIdxInList = MathEx.Mod(newOrigin - Origin, Nodes.Count);
+
+            if (Nodes[newOriginIdxInList].BackwardItem is not null || Nodes[0].BackwardItem is not null)
+                throw new InvalidOperationException("Unable to change origin: one or both of the " +
+                    "affected nodes have an item attached to them");
+
             Nodes[newOriginIdxInList].IsRed = 
                 Nodes[0].IsRed && Nodes[0].BackwardItem == null;
 

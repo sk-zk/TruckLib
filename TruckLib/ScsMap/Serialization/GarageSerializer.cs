@@ -16,7 +16,7 @@ namespace TruckLib.ScsMap.Serialization
             garage.BuyMode = r.ReadUInt32();
              
             garage.Node = new UnresolvedNode(r.ReadUInt64());
-            garage.PrefabLink = new UnresolvedItem(r.ReadUInt64());
+            garage.Prefab = new UnresolvedItem(r.ReadUInt64());
              
             garage.TrailerSpawnPoints = ReadNodeRefList(r);
 
@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(garage.BuyMode);
  
             w.Write(garage.Node.Uid);
-            w.Write(garage.PrefabLink.Uid);
+            w.Write(garage.Prefab.Uid);
 
             WriteNodeRefList(w, garage.TrailerSpawnPoints);
         }

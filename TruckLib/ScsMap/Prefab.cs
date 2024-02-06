@@ -83,9 +83,9 @@ namespace TruckLib.ScsMap
         public Token SemaphoreProfile { get; set; }
 
         /// <summary>
-        /// The <see cref="Ferry"/> item this prefab is connected to, if applicable.
+        /// The <see cref="ScsMap.Ferry"/> item this prefab is connected to, if applicable.
         /// </summary>
-        public IMapItem FerryLink { get; set; }
+        public IMapItem Ferry { get; set; }
 
         public uint RandomSeed { get; set; }
 
@@ -212,7 +212,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if this prefab is the last prefab before a <see cref="Ferry"/>.
+        /// Gets or sets if this prefab is the last prefab before a <see cref="ScsMap.Ferry"/>.
         /// </summary>
         public bool IsFerryEntrance
         {
@@ -537,10 +537,10 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (FerryLink is UnresolvedItem && 
-                allItems.TryGetValue(FerryLink.Uid, out var resolvedFerry))
+            if (Ferry is UnresolvedItem && 
+                allItems.TryGetValue(Ferry.Uid, out var resolvedFerry))
             {
-                FerryLink = resolvedFerry;
+                Ferry = resolvedFerry;
             }
 
             for (int i = 0; i < SlaveItems.Count; i++)

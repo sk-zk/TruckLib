@@ -93,7 +93,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             AssertEx.Equal(new Vector3(80.0352f, 0, 71.0938f), company.Node.Position, 0.01f);
             AssertEx.Equal(new Quaternion(0, -1, 0, 0), company.Node.Rotation, 0.001f);
             Assert.True(company.Node.IsRed);
-            Assert.Equal(prefab, company.PrefabLink);
+            Assert.Equal(prefab, company.Prefab);
 
             company.SpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
             expectedPositions = new Vector3[] {
@@ -143,7 +143,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             AssertEx.Equal(new Vector3(71.0938f, 0, 79.9648f), company.Node.Position, 0.01f);
             AssertEx.Equal(new Quaternion(0, 0.707107f, 0, -0.707107f), company.Node.Rotation, 0.001f);
             Assert.True(company.Node.IsRed);
-            Assert.Equal(prefab, company.PrefabLink);
+            Assert.Equal(prefab, company.Prefab);
 
             company.SpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
             expectedPositions = new Vector3[] {

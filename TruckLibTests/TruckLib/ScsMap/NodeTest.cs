@@ -8,8 +8,8 @@ using System.Numerics;
 using Newtonsoft.Json.Bson;
 using TruckLib.Models.Ppd;
 
-namespace TruckLibTests.TruckLib.ScsMap {
-
+namespace TruckLibTests.TruckLib.ScsMap 
+{
     [Collection("Prefab collection")]
     public class NodeTest
     {

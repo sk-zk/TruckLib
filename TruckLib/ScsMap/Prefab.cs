@@ -386,16 +386,17 @@ namespace TruckLib.ScsMap
         /// Attaches a node of a polyline item to the specified node of this prefab.
         /// </summary>
         /// <param name="itemNode">The node of the polyline item to attach. This node will be deleted.</param>
-        /// <param name="prefabNodeIdx">The index of the prefab node to attach to.</param>
+        /// <param name="prefabNode">The index of the prefab node (in <see cref="Nodes"/>, not the .ppd file)
+        /// to attach to.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the index exceeds the number of nodes.</exception>
         /// <exception cref="InvalidOperationException">Thrown when attempting to merge the backward node of a road
         /// into the origin node of the prefab, which is not allowed.</exception>
-        public void Attach(INode itemNode, ushort prefabNodeIdx)
+        public void Attach(INode itemNode, ushort prefabNode)
         {
-            if (prefabNodeIdx > Nodes.Count)
+            if (prefabNode > Nodes.Count)
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
-            Nodes[prefabNodeIdx].Merge(itemNode);
+            Nodes[prefabNode].Merge(itemNode);
         }
 
         /// <summary>
@@ -482,7 +483,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Changes the origin of the prefab.
         /// </summary>
-        /// <param name="newOrigin">The index (in the ppd file, not <see cref="Nodes"/> of the new origin.</param>
+        /// <param name="newOrigin">The index (in the ppd file, not <see cref="Nodes"/>) of the new origin.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the index exceeds the number of nodes.</exception>
         /// <exception cref="InvalidOperationException">Thrown if one or both of the nodes which would be
         /// affected by the opertation already have an item attached to them.</exception>
@@ -542,6 +543,7 @@ namespace TruckLib.ScsMap
             public int GetHashCode(INode obj) => 0; // apparently this has to happen for Equals to be called
         }
 
+        /// <inheritdoc/>
         internal override Vector3 GetCenter()
         {
             var acc = Vector3.Zero;

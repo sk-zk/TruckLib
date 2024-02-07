@@ -7,3 +7,5 @@ items:
     href: move-items.md
   - name: Working with polyline items
     href: polyline-items.md
+  - name: Working with prefabs
+    href: prefabs.md

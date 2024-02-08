@@ -479,7 +479,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Moves the item to a different location.
+        /// Moves the prefab to a different location. All other prefabs attached to this one
+        /// will also be moved.
         /// </summary>
         /// <param name="newPos">The new position of node 0.</param>
         public override void Move(Vector3 newPos)
@@ -488,7 +489,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Moves the item to a different location.
+        /// Moves the prefab to a different location. All other prefabs attached to this one
+        /// will also be moved.
         /// </summary>
         /// <param name="newPos">The new position of the specified node.</param>
         /// <param name="nodeIdx">The index of the node which will assume the given position.</param>
@@ -498,14 +500,36 @@ namespace TruckLib.ScsMap
             Translate(translation);
         }
 
+        /// <summary>
+        /// Translates the prefab by the given vector. All other prefabs attached to this one
+        /// will also be moved.
+        /// </summary>
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
-            foreach (var node in Nodes)
-                node.Move(node.Position + translation);
+            var prefabs = new HashSet<Prefab>();
+            var nodes = new HashSet<INode>();
+            GetConnectedPrefabsAndNodesRecursive(prefabs, nodes);
 
-            foreach (var si in SlaveItems)
-                (si as PrefabSlaveItem).Translate(translation);
+            foreach (var node in nodes)
+                node.Translate(translation);
+
+            foreach (var pf in prefabs)
+                foreach (var si in pf.SlaveItems)
+                    (si as PrefabSlaveItem).Translate(translation);
+        }
+
+        internal void GetConnectedPrefabsAndNodesRecursive(HashSet<Prefab> visited, HashSet<INode> nodes)
+        {
+            visited.Add(this);
+            foreach (var node in Nodes)
+            {
+                nodes.Add(node);
+                if (node.ForwardItem is Prefab fw && !visited.Contains(fw))
+                    fw.GetConnectedPrefabsAndNodesRecursive(visited, nodes);
+                if (node.BackwardItem is Prefab bw && !visited.Contains(bw))
+                    bw.GetConnectedPrefabsAndNodesRecursive(visited, nodes);
+            }
         }
 
         /// <summary>
@@ -523,11 +547,13 @@ namespace TruckLib.ScsMap
             var newOriginIdxInList = MathEx.Mod(newOrigin - Origin, Nodes.Count);
 
             if (Nodes[newOriginIdxInList].BackwardItem is not null || Nodes[0].BackwardItem is not null)
+            {
                 throw new InvalidOperationException("Unable to change origin: one or both of the " +
                     "affected nodes have an item attached to them");
+            }
 
-            Nodes[newOriginIdxInList].IsRed = 
-                Nodes[0].IsRed && Nodes[0].BackwardItem == null;
+            Nodes[newOriginIdxInList].IsRed = Nodes[0].IsRed 
+                && Nodes[0].BackwardItem == null;
 
             Nodes = Utils.Rotate(Nodes, newOrigin - Origin);
             Origin = newOrigin;

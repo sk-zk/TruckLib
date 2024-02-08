@@ -90,5 +90,23 @@ namespace TruckLibTests.TruckLib.ScsMap
             prefab.AppendRoad(2, new Vector3(10, 0, 10), "ger1");
             Assert.Throws<InvalidOperationException>(() => prefab.ChangeOrigin(2));
         }
+
+        [Fact]
+        public void MoveConnected()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
+            prefab2.ChangeOrigin(1);
+            prefab1.Attach(3, prefab2, 0);
+
+            var translation = new Vector3(42, 0, 42);
+            var expected = prefab2.Nodes.Select(x => x.Position + translation).ToArray();
+
+            prefab1.Translate(translation);
+
+            var actual = prefab2.Nodes.Select(x => x.Position).ToArray();
+            Assert.Equal(expected, actual);
+        }
     }
 }

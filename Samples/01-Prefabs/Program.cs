@@ -59,6 +59,7 @@ namespace Prefabs
                 Quaternion.CreateFromYawPitchRoll(-1.5708f, 0, 0));
             crossing.Variant = "shoul_fr_1";
             crossing.Look = "gray_fr";
+            crossing.AdditionalParts.Add("_midlines");
 
             // The T node of this prefab is the origin node, so to connect it
             // to the company prefab's node, which is also red, we'll have to
@@ -71,9 +72,11 @@ namespace Prefabs
 
             // 3)
             // Finally, let's connect the other ends of the prefab with a road.
-            var road = crossing.AppendRoad(1, new Vector3(100, 0, 88), "ger1")
-                .Append(new Vector3(100, 0, 52))
-                .Append(crossing.Nodes[0].Position);
+            var road = crossing.AppendRoad(1, new Vector3(100, 0, 88), "template22");
+            road.Right.Variant = "broken";
+            road.Right.LeftEdge = "fr_sh_15";
+            road.Right.RightEdge = "fr_sh_15";
+            road = road.Append(new Vector3(100, 0, 52)).Append(crossing.Nodes[0].Position);
             crossing.Attach(road);
 
 

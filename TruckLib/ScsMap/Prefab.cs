@@ -283,6 +283,7 @@ namespace TruckLib.ScsMap
         /// <param name="unitName">The unit name of the prefab.</param>
         /// <param name="position">The position of node 0.</param>
         /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
+        /// <param name="rotation">The rotation of the prefab.</param>
         /// <returns>The newly created prefab.</returns>
         public static Prefab Add(IItemContainer map, Vector3 position, Token unitName,
             PrefabDescriptor ppd, Quaternion? rotation = null)

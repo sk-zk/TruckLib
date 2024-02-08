@@ -5,7 +5,7 @@ Prefabs are the most complex map item in the game, so adding one requires an ext
 
 ### Loading the descriptor
 To add a prefab to the map, the positions of its control nodes and spawn points must be known to the library
-so that the map nodes can be placed correctly and the required slave items can be created. This means that
+so that the map nodes can be placed correctly and slave items, if required, can be created. This means that
 the prefab descriptor (`.ppd`) file of the prefab must be opened first, which you can do with the
 [`PrefabDescriptor`](xref:TruckLib.Models.Ppd.PrefabDescriptor) class:
 
@@ -15,8 +15,8 @@ using TruckLib.Models.Ppd;
 PrefabDescriptor ppd = PrefabDescriptor.Open("<location of extracted files>/prefab2/car_dealer/car_dealer_01_fr.ppd");
 ```
 
-Alternatively, you can use a [`HashFsReader`](xref:TruckLib.HashFs.HashFsReader) to load the desciptor directly
-from its `.scs` file without having to extract it first: 
+Alternatively, you can use a [`HashFsReader`](xref:TruckLib.HashFs.HashFsReader) to load the descriptor directly
+from its `.scs` file without having to extract it: 
 
 ```cs
 using TruckLib.Models.Ppd;
@@ -31,7 +31,7 @@ Note that this will not work while the game is running because the game locks th
 
 ### Creating the prefab
 Now that we have the prefab descriptor, we can call [`Prefab.Add`](xref:TruckLib.ScsMap.Prefab.Add*)
-to add a prefab to the map:
+to add the prefab to the map:
 
 ```cs
 Prefab prefab = Prefab.Add(map, new Vector3(12.3f, 0, 23.4f), "dlc_fr_14", ppd, Quaternion.Identity);
@@ -58,9 +58,33 @@ ordered such that the origin node is the 0th entry.
 
 If one or both nodes affected by the operation already have an item attached to them, `InvalidOperationException` is thrown.
 
+## Attaching prefabs
+You can attach two prefabs to each other with [`Attach`](xref:TruckLib.ScsMap.Prefab.Attach(System.UInt16,TruckLib.ScsMap.Prefab,System.UInt16)):
+
+```cs
+prefab1.Attach(3, prefab2, 0);
+```
+
+The first parameter is the index of the node of `prefab1` the other prefab will be connected to, the second parameter
+is the prefab, and the third parameter is the index of the node of `prefab2` which you want to attach. Note that
+`prefab2` will be moved such that the two specified nodes have the same position - the prefabs can't
+be connected otherwise. 
+
+If both specified nodes are the current origin node (which is the case when both index parameters are 0) or
+one or both of the nodes already have something attached to them, `InvalidOperationException` is thrown.
+
+There is also a "I'm feeling lucky" option which will attach the closest nodes of the two prefabs without having to
+specify what they are:
+
+```cs
+prefab1.Attach(prefab2);
+```
+
+In both cases, one of the prefab nodes will become unnecessary and will be deleted.
+
 ## Attaching polyline items
-To attach a road or another polyline item to a node of a prefab, call the
-[`Attach`](xref:TruckLib.ScsMap.Prefab.Attach(TruckLib.ScsMap.INode,System.UInt16)) method:
+There is another overload of [`Attach`](xref:TruckLib.ScsMap.Prefab.Attach(TruckLib.ScsMap.INode,System.UInt16))
+for attaching a road or another polyline item to a node of a prefab:
 
 ```cs
 prefab.Attach(road.ForwardNode, 1);
@@ -72,8 +96,7 @@ to attach it to.
 Attempting to attach the backward node of a polyline item to the origin node of a prefab will throw `InvalidOperationException`.
 All other configurations will work.
 
-There is also a "I'm feeling lucky" option which will attach the closest nodes of the item and the prefab without having to
-specifiy what they are:
+As with attaching a prefab, there is another method which attaches the closest nodes of the item and the prefab:
 
 ```cs
 prefab.Attach(road);

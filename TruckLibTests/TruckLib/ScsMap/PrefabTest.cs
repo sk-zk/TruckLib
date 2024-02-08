@@ -300,5 +300,81 @@ namespace TruckLibTests.TruckLib.ScsMap
             prefab.AppendRoad(2, new Vector3(10, 0, 10), "ger1");
             Assert.Throws<InvalidOperationException>(() => prefab.ChangeOrigin(2));
         }
+
+        [Fact]
+        public void AttachPrefabs()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
+
+            prefab1.Attach(3, prefab2, 1);
+
+            Assert.Equal(prefab1.Nodes[3], prefab2.Nodes[1]);
+            AssertEx.Equal(new Vector3(86, 0, 50), prefab2.Nodes[0].Position, 0.001f);
+            Assert.Equal(prefab1, prefab1.Nodes[3].ForwardItem);
+            Assert.Equal(prefab2, prefab1.Nodes[3].BackwardItem);
+            Assert.False(prefab1.Nodes[3].IsRed);
+            AssertEx.Equal(new Quaternion(0, -0.707107f, 0, -0.707107f), prefab1.Nodes[3].Rotation, 0.001f);
+        }
+
+        [Fact]
+        public void AttachPrefabsP1Origin()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var prefab2 = Prefab.Add(map, new Vector3(48, 0, 89), "dlc_blkw_02", fixture.CrossingPpd);
+
+            prefab1.Attach(0, prefab2, 2);
+
+            Assert.Equal(prefab1.Nodes[0], prefab2.Nodes[2]);
+            AssertEx.Equal(new Vector3(50, 0, 86), prefab2.Nodes[0].Position, 0.001f);
+            Assert.Equal(prefab1, prefab1.Nodes[0].ForwardItem);
+            Assert.Equal(prefab2, prefab1.Nodes[0].BackwardItem);
+            Assert.True(prefab1.Nodes[0].IsRed);
+            AssertEx.Equal(Quaternion.Identity, prefab1.Nodes[0].Rotation, 0.001f);
+        }
+
+        [Fact]
+        public void AttachPrefabsP2Origin()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
+            prefab2.ChangeOrigin(1);
+
+            prefab1.Attach(3, prefab2, 0);
+
+            Assert.Equal(prefab1.Nodes[3], prefab2.Nodes[0]);
+            AssertEx.Equal(new Vector3(86, 0, 50), prefab2.Nodes[3].Position, 0.001f);
+            Assert.Equal(prefab1, prefab1.Nodes[3].BackwardItem);
+            Assert.Equal(prefab2, prefab1.Nodes[3].ForwardItem);
+            Assert.True(prefab1.Nodes[3].IsRed);
+            AssertEx.Equal(new Quaternion(0, 0.707107f, 0, -0.707107f), prefab1.Nodes[3].Rotation, 0.001f);
+        }
+
+        [Fact]
+        public void AttachThrowsIfNodeOccupied()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
+
+            prefab1.AppendRoad(3, new Vector3(69, 0, 69), "bar");
+
+            Assert.Throws<InvalidOperationException>(() => prefab1.Attach(3, prefab2, 1));
+        }
+
+        [Fact]
+        public void AttachThrowsIfBothNodesAreOrigin()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            prefab1.ChangeOrigin(3);
+            var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
+            prefab2.ChangeOrigin(1);
+
+            Assert.Throws<InvalidOperationException>(() => prefab1.Attach(0, prefab2, 0));
+        }
     }
 }

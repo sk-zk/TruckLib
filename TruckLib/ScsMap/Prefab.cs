@@ -361,7 +361,6 @@ namespace TruckLib.ScsMap
         /// <param name="item">The polyline item to attach.</param>
         public void Attach(PolylineItem item)
         {
-            // find closest node
             float shortestDist = float.MaxValue;
             INode closestPrefabNode = null;
             INode closestItemNode = null;
@@ -400,55 +399,83 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Attaches the given prefab to a node of this prefab, assuming that
-        /// at least one of the nodes has the same position as a node of this prefab.
+        /// Attaches the prefab <c>p2</c> to a node of this prefab. <c>p2</c> will be moved such that the nodes
+        /// which will be merged have the same position.
         /// </summary>
-        /// <param name="p2">The prefab to attach.</param>
-        public void Attach(Prefab p2)
+        /// <param name="p1NodeIdx">The index of the node of this prefab to which <c>p2</c> will be attached.</param>
+        /// <param name="p2">The prefab to attach to this one.</param>
+        /// <param name="p2NodeIdx">The index of the node of <c>p2</c> which will be attached to this prefab.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if one of the indices exceeds the number of nodes.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the nodes can't be connected.</exception>
+        public void Attach(ushort p1NodeIdx, Prefab p2, ushort p2NodeIdx)
         {
-            // find overlapping node(s). 
-            // the Intersect call returns the
-            // nodes of this prefab which will replace the corresponding newPf nodes.
-            var overlappingNodes = Nodes.Intersect(p2.Nodes, new NodePositionComparer()).ToList();
-            if (overlappingNodes.Count == 0)
-                throw new NotImplementedException("No overlapping node found - can't attach prefab");
+            if (p1NodeIdx > Nodes.Count)
+                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
-            for (var i = 0; i < overlappingNodes.Count; i++)
+            if (p2NodeIdx > p2.Nodes.Count)
+                throw new IndexOutOfRangeException($"p2 only has {p2.Nodes.Count} nodes.");
+
+            if (p1NodeIdx == 0 && p2NodeIdx == 0)
+                throw new InvalidOperationException("Unable to attach: two origin nodes can't be connected.");
+
+            var p1Node = Nodes[p1NodeIdx];
+            var p2Node = p2.Nodes[p2NodeIdx];
+
+            if (!(p1Node.ForwardItem == this && p1Node.BackwardItem is null))
+                throw new InvalidOperationException("Unable to attach: p1Node is already occupied.");
+
+            if (!(p2Node.ForwardItem == p2 && p2Node.BackwardItem is null))
+                throw new InvalidOperationException("Unable to attach: p2Node is already occupied.");
+
+            p2.Move(p1Node.Position, p2NodeIdx);
+
+            if (p2NodeIdx == 0)
             {
-                var p1Node = overlappingNodes[i];
-                var p1NodeIdx = Nodes.IndexOf(p1Node);
-                var p2NodeIdx = p2.Nodes.FindIndex(x => x.Position == p1Node.Position);
-                var p2Node = p2.Nodes[p2NodeIdx];
+                p2Node.BackwardItem = this;
+                Nodes[p1NodeIdx] = p2Node;
 
-                // if the p2 node is the origin, the nodes have to be merged to the p2 node.
-                // otherwise, the p1 node survives
-                if (p2NodeIdx == 0)
-                {
-                    p2Node.BackwardItem = this;
-                    Nodes[p1NodeIdx] = p2Node;
+                p1Node.ForwardItem = null;
+                p1Node.Parent.Delete(p1Node);
+            } 
+            else
+            {
+                p1Node.BackwardItem = p2;
+                p1Node.ForwardItem = this;
+                p2.Nodes[p2NodeIdx] = p1Node;
 
-                    p1Node.Parent.Nodes.Remove(p1Node.Uid);
-                }
-                else
-                {
-                    p1Node.BackwardItem = p2;
-                    p1Node.IsRed = p1Node.IsRed || p2Node.IsRed;
-                    p2.Nodes[p2NodeIdx] = p1Node;
-
-                    p2Node.ForwardItem = null;
-                    p2Node.Parent.Nodes.Remove(p2Node.Uid);
-                }
+                p2Node.ForwardItem = null;
+                p2Node.Parent.Delete(p2Node);
             }
         }
 
         /// <summary>
-        /// Checks if this and the given prefab are connected to each other at one or more nodes.
+        /// Finds the two closest nodes of this prefab and <c>p2</c>, moves <c>p2</c> such that
+        /// the two nodes have the same position, and attaches it to this prefab.
         /// </summary>
-        /// <param name="p2">The other prefab.</param>
-        /// <returns>Whether this and the given prefab are connected to each other at 
-        /// one or more nodes.</returns>
-        public bool IsAttachedTo(Prefab p2) =>
-            Nodes.Intersect(p2.Nodes).Any();
+        /// <param name="p2">The prefab to attach to this one.</param>
+        /// <exception cref="InvalidOperationException">Thrown if the nodes can't be connected.</exception>
+        public void Attach(Prefab p2)
+        {
+            float shortestDist = float.MaxValue;
+            ushort closestP1NodeIdx = 999;
+            ushort closestP2NodeIdx = 999;
+            for (ushort p1NodeIdx = 0; p1NodeIdx < Nodes.Count; p1NodeIdx++)
+            {
+                for (ushort p2NodeIdx = 0; p2NodeIdx < p2.Nodes.Count; p2NodeIdx++)
+                {
+                    var dist = Vector3.DistanceSquared(
+                        Nodes[p1NodeIdx].Position, p2.Nodes[p2NodeIdx].Position);
+                    if (dist < shortestDist)
+                    {
+                        shortestDist = dist;
+                        closestP1NodeIdx = p1NodeIdx;
+                        closestP2NodeIdx = p2NodeIdx;
+                    }
+                }
+            }
+
+            Attach(closestP1NodeIdx, p2, closestP2NodeIdx);
+        }
 
         /// <summary>
         /// Moves the item to a different location.
@@ -532,15 +559,6 @@ namespace TruckLib.ScsMap
                     SlaveItems[i] = resolvedSlaveItem;
                 }
             }
-        }
-
-        /// <summary>
-        /// Used for Attach(Prefab). Compares the position of two nodes.
-        /// </summary>
-        internal class NodePositionComparer : IEqualityComparer<INode>
-        {
-            public bool Equals(INode x, INode y) => x.Position == y.Position;
-            public int GetHashCode(INode obj) => 0; // apparently this has to happen for Equals to be called
         }
 
         /// <inheritdoc/>

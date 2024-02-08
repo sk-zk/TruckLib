@@ -83,15 +83,15 @@ prefab1.Attach(prefab2);
 In both cases, one of the prefab nodes will become unnecessary and will be deleted.
 
 ## Attaching polyline items
-There is another overload of [`Attach`](xref:TruckLib.ScsMap.Prefab.Attach(TruckLib.ScsMap.INode,System.UInt16))
+There is another overload of [`Attach`](xref:TruckLib.ScsMap.Prefab.Attach(System.UInt16,TruckLib.ScsMap.INode))
 for attaching a road or another polyline item to a node of a prefab:
 
 ```cs
-prefab.Attach(road.ForwardNode, 1);
+prefab.Attach(1, road.ForwardNode);
 ```
 
-The first parameter is the node you want to attach to the prefab, and the second parameter is the index of the prefab node
-to attach it to.
+The first parameter is the index of the prefab node to attach the item to, and the second parameter is the item node
+you want to attach to the prefab.
 
 Attempting to attach the backward node of a polyline item to the origin node of a prefab will throw `InvalidOperationException`.
 All other configurations will work.

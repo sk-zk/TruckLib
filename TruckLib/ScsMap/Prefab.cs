@@ -378,19 +378,19 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            Attach(closestItemNode, (ushort)Nodes.IndexOf(closestPrefabNode));
+            Attach((ushort)Nodes.IndexOf(closestPrefabNode), closestItemNode);
         }
 
         /// <summary>
         /// Attaches a node of a polyline item to the specified node of this prefab.
         /// </summary>
-        /// <param name="itemNode">The node of the polyline item to attach. This node will be deleted.</param>
         /// <param name="prefabNode">The index of the prefab node (in <see cref="Nodes"/>, not the .ppd file)
         /// to attach to.</param>
+        /// <param name="itemNode">The node of the polyline item to attach. This node will be deleted.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the index exceeds the number of nodes.</exception>
         /// <exception cref="InvalidOperationException">Thrown when attempting to merge the backward node of a road
         /// into the origin node of the prefab, which is not allowed.</exception>
-        public void Attach(INode itemNode, ushort prefabNode)
+        public void Attach(ushort prefabNode, INode itemNode)
         {
             if (prefabNode > Nodes.Count)
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");

@@ -47,7 +47,7 @@ bool exists = map.MapItems.TryGetValue(0x521CD80FA4000001, out MapItem item);
 var allMovers = map.MapItems.OfType<Mover>();
 ```
 
-Do not modify this dictionary directly - see "Adding and deleting map items" for the intended way to do that.
+Do not modify this dictionary directly &ndash; see "Adding and deleting map items" for the intended way to do that.
 
 ## Nodes
 Likewise, the [`Nodes`](xref:TruckLib.ScsMap.Map.Nodes) property is a dictionary containing all nodes in the map.

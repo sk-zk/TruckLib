@@ -67,7 +67,7 @@ prefab1.Attach(3, prefab2, 0);
 
 The first parameter is the index of the node of `prefab1` the other prefab will be connected to, the second parameter
 is the prefab, and the third parameter is the index of the node of `prefab2` which you want to attach. Note that
-`prefab2` will be moved such that the two specified nodes have the same position - the prefabs can't
+`prefab2` will be moved such that the two specified nodes have the same position &ndash; the prefabs can't
 be connected otherwise. 
 
 If both specified nodes are the current origin node (which is the case when both index parameters are 0) or

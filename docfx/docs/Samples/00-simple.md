@@ -37,7 +37,7 @@ to the map. In this case, we're adding a road item going from (19, 0, 19.5) to (
 
 If you were to save the map here, it would look like this:
 
-![](/images/00-wip1.png)
+![](../../images/00-wip1.png)
 
 ## Setting road properties
 The next lines of code set the appearance of the road.
@@ -86,7 +86,7 @@ Lastly, let's place some bollards:
 
 The road item now looks like this:
 
-![](/images/00-wip2.png)
+![](../../images/00-wip2.png)
 
 ## Appending to a road
 We will now continue this road by appending some more segments:
@@ -107,7 +107,7 @@ because, by default, `Append` copies all properties to the new segment.
 
 Our map now looks like this:
 
-![](/images/00-wip3.png)
+![](../../images/00-wip3.png)
 
 ## Adding models
 As the last step, we will place two models.
@@ -144,4 +144,4 @@ Remember to **recompute the map** (Map > Recompute map). This is necessary becau
 does not calculate the bounding boxes of items. Once you did, this is what the final map
 should look like:
 
-![](/images/00-final.png)
+![](../../images/00-final.png)

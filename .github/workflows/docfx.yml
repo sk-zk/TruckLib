@@ -1,0 +1,38 @@
+name: Publish documentation
+
+on:
+  push:
+    branches:
+      - main
+      - docfx-action
+
+jobs:
+  publish-docs:
+    name: Publish documentation
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Dotnet Setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+
+    - name: Update docfx
+      run: dotnet tool update -g docfx
+
+    - name: Build documentation
+      run: docfx docfx/docfx.json
+
+    - name: Publish to GitHub Pages
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git clone https://${{ secrets.PERSONAL_TOKEN }}@github.com/sk-zk/sk-zk.github.io.git
+        cd sk-zk.github.io
+        rm -rf trucklib
+        mkdir -p trucklib/master
+        cp -r ../docfx/_site/* trucklib/master
+        git add .
+        git diff-index --quiet HEAD || git commit -m "Update TruckLib documentation"
+        git push

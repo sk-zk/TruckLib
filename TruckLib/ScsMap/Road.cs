@@ -57,7 +57,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The unit name of the road.
+        /// The unit name of the road type.
         /// </summary>
         public Token RoadType { get; set; }
 

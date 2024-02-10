@@ -18,12 +18,12 @@ namespace Route
         {            
 
             // load or create, edit offsets
-            var map = new Map("pgi2");
+            var map = new Map("pgi");
             //Map map = Map.Open(@"C:\Users\worker\Documents\Euro Truck Simulator 2\mod\user_map\map\pgi.mbd");
                    
             // read .csv
-            // https://valhalla.openstreetmap.de/directions?profile=car&wps=8.736566305160524%2C47.9225903172469%2C8.736308813095095%2C47.92535111067535%2C8.733605146408083%2C47.9213392842135%2C8.736013770103456%2C47.92231351082017
-            var path = @"C:\Users\worker\Documents\dev\ets2\PGI\2_csv\added\bergstr_out.csv"; 
+            // https://valhalla.openstreetmap.de/directions?profile=car&wps=8.736566305160524%2C47.9225903172469%2C8.736308813095095%2C47.92535111067535%2C8.732757568359377%2C47.92223082809373%2C8.736013770103456%2C47.92231351082017
+            var path = @"C:\Users\worker\Documents\dev\ets2\PGI\data\bergstr_out.csv"; 
             using (TextFieldParser csvParser = new TextFieldParser(path))
             {
                 // parser options
@@ -31,7 +31,7 @@ namespace Route
                 csvParser.SetDelimiters(new string[] { ";" });
                 csvParser.HasFieldsEnclosedInQuotes = false;
 
-                // last and current waypoint
+                // last waypoint
                 float x0 = 0;
                 float y0 = 0;
                 float z0 = 0;

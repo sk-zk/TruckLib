@@ -16,10 +16,14 @@ namespace Route
         
         static void Main(string[] args)
         {            
-            var map = new Map("route");
-            
+
+            // load or create, edit offsets
+            var map = new Map("pgi2");
+            //Map map = Map.Open(@"C:\Users\worker\Documents\Euro Truck Simulator 2\mod\user_map\map\pgi.mbd");
+                   
             // read .csv
-            var path = @"C:\Users\worker\Documents\dev\ets2\route.csv"; 
+            // https://valhalla.openstreetmap.de/directions?profile=car&wps=8.736566305160524%2C47.9225903172469%2C8.736308813095095%2C47.92535111067535%2C8.733605146408083%2C47.9213392842135%2C8.736013770103456%2C47.92231351082017
+            var path = @"C:\Users\worker\Documents\dev\ets2\PGI\2_csv\added\bergstr_out.csv"; 
             using (TextFieldParser csvParser = new TextFieldParser(path))
             {
                 // parser options
@@ -32,6 +36,11 @@ namespace Route
                 float y0 = 0;
                 float z0 = 0;
 
+                // offset
+                float xoff = 0f;
+                float yoff = 0f; //*-1
+                float zoff = 0f;
+
                 // helper
                 bool firstLoop = true;
                 bool firstOdd = true;
@@ -41,9 +50,14 @@ namespace Route
                 {
                     // Read current line fields, pointer moves to the next line.
                     string[] fields = csvParser.ReadFields();
-                    float x1 = float.Parse(fields[0], CultureInfo.InvariantCulture.NumberFormat);
-                    float y1 = float.Parse(fields[1], CultureInfo.InvariantCulture.NumberFormat);
-                    float z1 = float.Parse(fields[2], CultureInfo.InvariantCulture.NumberFormat);
+                    fields[0] = fields[0].Replace(',', '.');
+                    fields[1] = fields[1].Replace(',', '.');
+                    fields[2] = fields[2].Replace(',', '.');
+                    float x1 = float.Parse(fields[0], CultureInfo.InvariantCulture.NumberFormat) - xoff;
+                    float y1 = float.Parse(fields[1], CultureInfo.InvariantCulture.NumberFormat) - yoff;
+                    float z1 = float.Parse(fields[2], CultureInfo.InvariantCulture.NumberFormat) - zoff;
+
+                    
                     
                     if(!firstLoop)
                     {
@@ -53,7 +67,7 @@ namespace Route
                             new Vector3(x0, y0, z0), // position of backward (red) node
                             new Vector3(x1, z1, y1),    // position of forward (green) node
                             "ger1",  // unit name of the road model
-                            80, 80   // terrain size on the left and right side
+                            10, 10   // terrain size on the left and right side
                             );
                             SetProperties(r0);
 
@@ -72,7 +86,7 @@ namespace Route
                                 new Vector3(x0, y0, z0), // position of backward (red) node
                                 new Vector3(x1, z1, y1),    // position of forward (green) node
                                 "ger1",  // unit name of the road model
-                                80, 80   // terrain size on the left and right side
+                                10, 10   // terrain size on the left and right side
                                 );
                             SetProperties(r1);
 

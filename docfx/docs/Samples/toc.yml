@@ -1,3 +1,5 @@
 items:
   - name: Simple example
     href: 00-simple.md
+  - name: Prefabs
+    href: 01-prefabs.md

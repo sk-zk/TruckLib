@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
-using TruckLib;
 using TruckLib.ScsMap;
 using TruckLib.Models.Ppd;
 using TruckLib.HashFs;
@@ -17,7 +16,7 @@ namespace Prefabs
 
             var map = new Map("example");
 
-            // (Modify this path before running)
+            // (modify this path before running)
             var gameRoot = @"D:\SteamLibrary\steamapps\common\Euro Truck Simulator 2";
 
 
@@ -35,35 +34,33 @@ namespace Prefabs
             var companyDescriptorFile = baseScs.Extract("/prefab2/car_dealer/car_dealer_01_fr.ppd");
             var companyDescriptor = PrefabDescriptor.Load(companyDescriptorFile);
 
-            var companyPos = new Vector3(55, 0, 70);
-            var companyRot = Quaternion.CreateFromYawPitchRoll(1.5708f, 0, 0); // 90°
-
             var company = Prefab.Add(map,
-                companyPos,         // position of node 0
-                "dlc_fr_14",        // Unit name
-                companyDescriptor,  // .ppd
-                companyRot          // optional: rotation
-                );
+                // position of node 0
+                new Vector3(55, 0, 70),
+                // Unit name
+                "dlc_fr_14",
+                // .ppd
+                companyDescriptor,
+                // rotation (90° in this case)
+                Quaternion.CreateFromYawPitchRoll(1.5708f, 0, 0));
             company.Variant = "bhv_fr";
             company.Look = "green_fr";
 
 
             // 2)
-            // Attach a T-crossing prefab to the entrance of the company.
+            // Attach a T junction prefab to the entrance of the company.
             var crossingDescriptorFile = baseScs.Extract("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd");
             var crossingDescriptor = PrefabDescriptor.Load(crossingDescriptorFile);
 
-            var crossingPos = companyPos;
-
-            var crossing = Prefab.Add(map, crossingPos, "387", crossingDescriptor,
-                Quaternion.CreateFromYawPitchRoll(-1.5708f, 0, 0));
+            var crossing = Prefab.Add(map, company.Nodes[0].Position, "387", 
+                crossingDescriptor, Quaternion.CreateFromYawPitchRoll(-1.5708f, 0, 0));
             crossing.Variant = "shoul_fr_1";
             crossing.Look = "gray_fr";
             crossing.AdditionalParts.Add("_midlines");
 
-            // The T node of this prefab is the origin node, so to connect it
-            // to the company prefab's node, which is also red, we'll have to
-            // change the origin node of the crossing.
+            // The T stem node of this prefab is the origin node, so to connect it
+            // to the company prefab's node, which is also the origin, we'll have to
+            // change the origin of the crossing.
             crossing.ChangeOrigin(1);
 
             // Now attach it.
@@ -86,7 +83,7 @@ namespace Prefabs
             var userMapFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod/user_map/map/");
             map.Save(userMapFolder, true);
 
-            // 5)
+
             // Remember to recalculate (Map > Recompute map) after loading it in the editor for the first time.
         }
     }

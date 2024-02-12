@@ -1,4 +1,4 @@
-# Simple example
+# Sample #1: Simple example
 
 The following code demonstrates how to create a map, add items to it, and save it.
 You can find the full source code at `Samples/00-SimpleExample/Program.cs`. 
@@ -145,3 +145,7 @@ does not calculate the bounding boxes of items. Once you did, this is what the f
 should look like:
 
 ![](../../images/00-final.png)
+
+## Further reading
+* [The Map class](/TruckLib.ScsMap/map-class.md)
+* [Working with polyline items](/TruckLib.ScsMap/polyline-items.md)

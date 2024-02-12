@@ -247,7 +247,17 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             MapItems.Remove(item.Uid);
-           
+
+            List<IRecalculatable> itemsToRecalculate = null;
+            if (item is PolylineItem poly)
+            {
+                itemsToRecalculate = new();
+                if (poly.BackwardItem is not null)
+                    itemsToRecalculate.Add((IRecalculatable)poly.BackwardItem);
+                if (poly.ForwardItem is not null)
+                    itemsToRecalculate.Add((IRecalculatable)poly.ForwardItem);
+            }
+
             // remove item from its nodes, 
             // and delete them if they're orphaned now
             foreach (var node in item.GetItemNodes())
@@ -266,6 +276,9 @@ namespace TruckLib.ScsMap
                     Delete(node);
                 }
             }
+
+            for (int i = 0; i < itemsToRecalculate?.Count; i++)
+                itemsToRecalculate[i].Recalculate();
 
             // delete dependent items
             if (item is Prefab pf)

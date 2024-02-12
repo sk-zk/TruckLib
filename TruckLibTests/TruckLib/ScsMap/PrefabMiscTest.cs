@@ -46,11 +46,8 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(prefab);
 
-            Assert.False(map.MapItems.ContainsKey(prefab.Uid));
-            Assert.False(map.Nodes.ContainsKey(prefab.Nodes[0].Uid));
-            Assert.False(map.Nodes.ContainsKey(prefab.Nodes[1].Uid));
-            Assert.False(map.MapItems.ContainsKey(prefab.SlaveItems[0].Uid));
-            Assert.False(map.Nodes.ContainsKey((prefab.SlaveItems[0] as Company).SpawnPoints[0].Node.Uid));
+            Assert.Empty(map.MapItems);
+            Assert.Empty(map.Nodes);
         }
 
         [Fact]

@@ -58,8 +58,8 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(model);
 
-            Assert.False(map.MapItems.ContainsKey(model.Uid));
-            Assert.False(map.Nodes.ContainsKey(model.Node.Uid));
+            Assert.Empty(map.MapItems);
+            Assert.Empty(map.Nodes);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, garage);
 
             garage.CityName = r.ReadToken();
-            garage.BuyMode = r.ReadUInt32();
+            garage.IsBuyPoint = r.ReadUInt32() > 0;
              
             garage.Node = new UnresolvedNode(r.ReadUInt64());
             garage.Prefab = new UnresolvedItem(r.ReadUInt64());
@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap.Serialization
             WriteKdopItem(w, garage);
 
             w.Write(garage.CityName);
-            w.Write(garage.BuyMode);
+            w.Write(garage.IsBuyPoint ? 1 : 0);
  
             w.Write(garage.Node.Uid);
             w.Write(garage.Prefab.Uid);

@@ -150,11 +150,11 @@ namespace TruckLib.ScsMap
         private void CreateGarage()
         {
             var garage = CreateSlaveItem<Garage>(SpawnPointType.GaragePoint);
-            garage.BuyMode = 0;
+            garage.IsBuyPoint = false;
             garage.TrailerSpawnPoints = CreateSpawnPointNodes(garage, SpawnPointType.TrailerSpawn);
 
             var buy = CreateSlaveItem<Garage>(SpawnPointType.BuyPoint);
-            buy.BuyMode = 1;
+            buy.IsBuyPoint = true;
 
             CreateSlaveItem<FuelPump>(SpawnPointType.GasStation);
         }

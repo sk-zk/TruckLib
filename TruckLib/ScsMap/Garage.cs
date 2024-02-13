@@ -27,9 +27,9 @@ namespace TruckLib.ScsMap
         public Token CityName { get; set; }
 
         /// <summary>
-        /// Determines if the point is the <c>BuyPoint</c> (1) or the <c>GaragePoint</c> (0).
+        /// Gets or sets if this is the <c>BuyPoint</c> (true) or the <c>GaragePoint</c> (false).
         /// </summary>
-        public uint BuyMode { get; set; }
+        public bool IsBuyPoint { get; set; }
 
         /// <summary>
         /// Nodes representing the <c>TrailerSpawn</c> spawn point type of the prefab.

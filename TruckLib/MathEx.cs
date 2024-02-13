@@ -9,7 +9,6 @@ namespace TruckLib
 {
     internal static class MathEx
     {
-
         public static double Deg(double rad) => rad * (180.0 / Math.PI);
         public static float Deg(float rad) => (float)(rad * (180.0 / Math.PI));
 
@@ -84,6 +83,5 @@ namespace TruckLib
         {
             return a - b * (int)Math.Floor((double)a / b);
         }
-
     }
 }

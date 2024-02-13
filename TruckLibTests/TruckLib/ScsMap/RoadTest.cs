@@ -5,12 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.ScsMap;
 using System.Numerics;
-using Xunit.Sdk;
+using TruckLib;
 
 namespace TruckLibTests.TruckLib.ScsMap
 {
+    [Collection("Prefab collection")]
     public class RoadTest
     {
+        PrefabFixture fixture;
+        public RoadTest(PrefabFixture fixture)
+        {
+            this.fixture = fixture;
+        }
+
         [Fact]
         public void Add()
         {
@@ -159,6 +166,20 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Null(road1.ForwardNode.ForwardItem);
             Assert.True(road3.Node.IsRed);
             Assert.Null(road3.Node.BackwardItem);
+        }
+
+        [Fact]
+        public void DeleteWhileBwItemIsPrefab()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
+                Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
+            var road = prefab.AppendRoad(1, new Vector3(55, 0, 10), "blkw1");
+
+            map.Delete(road);
+
+            AssertEx.Equal(new Quaternion(0, 1, 0, 0), prefab.Nodes[1].Rotation);
+            Assert.False(prefab.Nodes[1].IsRed);
         }
     }
 }

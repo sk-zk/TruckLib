@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.ScsMap;
 using System.Numerics;
-using Newtonsoft.Json.Bson;
-using TruckLib.Models.Ppd;
 
 namespace TruckLibTests.TruckLib.ScsMap 
 {
@@ -159,6 +157,79 @@ namespace TruckLibTests.TruckLib.ScsMap
             var road = Road.Add(map, new Vector3(55, 0, 55), new Vector3(50, 0, 70), "blkw1");
 
             Assert.Throws<InvalidOperationException>(() => prefab.Nodes[0].Merge(road.Node));
+        }
+
+        [Fact]
+        public void SplitRoads()
+        {
+            var map = new Map("foo");
+            var road1 = Road.Add(map, new Vector3(10, 0, 10), new Vector3(30, 0, 30), "blkw1");
+            var road2 = road1.Append(new Vector3(50, 0, 50));
+
+            var newNode = road2.Node.Split();
+
+            Assert.NotEqual(road1.ForwardNode, road2.Node);
+            Assert.Equal(newNode, road2.Node);
+            Assert.Null(road1.ForwardNode.ForwardItem);
+            Assert.Equal(road2, newNode.ForwardItem);
+            Assert.Null(newNode.BackwardItem);
+            Assert.True(newNode.IsRed);
+            Assert.False(road1.ForwardNode.IsRed);
+            Assert.Equal(road1.ForwardNode.Position, newNode.Position);
+        }
+
+        [Fact]
+        public void SplitReturnsNull()
+        {
+            var map = new Map("foo");
+            var model = Model.Add(map, new Vector3(1, 2, 3), "aaa", "bbb", "ccc");
+
+            Assert.Null(model.Node.Split());
+        }
+
+        [Fact]
+        public void SplitRoadAndPrefab()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var expectedPfNodeRot = prefab.Nodes[3].Rotation;
+            var road = prefab.AppendRoad(3, new Vector3(100, 0, 20), "ger1");
+
+            var newNode = road.Node.Split();
+
+            Assert.NotEqual(prefab.Nodes[3], road.Node);
+            Assert.Equal(newNode, road.Node);
+            Assert.Null(road.Node.BackwardItem);
+            Assert.Equal(road, newNode.ForwardItem);
+            Assert.Null(prefab.Nodes[3].BackwardItem);
+            Assert.Equal(prefab, prefab.Nodes[3].ForwardItem);
+            Assert.True(newNode.IsRed);
+            Assert.False(prefab.Nodes[3].IsRed);
+            Assert.Equal(prefab.Nodes[3].Position, newNode.Position);
+            AssertEx.Equal(expectedPfNodeRot, prefab.Nodes[3].Rotation, 0.001f);
+        }
+
+        [Fact]
+        public void SplitRoadAndPrefabAtOrigin()
+        {
+            var map = new Map("foo");
+            var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            prefab.ChangeOrigin(3);
+            var expectedPfNodeRot = prefab.Nodes[0].Rotation;
+            var road = prefab.AppendRoad(0, new Vector3(100, 0, 20), "ger1");
+
+            var newNode = road.ForwardNode.Split();
+
+            Assert.NotEqual(prefab.Nodes[0], road.ForwardNode);
+            Assert.Equal(newNode, road.ForwardNode);
+            Assert.Null(road.ForwardNode.ForwardItem);
+            Assert.Equal(road, newNode.BackwardItem);
+            Assert.Null(prefab.Nodes[0].BackwardItem);
+            Assert.Equal(prefab, prefab.Nodes[0].ForwardItem);
+            Assert.False(newNode.IsRed);
+            Assert.True(prefab.Nodes[0].IsRed);
+            Assert.Equal(prefab.Nodes[0].Position, newNode.Position);
+            AssertEx.Equal(expectedPfNodeRot, prefab.Nodes[0].Rotation, 0.001f);
         }
     }
 }

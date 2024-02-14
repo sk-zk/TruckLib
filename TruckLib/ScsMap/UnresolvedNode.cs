@@ -39,6 +39,8 @@ namespace TruckLib.ScsMap
         public bool IsOrphaned() => throw new InvalidOperationException();
         public void Move(Vector3 newPos) => throw new InvalidOperationException();
         public void Merge(INode n2) => throw new NotImplementedException();
+        public INode Split() => throw new NotImplementedException();
+
         public void Translate(Vector3 translation) => throw new InvalidOperationException();
         public void Deserialize(BinaryReader r, uint? version = null) => throw new InvalidOperationException();
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems) => throw new InvalidOperationException();

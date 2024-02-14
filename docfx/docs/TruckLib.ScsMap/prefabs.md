@@ -114,3 +114,13 @@ Road road = prefab.AppendRoad(1, new Vector3(42, 0, 21), "ger1");
 
 The given position will be the position of the forward node of the road, unless you are appending to the origin node,
 in which case it will be the backward node (meaning the road is actually prepended).
+
+## Disconnecting polyline items
+You can disconnect a polyline item from a prefab by calling [`Split`](xref:TruckLib.ScsMap.Node.Split*) on the node
+which connects them. For example, the following line of code will detach the item attached to node 1:
+
+```cs
+INode newNode = prefab.Nodes[1].Split();
+```
+
+The method also returns the newly created node.

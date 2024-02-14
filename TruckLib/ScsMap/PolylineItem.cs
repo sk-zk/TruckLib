@@ -243,7 +243,8 @@ namespace TruckLib.ScsMap
 
             if (first.BackwardItem is not Prefab)
                 first.Node.Rotation = initialRot;
-            first.ForwardNode.Rotation = initialRot;
+            if (first.ForwardItem is not Prefab)
+                first.ForwardNode.Rotation = initialRot;
 
             var next = first;
             while (next.ForwardItem is PolylineItem fw)

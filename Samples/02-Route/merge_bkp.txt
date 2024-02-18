@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Numerics;
 using TruckLib.ScsMap;
@@ -10,10 +10,13 @@ namespace Route
 {
     class Program
     {
-        static Road r;
-
+        // dummys
+        static Road r0;
+        static Road r1;
+        
         static void Main(string[] args)
-        {   
+        {            
+
             // load or create, edit offsets
             var map = new Map("example");
             //Map map = Map.Open(@"C:\Users\worker\Documents\Euro Truck Simulator 2\mod\user_map\map\pgi.mbd");
@@ -21,7 +24,6 @@ namespace Route
             // read .csv
             // https://valhalla.openstreetmap.de/directions?profile=car&wps=8.736566305160524%2C47.9225903172469%2C8.736308813095095%2C47.92535111067535%2C8.732757568359377%2C47.92223082809373%2C8.736013770103456%2C47.92231351082017
             var path = @"C:\Users\worker\Documents\dev\ets2\PGI\2_csv\donau.csv"; 
-            
             using (TextFieldParser csvParser = new TextFieldParser(path))
             {
                 // parser options
@@ -34,14 +36,15 @@ namespace Route
                 float y0 = 0;
                 float z0 = 0;
 
-                // offset //todo: add to first row .csv
+                // offset
                 float xoff = 0f;
-                float yoff = 0f;
+                float yoff = 0f; //*-1
                 float zoff = 0f;
 
                 // helper
                 bool firstLoop = true;
-                bool firstRoad = true;
+                bool firstOdd = true;
+                bool odd = true;
 
                 while (!csvParser.EndOfData)
                 {
@@ -54,39 +57,52 @@ namespace Route
                     float y1 = float.Parse(fields[1], CultureInfo.InvariantCulture.NumberFormat) - yoff;
                     float z1 = float.Parse(fields[2], CultureInfo.InvariantCulture.NumberFormat) - zoff;
 
-                    if(firstLoop)
+                    
+                    
+                    if(!firstLoop)
                     {
-                        x0 = x1;
-                        y0 = y1;
-                        z0 = z1;
-                        
-                        firstLoop = false;
-
-                    }
-
-                    else
-                    {
-                        if(firstRoad)
+                        if(odd)
                         {
-                            r = Road.Add(map,
+                            r0 = Road.Add(map,
                             new Vector3(x0, z0, y0), // position of backward (red) node
                             new Vector3(x1, z1, y1),    // position of forward (green) node
                             "ger1",  // unit name of the road model
                             10, 10   // terrain size on the left and right side
                             );
-                            SetProperties(r);
+                            SetProperties(r0);
 
-                            firstRoad = false;
+                            if(!firstOdd)
+                            {
+                                r0.ForwardNode.Merge(r1.Node);                                                                
+                            }
+
+                            firstOdd = false;
 
                         }
 
                         else
                         {   
-                            r = r.Append(new Vector3(x1, z1, y1));                                                       
+                            r1 = Road.Add(map,
+                                new Vector3(x0, z0, y0), // position of backward (red) node
+                                new Vector3(x1, z1, y1),    // position of forward (green) node
+                                "ger1",  // unit name of the road model
+                                10, 10   // terrain size on the left and right side
+                                );
+                            SetProperties(r1);
+
+                            r1.ForwardNode.Merge(r0.Node);                                                        
                         } 
-                    
+
+                        odd = !odd;                        
+
                     }
-                
+                                       
+                    firstLoop = false;
+                    
+                    x0 = x1;
+                    y0 = y1;
+                    z0 = z1;
+
                 }
             
             }

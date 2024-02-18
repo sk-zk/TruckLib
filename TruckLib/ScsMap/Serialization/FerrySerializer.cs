@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, ferry);
 
             ferry.Port = r.ReadToken();
-            ferry.PrefabLink = new UnresolvedItem(r.ReadUInt64());
+            ferry.Prefab = new UnresolvedItem(r.ReadUInt64());
             ferry.Node = new UnresolvedNode(r.ReadUInt64());
             ferry.UnloadOffset = r.ReadVector3();
 
@@ -25,7 +25,7 @@ namespace TruckLib.ScsMap.Serialization
             var ferry = item as Ferry;
             WriteKdopItem(w, ferry);
             w.Write(ferry.Port);
-            w.Write(ferry.PrefabLink.Uid);
+            w.Write(ferry.Prefab.Uid);
             w.Write(ferry.Node.Uid);
             w.Write(ferry.UnloadOffset);
         }

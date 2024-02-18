@@ -1,5 +1,9 @@
 items:
-  - name: TruckLib.ScsMap
+  - name: Introduction
+    href: introduction.md
+  - name: Creating and modifying maps
     href: TruckLib.ScsMap/toc.yml
-  - name: TruckLib.HashFs
+  - name: HashFS
     href: TruckLib.HashFs/toc.yml
+  - name: Sample code
+    href: Samples/toc.yml

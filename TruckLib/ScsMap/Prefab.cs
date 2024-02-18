@@ -52,14 +52,14 @@ namespace TruckLib.ScsMap
         public Token Look { get; set; }
 
         /// <summary>
-        /// The map nodes of this prefab.
+        /// The map nodes of this prefab. The origin node will always be the first entry in this list.
         /// </summary>
         public List<INode> Nodes { get; set; }
 
         /// <summary>
         /// The index of the origin node.
         /// <para>This defines which of the ppd nodes is the origin node.
-        /// It is not an index for the <see cref="Prefab.Nodes">Nodes</see> property,
+        /// It is not an index for the <see cref="Nodes">Nodes</see> property,
         /// as the origin node is always the first node in that list.</para>
         /// </summary>
         public ushort Origin { get; internal set; }
@@ -83,9 +83,9 @@ namespace TruckLib.ScsMap
         public Token SemaphoreProfile { get; set; }
 
         /// <summary>
-        /// The <see cref="Ferry"/> item this prefab is connected to, if applicable.
+        /// The <see cref="ScsMap.Ferry"/> item this prefab is connected to, if applicable.
         /// </summary>
-        public IMapItem FerryLink { get; set; }
+        public IMapItem Ferry { get; set; }
 
         public uint RandomSeed { get; set; }
 
@@ -212,7 +212,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if this prefab is the last prefab before a <see cref="Ferry"/>.
+        /// Gets or sets if this prefab is the last prefab before a <see cref="ScsMap.Ferry"/>.
         /// </summary>
         public bool IsFerryEntrance
         {
@@ -283,57 +283,56 @@ namespace TruckLib.ScsMap
         /// <param name="unitName">The unit name of the prefab.</param>
         /// <param name="position">The position of node 0.</param>
         /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
+        /// <param name="rotation">The rotation of the prefab.</param>
         /// <returns>The newly created prefab.</returns>
-        public static Prefab Add(IItemContainer map, string unitName, PrefabDescriptor ppd,
-            Vector3 position, Quaternion? rotation = null)
+        public static Prefab Add(IItemContainer map, Vector3 position, Token unitName,
+            PrefabDescriptor ppd, Quaternion? rotation = null)
         {
             return new PrefabCreator().FromPpd(map, unitName, ppd, position,
                 rotation ?? Quaternion.Identity);
         }
 
         /// <summary>
-        /// Appends a new road segment to a prefab.
+        /// Appends a new road segment to a node of this prefab.
+        /// <remarks>If the node is the origin node, it will be prepended instead.</remarks>
         /// </summary>
-        /// <param name="map">The map.</param>
-        /// <param name="node">The index of the prefab node to attach to.</param>
+        /// <param name="node">The index of the prefab node 
+        /// (in <see cref="Nodes"/>, not the .ppd file) to attach to.</param>
         /// <param name="forwardPos">The position of the road's forward node.</param>
         /// <param name="type">The unit name of the road.</param>
         /// <param name="leftTerrainSize">The left terrain size.</param>
         /// <param name="rightTerrainSize">The right terrain size.</param>
         /// <returns>The newly created road.</returns>
-        public Road AppendRoad(IItemContainer map, ushort node, Vector3 forwardPos,
-            Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
+        public Road AppendRoad(ushort node, Vector3 forwardPos, Token type,
+            float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
             if (node > Nodes.Count)
                 throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
-            INode backwardNode;
-            INode forwardNode;
-
             // if the node to attach to is the origin node,
             // the road has to be *prepended* instead
-            var prepend = (node == 0);
-            if (prepend)
-            {
-                backwardNode = map.AddNode(forwardPos);
-                forwardNode = Nodes[node];
-            }
-            else
-            {
-                backwardNode = Nodes[node];
-                forwardNode = map.AddNode(forwardPos);
-            }
+            var prepend = node == 0;
+
+            if (prepend && Nodes[node].BackwardItem is not null)
+                throw new InvalidOperationException("Can't prepend to this node: there is already an item attached to it.");
+            else if (!prepend && Nodes[node].BackwardItem is not null)
+                throw new InvalidOperationException("Can't append to this node: there is already an item attached to it.");
+
+            var theNewNode = Nodes[0].Parent.AddNode(forwardPos);
+            var backwardNode = prepend ? theNewNode : Nodes[node];
+            var forwardNode = prepend ? Nodes[node] : theNewNode;
          
             var road = new Road
             {
                 Node = backwardNode,
                 ForwardNode = forwardNode
             };
-            road.Node.ForwardItem = road;
-            road.ForwardNode.BackwardItem = road;
+            backwardNode.ForwardItem = road;
+            forwardNode.BackwardItem = road;
             road.InitFromAddOrAppend(backwardNode.Position, forwardNode.Position, type,
                 leftTerrainSize, rightTerrainSize);
-            map.AddItem(road);
+            backwardNode.IsRed = true;
+            Nodes[0].Parent.AddItem(road);
             
             // nodes of a prefab that have nothing attached to it
             // always have the prefab as ForwardItem, but they will be
@@ -347,64 +346,22 @@ namespace TruckLib.ScsMap
             }
             else
             {
-                backwardNode.Rotation = (backwardNode.Rotation.IsIdentity)
-                    ? Quaternion.CreateFromAxisAngle(Vector3.UnitY, -3.14159265f)
-                    : Quaternion.Inverse(backwardNode.Rotation);
+                backwardNode.Rotation *= Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
-            }          
+            }
 
             road.Recalculate();
-            
-            backwardNode.IsRed = true;
-            
             return road;
         }
 
         /// <summary>
-        /// Attaches the ForwardNode of the given polyline item to the specified node of this prefab.
-        /// The polyline item's ForwardNode will be deleted.
-        /// </summary>
-        /// <param name="item">The polyline item to attach.</param>
-        /// <param name="prefabNodeIdx">The index of the prefab node to attach to.</param>
-        public void Attach(PolylineItem item, INode itemNode, ushort prefabNodeIdx)
-        {
-            if (prefabNodeIdx > Nodes.Count)
-                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
-
-            if (itemNode.BackwardItem is null)
-            {
-                // deal with prepend roads coming from the wrong direction
-                var oldPfNode = Nodes[prefabNodeIdx];
-                Nodes[prefabNodeIdx] = itemNode;
-                itemNode.ForwardItem = item;
-                itemNode.BackwardItem = this;
-                itemNode.Position = oldPfNode.Position;
-                // set rotation to the inverse angle
-                // now that something is attached to it
-                itemNode.Rotation = Quaternion.Inverse(oldPfNode.Rotation);
-                itemNode.IsRed = true;
-                oldPfNode.Parent.Nodes.Remove(oldPfNode.Uid);
-            }
-            else
-            {
-                item.ForwardNode = Nodes[prefabNodeIdx];
-                item.ForwardNode.ForwardItem = this;
-                item.ForwardNode.BackwardItem = item;
-                item.ForwardNode.IsRed = true;
-                itemNode.Parent.Nodes.Remove(itemNode.Uid);
-            }
-
-            item.RecalculateLength();
-        }
-
-        /// <summary>
-        /// Attaches the ForwardNode of the given polyline item to the closest node of this prefab.
-        /// The polyline item's ForwardNode will be deleted.
+        /// Finds the two closest nodes of this prefab and the given polyline item and attaches the
+        /// polyline item to the prefab node.
+        /// The leftover node of the polyline item will be deleted.
         /// </summary>
         /// <param name="item">The polyline item to attach.</param>
         public void Attach(PolylineItem item)
         {
-            // find closest node
             float shortestDist = float.MaxValue;
             INode closestPrefabNode = null;
             INode closestItemNode = null;
@@ -422,62 +379,108 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            Attach(item, closestItemNode, (ushort)Nodes.IndexOf(closestPrefabNode));
+            Attach((ushort)Nodes.IndexOf(closestPrefabNode), closestItemNode);
         }
 
         /// <summary>
-        /// Attaches the given prefab to a node of this prefab, assuming that
-        /// at least one of the nodes has the same position as a node of this prefab.
+        /// Attaches a node of a polyline item to the specified node of this prefab.
         /// </summary>
-        /// <param name="p2">The prefab to attach.</param>
-        public void Attach(Prefab p2)
+        /// <param name="prefabNode">The index of the prefab node (in <see cref="Nodes"/>, not the .ppd file)
+        /// to attach to.</param>
+        /// <param name="itemNode">The node of the polyline item to attach. This node will be deleted.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the index exceeds the number of nodes.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when attempting to merge the backward node of a road
+        /// into the origin node of the prefab, which is not allowed.</exception>
+        public void Attach(ushort prefabNode, INode itemNode)
         {
-            // find overlapping node(s). 
-            // the Intersect call returns the
-            // nodes of this prefab which will replace the corresponding newPf nodes.
-            var overlappingNodes = Nodes.Intersect(p2.Nodes, new NodePositionComparer()).ToList();
-            if (overlappingNodes.Count == 0)
-                throw new NotImplementedException("No overlapping node found - can't attach prefab");
+            if (prefabNode > Nodes.Count)
+                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
 
-            for (var i = 0; i < overlappingNodes.Count; i++)
+            Nodes[prefabNode].Merge(itemNode);
+        }
+
+        /// <summary>
+        /// Attaches the prefab <c>p2</c> to a node of this prefab. <c>p2</c> will be moved such that the nodes
+        /// which will be merged have the same position.
+        /// </summary>
+        /// <param name="p1NodeIdx">The index of the node of this prefab to which <c>p2</c> will be attached.</param>
+        /// <param name="p2">The prefab to attach to this one.</param>
+        /// <param name="p2NodeIdx">The index of the node of <c>p2</c> which will be attached to this prefab.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if one of the indices exceeds the number of nodes.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the nodes can't be connected.</exception>
+        public void Attach(ushort p1NodeIdx, Prefab p2, ushort p2NodeIdx)
+        {
+            if (p1NodeIdx > Nodes.Count)
+                throw new IndexOutOfRangeException($"This prefab only has {Nodes.Count} nodes.");
+
+            if (p2NodeIdx > p2.Nodes.Count)
+                throw new IndexOutOfRangeException($"p2 only has {p2.Nodes.Count} nodes.");
+
+            if (p1NodeIdx == 0 && p2NodeIdx == 0)
+                throw new InvalidOperationException("Unable to attach: two origin nodes can't be connected.");
+
+            var p1Node = Nodes[p1NodeIdx];
+            var p2Node = p2.Nodes[p2NodeIdx];
+
+            if (!(p1Node.ForwardItem == this && p1Node.BackwardItem is null))
+                throw new InvalidOperationException("Unable to attach: p1Node is already occupied.");
+
+            if (!(p2Node.ForwardItem == p2 && p2Node.BackwardItem is null))
+                throw new InvalidOperationException("Unable to attach: p2Node is already occupied.");
+
+            p2.Move(p1Node.Position, p2NodeIdx);
+
+            if (p2NodeIdx == 0)
             {
-                var p1Node = overlappingNodes[i];
-                var p1NodeIdx = Nodes.IndexOf(p1Node);
-                var p2NodeIdx = p2.Nodes.FindIndex(x => x.Position == p1Node.Position);
-                var p2Node = p2.Nodes[p2NodeIdx];
+                p2Node.BackwardItem = this;
+                Nodes[p1NodeIdx] = p2Node;
 
-                // if the p2 node is the origin, the nodes have to be merged to the p2 node.
-                // otherwise, the p1 node survives
-                if (p2NodeIdx == 0)
-                {
-                    p2Node.BackwardItem = this;
-                    Nodes[p1NodeIdx] = p2Node;
+                p1Node.ForwardItem = null;
+                p1Node.Parent.Delete(p1Node);
+            } 
+            else
+            {
+                p1Node.BackwardItem = p2;
+                p1Node.ForwardItem = this;
+                p2.Nodes[p2NodeIdx] = p1Node;
 
-                    p1Node.Parent.Nodes.Remove(p1Node.Uid);
-                }
-                else
-                {
-                    p1Node.BackwardItem = p2;
-                    p1Node.IsRed = p1Node.IsRed || p2Node.IsRed;
-                    p2.Nodes[p2NodeIdx] = p1Node;
-
-                    p2Node.ForwardItem = null;
-                    p2Node.Parent.Nodes.Remove(p2Node.Uid);
-                }
+                p2Node.ForwardItem = null;
+                p2Node.Parent.Delete(p2Node);
             }
         }
 
         /// <summary>
-        /// Checks if this and the given prefab are connected to each other at one or more nodes.
+        /// Finds the two closest nodes of this prefab and <c>p2</c>, moves <c>p2</c> such that
+        /// the two nodes have the same position, and attaches it to this prefab.
         /// </summary>
-        /// <param name="p2">The other prefab.</param>
-        /// <returns>Whether this and the given prefab are connected to each other at 
-        /// one or more nodes.</returns>
-        public bool IsAttachedTo(Prefab p2) =>
-            Nodes.Intersect(p2.Nodes).Any();
+        /// <param name="p2">The prefab to attach to this one.</param>
+        /// <exception cref="InvalidOperationException">Thrown if the nodes can't be connected.</exception>
+        public void Attach(Prefab p2)
+        {
+            float shortestDist = float.MaxValue;
+            ushort closestP1NodeIdx = 999;
+            ushort closestP2NodeIdx = 999;
+            for (ushort p1NodeIdx = 0; p1NodeIdx < Nodes.Count; p1NodeIdx++)
+            {
+                for (ushort p2NodeIdx = 0; p2NodeIdx < p2.Nodes.Count; p2NodeIdx++)
+                {
+                    var dist = Vector3.DistanceSquared(
+                        Nodes[p1NodeIdx].Position, p2.Nodes[p2NodeIdx].Position);
+                    if (dist < shortestDist)
+                    {
+                        shortestDist = dist;
+                        closestP1NodeIdx = p1NodeIdx;
+                        closestP2NodeIdx = p2NodeIdx;
+                    }
+                }
+            }
+
+            Attach(closestP1NodeIdx, p2, closestP2NodeIdx);
+        }
 
         /// <summary>
-        /// Moves the item to a different location.
+        /// Moves the prefab to a different location. All other prefabs attached to this one
+        /// will also be moved.
         /// </summary>
         /// <param name="newPos">The new position of node 0.</param>
         public override void Move(Vector3 newPos)
@@ -486,7 +489,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Moves the item to a different location.
+        /// Moves the prefab to a different location. All other prefabs attached to this one
+        /// will also be moved.
         /// </summary>
         /// <param name="newPos">The new position of the specified node.</param>
         /// <param name="nodeIdx">The index of the node which will assume the given position.</param>
@@ -496,32 +500,62 @@ namespace TruckLib.ScsMap
             Translate(translation);
         }
 
+        /// <summary>
+        /// Translates the prefab by the given vector. All other prefabs attached to this one
+        /// will also be moved.
+        /// </summary>
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
-            foreach (var node in Nodes)
-                node.Move(node.Position + translation);
+            var prefabs = new HashSet<Prefab>();
+            var nodes = new HashSet<INode>();
+            GetConnectedPrefabsAndNodesRecursive(prefabs, nodes);
 
-            foreach (var si in SlaveItems)
-                (si as PrefabSlaveItem).Translate(translation);
+            foreach (var node in nodes)
+                node.Translate(translation);
+
+            foreach (var pf in prefabs)
+                foreach (var si in pf.SlaveItems)
+                    (si as PrefabSlaveItem).Translate(translation);
+        }
+
+        internal void GetConnectedPrefabsAndNodesRecursive(HashSet<Prefab> visited, HashSet<INode> nodes)
+        {
+            visited.Add(this);
+            foreach (var node in Nodes)
+            {
+                nodes.Add(node);
+                if (node.ForwardItem is Prefab fw && !visited.Contains(fw))
+                    fw.GetConnectedPrefabsAndNodesRecursive(visited, nodes);
+                if (node.BackwardItem is Prefab bw && !visited.Contains(bw))
+                    bw.GetConnectedPrefabsAndNodesRecursive(visited, nodes);
+            }
         }
 
         /// <summary>
         /// Changes the origin of the prefab.
         /// </summary>
-        /// <param name="newOrigin">The index of the new origin.</param>
-        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <param name="newOrigin">The index (in the ppd file, not <see cref="Nodes"/>) of the new origin.</param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the index exceeds the number of nodes.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if one or both of the nodes which would be
+        /// affected by the opertation already have an item attached to them.</exception>
         public void ChangeOrigin(ushort newOrigin)
         {
             if (newOrigin > Nodes.Count)
                 throw new IndexOutOfRangeException();
 
-            Nodes[newOrigin].IsRed = 
-                Nodes[Origin].IsRed && Nodes[Origin].BackwardItem == null;
+            var newOriginIdxInList = MathEx.Mod(newOrigin - Origin, Nodes.Count);
 
-            Nodes = Nodes.Skip(newOrigin)
-                .Concat(Nodes.Take(newOrigin))
-                .ToList();
+            if (Nodes[newOriginIdxInList].BackwardItem is not null || Nodes[0].BackwardItem is not null)
+            {
+                throw new InvalidOperationException("Unable to change origin: one or both of the " +
+                    "affected nodes have an item attached to them");
+            }
+
+            Nodes[newOriginIdxInList].IsRed = Nodes[0].IsRed 
+                && Nodes[0].BackwardItem == null;
+
+            Nodes = Utils.Rotate(Nodes, newOrigin - Origin);
             Origin = newOrigin;
         }
 
@@ -538,10 +572,10 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (FerryLink is UnresolvedItem && 
-                allItems.TryGetValue(FerryLink.Uid, out var resolvedFerry))
+            if (Ferry is UnresolvedItem && 
+                allItems.TryGetValue(Ferry.Uid, out var resolvedFerry))
             {
-                FerryLink = resolvedFerry;
+                Ferry = resolvedFerry;
             }
 
             for (int i = 0; i < SlaveItems.Count; i++)
@@ -554,15 +588,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        /// <summary>
-        /// Used for Attach(Prefab). Compares the position of two nodes.
-        /// </summary>
-        internal class NodePositionComparer : IEqualityComparer<INode>
-        {
-            public bool Equals(INode x, INode y) => x.Position == y.Position;
-            public int GetHashCode(INode obj) => 0; // apparently this has to happen for Equals to be called
-        }
-
+        /// <inheritdoc/>
         internal override Vector3 GetCenter()
         {
             var acc = Vector3.Zero;

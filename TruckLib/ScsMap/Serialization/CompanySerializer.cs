@@ -15,7 +15,7 @@ namespace TruckLib.ScsMap.Serialization
             company.CompanyName = r.ReadToken();
             company.CityName = r.ReadToken();
 
-            company.PrefabLink = new UnresolvedItem(r.ReadUInt64());
+            company.Prefab = new UnresolvedItem(r.ReadUInt64());
 
             company.Node = new UnresolvedNode(r.ReadUInt64());
 
@@ -39,7 +39,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(company.CompanyName);
             w.Write(company.CityName);
 
-            w.Write(company.PrefabLink.Uid);
+            w.Write(company.Prefab.Uid);
 
             w.Write(company.Node.Uid);
 

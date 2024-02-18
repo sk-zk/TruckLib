@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, service);
 
             service.Node = new UnresolvedNode(r.ReadUInt64());
-            service.PrefabLink = new UnresolvedItem(r.ReadUInt64());
+            service.Prefab = new UnresolvedItem(r.ReadUInt64());
             service.Nodes = ReadNodeRefList(r);
 
             return service;
@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap.Serialization
             var service = item as Service;
             WriteKdopItem(w, service);
             w.Write(service.Node.Uid);
-            w.Write(service.PrefabLink.Uid);
+            w.Write(service.Prefab.Uid);
             WriteNodeRefList(w, service.Nodes);
         }
     }

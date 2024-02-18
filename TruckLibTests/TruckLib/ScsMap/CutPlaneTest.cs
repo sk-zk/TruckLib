@@ -81,11 +81,8 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(cutPlane);
 
-            Assert.False(map.MapItems.ContainsKey(cutPlane.Uid));
-            for (int i = 0; i < cutPlane.Nodes.Count; i++)
-            {
-                Assert.False(map.Nodes.ContainsKey(cutPlane.Nodes[i].Uid));
-            }
+            Assert.Empty(map.MapItems);
+            Assert.Empty(map.Nodes);
         }
     }
 }

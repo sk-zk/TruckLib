@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap.Serialization
             var ferryLinkUid = r.ReadUInt64();
             if (ferryLinkUid != 0)
             {
-                pf.FerryLink = new UnresolvedItem(ferryLinkUid);
+                pf.Ferry = new UnresolvedItem(ferryLinkUid);
             }
 
             pf.Origin = r.ReadUInt16();
@@ -102,13 +102,13 @@ namespace TruckLib.ScsMap.Serialization
 
             WriteItemRefList(w, pf.SlaveItems);
 
-            if (pf.FerryLink is null)
+            if (pf.Ferry is null)
             {
                 w.Write(0UL);
             }
             else
             {
-                w.Write(pf.FerryLink.Uid);
+                w.Write(pf.Ferry.Uid);
             }
 
             w.Write(pf.Origin);

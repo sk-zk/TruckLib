@@ -21,9 +21,9 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// The prefab this item is linked to.
+        /// The prefab which owns this item.
         /// </summary>
-        public IMapItem PrefabLink { get; set; }
+        public IMapItem Prefab { get; set; }
 
         public PrefabSlaveItem() : base() { }
 
@@ -51,7 +51,7 @@ namespace TruckLib.ScsMap
             where T : PrefabSlaveItem, new()
         {
             var item = Add<T>(map, position);
-            item.PrefabLink = parent;
+            item.Prefab = parent;
             parent.SlaveItems.Add(item);
             return item;
         }
@@ -71,10 +71,10 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (PrefabLink is UnresolvedItem 
-                && allItems.TryGetValue(PrefabLink.Uid, out var resolvedPrefab))
+            if (Prefab is UnresolvedItem 
+                && allItems.TryGetValue(Prefab.Uid, out var resolvedPrefab))
             {
-                PrefabLink = resolvedPrefab;
+                Prefab = resolvedPrefab;
             }
         }
     }

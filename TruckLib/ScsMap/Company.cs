@@ -88,5 +88,14 @@ namespace TruckLib.ScsMap
                 SpawnPoints[i] = spawnPoint;
             }
         }
+
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            var nodes = new List<INode>(SpawnPoints.Count + 1) { Node };
+            foreach (var point in SpawnPoints)
+                nodes.Add(point.Node);
+            return nodes;
+        }
     }
 }

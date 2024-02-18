@@ -97,9 +97,8 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(buildings);
 
-            Assert.False(map.MapItems.ContainsKey(buildings.Uid));
-            Assert.False(map.Nodes.ContainsKey(buildings.Node.Uid));
-            Assert.False(map.Nodes.ContainsKey(buildings.ForwardNode.Uid));
+            Assert.Empty(map.MapItems);
+            Assert.Empty(map.Nodes);
         }
 
         [Fact]

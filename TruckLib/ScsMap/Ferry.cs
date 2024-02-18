@@ -33,7 +33,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The prefab this ferry is linked to, if applicable.
         /// </summary>
-        public IMapItem PrefabLink { get; set; }
+        public IMapItem Prefab { get; set; }
 
         /// <summary>
         /// Gets or sets if the item is actually a train transport.
@@ -80,10 +80,10 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
-            if (PrefabLink is UnresolvedItem 
-                && allItems.TryGetValue(PrefabLink.Uid, out var resolvedPrefab))
+            if (Prefab is UnresolvedItem 
+                && allItems.TryGetValue(Prefab.Uid, out var resolvedPrefab))
             {
-                PrefabLink = resolvedPrefab;
+                Prefab = resolvedPrefab;
             }
         }
     }

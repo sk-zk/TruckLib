@@ -56,8 +56,10 @@ namespace TruckLib.ScsMap
             set => base.ViewDistance = value;
         }
 
+        private FlagField tmpFlags = new();
+
         /// <summary>
-        /// The unit name of the road.
+        /// The unit name of the road type.
         /// </summary>
         public Token RoadType { get; set; }
 
@@ -131,76 +133,146 @@ namespace TruckLib.ScsMap
         /// can therefore have a sidewalk.
         /// </summary>
         [Obsolete]
-        public bool IsCityRoad { get; set; } = false;
+        public bool IsCityRoad 
+        {
+            get => tmpFlags[0];
+            set => tmpFlags[0] = value; 
+        }
 
         public byte DlcGuard { get; set; }
 
         /// <summary>
         /// Gets or sets if the satnav should avoid this road segment.
         /// </summary>
-        public bool GpsAvoid { get; set; } = false;
+        public bool GpsAvoid
+        {
+            get => tmpFlags[1];
+            set => tmpFlags[1] = value;
+        }
 
         /// <summary>
         /// Gets or sets if this road is displayed in the UI map.
         /// </summary>
-        public bool ShowInUiMap { get; set; } = true;
+        public bool ShowInUiMap
+        {
+            get => tmpFlags[2];
+            set => tmpFlags[2] = value;
+        }
 
         /// <summary>
         /// Gets or sets if this item will render behind a cut plane.
         /// </summary>
-        public bool IgnoreCutPlanes { get; set; } = false;
+        public bool IgnoreCutPlanes
+        {
+            get => tmpFlags[3];
+            set => tmpFlags[3] = value;
+        }
 
         /// <summary>
         /// Gets or sets if the item uses left hand traffic.
         /// </summary>
-        public bool LeftHandTraffic { get; set; } = false;
+        public bool LeftHandTraffic
+        {
+            get => tmpFlags[4];
+            set => tmpFlags[4] = value;
+        }
 
         /// <summary>
         /// Gets or sets if only flat textures are used as vegetation.
         /// </summary>
-        public bool LowPolyVegetation { get; set; } = false;
+        public bool LowPolyVegetation
+        {
+            get => tmpFlags[5];
+            set => tmpFlags[5] = value;
+        }
 
         /// <summary>
         /// Gets or sets if AI traffic can use this road.
         /// If not, AI vehicles will choose a different route.
         /// If there isn't one, they will despawn instead.
         /// </summary>
-        public bool AiVehicles { get; set; } = true;
+        public bool AiVehicles
+        {
+            get => tmpFlags[6];
+            set => tmpFlags[6] = value;
+        }
 
         /// <summary>
         /// Gets or sets if the road has invisible walls on both sides of it.
         /// </summary>
-        public bool Boundary { get; set; } = true;
+        public bool Boundary
+        {
+            get => tmpFlags[7];
+            set => tmpFlags[7] = value;
+        }
 
         /// <summary>
         /// Gets or sets if collision is enabled.
         /// </summary>
-        public bool Collision { get; set; } = true;
+        public bool Collision
+        {
+            get => tmpFlags[8];
+            set => tmpFlags[8] = value;
+        }
 
-        public bool TerrainShadows { get; set; } = true;
+        public bool TerrainShadows
+        {
+            get => tmpFlags[9];
+            set => tmpFlags[9] = value;
+        }
 
         /// <summary>
         /// Gets or sets if detail vegetation transitions smoothly in places
         /// where it is affected by brushes.
         /// </summary>
-        public bool SmoothDetailVegetation { get; set; } = true;
+        public bool SmoothDetailVegetation        
+        {
+            get => tmpFlags[10];
+            set => tmpFlags[10] = value;
+        }
 
         [Obsolete]
-        public bool StretchTerrain { get; set; } = false;
+        public bool StretchTerrain
+        {
+            get => tmpFlags[11];
+            set => tmpFlags[11] = value;
+        }
 
         /// <summary>
         /// Gets or sets if the item is reflected on water surfaces.
         /// </summary>
-        public bool WaterReflection { get; set; } = false;
+        public bool WaterReflection
+        {
+            get => tmpFlags[12];
+            set => tmpFlags[12] = value;
+        }
 
         /// <summary>
         /// Gets or sets if this road is only visible in the UI map once discovered.
         /// </summary>
-        public bool Secret { get; set; } = false;
+        public bool Secret
+        {
+            get => tmpFlags[13];
+            set => tmpFlags[13] = value;
+        }
 
-        public bool Unknown { get; set; } = false;
-        public bool Unknown2 { get; set; } = false;
-        public bool Unknown3 { get; set; } = false;
+        public bool Unknown
+        {
+            get => tmpFlags[14];
+            set => tmpFlags[14] = value;
+        }
+
+        public bool Unknown2
+        {
+            get => tmpFlags[15];
+            set => tmpFlags[15] = value;
+        }
+
+        public bool Unknown3
+        {
+            get => tmpFlags[16];
+            set => tmpFlags[16] = value;
+        }
 
         public Road() : base() { }
 
@@ -221,9 +293,12 @@ namespace TruckLib.ScsMap
             CenterVegetation = new CenterVegetation();
             CenterDetailVegetation = true;
             VegetationSpheres = new List<VegetationSphere>();
-            // set to HighPoly by default since you probably aren't creating
-            // non-template roads, so the road is HighPoly no matter what, 
-            // but this setting is needed to make the terrain match the road.
+            ShowInUiMap = true;
+            AiVehicles = true;
+            Boundary = true;
+            Collision = true;
+            TerrainShadows = true;
+            SmoothDetailVegetation = true;
         }
 
         /// <summary>
@@ -264,7 +339,7 @@ namespace TruckLib.ScsMap
 
         private void CopySettingsTo(Road r)
         {
-            // don't forget to remove all the flags after the kdopitem migration
+            // don't forget to remove tmpflags after the kdopitem migration
 
             r.Left = Left.Clone();
             r.Right = Right.Clone();
@@ -277,20 +352,7 @@ namespace TruckLib.ScsMap
             r.Resolution = Resolution;
             r.VegetationSpheres = new List<VegetationSphere>(VegetationSpheres);
             r.ViewDistance = ViewDistance;
-
-            r.GpsAvoid = GpsAvoid;
-            r.ShowInUiMap = ShowInUiMap;
-            r.IgnoreCutPlanes = IgnoreCutPlanes;
-            r.IsCityRoad = IsCityRoad;
-            r.LeftHandTraffic = LeftHandTraffic;
-            r.LowPolyVegetation = LowPolyVegetation;
-            r.AiVehicles = AiVehicles;
-            r.Boundary = Boundary;
-            r.Collision = Collision;
-            r.TerrainShadows = TerrainShadows;
-            r.SmoothDetailVegetation = SmoothDetailVegetation;
-            r.StretchTerrain = StretchTerrain;
-            r.WaterReflection = WaterReflection;
+            r.tmpFlags = tmpFlags;
         }
 
         /// <summary>

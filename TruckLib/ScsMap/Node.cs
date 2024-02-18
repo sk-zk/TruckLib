@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.IO;
 using System.Collections;
+using System.Xml.Linq;
 
 namespace TruckLib.ScsMap
 {
@@ -194,7 +195,7 @@ namespace TruckLib.ScsMap
             {
                 throw new InvalidOperationException("Unable to merge: both nodes have a backward item");
             }
-            else if (ForwardItem is not null && n2.ForwardItem is not null)
+            else if (ForwardItem is not null && ForwardItem is not Prefab && n2.ForwardItem is not null)
             {
                 throw new InvalidOperationException("Unable to merge: both nodes have a forward item");
             }
@@ -214,6 +215,27 @@ namespace TruckLib.ScsMap
                 var item = n2.BackwardItem as PolylineItem;
                 BackwardItem = item;
                 item.ForwardNode = this;
+                if (ForwardItem is not Prefab)
+                    item.Recalculate();
+                n2.ForwardItem = null;
+                n2.BackwardItem = null;
+                n2.Parent.Delete(n2);
+            }
+            // attach backward node of polyline item to non-origin prefab node
+            else if (ForwardItem is Prefab && n2.ForwardItem is PolylineItem)
+            {
+                var item = n2.ForwardItem as PolylineItem;
+                var prefab = ForwardItem as Prefab;
+                if (IsRed)
+                {
+                    throw new InvalidOperationException("Unable to merge: can't connect the backward node " +
+                        "of a polyline item with the origin node of a prefab");
+                }
+                item.Node = this;
+                Rotation = Quaternion.Inverse(Rotation);
+                BackwardItem = prefab;
+                ForwardItem = item;
+                IsRed = true;
                 item.Recalculate();
                 n2.ForwardItem = null;
                 n2.BackwardItem = null;
@@ -222,6 +244,63 @@ namespace TruckLib.ScsMap
             else
             {
                 throw new InvalidOperationException("Unable to merge");
+            }
+        }
+
+        /// <summary>
+        /// Splits this node into one node holding the backward item and one node 
+        /// holding the forward item.
+        /// This method is the opposite of <see cref="Merge(INode)">Merge</see>.
+        /// </summary>
+        /// <returns>The newly created node. If no action was performed because
+        /// this node is already only used by one item, the method returns null.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the node can''t be split.</exception>
+        public INode Split()
+        {
+            if (ForwardItem is null || BackwardItem is null)
+            {
+                return null;
+            }
+            else if (ForwardItem is PolylineItem fwPoly && BackwardItem is PolylineItem bwPoly)
+            {
+                var newNode = Parent.AddNode(Position);
+                newNode.ForwardItem = fwPoly;
+                newNode.IsRed = true;
+                newNode.Rotation = Rotation;
+                IsRed = false;
+                ForwardItem = null;
+                fwPoly.Node = newNode;
+                fwPoly.Recalculate();
+                bwPoly.Recalculate();
+                return newNode;
+            }
+            else if (ForwardItem is PolylineItem && BackwardItem is Prefab)
+            {
+                var newNode = Parent.AddNode(Position);
+                newNode.ForwardItem = ForwardItem;
+                newNode.IsRed = true;
+                newNode.Rotation = Rotation;
+                IsRed = false;
+                (ForwardItem as PolylineItem).Node = newNode;
+                (ForwardItem as PolylineItem).Recalculate();
+                ForwardItem = BackwardItem;
+                BackwardItem = null;
+                Rotation = Quaternion.Inverse(Rotation);
+                return newNode;
+            }
+            else if (ForwardItem is Prefab && BackwardItem is PolylineItem)
+            {
+                var newNode = Parent.AddNode(Position);
+                newNode.BackwardItem = BackwardItem;
+                newNode.Rotation = Rotation;
+                (BackwardItem as PolylineItem).ForwardNode = newNode;
+                (BackwardItem as PolylineItem).Recalculate();
+                BackwardItem = null;
+                return newNode;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unable to split");
             }
         }
 

@@ -13,6 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, ta);
 
             ta.Tags = ReadObjectList<Token>(r);
+            ta.Nodes = new PolygonNodeList(ta);
             ta.Nodes.AddRange(ReadNodeRefList(r));
             ta.Rule = r.ReadToken();
             ta.Range = r.ReadSingle();

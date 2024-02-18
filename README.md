@@ -35,7 +35,11 @@ map.Save(@"<ETS2 folder>\mod\user_map\map");
 
 ## Documentation
 It's long overdue, but I've finally started working on cleaning this thing up a bit and writing some proper documentation
-for it. You'll find a link to it here soon™.
+for it. Here it is:
+
+https://sk-zk.github.io/trucklib/master/
+
+This will of course expand as time goes on.
 
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map > Recompute map).
@@ -48,14 +52,9 @@ for it. You'll find a link to it here soon™.
 * When adding a camera path, the positions of the control points in the Keyframe objects are not set to any default values
   and therefore left at (0, 0, 0).
 * Helper locators of curve items, if used by the model, are not placed automatically by the library because their 
-  coordinates are not known to it. Moving a locator node or a curve node which is tetherd to a locator node will also cause issues.
+  coordinates are not known to it. Moving a locator node or a curve node which is tethered to a locator node will also cause issues.
   The editor will fix both of these once a curve node is moved or the properties dialog of the curve is closed.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
- 
-## Dependencies
-* [Ionic.Zlib](https://www.nuget.org/packages/Iconic.Zlib.Netstandard/)
-* [Microsoft.CSharp](https://www.nuget.org/packages/Microsoft.CSharp/)
-* [System.Numerics.Vectors](https://www.nuget.org/packages/System.Numerics.Vectors/)
 
 ## License
 TruckLib is licensed under GPL v2 except for `CityHash.cs`.

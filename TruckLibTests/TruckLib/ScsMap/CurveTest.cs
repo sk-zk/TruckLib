@@ -102,17 +102,12 @@ namespace TruckLibTests.TruckLib.ScsMap
             var map = new Map("foo");
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
             curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
-            var locator1 = curve.Locators[0];
             curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity);
-            var locator2 = curve.Locators[1];
 
             map.Delete(curve);
 
-            Assert.False(map.MapItems.ContainsKey(curve.Uid));
-            Assert.False(map.Nodes.ContainsKey(curve.Node.Uid));
-            Assert.False(map.Nodes.ContainsKey(curve.ForwardNode.Uid));
-            Assert.False(map.Nodes.ContainsKey(locator1.Uid));
-            Assert.False(map.Nodes.ContainsKey(locator2.Uid));
+            Assert.Empty(map.MapItems);
+            Assert.Empty(map.Nodes);
         }
 
         [Fact]

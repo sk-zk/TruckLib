@@ -37,10 +37,7 @@ namespace TruckLibTests.TruckLib.ScsMap
                 Assert.True(map.Nodes.ContainsKey(mover.Nodes[i].Uid));
                 Assert.Equal(mover, mover.Nodes[i].ForwardItem);
                 Assert.Null(mover.Nodes[i].BackwardItem);
-                Assert.Equal(expectedRotations[i].W, mover.Nodes[i].Rotation.W, 0.001f);
-                Assert.Equal(expectedRotations[i].X, mover.Nodes[i].Rotation.X, 0.001f);
-                Assert.Equal(expectedRotations[i].Y, mover.Nodes[i].Rotation.Y, 0.001f);
-                Assert.Equal(expectedRotations[i].Z, mover.Nodes[i].Rotation.Z, 0.001f);
+                AssertEx.Equal(expectedRotations[i], mover.Nodes[i].Rotation, 0.001f);
             }
 
             Assert.True(mover.Nodes[0].IsRed);
@@ -93,11 +90,8 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             map.Delete(mover);
 
-            Assert.False(map.MapItems.ContainsKey(mover.Uid));
-            for (int i = 0; i < mover.Nodes.Count; i++)
-            {
-                Assert.False(map.Nodes.ContainsKey(mover.Nodes[i].Uid));
-            }
+            Assert.Empty(map.MapItems);
+            Assert.Empty(map.Nodes);
         }
     }
 }

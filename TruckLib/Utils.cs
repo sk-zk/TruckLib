@@ -136,5 +136,19 @@ namespace TruckLib
             Array.Copy(src, copy, (src.GetLength(0)) * (src.GetLength(1)));
             return copy;
         }
+
+        internal static List<T> Rotate<T>(List<T> list, int shift)
+        {
+            shift = MathEx.Mod(shift, list.Count);
+
+            var newList = new List<T>(list.Count);
+            for (int i = 0; i < list.Count; i++)
+            {
+                var idx = ((i + shift) % list.Count);
+                newList.Add(list[idx]);
+            }
+
+            return newList;
+        }
     }
 }

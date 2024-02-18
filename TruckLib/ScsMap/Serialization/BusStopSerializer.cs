@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, bs);
 
             bs.CityName = r.ReadToken();
-            bs.PrefabLink = new UnresolvedItem(r.ReadUInt64());
+            bs.Prefab = new UnresolvedItem(r.ReadUInt64());
             bs.Node = new UnresolvedNode(r.ReadUInt64());
 
             return bs;
@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap.Serialization
             var bs = item as BusStop;
             WriteKdopItem(w, bs);
             w.Write(bs.CityName);
-            w.Write(bs.PrefabLink.Uid);
+            w.Write(bs.Prefab.Uid);
             w.Write(bs.Node.Uid);
         }
     }

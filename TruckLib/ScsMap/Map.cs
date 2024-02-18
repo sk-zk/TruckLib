@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.ScsMap
@@ -247,7 +248,23 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             MapItems.Remove(item.Uid);
-           
+
+            List<IRecalculatable> recalculatables = null;
+            List<INode> prefabNodes = null;
+            if (item is PolylineItem poly)
+            {
+                recalculatables = new();
+                prefabNodes = new();
+                if (poly.BackwardItem is IRecalculatable)
+                    recalculatables.Add((IRecalculatable)poly.BackwardItem);
+                // if the backward item is a prefab, the rotation of that node
+                // needs to be reset
+                else if (poly.BackwardItem is Prefab)
+                    prefabNodes.Add(poly.Node);
+                if (poly.ForwardItem is IRecalculatable)
+                    recalculatables.Add((IRecalculatable)poly.ForwardItem);
+            }
+
             // remove item from its nodes, 
             // and delete them if they're orphaned now
             foreach (var node in item.GetItemNodes())
@@ -266,6 +283,12 @@ namespace TruckLib.ScsMap
                     Delete(node);
                 }
             }
+
+            for (int i = 0; i < recalculatables?.Count; i++)
+                recalculatables[i].Recalculate();
+
+            for (int i = 0; i < prefabNodes?.Count; i++)
+                prefabNodes[i].Rotation *= Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
 
             // delete dependent items
             if (item is Prefab pf)

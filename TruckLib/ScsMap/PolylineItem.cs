@@ -238,12 +238,13 @@ namespace TruckLib.ScsMap
             // as if you'd just added all the segments from start to end.
             // it's dumb, but it works
 
-            var first = (PolylineItem)FindFirstItem();
+            var first = FindFirstItem();
             var initialRot = MathEx.GetNodeRotation(first.Node.Position, first.ForwardNode.Position);
 
             if (first.BackwardItem is not Prefab)
                 first.Node.Rotation = initialRot;
-            first.ForwardNode.Rotation = initialRot;
+            if (first.ForwardItem is not Prefab)
+                first.ForwardNode.Rotation = initialRot;
 
             var next = first;
             while (next.ForwardItem is PolylineItem fw)

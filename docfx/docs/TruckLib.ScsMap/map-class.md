@@ -47,12 +47,18 @@ bool exists = map.MapItems.TryGetValue(0x521CD80FA4000001, out MapItem item);
 var allMovers = map.MapItems.OfType<Mover>();
 ```
 
+Do not modify this dictionary directly &ndash; see "Adding and deleting map items" for the intended way to do that.
+
 ## Nodes
 Likewise, the [`Nodes`](xref:TruckLib.ScsMap.Map.Nodes) property is a dictionary containing all nodes in the map.
 
 ```cs
 bool exists = map.Nodes.TryGetValue(0x521CD80C53000000, out INode node);
 ```
+
+As with `MapItems`, it is not recommended to add to or remove from this dictionary by hand.
+To add a node, if necessary, call [`AddNode`](xref:TruckLib.ScsMap.Map.AddNode*), and to
+delete a node, call [`Delete`](xref:TruckLib.ScsMap.Map.Delete(TruckLib.ScsMap.INode)).
 
 ### Searching for nodes
 Searching for nodes within a bounding box or around a point is not yet implemented. Soon™.

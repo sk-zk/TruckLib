@@ -11,6 +11,8 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class RoadSide
     {
+        private FlagField tmpFlags = new();
+
         /// <summary>
         /// Unit name of the road variant.
         /// </summary>
@@ -44,7 +46,11 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Gets or sets if visual details in shoulders cannot spawn on this side.
         /// </summary>
-        public bool ShoulderBlocked { get; set; } = false;
+        public bool ShoulderBlocked
+        {
+            get => tmpFlags[0];
+            set => tmpFlags[0] = value;
+        }
 
         /// <summary>
         /// Sidewalk for legacy city roads.
@@ -65,7 +71,11 @@ namespace TruckLib.ScsMap
         /// Gets or sets if detail vegetation (small clumps of grass etc.) is rendered
         /// if the selected terrain material supports it.
         /// </summary>
-        public bool DetailVegetation { get; set; } = true;
+        public bool DetailVegetation
+        {
+            get => tmpFlags[1];
+            set => tmpFlags[1] = value;
+        }
 
         /// <summary>
         /// The start of the band, in meters, in which detail vegetation is not rendered.
@@ -80,7 +90,11 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Gets or sets if vegetation has collision.
         /// </summary>
-        public bool VegetationCollision = false;
+        public bool VegetationCollision
+        {
+            get => tmpFlags[2];
+            set => tmpFlags[2] = value;
+        }
 
         /// <summary>
         /// Models on this side of the road.
@@ -138,6 +152,7 @@ namespace TruckLib.ScsMap
             Terrain = new RoadTerrain();
             EdgeOverrides = new List<EdgeOverride>();
             VariantOverrides = new List<VariantOverride>();
+            DetailVegetation = true;
         }
 
         /// <summary>
@@ -161,6 +176,7 @@ namespace TruckLib.ScsMap
             cloned.AdditionalParts = new List<Token>(AdditionalParts);
             cloned.EdgeOverrides = new List<EdgeOverride>(EdgeOverrides);
             cloned.VariantOverrides = new List<VariantOverride>(VariantOverrides);
+            cloned.tmpFlags = tmpFlags;
             return cloned;
         }
     }

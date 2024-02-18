@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TruckLib.Models.Ppd;
 
 namespace TruckLib.ScsMap
 {
@@ -26,9 +27,9 @@ namespace TruckLib.ScsMap
         public Token CityName { get; set; }
 
         /// <summary>
-        /// Determines if the point is the <c>BuyPoint</c> (1) or the <c>GaragePoint</c> (0).
+        /// Gets or sets if this is the <c>BuyPoint</c> (true) or the <c>GaragePoint</c> (false).
         /// </summary>
-        public uint BuyMode { get; set; }
+        public bool IsBuyPoint { get; set; }
 
         /// <summary>
         /// Nodes representing the <c>TrailerSpawn</c> spawn point type of the prefab.
@@ -83,6 +84,14 @@ namespace TruckLib.ScsMap
         {
             base.UpdateNodeReferences(allNodes);
             ResolveNodeReferences(TrailerSpawnPoints, allNodes);
+        }
+
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            var nodes = new List<INode>(TrailerSpawnPoints.Count + 1) { Node };
+            nodes.AddRange(TrailerSpawnPoints);
+            return nodes;
         }
     }
 }

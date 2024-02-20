@@ -15,12 +15,6 @@ namespace TruckLib
         public static double Rad(double deg) => deg * (Math.PI / 180.0);
         public static float Rad(float deg) => (float)(deg * (Math.PI / 180.0));
 
-        /// <summary>
-        /// Returns the yaw of the angle between (b - a) and the Z axis as a quaternion.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
         public static Quaternion GetNodeRotation(Vector3 a, Vector3 b)
         {
             var direction = Vector3.Normalize(b - a);
@@ -37,17 +31,6 @@ namespace TruckLib
         public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion rot)
         {
             return Vector3.Transform(point - pivot, rot) + pivot;
-        }
-
-        /// <summary>
-        /// Calculates the angle between two vectors.
-        /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>The angle in radians.</returns>
-        public static double Angle(Vector3 a, Vector3 b)
-        {
-            return Math.Acos(Vector3.Dot(a, b) / (a.Length() * b.Length()));
         }
 
         public static double AngleOffAroundAxis(Vector3 v, Vector3 forward, Vector3 axis, bool clockwise = false)

@@ -23,16 +23,10 @@ namespace TruckLib
         /// <returns></returns>
         public static Quaternion GetNodeRotation(Vector3 a, Vector3 b)
         {
-            var angle = GetNodeAngle(a, b);
-            var rotation = Quaternion.CreateFromYawPitchRoll((float)angle, 0f, 0f);
-            return rotation;
-        }
-
-        public static double GetNodeAngle(Vector3 a, Vector3 b)
-        {
             var direction = Vector3.Normalize(b - a);
-            var angle = AngleOffAroundAxis(direction, -Vector3.UnitZ, Vector3.UnitY, false);
-            return angle;
+            var yaw = Math.Atan2(-direction.Z, direction.X) - (Math.PI / 2);
+            var pitch = Math.Atan2(direction.Y, Math.Sqrt(direction.X * direction.X + direction.Z * direction.Z));
+            return Quaternion.CreateFromYawPitchRoll((float)yaw, (float)pitch, 0);
         }
 
         public static double GetNodeAngle(Vector3 direction)

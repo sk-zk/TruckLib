@@ -13,6 +13,8 @@ namespace Prefabs
         {
             // This example program demonstrates how to add prefabs to a map.
             // As before, positions are hardcoded for simplicity.
+            // You can find a more detailed walkthrough of the code in
+            // the documentation.
 
             var map = new Map("example");
 

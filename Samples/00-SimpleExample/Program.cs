@@ -12,6 +12,8 @@ namespace Example
             // This example program places a few road segments
             // and models at hardcoded locations into an empty map
             // and saves the map into the mod folder.
+            // You can find a more detailed walkthrough of the code in
+            // the documentation.
 
 
             // Create an empty map

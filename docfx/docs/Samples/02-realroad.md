@@ -17,7 +17,7 @@ WGS84 latitude/longitude coordinates describing the course of a road in Germany 
 var coordinates = LoadCoordinates();
 ```
 
-We'll gloss over `LoadCoordinates` here &ndash; it just loads the CSV file into a list of `GeographicCoordinate`s.
+We'll skip over `LoadCoordinates` here &ndash; it just loads the CSV file into a list of `GeographicCoordinate`s.
 
 ## Elevation
 The majority of map data you will encounter will not have elevation data present, so we must fetch it ourselves. In this case,

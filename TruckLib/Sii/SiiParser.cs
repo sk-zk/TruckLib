@@ -502,7 +502,10 @@ namespace TruckLib.Sii
                 SerializeAttributeValue(sb, list[i]);
 
                 if (i != list.Count - 1)
+                {
                     sb.Append(TupleSeperator);
+                    sb.Append(" ");
+                }
             }
 
             sb.Append(TupleAttribClose);

@@ -23,7 +23,7 @@ namespace TruckLib.Sii
     {
         public bool ShouldCheckForAndInsertIncludes { get; set; } = true;
 
-        public string Indentation { get; set; } = "    ";
+        public string Indentation { get; set; } = "\t";
         internal string TupleAttribOpen = "(";
         internal string TupleAttribClose = ")";
         private const string SiiHeader = "SiiNunit";

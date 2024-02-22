@@ -56,13 +56,13 @@ namespace TruckLib.Sii
         /// <summary>
         /// Serializes this object to a string.
         /// </summary>
-        public string Serialize() =>
-            new SiiParser().Serialize(this);
+        public string Serialize(string indentation = "\t") =>
+            new SiiParser() { Indentation = indentation }.Serialize(this);
 
         /// <summary>
         /// Serializes this object and writes it to a file.
         /// </summary>
-        public void Serialize(string path) =>
-            new SiiParser().Serialize(this, path);
+        public void Serialize(string path, string indentation = "\t") =>
+            new SiiParser() { Indentation = indentation }.Serialize(this, path);
     }
 }

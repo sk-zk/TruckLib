@@ -37,6 +37,8 @@ namespace TruckLib.Sii
 
         private readonly CultureInfo culture = CultureInfo.InvariantCulture;
 
+        private Dictionary<string, int> arrInsertIndex = new();
+
         public SiiFile DeserializeFromString(string sii, string siiPath = "")
         {
             var siiFile = new SiiFile();
@@ -123,6 +125,8 @@ namespace TruckLib.Sii
 
         private Unit ParseUnit(string unitStr)
         {
+            arrInsertIndex.Clear();
+
             var firstColonPos = unitStr.IndexOf(':');
             var openBracketPos = unitStr.IndexOf('{');
             var closeBracketPos = unitStr.LastIndexOf('}');
@@ -179,25 +183,29 @@ namespace TruckLib.Sii
             return (attributeName, value);
         }
 
-        private void ParseListOrArrayAttribute(Unit unit, string Name, dynamic Value)
+        private void ParseListOrArrayAttribute(Unit unit, string name, dynamic value)
         {
-            var match = Regex.Match(Name, @"^(.+)\[(.*)\]$");
+            var match = Regex.Match(name, @"^(.+)\[(.*)\]$");
             if (!match.Success)
                 return;
 
             var arrName = match.Groups[1].Value;
-            var hasIndex = int.TryParse(match.Groups[2].Value, out int arrIndex);
+            var hasArrIndex = int.TryParse(match.Groups[2].Value, out int arrIndex);
+            if (!arrInsertIndex.ContainsKey(arrName))
+            {
+                arrInsertIndex.Add(arrName, 0);
+            }
 
             // figure out if this is a fixed-length array entry or a list entry
             // and create the thing if it doesn't exist yet
             bool isFixedLengthArray;
             if (unit.Attributes.TryGetValue(arrName, out var whatsAllThisThen))
             {
-                isFixedLengthArray = whatsAllThisThen is int || whatsAllThisThen is Array;
+                isFixedLengthArray = whatsAllThisThen is int or Array;
             } 
             else
             {
-                isFixedLengthArray = hasIndex;
+                isFixedLengthArray = hasArrIndex;
                 if (isFixedLengthArray)
                 {
                     int initSize = arrIndex + 1;
@@ -233,11 +241,20 @@ namespace TruckLib.Sii
                     Array.Resize(ref arr, arrIndex + 1);
                     unit.Attributes[arrName] = arr;
                 }
-                arr[arrIndex] = Value;
+
+                if (hasArrIndex)
+                {
+                    arrInsertIndex[arrName] = arrIndex + 1; 
+                }
+                else
+                {
+                    arrIndex = arrInsertIndex[arrName]++;
+                }
+                arr[arrIndex] = value;
             }
             else
             {
-                unit.Attributes[arrName].Add(Value);
+                unit.Attributes[arrName].Add(value);
             }
         }
 
@@ -431,6 +448,7 @@ namespace TruckLib.Sii
                 }
                 else if (attrib.Value is dynamic[] arr)
                 {
+                    sb.AppendLine($"{Indentation}{attrib.Key}: {arr.Length}");
                     for (int i = 0; i < arr.Length; i++)
                     {
                         if (arr[i] is null)

@@ -504,6 +504,16 @@ namespace TruckLib.Sii
                     sb.Append($"{q.Y.ToString(culture)}{TupleSeperator} ");
                     sb.Append($"{q.Z.ToString(culture)}{TupleAttribClose}");
                     break;
+                case Vector3 v:
+                    sb.Append($"{TupleAttribOpen}{v.X.ToString(culture)}{TupleSeperator} ");
+                    sb.Append($"{v.Y.ToString(culture)}{TupleSeperator} ");
+                    sb.Append($"{v.Z.ToString(culture)}{TupleAttribClose}");
+                    break;
+                case Placement p:
+                    SerializeAttributeValue(sb, p.Position);
+                    sb.Append(" ");
+                    SerializeAttributeValue(sb, p.Rotation);
+                    break;
                 default:
                     sb.Append(Convert.ToString(attribValue, culture));
                     break;

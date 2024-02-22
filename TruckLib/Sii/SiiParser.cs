@@ -98,6 +98,7 @@ namespace TruckLib.Sii
                             throw new FileNotFoundException("Included file was not found.", path);
 
                         var fileContents = File.ReadAllText(path);
+                        fileContents = RemoveComments(fileContents);
                         output.AppendLine(fileContents);
                         continue;
                     }

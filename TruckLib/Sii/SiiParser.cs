@@ -422,7 +422,7 @@ namespace TruckLib.Sii
 
             foreach (var unit in siiFile.Units)
             {
-                sb.AppendLine($"{unit.Class} : {unit.Name} {{");
+                sb.AppendLine($"{unit.Class} : {unit.Name}\n{{");
                 SerializeAttributes(sb, unit);
                 sb.AppendLine("}\n");
             }

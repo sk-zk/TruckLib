@@ -301,25 +301,25 @@ namespace TruckLib.Sii
         {
             foreach (var attrib in attributes)
             {
-                if (attrib.Value is List<dynamic> list)
+                if (attrib.Value is Array arr)
+                {
+                    sb.AppendLine($"{indentation}{attrib.Key}: {arr.Length}");
+                    for (int i = 0; i < arr.Length; i++)
+                    {
+                        if (arr.GetValue(i) is null)
+                            continue;
+
+                        sb.Append($"{indentation}{attrib.Key}[{i}]: ");
+                        SerializeAttributeValue(sb, arr.GetValue(i), isMat);
+                        sb.AppendLine();
+                    }
+                }
+                else if (attrib.Value is IList list)
                 {
                     for (int i = 0; i < list.Count; i++)
                     {
                         sb.Append($"{indentation}{attrib.Key}[]: ");
                         SerializeAttributeValue(sb, list[i], isMat);
-                        sb.AppendLine();
-                    }
-                }
-                else if (attrib.Value is dynamic[] arr)
-                {
-                    sb.AppendLine($"{indentation}{attrib.Key}: {arr.Length}");
-                    for (int i = 0; i < arr.Length; i++)
-                    {
-                        if (arr[i] is null)
-                            continue;
-
-                        sb.Append($"{indentation}{attrib.Key}[{i}]: ");
-                        SerializeAttributeValue(sb, arr[i], isMat);
                         sb.AppendLine();
                     }
                 }

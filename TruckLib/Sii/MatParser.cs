@@ -1,55 +1,66 @@
-﻿using System;
+﻿using Sprache;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace TruckLib.Sii
 {
     internal static class MatParser
     {
-        public static MatFile DeserializeFromString(string matStr)
+        public static MatFile DeserializeFromString(string mat)
         {
-            var siiParser = new SiiParser
-            {
-                TupleAttribOpen = "{",
-                TupleAttribClose = "}",
-                ShouldCheckForAndInsertIncludes = false
-            };
-            var sii = siiParser.DeserializeFromString(matStr);
+            var firstPass = ParserElements.Mat.Parse(mat);
 
-            var mat = new MatFile
+            var matFile = new MatFile { Effect = firstPass.UnitName };
+
+            foreach (var (key, value) in firstPass.Attributes)
             {
-                Attributes = sii.Units[0].Attributes,
-                Effect = sii.Units[0].Name.Replace("\"", "")
-            };
-            return mat;
+                if (value is FirstPassUnit unit)
+                {
+                    var attribDict = unit.Attributes
+                        .ToDictionary(k => k.Key, v => v.Value);
+                    matFile.Textures.Add(new Texture()
+                    {
+                        Name = unit.UnitName,
+                        Attributes = attribDict
+                    });
+                } 
+                else
+                {
+                    matFile.Attributes.Add(key, value);
+                }
+            }
+
+            return matFile;
         }
 
         public static MatFile DeserializeFromFile(string path) =>
             DeserializeFromString(File.ReadAllText(path));
 
-        public static string Serialize(MatFile mat)
+        public static string Serialize(MatFile matFile, string indentation = "\t")
         {
-            var siiParser = new SiiParser
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"effect : \"{matFile.Effect}\" {{");
+
+            ParserElements.SerializeAttributes(sb, matFile.Attributes, indentation);
+            foreach (var texture in matFile.Textures)
             {
-                TupleAttribOpen = "{",
-                TupleAttribClose = "}"
-            };
+                sb.AppendLine($"{indentation}texture: \"{texture.Name}\" {{");
+                ParserElements.SerializeAttributes(sb, texture.Attributes, indentation + indentation, true);
+                sb.AppendLine($"{indentation}}}");
+            }
 
-            var siiFile = new SiiFile();
-            siiFile.GlobalScope = false;
-            var unit = new Unit();
-            siiFile.Units.Add(unit);
-            unit.Class = "material";
-            unit.Name = $"\"{mat.Effect}\"";
-            unit.Attributes = mat.Attributes;
+            sb.AppendLine("}\n");
 
-            return siiParser.Serialize(siiFile);
+            return sb.ToString();
         }
 
-        public static void Serialize(MatFile mat, string path)
+        public static void Serialize(MatFile matFile, string path, string indentation = "\t")
         {
-            var str = Serialize(mat);
+            var str = Serialize(matFile, indentation);
             File.WriteAllText(path, str);
         }
 

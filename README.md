@@ -12,7 +12,7 @@ The currently supported map format version is **900** (game version **1.48.5/1.4
 The main namespace of the library: classes for working with the map format.
 
 **TruckLib.Sii**:  
-Mostly complete de/serializer for SII and .mat files.
+Parser for .sii and .mat files.
 
 **TruckLib.Models**:  
 Rudimentary support for binary model files (.pm\*), prefab descriptors (.ppd), and binary .tobj files.

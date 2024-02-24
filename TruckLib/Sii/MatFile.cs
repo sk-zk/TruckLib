@@ -21,6 +21,11 @@ namespace TruckLib.Sii
             = new Dictionary<string, dynamic>();
 
         /// <summary>
+        /// Textures of the shader.
+        /// </summary>
+        public List<Texture> Textures { get; set; } = new List<Texture>();
+
+        /// <summary>
         /// Deserializes a string containing a .mat file.
         /// </summary>
         /// <param name="mat">The string containing the .mat file.</param>
@@ -39,15 +44,17 @@ namespace TruckLib.Sii
         /// <summary>
         /// Serializes this object to a string.
         /// </summary>
+        /// <param name="indentation">The string which will be used as one level of indentation.</param>
         /// <returns>The serialized object.</returns>
-        public string Serialize() =>
-            MatParser.Serialize(this);
+        public string Serialize(string indentation = "\t") =>
+            MatParser.Serialize(this, indentation);
 
         /// <summary>
         /// Serializes this object and writes it to a file.
         /// </summary>
         /// <param name="path">The path of the file.</param>
-        public void Serialize(string path) =>
-            MatParser.Serialize(this, path);
+        /// <param name="indentation">The string which will be used as one level of indentation.</param>
+        public void Serialize(string path, string indentation = "\t") =>
+            MatParser.Serialize(this, path, indentation);
     }
 }

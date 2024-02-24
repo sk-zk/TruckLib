@@ -8,3 +8,5 @@ foo : .bar {
 @include "included2.sui"
 	c: 3
 }
+
+}

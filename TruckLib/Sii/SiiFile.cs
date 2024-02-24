@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TruckLib.Sii
 {
@@ -16,18 +9,10 @@ namespace TruckLib.Sii
     {
         // https://modding.scssoft.com/wiki/Documentation/Engine/Units
 
-        // TODO:
-        // Support placement type (currently unused in the game though (?))
-
         /// <summary>
         /// Units in this file.
         /// </summary>
         public List<Unit> Units { get; set; } = new List<Unit>();
-
-        /// <summary>
-        /// Gets or sets if the file has global scope ("<c>SiiNunit {</c>") or not.
-        /// </summary>
-        public bool GlobalScope { get; set; } = true;
 
         /// <summary>
         /// Instantiates an empty SII file.
@@ -43,7 +28,7 @@ namespace TruckLib.Sii
         /// have <c>@include</c>s.</param>
         /// <returns>A SiiFile object.</returns>
         public static SiiFile Load(string sii, string siiDirectory = "") =>
-            new SiiParser().DeserializeFromString(sii, siiDirectory);
+            SiiParser.DeserializeFromString(sii, siiDirectory);
 
         /// <summary>
         /// Opens a SII file.
@@ -51,18 +36,21 @@ namespace TruckLib.Sii
         /// <param name="path">The path of the file.</param>
         /// <returns>A SiiFile object.</returns>
         public static SiiFile Open(string path) =>
-            new SiiParser().DeserializeFromFile(path);
+            SiiParser.DeserializeFromFile(path);
 
         /// <summary>
         /// Serializes this object to a string.
         /// </summary>
+        /// <param name="indentation">The indentation inside units.</param>
         public string Serialize(string indentation = "\t") =>
-            new SiiParser() { Indentation = indentation }.Serialize(this);
+            SiiParser.Serialize(this, indentation);
 
         /// <summary>
         /// Serializes this object and writes it to a file.
         /// </summary>
-        public void Serialize(string path, string indentation = "\t") =>
-            new SiiParser() { Indentation = indentation }.Serialize(this, path);
+        /// <param name="path">The output path.</param>
+        /// <param name="indentation">The indentation inside units.</param>
+        public void Save(string path, string indentation = "\t") =>
+            SiiParser.Save(this, path, indentation);
     }
 }

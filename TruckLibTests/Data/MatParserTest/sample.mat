@@ -1,0 +1,32 @@
+effect : "eut2.dif.spec.mult.dif.iamod.dif.add.env.tsnmap.rfx" {
+	additional_ambient : 0.000000
+	diffuse : { 1.000000 , 1.000000 , 1.000000 }
+	env_factor : { 0.073239 , 0.073239 , 0.073239 }
+	fresnel : { 0.200000 , 0.900000 }
+	reflection : 0.000000
+	shininess : 25.000000
+	specular : { 0.380056 , 0.380056 , 0.380056 }
+	texture : "texture_base" {
+		source : "/asset/prefab/depots/offshore_shipyard/tx_container02_red.tobj"
+		sampler : default
+	}
+	texture : "texture_iamod" {
+		source : "/material/tiled/iamod_building_01.tobj"
+		sampler : default
+	}
+	texture : "texture_mult" {
+		source : "/material/tiled/iamod_building_01.tobj"
+		sampler : default
+	}
+	texture : "texture_nmap" {
+		source : "/asset/prefab/depots/offshore_shipyard/tx_container02_nrm.tobj"
+		sampler : default
+	}
+	texture : "texture_reflection" {
+		source : "/material/environment/building_reflection/building_ref.tobj"
+		mip_filter : none
+		u_address : clamp
+		v_address : clamp
+		w_address : clamp
+	}
+}

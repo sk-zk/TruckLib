@@ -5,7 +5,7 @@ using System.Text;
 namespace TruckLib.Sii
 {
     /// <summary>
-    /// Represents a .mat material file.
+    /// Represents a .mat file.
     /// </summary>
     public class MatFile
     {
@@ -26,7 +26,7 @@ namespace TruckLib.Sii
         public List<Texture> Textures { get; set; } = new List<Texture>();
 
         /// <summary>
-        /// Deserializes a string containing a .mat file.
+        /// Deserializes a .mat file.
         /// </summary>
         /// <param name="mat">The string containing the .mat file.</param>
         /// <returns>A MatFile object.</returns>
@@ -52,7 +52,7 @@ namespace TruckLib.Sii
         /// <summary>
         /// Serializes this object and writes it to a file.
         /// </summary>
-        /// <param name="path">The path of the file.</param>
+        /// <param name="path">The output path.</param>
         /// <param name="indentation">The string which will be used as one level of indentation.</param>
         public void Serialize(string path, string indentation = "\t") =>
             MatParser.Serialize(this, path, indentation);

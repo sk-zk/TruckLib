@@ -20,7 +20,7 @@ namespace TruckLib.Sii
         public SiiFile() { }
 
         /// <summary>
-        /// Deserializes a string containing a SII file.
+        /// Deserializes a SII file.
         /// </summary>
         /// <param name="sii">The string containing the SII file.</param>
         /// <param name="siiDirectory">The path of the directory in which the SII file is located.

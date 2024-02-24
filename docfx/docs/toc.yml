@@ -5,5 +5,7 @@ items:
     href: TruckLib.ScsMap/toc.yml
   - name: HashFS
     href: TruckLib.HashFs/toc.yml
+  - name: SII files
+    href: TruckLib.Sii/toc.yml
   - name: Sample code
     href: Samples/toc.yml

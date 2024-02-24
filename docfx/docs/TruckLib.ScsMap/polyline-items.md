@@ -47,7 +47,7 @@ which connects them. For example, the following line of code will disconnect `ro
 INode newNode = road.ForwardNode.Split();
 ```
 
-The method also returns the newly created node.
+This method also returns the newly created node.
 
 ## Connecting/disconnecting polyline items to/from prefabs
 See [Prefabs](~/docs/TruckLib.ScsMap/prefabs.md).

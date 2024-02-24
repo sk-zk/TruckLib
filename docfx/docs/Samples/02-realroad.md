@@ -80,15 +80,15 @@ elevationProvider.SetElevations(coordinates);
 ```
 
 Our coordinates now have elevations associated with them. The first time you run this program, this step will take several seconds
-as DEM.Net needs to download the elevation model for the requested region. On any subsequent run, it will load a cached version from disk.
+as DEM.Net needs to download the elevation model for the requested region; on any subsequent run, it will load a cached version from disk.
 
 Note that this is a primitive approach with one big disadvantage: we sample the elevation model at these particular points, but ignore elevation
-changes that happen in between. If you have, say, two points which are 200 m apart, and within that distance the road goes slightly uphill,
-then downhill again, this elevation change will not be present in your road.
+changes that happen in between. If you had two points which are 200 m apart, and within that distance the road goes slightly uphill,
+then downhill again, this elevation change would not be present in the road items we are about to place.
 
 ## Projection
 The real world is round, but game worlds are flat, so we need to project our points into that flat world. Here, we will use a transverse Mercator;
-more specifically, UTM zone 32N, which is the zone most of Germany falls into. The library
+more specifically, UTM zone 32N, which is the UTM zone most of Germany falls into. The library
 [DotSpatial.Projections](https://www.nuget.org/packages/DotSpatial.Projections) will do this for us.
 
 The method for projecting our list of coordinates looks like this:
@@ -139,7 +139,10 @@ var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
 ```
 
 ## Adding the road to the map
-We now have everything we need to add the road to a map. As usual, we'll simply create an empty map:
+We now have everything we need to add the road to a map. For this step, I will assume that you have read
+[Sample #1: Simple example](~/docs/Samples/00-simple.md).
+
+As with the previous samples, we'll create an empty map:
 
 ```cs
 using TruckLib.ScsMap;
@@ -185,4 +188,4 @@ This is what you should see:
 
 ## Further reading
 * [Sample #1: Simple example](~/docs/Samples/00-simple.md)
-* [Working with polyline items](/TruckLib.ScsMap/polyline-items.md)
+* [Working with polyline items](~/docs/TruckLib.ScsMap/polyline-items.md)

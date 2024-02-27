@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
 [assembly: InternalsVisibleTo("TruckLibTests")]
 namespace TruckLib.Sii
 {
@@ -17,8 +16,6 @@ namespace TruckLib.Sii
     /// </summary>
     internal static class SiiParser
     {
-        public static bool ShouldCheckForAndInsertIncludes { get; set; } = true;
-
         private const string IncludeKeyword = "@include";
 
         /// <summary>
@@ -33,8 +30,7 @@ namespace TruckLib.Sii
             var siiFile = new SiiFile();
 
             sii = RemoveComments(sii);
-            if (ShouldCheckForAndInsertIncludes)
-                sii = InsertIncludes(sii, siiPath);
+            sii = InsertIncludes(sii, siiPath);
 
             var firstPassUnits = ParserElements.Sii.Parse(sii);
             foreach (var firstPassUnit in firstPassUnits)

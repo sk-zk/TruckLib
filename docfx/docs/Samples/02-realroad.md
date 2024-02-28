@@ -55,36 +55,32 @@ namespace RealRoad
 }
 ```
 
-We now add a method to this class which takes in the coordinates we just loaded and looks up the elevation at these points:
+We now add a method to this class which takes in the coordinates we just loaded and fetches the elevation of the road.
 
 ```cs
-public void SetElevations(List<GeographicCoordinate> points)
+public List<GeographicCoordinate> GetElevations(List<GeographicCoordinate> points)
 {
-    var geoPoints = elevationService.GetPointsElevation(
+    var geoPoints = elevationService.GetLineGeometryElevation(
         points.Select(p => new GeoPoint(p.Latitude, p.Longitude)), 
         dataset).ToList();
-    for (int i = 0; i < points.Count; i++)
-    {
-        var point = points[i];
-        point.Height = geoPoints[i].Elevation ?? 0;
-        points[i] = point;
-    }
+    return geoPoints.Select(
+        x => new GeographicCoordinate(x.Latitude, x.Longitude, x.Elevation ?? 0))
+        .ToList();
 }
 ```
+
+This gives us a new set of coordinates which not only has elevation for our input coordinates, but 
+also accounts for all elevation changes along the way.
 
 Finally, we'll call it from Main:
 
 ```cs
 var elevationProvider = ElevationProvider.Create();
-elevationProvider.SetElevations(coordinates);
+var coordinatesWithElevation = elevationProvider.GetElevations(coordinates);
 ```
 
-Our coordinates now have elevations associated with them. The first time you run this program, this step will take several seconds
+The first time you run this program, this step will take several seconds
 as DEM.Net needs to download the elevation model for the requested region; on any subsequent run, it will load a cached version from disk.
-
-Note that this is a primitive approach with one big disadvantage: we sample the elevation model at these particular points, but ignore elevation
-changes that happen in between. If you had two points which are 200 m apart, and within that distance the road goes slightly uphill,
-then downhill again, this elevation change would not be present in the road items we are about to place.
 
 ## Projection
 The real world is round, but game worlds are flat, so we need to project our points into that flat world. Here, we will use a transverse Mercator;
@@ -127,7 +123,7 @@ And this is how we call it:
 ```cs
 var sourceCrs = KnownCoordinateSystems.Geographic.World.WGS1984;
 var destCrs = KnownCoordinateSystems.Projected.UtmWgs1984.WGS1984UTMZone32N;
-var points = Project(coordinates, sourceCrs, destCrs);
+var points = Project(coordinatesWithElevation, sourceCrs, destCrs);
 ```
 
 We now have a list of `ProjectedCoordinate`s. Let's also define a center point for our map, which we will subtract
@@ -136,6 +132,16 @@ from our projected coordinates later:
 ```cs
 var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
     sourceCrs, destCrs)[0];
+```
+
+One last thing &ndash; the game has a minimum length for road segments, which in this case is 1.25 m.
+Further, segments shorter than 5 m often render quite strangely. Now that we have our projected points
+and know how long each segment will be in-game, we'll filter out these segments.
+(This file has enough LOC as it is, so for the sake of simplicity, we just remove any point for which
+|| n<sub>i</sub> - n<sub>i-1</sub> || < 5.)
+
+```cs
+points = RemoveShortSegments(points);
 ```
 
 ## Adding the road to the map

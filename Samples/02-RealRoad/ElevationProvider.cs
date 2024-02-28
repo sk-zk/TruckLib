@@ -22,17 +22,14 @@ namespace RealRoad
             this.elevationService = elevationService;
         }
 
-        public void SetElevations(List<GeographicCoordinate> points)
+        public List<GeographicCoordinate> GetElevations(List<GeographicCoordinate> points)
         {
-            var geoPoints = elevationService.GetPointsElevation(
+            var geoPoints = elevationService.GetLineGeometryElevation(
                 points.Select(p => new GeoPoint(p.Latitude, p.Longitude)), 
                 dataset).ToList();
-            for (int i = 0; i < points.Count; i++)
-            {
-                var point = points[i];
-                point.Height = geoPoints[i].Elevation ?? 0;
-                points[i] = point;
-            }
+            return geoPoints.Select(
+                x => new GeographicCoordinate(x.Latitude, x.Longitude, x.Elevation ?? 0))
+                .ToList();
         }
     }
 }

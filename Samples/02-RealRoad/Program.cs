@@ -23,9 +23,11 @@ namespace RealRoad
 
 
             // 2)
-            // Fetch height above mean sea level for each point.
+            // Fetch height above mean sea level along the path.
+            // This will give us a new set of coordinates which takes elevation changes
+            // along the way into account.
             var elevationProvider = ElevationProvider.Create();
-            elevationProvider.SetElevations(coordinates);
+            var coordinatesWithElevation = elevationProvider.GetElevations(coordinates);
 
 
             // 3)
@@ -35,12 +37,20 @@ namespace RealRoad
             // UTM zone 32N, which is the zone most of Germany falls into.
             var sourceCrs = KnownCoordinateSystems.Geographic.World.WGS1984;
             var destCrs = KnownCoordinateSystems.Projected.UtmWgs1984.WGS1984UTMZone32N;
-            var points = Project(coordinates, sourceCrs, destCrs);
+            var points = Project(coordinatesWithElevation, sourceCrs, destCrs);
 
             // We also project a center point which will be subtracted
             // from all of our road points.
             var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
                 sourceCrs, destCrs)[0];
+
+            // The game has a minimum length for road segments, which in this case is 1.25 m.
+            // Further, segments shorter than 5 m often render quite strangely.
+            // Now that we have our projected points and know how long each segment will be
+            // in-game, we'll filter out these segments.
+            // For the sake of simplicity, we'll remove any point for which
+            // [i] - [i-1] is smaller than 5 m.
+            points = RemoveShortSegments(points);
 
 
             // 4)
@@ -117,6 +127,23 @@ namespace RealRoad
                 points.Add(new ProjectedCoordinate(easting, northing, coordinates[i].Height));
             }
             return points;
+        }
+
+        static List<ProjectedCoordinate> RemoveShortSegments(List<ProjectedCoordinate> input)
+        {
+            const double minLengthSquared = 5 * 5;
+            var output = new List<ProjectedCoordinate>() { input[0] };
+            for (int i = 1; i < input.Count; i++)
+            {
+                var deltaX = input[i].X - input[i - 1].X;
+                var deltaY = input[i].Y - input[i - 1].Y;
+                var lengthSquared = deltaX * deltaX + deltaY * deltaY;
+                if (lengthSquared > minLengthSquared)
+                {
+                    output.Add(input[i]);
+                }
+            }
+            return output;
         }
     }
 

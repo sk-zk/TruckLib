@@ -60,6 +60,8 @@ We now add a method to this class which takes in the coordinates we just loaded 
 ```cs
 public List<GeographicCoordinate> GetElevations(List<GeographicCoordinate> points)
 {
+    elevationService.DownloadMissingFiles(dataset, GetBoundingBoxContainingPoints(points));
+
     var geoPoints = elevationService.GetLineGeometryElevation(
         points.Select(p => new GeoPoint(p.Latitude, p.Longitude)), 
         dataset).ToList();
@@ -137,7 +139,7 @@ var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
 One last thing &ndash; the game has a minimum length for road segments, which in this case is 1.25 m.
 Further, segments shorter than 5 m often render quite strangely. Now that we have our projected points
 and know how long each segment will be in-game, we'll filter out these segments.
-(This file has enough LOC as it is, so for the sake of simplicity, we just remove any point for which
+(This sample has enough LOC as it is, so for the sake of simplicity, we just remove any point for which
 || n<sub>i</sub> - n<sub>i-1</sub> || < 5.)
 
 ```cs

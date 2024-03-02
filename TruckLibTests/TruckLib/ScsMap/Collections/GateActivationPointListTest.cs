@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.ScsMap;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLibTests.TruckLib.ScsMap.Collections
 {
     public class GateActivationPointListTest
     {

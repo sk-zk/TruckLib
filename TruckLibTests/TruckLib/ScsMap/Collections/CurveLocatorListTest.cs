@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.ScsMap;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLibTests.TruckLib.ScsMap.Collections
 {
     public class CurveLocatorListTest
     {
@@ -88,7 +88,7 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
             curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity);
-            Assert.Throws<IndexOutOfRangeException>(() => 
+            Assert.Throws<IndexOutOfRangeException>(() =>
                 curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity));
         }
     }

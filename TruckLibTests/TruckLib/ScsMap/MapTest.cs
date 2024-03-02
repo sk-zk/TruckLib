@@ -26,9 +26,9 @@ namespace TruckLibTests.TruckLib.ScsMap
             var sector = map.AddSector(-5, 5);
 
             Assert.Single(map.Sectors);
-            Assert.Equal(sector, map.Sectors[(-5, 5)]);
-            Assert.Equal(-5, sector.X);
-            Assert.Equal(5, sector.Z);
+            Assert.Equal(sector, map.Sectors[new SectorCoordinate(-5, 5)]);
+            Assert.Equal(-5, sector.Coordinate.X);
+            Assert.Equal(5, sector.Coordinate.Z);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.True(node.IsRed);
 
             Assert.Single(map.Sectors);
-            Assert.True(map.Sectors.ContainsKey((-1, -1)));
+            Assert.True(map.Sectors.ContainsKey(new SectorCoordinate(-1, -1)));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace TruckLibTests.TruckLib.ScsMap
         [Fact]
         public void GetSectorOfCoordinate()
         {
-            var expected = (-1, -1);
+            var expected = new SectorCoordinate(-1, -1);
             var actual = Map.GetSectorOfCoordinate(new(-100, 200, -300));
 
             Assert.Equal(expected, actual);

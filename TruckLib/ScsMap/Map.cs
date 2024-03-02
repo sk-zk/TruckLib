@@ -44,8 +44,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Metadata of the map's sectors.
         /// </summary>
-        public Dictionary<(int X, int Z), Sector> Sectors { get; set; } 
-            = new Dictionary<(int X, int Z), Sector>();
+        public Dictionary<SectorCoordinate, Sector> Sectors { get; set; } 
+            = new Dictionary<SectorCoordinate, Sector>();
 
         /// <summary>
         /// Contains the map's nodes.
@@ -127,7 +127,7 @@ namespace TruckLib.ScsMap
         /// <param name="mbdPath">Path to the .mbd file of the map.</param>
         /// <param name="sectors">If set, only the given sectors will be loaded.</param>
         /// <returns>A Map object.</returns>
-        public static Map Open(string mbdPath, (int,int)[] sectors = null)
+        public static Map Open(string mbdPath, IList<SectorCoordinate> sectors = null)
         {
             Trace.WriteLine("Loading map " + mbdPath);
             var name = Path.GetFileNameWithoutExtension(mbdPath);
@@ -148,16 +148,15 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Creates a new sector.
         /// </summary>
-        /// <param name="x">The X coordinate of the sector.</param>
-        /// <param name="z">The Z coordinate of the sector.</param>
+        /// <param name="coord">The coordinate of the sector.</param>
         /// <returns>The new sector.</returns>
-        public Sector AddSector(int x, int z)
+        public Sector AddSector(SectorCoordinate coord)
         {
-            if (Sectors.TryGetValue((x, z), out var existing))
+            if (Sectors.TryGetValue(coord, out var existing))
                 return existing;
             
-             var sector = new Sector(x, z, this);
-             Sectors.Add((x, z), sector);
+             var sector = new Sector(coord, this);
+             Sectors.Add(coord, sector);
              return sector;
         }
 
@@ -167,10 +166,8 @@ namespace TruckLib.ScsMap
         /// <param name="x">The X coordinate of the sector.</param>
         /// <param name="z">The Z coordinate of the sector.</param>
         /// <returns>The new sector.</returns>
-        public Sector AddSector((int X, int Z) coords)
-        {
-            return AddSector(coords.X, coords.Z);
-        }
+        public Sector AddSector(int x, int z) =>
+            AddSector(new SectorCoordinate(x, z));
 
         /// <summary>
         /// Creates a new node.
@@ -190,10 +187,10 @@ namespace TruckLib.ScsMap
         /// <returns>The new node.</returns>
         public Node AddNode(Vector3 position, bool isRed)
         {
-            var sectorIdx = GetSectorOfCoordinate(position);
-            if (!Sectors.ContainsKey(sectorIdx))
+            var coord = GetSectorOfCoordinate(position);
+            if (!Sectors.ContainsKey(coord))
             {
-                AddSector(sectorIdx.X, sectorIdx.Z);
+                AddSector(coord);
             }
 
             var node = new Node
@@ -236,13 +233,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="c">The coordinate to check.</param>
         /// <returns>The index of the sector the coordinate is in.</returns>
-        public static (int X, int Z) GetSectorOfCoordinate(Vector3 c)
-        {
-            return (
+        public static SectorCoordinate GetSectorOfCoordinate(Vector3 c) => 
+            new SectorCoordinate(
                 (int)Math.Floor(c.X / SectorSize), 
-                (int)Math.Floor(c.Z / SectorSize)
-                );
-        }
+                (int)Math.Floor(c.Z / SectorSize));
 
         /// <summary>
         /// Deletes an item. Nodes that are only used by this item will also be deleted.
@@ -344,8 +338,8 @@ namespace TruckLib.ScsMap
             {
                 node.Position += position - selection.Origin;
                 node.UpdateItemReferences(clonedItems);
-                var (X, Z) = GetSectorOfCoordinate(node.Position);
-                AddSector(X, Z);
+                var coord = GetSectorOfCoordinate(node.Position);
+                AddSector(coord);
                 Nodes.Add(node.Uid, node);
             }
 
@@ -389,7 +383,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="mapDirectory">The main map directory.</param>
         /// <param name="sectors">If set, only the given sectors will be loaded.</param>
-        private void ReadSectors(string mapDirectory, (int X, int Z)[] sectors = null)
+        private void ReadSectors(string mapDirectory, IList<SectorCoordinate> sectors = null)
         {
             var baseFiles = Directory.GetFiles(mapDirectory, "*.base");
 
@@ -403,7 +397,7 @@ namespace TruckLib.ScsMap
                 if (sectors != null && !sectors.Contains(coords))
                     continue;
 
-                var sector = new Sector(coords.X, coords.Z, this);
+                var sector = new Sector(coords, this);
                 sector.BasePath = baseFile;
                 Sectors.Add(coords, sector);
             }
@@ -681,28 +675,25 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal Dictionary<(int X, int Z), List<MapItem>> GetSectorItems()
+        internal Dictionary<SectorCoordinate, List<MapItem>> GetSectorItems()
         {
-            var items = new Dictionary<(int X, int Z), List<MapItem>>();
+            var items = new Dictionary<SectorCoordinate, List<MapItem>>();
             foreach (var (_, item) in MapItems)
             {
                 var center = item.GetCenter();
                 var sectorCoord = GetSectorOfCoordinate(center);
                 if (items.TryGetValue(sectorCoord, out var list))
-                {
                     list.Add(item);
-                } 
                 else
-                {
                     items.Add(sectorCoord, new List<MapItem>() { item });
-                }
             }
             return items;
         }
 
-        internal Dictionary<(int X, int Z), List<INode>> GetSectorNodes(Dictionary<(int X, int Z), List<MapItem>> items)
+        internal Dictionary<SectorCoordinate, List<INode>> GetSectorNodes(
+            Dictionary<SectorCoordinate, List<MapItem>> items)
         {
-            var nodes = new Dictionary<(int X, int Z), List<INode>>();
+            var nodes = new Dictionary<SectorCoordinate, List<INode>>();
             foreach (var (_, node) in Nodes)
             {
                 if (node.ForwardItem is null && node.BackwardItem is null)
@@ -722,13 +713,9 @@ namespace TruckLib.ScsMap
 
                 var sectorCoord = GetSectorOfCoordinate(node.Position);
                 if (nodes.TryGetValue(sectorCoord, out var list))
-                {
                     list.Add(node);
-                }
                 else
-                {
                     nodes.Add(sectorCoord, new List<INode>() { node });
-                }
             }
             return nodes;
         }
@@ -762,29 +749,30 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Saves the sector in binary format to the specified directory.
         /// </summary>
-        /// <param name="sectorCoords">The coordinates of the sector to write.</param>
+        /// <param name="coord">The coordinate of the sector to write.</param>
         /// <param name="sectorDirectory">The sector directory.</param>
         /// <param name="sectorItems">A list of all items in this sector.</param>
         /// <param name="sectorNodes">A list of all nodes in this sector.</param>
         /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
-        public void SaveSector((int X, int Z) sectorCoords, string sectorDirectory, 
+        private void SaveSector(SectorCoordinate coord, string sectorDirectory, 
             List<MapItem> sectorItems, List<INode> sectorNodes,
             HashSet<ulong> visAreaShowObjectsChildren)
         {
-            WriteBase(GetSectorFilename(sectorCoords, sectorDirectory, Sector.BaseExtension), 
+            WriteBase(GetSectorFilename(coord, sectorDirectory, Sector.BaseExtension), 
                 sectorItems, sectorNodes, visAreaShowObjectsChildren);
-            WriteData(GetSectorFilename(sectorCoords, sectorDirectory, Sector.DataExtension), 
+            WriteData(GetSectorFilename(coord, sectorDirectory, Sector.DataExtension), 
                 sectorItems);
-            WriteAux(GetSectorFilename(sectorCoords, sectorDirectory, Sector.AuxExtenstion), 
+            WriteAux(GetSectorFilename(coord, sectorDirectory, Sector.AuxExtenstion), 
                 sectorItems, sectorNodes, visAreaShowObjectsChildren);
-            WriteSnd(GetSectorFilename(sectorCoords, sectorDirectory, Sector.SndExtension), 
+            WriteSnd(GetSectorFilename(coord, sectorDirectory, Sector.SndExtension), 
                 sectorItems, sectorNodes, visAreaShowObjectsChildren);
-            WriteLayer(GetSectorFilename(sectorCoords, sectorDirectory, Sector.LayerExtension),
+            WriteLayer(GetSectorFilename(coord, sectorDirectory, Sector.LayerExtension),
                 sectorItems);
         }
-        private string GetSectorFilename((int X, int Z) sectorCoords, string sectorDirectory, 
-            string ext) =>
-            Path.Combine(sectorDirectory, $"{Sector.SectorFileNameFromSectorCoords(sectorCoords)}.{ext}");
+
+        private string GetSectorFilename(SectorCoordinate coord, 
+            string sectorDirectory, string ext) =>
+            Path.Combine(sectorDirectory, $"{Sector.SectorFileNameFromSectorCoords(coord)}.{ext}");
 
         /// <summary>
         /// Writes the .base part of this sector.

@@ -17,14 +17,9 @@ namespace TruckLib.ScsMap
     public class Sector
     {
         /// <summary>
-        /// The X coordinate of this sector. 
+        /// The coordinate of this sector. 
         /// </summary>
-        public int X { get; set; }
-
-        /// <summary>
-        /// The Z coordinate of this sector.
-        /// </summary>
-        public int Z { get; set; }
+        public SectorCoordinate Coordinate { get; set; }
 
         /// <summary>
         /// The map the sector belongs to.
@@ -68,10 +63,15 @@ namespace TruckLib.ScsMap
         /// <param name="x">The X coordinate.</param>
         /// <param name="z">The Z coordinate.</param>
         /// <param name="map">The map this sector belongs to.</param>
-        public Sector(int x, int z, Map map)
+        public Sector(int x, int z, Map map) 
+            : this(new SectorCoordinate(x, z), map) { }
+
+        /// <summary>Instantiates a sector with default metadata.</summary>
+        /// <param name="coord">The coordinate of the sector.</param>
+        /// <param name="map">The map this sector belongs to.</param>
+        public Sector(SectorCoordinate coord, Map map)
         {
-            X = x;
-            Z = z;
+            Coordinate = coord;
             Map = map;
         }
 
@@ -130,24 +130,24 @@ namespace TruckLib.ScsMap
         /// Parses sector coordinates from the path to a sector file.
         /// </summary>
         /// <param name="path">The file path.</param>
-        /// <returns>The coordinates of the sector as (X, Z) tuple.</returns>
-        public static (int X, int Z) SectorCoordsFromSectorFilePath(string path)
+        /// <returns>The coordinates of the sector.</returns>
+        public static SectorCoordinate SectorCoordsFromSectorFilePath(string path)
         {
             var sectorName = Path.GetFileNameWithoutExtension(path);
-            var X = int.Parse(sectorName.Substring(3, 5));
-            var Z = int.Parse(sectorName.Substring(8, 5));
-            return (X, Z);
+            var x = int.Parse(sectorName.Substring(3, 5));
+            var z = int.Parse(sectorName.Substring(8, 5));
+            return new SectorCoordinate(x, z);
         }
 
-        public static string SectorFileNameFromSectorCoords((int X, int Z) coords) => 
-            $"sec{coords.X:+0000;-0000;+0000}{coords.Z:+0000;-0000;+0000}";
+        public static string SectorFileNameFromSectorCoords(SectorCoordinate coord) => 
+            $"sec{coord.X:+0000;-0000;+0000}{coord.Z:+0000;-0000;+0000}";
 
         /// <summary>
         /// Returns the name of this sector as used in filenames and the editor's map overlay.
         /// </summary>
         /// <returns>The name of this sector.</returns>
         public override string ToString() =>
-            SectorFileNameFromSectorCoords((X, Z));
+            SectorFileNameFromSectorCoords(Coordinate);
 
     }
 }

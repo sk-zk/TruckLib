@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.ScsMap
+namespace TruckLib.ScsMap.Collections
 {
     /// <summary>
     /// Reperesents a list of <see cref="FarModel.Models">Far Model models</see>.
@@ -30,10 +30,10 @@ namespace TruckLib.ScsMap
         }
 
         /// <inheritdoc/>
-        public FarModelData this[int index] 
-        { 
-            get => list[index]; 
-            set => list[index] = value; 
+        public FarModelData this[int index]
+        {
+            get => list[index];
+            set => list[index] = value;
         }
 
         /// <inheritdoc/>

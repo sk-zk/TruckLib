@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.ScsMap
+namespace TruckLib.ScsMap.Collections
 {
     /// <summary>
     /// Reperesents a list of <see cref="Gate.ActivationPoints">gate activation points</see>.
@@ -36,9 +36,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <inheritdoc/>
-        public GateActivationPoint this[int index] 
-        { 
-            get => list[index]; 
+        public GateActivationPoint this[int index]
+        {
+            get => list[index];
             set => list[index] = value;
         }
 

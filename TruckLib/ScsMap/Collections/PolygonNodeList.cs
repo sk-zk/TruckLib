@@ -6,40 +6,48 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLib.ScsMap
+namespace TruckLib.ScsMap.Collections
 {
     /// <summary>
-    /// Reperesents a list of <see cref="Curve.Locators">curve locator points</see>.
-    /// Has a maximum size of 2.
+    /// Contains the nodes of a <see cref="PolygonItem">polygon item</see>.
     /// </summary>
-    public class CurveLocatorList : IList<INode>
+    public class PolygonNodeList : IList<INode>
     {
         /// <summary>
-        /// The <see cref="Curve">Curve</see> item which parents these nodes.
+        /// The <see cref="PolygonItem">polygon item</see> which parents these nodes.
         /// </summary>
-        public Curve Parent { get; init; }
+        public PolygonItem Parent { get; init; }
+
+        private IItemContainer container;
 
         private readonly List<INode> list = new();
 
         /// <summary>
-        /// The maximum size of the list.
-        /// </summary>
-        public const int MaxSize = 2;
-
-        /// <summary>
         /// Instantiates an empty list.
         /// </summary>
-        /// <param name="parent">The <see cref="Gate">Curve</see> item which parents these models.</param>
-        public CurveLocatorList(Curve parent)
+        /// <param name="parent">The <see cref="PolygonItem">polygon item</see>
+        /// which parents these models.</param>
+        public PolygonNodeList(PolygonItem parent)
         {
             Parent = parent;
         }
 
         /// <inheritdoc/>
-        public INode this[int index] 
-        { 
-            get => list[index]; 
-            set => list[index] = value;
+        public INode this[int index]
+        {
+            get => list[index];
+            set
+            {
+                list[index] = value;
+                if (index == 0)
+                {
+                    container = list[0].Parent;
+                    if (list[0] is not UnresolvedNode)
+                        list[0].IsRed = true;
+                    if (Count > 1 && list[1] is not UnresolvedNode)
+                        list[1].IsRed = false;
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -48,26 +56,46 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public bool IsReadOnly => false;
 
-        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         /// <inheritdoc/>
         public void Add(INode item)
         {
-            if (list.Count >= MaxSize)
-                throw new IndexOutOfRangeException();
             list.Add(item);
+            if (Count == 1 && item is not UnresolvedNode)
+            {
+                container = list[0].Parent;
+                list[0].IsRed = true;
+            }
         }
 
         /// <summary>
-        /// Creates a locator node at the specified position and adds it to the end of the list.
+        /// Adds nodes to the end of list.
+        /// </summary>
+        /// <param name="items">The nodes to add to the list.</param>
+        public void AddRange(IEnumerable<INode> items)
+        {
+            list.AddRange(items);
+            if (Count == items.Count() && list[0] is not UnresolvedNode)
+                list[0].IsRed = true;
+        }
+
+        /// <summary>
+        /// Creates a map node at the specified position and adds it to the end of the list.
         /// </summary>
         /// <param name="position">The position of the node.</param>
-        /// <param name="rotation">The rotation of the node.</param>
-        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
-        public void Add(Vector3 position, Quaternion rotation)
+        public void Add(Vector3 position)
         {
-            if (list.Count >= MaxSize)
-                throw new IndexOutOfRangeException();
-            Add(CreateNode(position, rotation));
+            Add(CreateNode(position));
+        }
+
+        /// <summary>
+        /// Creates map nodes at the specified positions and adds them to the end of the list.
+        /// </summary>
+        /// <param name="positions">The positions of the nodes.</param>
+        public void AddRange(IEnumerable<Vector3> positions)
+        {
+            list.EnsureCapacity(Count + positions.Count());
+            foreach (var position in positions)
+                Add(position);
         }
 
         /// <inheritdoc/>
@@ -102,28 +130,23 @@ namespace TruckLib.ScsMap
             return list.IndexOf(item);
         }
 
-        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
         /// <inheritdoc/>
         public void Insert(int index, INode item)
         {
-            if (list.Count >= MaxSize)
-                throw new IndexOutOfRangeException();
             list.Insert(index, item);
         }
 
         /// <summary>
-        /// Creates a locator node at the specified position and inserts it
+        /// Creates a map node at the specified position and inserts it
         /// with the given properties at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index at which the object should be inserted.</param>
         /// <param name="position">The position of the node.</param>
-        /// <param name="rotation">The rotation of the node.</param>
-        /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
-        public void Insert(int index, Vector3 position, Quaternion rotation)
+        public void Insert(int index, Vector3 position)
         {
-            if (list.Count >= MaxSize)
-                throw new IndexOutOfRangeException();
-            Insert(index, CreateNode(position, rotation));
+            Insert(index, CreateNode(position, index == 0));
+            if (index == 0)
+                list[1].IsRed = false;
         }
 
         /// <summary>
@@ -149,6 +172,8 @@ namespace TruckLib.ScsMap
             var point = list[index];
             list.RemoveAt(index);
             GetRidOfTheNode(point);
+            if (index == 0)
+                list[0].IsRed = true;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -156,18 +181,18 @@ namespace TruckLib.ScsMap
             return list.GetEnumerator();
         }
 
-        private INode CreateNode(Vector3 position, Quaternion rotation)
+        private INode CreateNode(Vector3 position, bool isIndex0 = false)
         {
-            var node = Parent.Node.Parent.AddNode(position, false);
-            node.Rotation = rotation;
-            node.IsCurveLocator = true;
-            node.BackwardItem = Parent;
+            if (container is null)
+                container = Parent.Parent;
+            var node = container.AddNode(position, isIndex0);
+            node.ForwardItem = Parent;
             return node;
         }
 
         private void GetRidOfTheNode(INode node)
         {
-            node.BackwardItem = null;
+            node.ForwardItem = null;
             if (node.IsOrphaned())
                 node.Parent.Delete(node);
         }

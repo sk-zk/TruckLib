@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using TruckLib.ScsMap.Collections;
 using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.ScsMap
@@ -49,7 +50,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Contains the map's nodes.
         /// </summary>
-        public Dictionary<ulong, INode> Nodes { get; internal set; } = new();
+        public NodeDictionary Nodes { get; internal set; } = new();
 
         /// <summary>
         /// Contains the map's items.

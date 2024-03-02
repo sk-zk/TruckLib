@@ -50,18 +50,23 @@ var allMovers = map.MapItems.OfType<Mover>();
 Do not modify this dictionary directly &ndash; see "Adding and deleting map items" for the intended way to do that.
 
 ## Nodes
-Likewise, the [`Nodes`](xref:TruckLib.ScsMap.Map.Nodes) property is a dictionary containing all nodes in the map.
+Likewise, the [`Nodes`](xref:TruckLib.ScsMap.Map.Nodes) property is a dictionary plus R-tree containing all nodes in the map.
+
+You can retrieve nodes by UID just like any dictionary:
 
 ```cs
 bool exists = map.Nodes.TryGetValue(0x521CD80C53000000, out INode node);
 ```
 
-As with `MapItems`, it is not recommended to add to or remove from this dictionary by hand.
-To add a node, if necessary, call [`AddNode`](xref:TruckLib.ScsMap.Map.AddNode*), and to
-delete a node, call [`Delete`](xref:TruckLib.ScsMap.Map.Delete(TruckLib.ScsMap.INode)).
+To find nodes within a bounding box, use the [`Within`](xref:TruckLib.ScsMap.Collections.NodeDictionary.Within*) method:
 
-### Searching for nodes
-Searching for nodes within a bounding box or around a point is not yet implemented. Soon™.
+```cs
+var nodes = map.Nodes.Within(0, 0, 4000, 4000);
+```
+
+As with `MapItems`, it is not recommended to add to or remove from this dictionary by hand.
+To add a node directly, if necessary, call [`AddNode`](xref:TruckLib.ScsMap.Map.AddNode*), and to
+delete a node, call [`Delete`](xref:TruckLib.ScsMap.Map.Delete(TruckLib.ScsMap.INode)).
 
 ## Sectors
 In TruckLib, sectors don't contain any map objects internally: which sector an item or a node should be written

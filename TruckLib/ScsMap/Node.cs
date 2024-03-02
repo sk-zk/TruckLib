@@ -7,13 +7,14 @@ using System.Numerics;
 using System.IO;
 using System.Collections;
 using System.Xml.Linq;
+using RBush;
 
 namespace TruckLib.ScsMap
 {
     /// <summary>
     /// Represents a map node.
     /// </summary>
-    public class Node : INode, IItemReferences, IMapObject, IBinarySerializable
+    public class Node : INode, IItemReferences, IMapObject, IBinarySerializable, ISpatialData
     {
         /// <summary>
         /// The UID of this node.
@@ -29,10 +30,12 @@ namespace TruckLib.ScsMap
             get => position;
             set
             {
-                var recalc = position != value;
-                position = value;
-                if (recalc)
+                if (position != value)
+                {
+                    position = value;
+                    UpdateEnvelope();
                     RecalculateItems();
+                }
             }
         }
 
@@ -129,6 +132,10 @@ namespace TruckLib.ScsMap
         /// The map, selection or compound which contains this node.
         /// </summary>
         public IItemContainer Parent { get; set; }
+
+        private Envelope envelope;
+
+        ref readonly Envelope ISpatialData.Envelope => ref envelope;
 
         /// <summary>
         /// Instantiates a new node with a random UID.
@@ -330,6 +337,7 @@ namespace TruckLib.ScsMap
                 r.ReadInt32() / positionFactor,
                 r.ReadInt32() / positionFactor
             );
+            UpdateEnvelope();
 
             rotation = r.ReadQuaternion();
 
@@ -391,6 +399,11 @@ namespace TruckLib.ScsMap
             {
                 BackwardItem = resolvedBw;
             }
+        }
+
+        private void UpdateEnvelope()
+        {
+            envelope = new(position.X, position.Z, position.X, position.Z);
         }
     }
 }

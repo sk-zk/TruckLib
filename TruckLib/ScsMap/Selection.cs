@@ -29,6 +29,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Dictionary<ulong, INode> Nodes { get; set; }
 
+        IDictionary<ulong, INode> IItemContainer.Nodes => Nodes;
+
         /// <summary>
         /// Adds a node to the selection.
         /// </summary>

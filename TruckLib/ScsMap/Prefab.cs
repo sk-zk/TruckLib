@@ -564,7 +564,7 @@ namespace TruckLib.ScsMap
             new List<INode>(Nodes);
 
         /// <inheritdoc/>
-        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
+        internal override void UpdateNodeReferences(IDictionary<ulong, INode> allNodes)
         {
             ResolveNodeReferences(Nodes, allNodes);
         }

@@ -128,7 +128,7 @@ namespace TruckLib.ScsMap
         /// does not need to be called by the user at any point.
         /// </summary>
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
-        internal abstract void UpdateNodeReferences(Dictionary<ulong, INode> allNodes);
+        internal abstract void UpdateNodeReferences(IDictionary<ulong, INode> allNodes);
 
         /// <summary>
         /// Returns all external nodes which this item references.
@@ -165,7 +165,7 @@ namespace TruckLib.ScsMap
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
         /// <returns>The resolved node if it could be resolved; returns <paramref name="node"/>
         /// unmodified otherwise.</returns>
-        protected static INode ResolveNodeReference(INode node, Dictionary<ulong, INode> allNodes)
+        protected static INode ResolveNodeReference(INode node, IDictionary<ulong, INode> allNodes)
         {
             if (node is UnresolvedNode && allNodes.TryGetValue(node.Uid, out var resolvedNode))
                 return resolvedNode;
@@ -181,7 +181,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="nodes">The nodes to resolve.</param>
         /// <param name="allNodes">A dictionary of all nodes in the entire map.</param>
-        protected static void ResolveNodeReferences(IList<INode> nodes, Dictionary<ulong, INode> allNodes)
+        protected static void ResolveNodeReferences(IList<INode> nodes, IDictionary<ulong, INode> allNodes)
         {
             for (int i = 0; i < nodes.Count; i++)
                 nodes[i] = ResolveNodeReference(nodes[i], allNodes);

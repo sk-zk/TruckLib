@@ -282,7 +282,7 @@ namespace TruckLib.ScsMap
         internal override Vector3 GetCenter() => 
             (Node.Position + ForwardNode.Position) / 2;
 
-        internal override void UpdateNodeReferences(Dictionary<ulong, INode> allNodes)
+        internal override void UpdateNodeReferences(IDictionary<ulong, INode> allNodes)
         {
             Node = ResolveNodeReference(Node, allNodes);
             ForwardNode = ResolveNodeReference(ForwardNode, allNodes);

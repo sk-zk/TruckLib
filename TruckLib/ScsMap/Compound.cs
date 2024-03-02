@@ -46,8 +46,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Contains all map items owned by this compound.
         /// </summary>
-        public Dictionary<ulong, MapItem> MapItems { get; set; } 
+        public Dictionary<ulong, MapItem> MapItems { get; set; }
 
+        IDictionary<ulong, INode> IItemContainer.Nodes => Nodes;
 
         /// <summary>
         /// Contains all nodes owned by this compound.

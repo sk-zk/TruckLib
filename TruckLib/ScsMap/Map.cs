@@ -56,6 +56,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Dictionary<ulong, MapItem> MapItems { get; internal set; } = new();
 
+        IDictionary<ulong, INode> IItemContainer.Nodes => Nodes;
+
         /// <summary>
         /// Scale and time compression of the game outside cities.
         /// </summary>

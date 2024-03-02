@@ -13,7 +13,7 @@ namespace TruckLib.ScsMap
     /// </summary>
     public interface IItemContainer
     {
-        Dictionary<ulong, INode> Nodes { get; }
+        IDictionary<ulong, INode> Nodes { get; }
 
         Dictionary<ulong, MapItem> MapItems { get; }
 

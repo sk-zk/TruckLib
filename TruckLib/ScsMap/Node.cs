@@ -62,15 +62,15 @@ namespace TruckLib.ScsMap
         /// </summary>
         public IMapObject ForwardItem { get; set; }
 
-        protected FlagField Flags;
+        private FlagField flags;
 
         /// <summary>
         /// Gets or sets if this node is red or green.
         /// </summary>
         public bool IsRed
         {
-            get => Flags[0];
-            set => Flags[0] = value;
+            get => flags[0];
+            set => flags[0] = value;
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool FreeRotation
         {
-            get => Flags[2];
-            set => Flags[2] = value;
+            get => flags[2];
+            set => flags[2] = value;
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IsCountryBorder
         {
-            get => Flags[1];
-            set => Flags[1] = value;
+            get => flags[1];
+            set => flags[1] = value;
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool IsCurveLocator
         {
-            get => Flags[3];
-            set => Flags[3] = value;
+            get => flags[3];
+            set => flags[3] = value;
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool Locked
         {
-            get => Flags[26];
-            set => Flags[26] = value;
+            get => flags[26];
+            set => flags[26] = value;
         }
 
         /// <summary>
@@ -115,8 +115,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public byte BackwardCountry
         {
-            get => Flags.GetByte(2);
-            set => Flags.SetByte(2, value);
+            get => flags.GetByte(2);
+            set => flags.SetByte(2, value);
         }
 
         /// <summary>
@@ -124,8 +124,8 @@ namespace TruckLib.ScsMap
         /// </summary>
         public byte ForwardCountry
         {
-            get => Flags.GetByte(1);
-            set => Flags.SetByte(1, value);
+            get => flags.GetByte(1);
+            set => flags.SetByte(1, value);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace TruckLib.ScsMap
         {
             Uid = Utils.GenerateUuid();
             rotation = Quaternion.Identity;
-            Flags = new FlagField();
+            flags = new FlagField();
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace TruckLib.ScsMap
             var fwItemUid = r.ReadUInt64();
             ForwardItem = fwItemUid == 0 ? null : (IMapObject)new UnresolvedItem(fwItemUid);
 
-            Flags = new FlagField(r.ReadUInt32());
+            flags = new FlagField(r.ReadUInt32());
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace TruckLib.ScsMap
             w.Write(BackwardItem is null ? 0UL : BackwardItem.Uid);
             w.Write(ForwardItem is null ? 0UL : ForwardItem.Uid);
 
-            w.Write(Flags.Bits);
+            w.Write(flags.Bits);
         }
 
         /// <inheritdoc/>

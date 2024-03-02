@@ -261,7 +261,7 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <returns>The newly created node. If no action was performed because
         /// this node is already only used by one item, the method returns null.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the node can''t be split.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the node can't be split.</exception>
         public INode Split()
         {
             if (ForwardItem is null || BackwardItem is null)

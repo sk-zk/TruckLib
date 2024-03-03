@@ -15,7 +15,7 @@ namespace TruckLib.ScsMap.Collections
     public class NodeDictionary : IDictionary<ulong, INode>
     {
         private readonly Dictionary<ulong, INode> dictionary = new();
-        private readonly RBush<Node> tree = new();
+        internal RBush<Node> Tree { get; } = new();
 
         public INode this[ulong key]
         {
@@ -23,8 +23,8 @@ namespace TruckLib.ScsMap.Collections
             set
             {
                 var previous = (Node)dictionary[key];
-                tree.Delete(previous);
-                tree.Insert((Node)value);
+                Tree.Delete(previous);
+                Tree.Insert((Node)value);
                 dictionary[key] = value;
             }
         }
@@ -39,20 +39,20 @@ namespace TruckLib.ScsMap.Collections
 
         public void Add(ulong key, INode value)
         {
-            tree.Insert((Node)value);
+            Tree.Insert((Node)value);
             dictionary.Add(key, value);
         }
 
         public void Add(KeyValuePair<ulong, INode> item)
         {
-            tree.Insert((Node)item.Value);
+            Tree.Insert((Node)item.Value);
             dictionary.Add(item.Key, item.Value);
         }
 
         public void Clear()
         {
             dictionary.Clear();
-            tree.Clear();
+            Tree.Clear();
         }
 
         public bool Contains(KeyValuePair<ulong, INode> item) => 
@@ -73,7 +73,7 @@ namespace TruckLib.ScsMap.Collections
         public bool Remove(ulong key)
         {
             if (dictionary.TryGetValue(key, out var node))
-                tree.Delete((Node)node);
+                Tree.Delete((Node)node);
 
             return dictionary.Remove(key);
         }
@@ -81,7 +81,7 @@ namespace TruckLib.ScsMap.Collections
         public bool Remove(KeyValuePair<ulong, INode> item)
         {
             if (dictionary.TryGetValue(item.Key, out var node))
-                tree.Delete((Node)node);
+                Tree.Delete((Node)node);
 
             return dictionary.Remove(item.Key);
         }
@@ -101,7 +101,7 @@ namespace TruckLib.ScsMap.Collections
         /// <returns>A list of nodes contained within this bounding box.</returns>
         public IReadOnlyList<Node> Within(double minX, double minZ, double maxX, double maxZ)
         {
-            return tree.Search(new RBush.Envelope(minX, minZ, maxX, maxZ));
+            return Tree.Search(new RBush.Envelope(minX, minZ, maxX, maxZ));
         }
     }
 }

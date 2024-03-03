@@ -410,6 +410,11 @@ namespace TruckLib.ScsMap
         private void UpdateEnvelope()
         {
             envelope = new(position.X, position.Z, position.X, position.Z);
+            if (Parent is Map map)
+            {
+                map.Nodes.Tree.Delete(this);
+                map.Nodes.Tree.Insert(this);
+            }
         }
     }
 }

@@ -134,6 +134,8 @@ namespace TruckLib.ScsMap.Collections
         public void Insert(int index, INode item)
         {
             list.Insert(index, item);
+            if (index == 0)
+                list[1].IsRed = false;
         }
 
         /// <summary>
@@ -145,8 +147,6 @@ namespace TruckLib.ScsMap.Collections
         public void Insert(int index, Vector3 position)
         {
             Insert(index, CreateNode(position, index == 0));
-            if (index == 0)
-                list[1].IsRed = false;
         }
 
         /// <summary>

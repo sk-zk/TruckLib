@@ -183,8 +183,7 @@ namespace TruckLib.ScsMap.Collections
 
         private INode CreateNode(Vector3 position, bool isIndex0 = false)
         {
-            if (container is null)
-                container = Parent.Parent;
+            container ??= Parent.Parent;
             var node = container.AddNode(position, isIndex0);
             node.ForwardItem = Parent;
             return node;

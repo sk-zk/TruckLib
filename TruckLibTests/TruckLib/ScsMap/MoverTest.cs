@@ -14,17 +14,17 @@ namespace TruckLibTests.TruckLib.ScsMap
         public void Add()
         {
             var points = new List<Vector3>() {
-                new(14.45f, 0, 12.32f),
-                new(28.68f, 0, 11.37f),
-                new(28.90f, 0, 25.28f),
-                new(14.98f, 0, 22.84f)
+                new(13, 0, 13),
+                new(38, 5, 5),
+                new(60, 10, 16),
+                new(44, 2, 31)
             };
             var expectedRotations = new List<Quaternion>()
             {
-                new(0, 0.682978f, 0, -0.730439f),
-                new(0, 0.913131f, 0, -0.407665f),
-                new(0, 0.906075f, 0, 0.423116f),
-                new(0, 0.643127f, 0, 0.76576f)
+                new(-0.075905f, 0.586977f, -0.055407f, -0.804131f),
+                new(-0.0714474f, 0.725294f, -0.0761533f, -0.680474f),
+                new(0.00633117f, 0.992021f, 0.0555912f, -0.112979f),
+                new(-0.0691682f, 0.903593f, 0.159656f, 0.391465f)
             };
 
             var map = new Map("foo");

@@ -17,7 +17,7 @@ namespace TruckLib.ScsMap
     /// being used in europe.mbd.
     /// </remarks>
     [Obsolete]
-    public class Walker : PathItem, IRecalculatable
+    public class Walker : PathItem, IPathItemWithCachedLengths
     {
         /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Walker;
@@ -38,12 +38,12 @@ namespace TruckLib.ScsMap
 
         public float Width { get; set; } 
 
-        public float Angle { get; set; } 
+        public float Angle { get; set; }
 
         /// <summary>
         /// Cached lengths of the segments.
         /// </summary>
-        public List<float> Lengths { get; set; }
+        public List<float> Lengths => Nodes.Lengths;
 
         public bool UseCurvedPath
         {
@@ -110,7 +110,6 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Lengths = new List<float>();
             NamePrefix = "walker_";
             Speed = 1f;
             EndDelay = 0f;
@@ -140,20 +139,14 @@ namespace TruckLib.ScsMap
         public override void Move(Vector3 newPos)
         {
             base.Move(newPos);
-            Recalculate();
+            Recalculate(); // TODO does this need to be here?
         }
 
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
-            Recalculate();
-        }
-
-        /// <inheritdoc/>
-        public void Recalculate()
-        {
-            Lengths = MapItemUtils.CalculatePathLengths(Nodes, UseCurvedPath);
+            Recalculate(); // TODO does this need to be here?
         }
     }
 }

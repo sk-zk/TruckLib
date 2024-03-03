@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap.Serialization
 {
@@ -13,7 +14,8 @@ namespace TruckLib.ScsMap.Serialization
             ReadKdopItem(r, path);
 
             path.Tags = ReadObjectList<Token>(r);
-            path.Nodes = ReadNodeRefList(r);
+            path.Nodes = new PathNodeList(path);
+            path.Nodes.AddRange(ReadNodeRefList(r), false);
             path.TrackPoints = ReadNodeRefList(r);
             path.ControlNodes = ReadNodeRefList(r);
             path.Keyframes = ReadObjectList<Keyframe>(r);

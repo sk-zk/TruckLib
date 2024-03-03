@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap.Serialization
 {
@@ -13,7 +14,8 @@ namespace TruckLib.ScsMap.Serialization
             var trj = new Trajectory(false);
             ReadKdopItem(r, trj);
 
-            trj.Nodes = ReadNodeRefList(r);
+            trj.Nodes = new PathNodeList(trj);
+            trj.Nodes.AddRange(ReadNodeRefList(r), false);
             trj.AccessRule = r.ReadToken();
             trj.Rules = ReadObjectList<TrajectoryRule>(r);
             

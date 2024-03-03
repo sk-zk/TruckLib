@@ -319,6 +319,12 @@ namespace TruckLib.ScsMap
             // TODO Whenever polyline recalculation changes, 
             // check if this needs to be updated.
 
+            if (ForwardItem is PathItem path)
+            {
+                var nodeIdx = path.Nodes.IndexOf(this);
+                path.RecalculateAdjacent(nodeIdx);
+            }
+
             if (BackwardItem is IRecalculatable bw)
                 bw.Recalculate();
         }

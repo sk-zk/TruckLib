@@ -31,6 +31,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
 
             Assert.Equal(4, mover.Nodes.Count);
+            Assert.Equal(3, mover.Lengths.Count);
             for (int i = 0; i < mover.Nodes.Count; i++)
             {
                 Assert.Equal(points[i], mover.Nodes[i].Position);
@@ -92,6 +93,26 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Empty(map.MapItems);
             Assert.Empty(map.Nodes);
+        }
+
+        [Fact]
+        public void MoveNode()
+        {
+            var points = new List<Vector3>() {
+                new(13, 0, 13),
+                new(38, 5, 5),
+                new(60, 10, 16),
+                new(44, 2, 31)
+            };
+            var map = new Map("foo");
+            var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
+
+            mover.Nodes[1].Move(new Vector3(24, 5, 24));
+
+            Assert.Equal(new Vector3(24, 5, 24), mover.Nodes[1].Position);
+            AssertEx.Equal(new Quaternion(-0.0592645f, 0.912733f, -0.143077f, -0.378067f), mover.Nodes[0].Rotation);
+            AssertEx.Equal(new Quaternion(-0.0714474f, 0.725294f, -0.0761533f, -0.680474f), mover.Nodes[1].Rotation);
+            AssertEx.Equal(new Quaternion(0.0406577f, 0.813567f, 0.0573061f, -0.57721f), mover.Nodes[2].Rotation);
         }
     }
 }

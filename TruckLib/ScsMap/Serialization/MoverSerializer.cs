@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Text;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap.Serialization
 {
@@ -20,8 +22,10 @@ namespace TruckLib.ScsMap.Serialization
             mover.EndDelay = r.ReadSingle();
             mover.Width = r.ReadSingle();
             mover.Count = r.ReadUInt32();
-            mover.Lengths = ReadObjectList<float>(r);
-            mover.Nodes = ReadNodeRefList(r);
+            var lengths = ReadObjectList<float>(r);
+            mover.Nodes = new PathNodeList(mover);
+            mover.Nodes.AddRange(ReadNodeRefList(r), false);
+            mover.Nodes.Lengths = lengths;
 
             return mover;
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap.Serialization
 {
@@ -12,7 +13,8 @@ namespace TruckLib.ScsMap.Serialization
             var plane = new CutPlane(false);
             ReadKdopItem(r, plane);
 
-            plane.Nodes = ReadNodeRefList(r);
+            plane.Nodes = new PathNodeList(plane);
+            plane.Nodes.AddRange(ReadNodeRefList(r), false);
 
             return plane;
         }

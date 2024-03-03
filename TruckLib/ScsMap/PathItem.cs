@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap
 {
@@ -10,12 +11,14 @@ namespace TruckLib.ScsMap
     /// Base class for map items which define a polyline or spline that is fully contained
     /// in one item rather than being one piece of it.
     /// </summary>
-    public abstract class PathItem : MapItem
+    public abstract class PathItem : MapItem, IRecalculatable
     {
         /// <summary>
         /// The nodes of the item.
         /// </summary>
-        public List<INode> Nodes { get; set; }
+        public PathNodeList Nodes { get; set; }
+
+        internal IItemContainer Parent { get; set; }
 
         protected PathItem() : base() { }
 
@@ -28,7 +31,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<INode>(2);
+            Nodes = new PathNodeList(this);
         }
 
         /// <summary>
@@ -37,6 +40,7 @@ namespace TruckLib.ScsMap
         internal static T Add<T>(IItemContainer map, IList<Vector3> positions) where T : PathItem, new()
         {
             var item = new T();
+            item.Parent = map;
             item.CreateNodes(map, positions);
             map.AddItem(item);
             return item;
@@ -84,43 +88,58 @@ namespace TruckLib.ScsMap
         protected void CreateNodes(IItemContainer map, IList<Vector3> positions)
         {
             if (Nodes.Count != 0)
-            {
                 throw new InvalidOperationException("Map item already has nodes.");
-            }
 
-            // all nodes have the item as ForwardItem; 
-            // how the nodes connect is determined by their position in the list only
             for (int i = 0; i < positions.Count; i++)
-            {
-                var node = map.AddNode(positions[i]);
-                if (i == 0)
-                {
-                    // one node has to have the red node flag.
-                    // without it, the item can't be deleted.
-                    node.IsRed = true;
-                }
-                node.ForwardItem = this;
-                Nodes.Add(node);
-            }
+                Nodes.Add(positions[i]);
 
-            SetNodeRotations();
+            Recalculate();
+        }
+
+
+        /// <inheritdoc/>
+        public virtual void Recalculate()
+        {
+            RecalculateRotation();
         }
 
         /// <summary>
         /// Sets the node rotations when creating a path item.
         /// Called by <see cref="CreateNodes">CreateNodes</see>.
         /// </summary>
-        protected virtual void SetNodeRotations()
+        private void RecalculateRotation()
         {
             for (int i = 0; i < Nodes.Count; i++)
-            {
-                var p0 = Nodes[Math.Max(0, i - 1)].Position;
-                var p1 = Nodes[i].Position;
-                var p2 = Nodes[Math.Min(Nodes.Count - 1, i + 1)].Position;
-                var p3 = Nodes[Math.Min(Nodes.Count - 1, i + 2)].Position;
-                var vec = CatmullRomSpline.Derivative(p0, p1, p2, p3, 0);
-                Nodes[i].Rotation = MathEx.GetNodeRotation(vec);
-            }
+                RecalculateRotation(i);
+        }
+
+        /// <summary>
+        /// Recalculates the rotation of one node.
+        /// </summary>
+        /// <param name="i">The index of the node.</param>
+        protected virtual void RecalculateRotation(int i)
+        {
+            var p0 = Nodes[Math.Max(0, i - 1)].Position;
+            var p1 = Nodes[i].Position;
+            var p2 = Nodes[Math.Min(Nodes.Count - 1, i + 1)].Position;
+            var p3 = Nodes[Math.Min(Nodes.Count - 1, i + 2)].Position;
+            var vec = CatmullRomSpline.Derivative(p0, p1, p2, p3, 0);
+            Nodes[i].Rotation = MathEx.GetNodeRotation(vec);
+        }
+
+        /// <summary>
+        /// Recalculates node i as well as i-1 and i+1 if they exist.
+        /// </summary>
+        /// <param name="i">The index of the central node.</param>
+        internal virtual void RecalculateAdjacent(int i)
+        {
+            if (i > 0)
+                RecalculateRotation(i - 1);
+
+            RecalculateRotation(i);
+
+            if (i < Nodes.Count - 1)
+                RecalculateRotation(i + 1);
         }
 
         /// <inheritdoc/>
@@ -129,7 +148,8 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         internal override void UpdateNodeReferences(IDictionary<ulong, INode> allNodes)
         {
-            ResolveNodeReferences(Nodes, allNodes);
+            for (int i = 0; i < Nodes.Count; i++)
+                Nodes.SetWithoutRecalculating(i, ResolveNodeReference(Nodes[i], allNodes));
         }
     }
 }

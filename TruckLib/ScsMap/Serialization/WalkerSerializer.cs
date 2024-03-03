@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap.Serialization
 {
@@ -18,8 +19,10 @@ namespace TruckLib.ScsMap.Serialization
             walker.Count = r.ReadUInt32();
             walker.Width = r.ReadSingle();
             walker.Angle = r.ReadSingle();
-            walker.Lengths = ReadObjectList<float>(r);
-            walker.Nodes = ReadNodeRefList(r);
+            var lengths = ReadObjectList<float>(r);
+            walker.Nodes = new PathNodeList(walker);
+            walker.Nodes.AddRange(ReadNodeRefList(r), false);
+            walker.Nodes.Lengths = lengths;
 
             return walker;
         }

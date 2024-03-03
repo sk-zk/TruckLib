@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// An animated model which can optionally be moved along a path.
     /// </summary>
-    public class Mover : PathItem, IRecalculatable
+    public class Mover : PathItem, IPathItemWithCachedLengths
     {
         /// <inheritdoc/>
         public override ItemType ItemType => ItemType.Mover;
@@ -67,14 +67,14 @@ namespace TruckLib.ScsMap
         public uint Count { get; set; }
 
         /// <summary>
-        /// Cached lengths of the path segments.
-        /// </summary>
-        public List<float> Lengths { get; set; } 
-
-        /// <summary>
         /// Tags.
         /// </summary>
         public List<Token> Tags { get; set; }
+
+        /// <summary>
+        /// Cached lengths of the segments.
+        /// </summary>
+        public List<float> Lengths => Nodes.Lengths;
 
         /// <summary>
         /// Gets or sets if the mover is active when street lamps are off.
@@ -210,7 +210,6 @@ namespace TruckLib.ScsMap
             ActiveDuringBadWeather = true;
             FollowDir = true;
             UseCurvedPath = true;
-            Lengths = new List<float>();
             Tags = new List<Token>();
             Speed = 1;
             Count = 1;
@@ -242,20 +241,14 @@ namespace TruckLib.ScsMap
         public override void Move(Vector3 newPos)
         {
             base.Move(newPos);
-            Recalculate();
+            Recalculate(); // TODO does this need to be here?
         }
 
         /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
-            Recalculate();
-        }
-
-        /// <inheritdoc/>
-        public void Recalculate()
-        {
-            Lengths = MapItemUtils.CalculatePathLengths(Nodes, UseCurvedPath);
+            Recalculate(); // TODO does this need to be here?
         }
     }
 }

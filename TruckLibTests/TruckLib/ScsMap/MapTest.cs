@@ -41,6 +41,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Equal(node, map.Nodes[node.Uid]);
             Assert.Equal(new(-69, 0, -420), node.Position);
             Assert.True(node.IsRed);
+            Assert.Single(map.Nodes.Within(-80, -440, -60, -400));
 
             Assert.Single(map.Sectors);
             Assert.True(map.Sectors.ContainsKey(new SectorCoordinate(-1, -1)));
@@ -55,6 +56,7 @@ namespace TruckLibTests.TruckLib.ScsMap
             map.Delete(node);
 
             Assert.Empty(map.Nodes);
+            Assert.Empty(map.Nodes.Within(-1000, -1000, 1000, 1000));
         }
 
         [Fact]

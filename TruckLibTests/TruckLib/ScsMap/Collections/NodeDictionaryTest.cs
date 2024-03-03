@@ -74,7 +74,18 @@ namespace TruckLibTests.TruckLib.ScsMap.Collections
 
             Assert.Empty(dict.Within(0, 0, 20, 20));
             Assert.Equal(node2, dict.Within(40, 40, 60, 60)[0]);
+        }
 
+        [Fact]
+        public void MoveNode()
+        {
+            var map = new Map("foo");
+            var node = map.AddNode(new Vector3(10, 0, 10));
+
+            node.Move(new Vector3(150, 0, 150));
+
+            Assert.Empty(map.Nodes.Within(0, 0, 20, 20));
+            Assert.Equal(node, map.Nodes.Within(140, 140, 160, 160)[0]);
         }
     }
 }

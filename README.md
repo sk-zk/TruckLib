@@ -7,12 +7,12 @@ The currently supported map format version is **900** (game version **1.48.5/1.4
 
 (This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later, and breaking changes will happen on occasion.)
 
-## What's all this then
+## Namespaces
 **TruckLib.ScsMap**:  
 The main namespace of the library: classes for working with the map format.
 
 **TruckLib.Sii**:  
-Parser for .sii and .mat files.
+Parsers for .sii and .mat files.
 
 **TruckLib.Models**:  
 Rudimentary support for binary model files (.pm\*), prefab descriptors (.ppd), and binary .tobj files.
@@ -39,7 +39,7 @@ https://sk-zk.github.io/trucklib/master/
 This will of course expand as time goes on.
 
 ## Known issues and limitations
-* The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map > Recompute map).
+* The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map&nbsp;>&nbsp;Recompute map).
 * I've yet to figure out how the game calculates the length of roads etc. What I've come up with is
   accurate enough to not be too annoying, but you'll notice while editing one of these items that they will slightly
   change their path as the game recalculates its length.

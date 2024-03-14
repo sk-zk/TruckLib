@@ -1,7 +1,7 @@
 # Sample #3: Real world data
 
 This sample demonstrates one possible approach for importing the course of a real road into a map for the purpose
-of 1:1 mapping; in particular, it deals with the essential steps of fetching elevation data and projecting the points.
+of 1:1 mapping. In particular, it deals with the essential steps of fetching elevation data and projecting the points.
 You can find the full source code at `Samples/02-RealRoad/Program.cs`.
 
 ## Structs
@@ -82,7 +82,8 @@ var coordinatesWithElevation = elevationProvider.GetElevations(coordinates);
 ```
 
 The first time you run this program, this step will take several seconds
-as DEM.Net needs to download the elevation model for the requested region; on any subsequent run, it will load a cached version from disk.
+as DEM.Net needs to download the elevation model for the requested region. On any subsequent run,
+it will load a cached version from disk.
 
 ## Projection
 The real world is round, but game worlds are flat, so we need to project our points into that flat world. Here, we will use a transverse Mercator;
@@ -137,7 +138,7 @@ var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
 ```
 
 One last thing &ndash; the game has a minimum length for road segments, which in this case is 1.25 m.
-Further, segments shorter than 5 m often render quite strangely. Now that we have our projected points
+Further, segments shorter than 5 m can render quite strangely. Now that we have our projected points
 and know how long each segment will be in-game, we'll filter out these segments.
 (This sample has enough LOC as it is, so for the sake of simplicity, we just remove any point for which
 || n<sub>i</sub> - n<sub>i-1</sub> || < 5.)
@@ -150,7 +151,7 @@ points = RemoveShortSegments(points);
 We now have everything we need to add the road to a map. For this step, I will assume that you have read
 [Sample #1: Simple example](~/docs/Samples/00-simple.md).
 
-As with the previous samples, we'll create an empty map:
+As with the previous samples, we create an empty map:
 
 ```cs
 using TruckLib.ScsMap;
@@ -158,7 +159,7 @@ using TruckLib.ScsMap;
 var map = new Map("example");
 ```
 
-The road items can be created as follows:
+The road items can now be created as follows:
 
 ```cs
 var road = Road.Add(map,
@@ -176,10 +177,10 @@ for (int i = 2; i < points.Count; i++)
 
 The first road item needs to be explicitly created with the first and second point of the road. After this,
 you can call `Append` in a loop with the remaining points. Remember that a road item can only be appended to once, so
-make sure to assign the return value of `Append`, which is the newly created road item, back to `road`.
+make sure that the return value of `Append`, which is the newly created road item, is assigned back to `road`.
 
 ## Saving the map
-You know the drill by now:
+Let's save the map:
 
 ```cs
 var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

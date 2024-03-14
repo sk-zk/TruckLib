@@ -24,18 +24,22 @@ properties instead, set the optional parameter `cloneSettings` to `false`.
 
 ## Connecting two polyline items
 To connect two unconnected polyline items where one has a free forward node and one has a free backward node, call
-[`Merge`](xref:TruckLib.ScsMap.Node.Merge*) on the node you wish to keep:
+[`Merge`](xref:TruckLib.ScsMap.Node.Merge*) on the node you wish to keep.
 
+Say you have the following two road items:
 ```cs
-// Say you have the following two road items:
 Road road1 = Road.Add(map, new Vector3(10, 0, 10), new Vector3(30, 0, 10), "ger1");
 Road road2 = Road.Add(map, new Vector3(32, 0, 12), new Vector3(50, 0, 30), "ger1");
+```
 
-// To connect the roads and keep the node at (30, 0, 10), do the following:
+To connect the roads and keep the node at (30, 0, 10), write the following:
+
+```cs
 road1.ForwardNode.Merge(road2.Node);
+```
 
-// Alternatively, if you would like to keep the node at (32, 0, 12), call it 
-// the other way around:
+Alternatively, if you would like to keep the node at (32, 0, 12), call it  the other way around:
+```cs
 road2.Node.Merge(road1.ForwardNode);
 ```
 

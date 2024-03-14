@@ -268,9 +268,10 @@ namespace TruckLib.ScsMap
             {
                 return null;
             }
-            else if (ForwardItem is PolylineItem fwPoly && BackwardItem is PolylineItem bwPoly)
+
+            var newNode = Parent.AddNode(Position);
+            if (ForwardItem is PolylineItem fwPoly && BackwardItem is PolylineItem bwPoly)
             {
-                var newNode = Parent.AddNode(Position);
                 newNode.ForwardItem = fwPoly;
                 newNode.IsRed = true;
                 newNode.Rotation = Rotation;
@@ -283,7 +284,6 @@ namespace TruckLib.ScsMap
             }
             else if (ForwardItem is PolylineItem && BackwardItem is Prefab)
             {
-                var newNode = Parent.AddNode(Position);
                 newNode.ForwardItem = ForwardItem;
                 newNode.IsRed = true;
                 newNode.Rotation = Rotation;
@@ -297,11 +297,19 @@ namespace TruckLib.ScsMap
             }
             else if (ForwardItem is Prefab && BackwardItem is PolylineItem)
             {
-                var newNode = Parent.AddNode(Position);
                 newNode.BackwardItem = BackwardItem;
                 newNode.Rotation = Rotation;
                 (BackwardItem as PolylineItem).ForwardNode = newNode;
                 (BackwardItem as PolylineItem).Recalculate();
+                BackwardItem = null;
+                return newNode;
+            }
+            else if (ForwardItem is Prefab && BackwardItem is Prefab)
+            {
+                newNode.ForwardItem = BackwardItem;
+                newNode.Rotation = Rotation * Quaternion.CreateFromYawPitchRoll(MathF.PI, 0, 0);
+                var idx = (BackwardItem as Prefab).Nodes.IndexOf(this);
+                (BackwardItem as Prefab).Nodes[idx] = newNode;
                 BackwardItem = null;
                 return newNode;
             }
@@ -326,7 +334,9 @@ namespace TruckLib.ScsMap
             }
 
             if (BackwardItem is IRecalculatable bw)
+            {
                 bw.Recalculate();
+            }
         }
 
         private const float positionFactor = 256f;

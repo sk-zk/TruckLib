@@ -231,5 +231,23 @@ namespace TruckLibTests.TruckLib.ScsMap
             Assert.Equal(prefab.Nodes[0].Position, newNode.Position);
             AssertEx.Equal(expectedPfNodeRot, prefab.Nodes[0].Rotation, 0.001f);
         }
+
+        [Fact]
+        public void SplitPrefabs()
+        {
+            var map = new Map("foo");
+            var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
+            var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
+            prefab1.Attach(3, prefab2, 1);
+
+            var newNode = prefab1.Nodes[3].Split();
+
+            Assert.Equal(newNode, prefab2.Nodes[1]);
+            Assert.Null(prefab1.Nodes[3].BackwardItem);
+            Assert.Equal(prefab2, newNode.ForwardItem);
+            Assert.Null(newNode.BackwardItem);
+            Assert.NotEqual(prefab1.Nodes[3].Rotation, newNode.Rotation);
+            Assert.False(newNode.IsRed);
+        }
     }
 }

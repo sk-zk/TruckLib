@@ -360,10 +360,7 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            var centers = items.Select(x => x.GetCenter());
-            var center = MathEx.GetCenter(centers);
-            var compound = Compound.Add(this, center);
-
+            var compound = Compound.Add(this, Vector3.Zero);
             foreach (var item in items)
             {
                 MapItems.Remove(item.Uid);
@@ -376,7 +373,7 @@ namespace TruckLib.ScsMap
                     node.Parent = compound;
                 }
             }
-
+            compound.RecalculateCenter();
             return compound;
         }
 

@@ -259,5 +259,14 @@ namespace TruckLib.ScsMap
                 item.Translate(translation);
             }
         }
+
+        /// <summary>
+        /// Moves the parent node of the compound to the center of its child items.
+        /// The positions of the child items are not changed.
+        /// </summary>
+        public void RecalculateCenter()
+        {
+            Node.Position = MathEx.GetCenter(Nodes.Select(x => x.Value.Position));
+        }
     }  
 }

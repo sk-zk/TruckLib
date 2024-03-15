@@ -233,9 +233,7 @@ namespace TruckLib.ScsMap
         /// <param name="c">The coordinate to check.</param>
         /// <returns>The index of the sector the coordinate is in.</returns>
         public static SectorCoordinate GetSectorOfCoordinate(Vector3 c) => 
-            new SectorCoordinate(
-                (int)Math.Floor(c.X / SectorSize), 
-                (int)Math.Floor(c.Z / SectorSize));
+            new((int)Math.Floor(c.X / SectorSize), (int)Math.Floor(c.Z / SectorSize));
 
         /// <summary>
         /// Deletes an item. Nodes that are only used by this item will also be deleted.
@@ -251,14 +249,21 @@ namespace TruckLib.ScsMap
             {
                 recalculatables = new();
                 prefabNodes = new();
-                if (poly.BackwardItem is IRecalculatable)
-                    recalculatables.Add((IRecalculatable)poly.BackwardItem);
+                if (poly.BackwardItem is IRecalculatable bwRecalculatable)
+                {
+                    recalculatables.Add(bwRecalculatable);
+                }
                 // if the backward item is a prefab, the rotation of that node
                 // needs to be reset
                 else if (poly.BackwardItem is Prefab)
+                {
                     prefabNodes.Add(poly.Node);
-                if (poly.ForwardItem is IRecalculatable)
-                    recalculatables.Add((IRecalculatable)poly.ForwardItem);
+                }
+
+                if (poly.ForwardItem is IRecalculatable fwRecalculatable)
+                {
+                    recalculatables.Add(fwRecalculatable);
+                }
             }
 
             // remove item from its nodes, 
@@ -414,7 +419,7 @@ namespace TruckLib.ScsMap
             var clonedItems = selection.MapItems.Select(x => (x.Key, x.Value.CloneItem()))
                 .ToDictionary(k => k.Item1, v => v.Item2);
             var clonedNodes = selection.Nodes.Select(x => (x.Key, (x.Value as Node).Clone()))
-                .ToDictionary(k => k.Item1, v => (INode)(v.Item2));
+                .ToDictionary(k => k.Item1, v => (INode)v.Item2);
 
             foreach (var (_, node) in clonedNodes)
             {
@@ -718,7 +723,7 @@ namespace TruckLib.ScsMap
             }
 
             var sectorItems = GetSectorItems();
-            var sectorNodes = GetSectorNodes(sectorItems);
+            var sectorNodes = GetSectorNodes();
             foreach (var sectorCoord in sectorNodes.Keys)
             {
                 AddSector(sectorCoord);
@@ -772,8 +777,7 @@ namespace TruckLib.ScsMap
             return items;
         }
 
-        internal Dictionary<SectorCoordinate, List<INode>> GetSectorNodes(
-            Dictionary<SectorCoordinate, List<MapItem>> items)
+        internal Dictionary<SectorCoordinate, List<INode>> GetSectorNodes()
         {
             var nodes = new Dictionary<SectorCoordinate, List<INode>>();
             foreach (var (_, node) in Nodes)

@@ -219,7 +219,6 @@ namespace TruckLib.ScsMap
 
         internal void UpdateInternalReferences()
         {
-
             // first of all, find map items referenced in nodes
             foreach (var (_, node) in Nodes)
             {

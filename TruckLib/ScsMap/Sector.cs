@@ -39,7 +39,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The header of this sector.
         /// </summary>
-        private Header header = new();
+        private readonly Header header = new();
 
         // Always 2 in both ETS2 and ATS.
         private uint SectorDescVersion = 2;

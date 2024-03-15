@@ -142,17 +142,7 @@ namespace TruckLib.ScsMap
         /// <returns>The center point of the item's nodes.</returns>
         internal virtual Vector3 GetCenter()
         {
-            var acc = Vector3.Zero;
-            var nodes = GetItemNodes();
-            if (nodes.Count() == 0)
-            {
-                throw new Exception("Item has no nodes?");
-            }
-            foreach (var node in nodes)
-            {
-                acc += node.Position;
-            }
-            return acc / nodes.Count();
+            return MathEx.GetCenter(GetItemNodes());
         }
 
         /// <summary>

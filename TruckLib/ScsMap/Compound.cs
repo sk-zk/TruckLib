@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap
     /// traffic rules can be added externally and the game will load them without issues.
     /// Likewise, the editor requires a compound to consist of at least two items,
     /// but a compound of only one item is supported (albeit somewhat pointless) if
-    /// created externally.</para>
+    /// created here.</para>
     /// </remarks>
     public class Compound : SingleNodeItem, IItemContainer
     {

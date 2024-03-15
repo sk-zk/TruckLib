@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using TruckLib.ScsMap;
 
 namespace TruckLib
 {
@@ -59,6 +60,32 @@ namespace TruckLib
         public static int Mod(int a, int b)
         {
             return a - b * (int)Math.Floor((double)a / b);
+        }
+
+        /// <summary>
+        /// Returns the center point of the given nodes.
+        /// </summary>
+        /// <param name="nodes">The nodes.</param>
+        /// <returns>The center point of the nodes.</returns>
+        /// <exception cref="ArgumentException">Thrown if the collection is empty.</exception>
+        public static Vector3 GetCenter(IEnumerable<INode> nodes)
+        {
+            return GetCenter(nodes.Select(x => x.Position));
+        }
+
+        /// <summary>
+        /// Returns the center point of the given points.
+        /// </summary>
+        /// <param name="points">The points.</param>
+        /// <returns>The center point of the nodes.</returns>
+        /// <exception cref="ArgumentException">Thrown if the collection is empty.</exception>
+        public static Vector3 GetCenter(IEnumerable<Vector3> points)
+        {
+            if (!points.Any())
+                throw new ArgumentException("Collection must not be empty.");
+
+            var sum = points.Aggregate((acc, point) => acc + point);
+            return sum / points.Count();
         }
     }
 }

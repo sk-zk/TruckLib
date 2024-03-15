@@ -7,7 +7,6 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using TruckLib.ScsMap.Collections;
 using TruckLib.ScsMap.Serialization;
 
@@ -306,6 +305,7 @@ namespace TruckLib.ScsMap
         public void Delete(INode node)
         {
             Nodes.Remove(node.Uid);
+            node.Parent = null;
             
             if (node.ForwardItem is MapItem fw)
             {
@@ -317,6 +317,88 @@ namespace TruckLib.ScsMap
             {
                 node.BackwardItem = null;
                 Delete(bw);
+            }
+        }
+
+        /// <summary>
+        /// <para>Creates a <see cref="Compound"/> item and makes it the parent of the given map items.</para>
+        /// <para>Note that only <see href="https://github.com/sk-zk/map-docs/wiki/base%2C-aux-and-snd">aux items</see>
+        /// are compoundable.</para>
+        /// </summary>
+        /// <param name="items">The items to compound.</param>
+        /// <returns>The newly created compound item.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if any of the map items or nodes
+        /// are not parented by this map.</exception>
+        public Compound CompoundItems(IEnumerable<MapItem> items)
+        {
+            // Make sure everything checks out before moving the first item.
+            foreach (var item in items)
+            {
+                if (item.ItemFile != ItemFile.Aux)
+                {
+                    throw new ArgumentException($"Item {item.Uid:X} is not an aux item.");
+                }
+
+                if (!MapItems.ContainsKey(item.Uid))
+                {
+                    throw new InvalidOperationException(
+                        $"Item {item.Uid:X} is not a child of this map.");
+                }
+
+                foreach (var node in item.GetItemNodes())
+                {
+                    if (!Nodes.ContainsKey(node.Uid))
+                    {
+                        throw new InvalidOperationException(
+                            $"Node {node.Uid:X} of item {item.Uid:X} is not a child of this map.");
+                    }
+                }
+            }
+
+            var centers = items.Select(x => x.GetCenter());
+            var center = MathEx.GetCenter(centers);
+            var compound = Compound.Add(this, center);
+
+            foreach (var item in items)
+            {
+                MapItems.Remove(item.Uid);
+                compound.MapItems.Add(item.Uid, item);
+
+                foreach (var node in item.GetItemNodes())
+                {
+                    Nodes.Remove(node.Uid);
+                    compound.Nodes.Add(node.Uid, node);
+                    node.Parent = compound;
+                }
+            }
+
+            return compound;
+        }
+
+        /// <summary>
+        /// Deletes the given <see cref="Compound"/> item and adds its child items to the map itself.
+        /// </summary>
+        /// <param name="compound">The compound item.</param>
+        /// <exception cref="InvalidOperationException">Thrown if the compound is not parented
+        /// by this map.</exception>
+        public void UncompoundItems(Compound compound)
+        {
+            if (!MapItems.ContainsKey(compound.Uid))
+            {
+                throw new InvalidOperationException(
+                    $"Compound {compound.Uid:X} is not a child of this map.");
+            }
+
+            Delete(compound);
+
+            foreach (var (uid, item) in compound.MapItems)
+            {
+                MapItems.Add(uid, item);
+            }
+            foreach (var (uid, node) in compound.Nodes)
+            {
+                Nodes.Add(uid, node);
+                node.Parent = this;
             }
         }
 

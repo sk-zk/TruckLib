@@ -67,5 +67,47 @@ namespace TruckLibTests.TruckLib.ScsMap
 
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void CompoundItems()
+        {
+            var map = new Map("foo");
+            var model1 = Model.Add(map, new Vector3(22, 0, 16), "aaa", "bbb", "ccc");
+            var model2 = Model.Add(map, new Vector3(30, 0, 8), "aaa", "bbb", "ccc");
+
+            var compound = map.CompoundItems(new[] {model1, model2});
+
+            Assert.True(compound.Node.IsRed);
+            Assert.False(map.MapItems.ContainsKey(model1.Uid));
+            Assert.False(map.MapItems.ContainsKey(model2.Uid));
+            Assert.True(compound.MapItems.ContainsKey(model1.Uid));
+            Assert.True(compound.MapItems.ContainsKey(model2.Uid));
+            Assert.False(map.Nodes.ContainsKey(model1.Node.Uid));
+            Assert.False(map.Nodes.ContainsKey(model2.Node.Uid));
+            Assert.True(compound.Nodes.ContainsKey(model1.Node.Uid));
+            Assert.True(compound.Nodes.ContainsKey(model2.Node.Uid));
+            Assert.Equal(compound, model1.Node.Parent);
+            Assert.Equal(compound, model2.Node.Parent);
+        }
+
+        [Fact]
+        public void UncompoundItems()
+        {
+            var map = new Map("foo");
+            var compound = Compound.Add(map, new Vector3(25, 0, 10));
+            var model1 = Model.Add(compound, new Vector3(22, 0, 16), "aaa", "bbb", "ccc");
+            var model2 = Model.Add(compound, new Vector3(30, 0, 8), "aaa", "bbb", "ccc");
+
+            map.UncompoundItems(compound);
+
+            Assert.False(map.MapItems.ContainsKey(compound.Uid));
+            Assert.False(map.Nodes.ContainsKey(compound.Node.Uid));
+            Assert.True(map.MapItems.ContainsKey(model1.Uid));
+            Assert.True(map.MapItems.ContainsKey(model2.Uid));
+            Assert.True(map.Nodes.ContainsKey(model1.Node.Uid));
+            Assert.True(map.Nodes.ContainsKey(model2.Node.Uid));
+            Assert.Equal(map, model1.Node.Parent);
+            Assert.Equal(map, model2.Node.Parent);
+        }
     }
 }

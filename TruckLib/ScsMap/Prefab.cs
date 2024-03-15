@@ -346,7 +346,7 @@ namespace TruckLib.ScsMap
             }
             else
             {
-                backwardNode.Rotation *= Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
+                backwardNode.Rotation *= Quaternion.CreateFromYawPitchRoll(MathF.PI, 0, 0);
                 forwardNode.Rotation = MathEx.GetNodeRotation(backwardNode.Position, forwardNode.Position);
             }
 

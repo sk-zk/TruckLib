@@ -289,7 +289,7 @@ namespace TruckLib.ScsMap
                 recalculatables[i].Recalculate();
 
             for (int i = 0; i < prefabNodes?.Count; i++)
-                prefabNodes[i].Rotation *= Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
+                prefabNodes[i].Rotation *= Quaternion.CreateFromYawPitchRoll(MathF.PI, 0, 0);
 
             // delete dependent items
             if (item is Prefab pf)

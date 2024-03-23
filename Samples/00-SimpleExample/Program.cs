@@ -85,7 +85,7 @@ namespace Example
             var model2 = Model.Add(map, new Vector3(159.64f, -0.1f, 36.91f), 
                 "378", // "wood_heap1"
                 "default", "default"); 
-            model2.Node.Rotation = Quaternion.CreateFromYawPitchRoll((float)(Math.PI / 2), 0, 0);
+            model2.Node.Rotation = Quaternion.CreateFromYawPitchRoll(MathF.PI, 0, 0);
 
 
             // Save the map

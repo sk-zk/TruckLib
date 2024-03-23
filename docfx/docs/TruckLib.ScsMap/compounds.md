@@ -38,7 +38,7 @@ compound.Delete(model);
 // The compound is now empty again.
 ```
 
-## Dissolve a compound
+## Uncompounding
 Dissolving a compound &ndash; moving its items back into the map itself and deleting the compound item &ndash; is accomplished with
 [`UncompoundItems`](xref:TruckLib.ScsMap.Map.UncompoundItems*):
 

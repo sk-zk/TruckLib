@@ -69,19 +69,19 @@ namespace TruckLib.ScsMap
         public float CityScale { get; set; } = 3;
 
         /// <summary>
-        /// Editor start position. TODO: Figure out these values
+        /// Editor start position.
         /// </summary>
-        private Vector3 StartPlacementPosition = new(0, 0, 0);
+        public Vector3 StartPosition { get; set; } = new(0, 0, 0);
 
         /// <summary>
-        /// Editor start position. TODO: Figure out these values
+        /// TODO: Figure out this value
         /// </summary>
-        private uint StartPlacementSectorOrSomething = 0x4B000800;
+        private uint StartSectorOrSomething = 0x4B000800;
 
         /// <summary>
         /// Editor start rotation.
         /// </summary>
-        private Quaternion StartPlacementRotation = Quaternion.Identity;
+        public Quaternion StartRotation { get; set; } = Quaternion.Identity;
 
         /// <summary>
         /// <para>Gets or sets if SCS's Europe map UI corrections are enabled.</para>
@@ -449,10 +449,9 @@ namespace TruckLib.ScsMap
 
             EditorMapId = r.ReadUInt64();
 
-            StartPlacementPosition = r.ReadVector3();
-            StartPlacementSectorOrSomething = r.ReadUInt32();
-
-            StartPlacementRotation = r.ReadQuaternion();
+            StartPosition = r.ReadVector3();
+            StartSectorOrSomething = r.ReadUInt32();
+            StartRotation = r.ReadQuaternion();
 
             gameTag = r.ReadUInt32();
 
@@ -816,10 +815,10 @@ namespace TruckLib.ScsMap
 
             w.Write(EditorMapId);
 
-            w.Write(StartPlacementPosition);
-            w.Write(StartPlacementSectorOrSomething);
+            w.Write(StartPosition);
+            w.Write(StartSectorOrSomething);
 
-            w.Write(StartPlacementRotation);
+            w.Write(StartRotation);
 
             w.Write(gameTag);
 

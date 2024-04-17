@@ -77,3 +77,6 @@ Sector metadata, however, does exist, and is stored in the [`Sectors`](xref:Truc
 ## Map metadata
 The scale of the map can be set with the [`NormalScale`](xref:TruckLib.ScsMap.Map.NormalScale) and
 [`CityScale`](xref:TruckLib.ScsMap.Map.CityScale) properties.
+
+The spawnpoint for the Run Map feature of the editor can be set with [`StartPosition`](xref:TruckLib.ScsMap.Map.StartPosition)
+and [`StartRotation`](xref:TruckLib.ScsMap.Map.StartRotation).

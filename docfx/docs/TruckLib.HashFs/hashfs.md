@@ -5,12 +5,15 @@ Mods may also be distributed in this format, though a ZIP file renamed to `.scs`
 
 In a HashFS archive, the identifier of the contained files is a CityHash64 hash of its full path, encoded as UTF-8.
 This means that a file can be retrieved by its path, but it is not possible to list every path in the archive, as the hashes
-cannot be reversed. To deal with this, archives can optionally contain directory listings, which are special text files
+cannot be reversed. To deal with this, archives can optionally contain directory listings, which are special files
 with the path of a directory, enumerating the files and subdirectories it contains. All but three of the games' `.scs`
 files contain full directory listings, but mods may not &ndash; the top level listing in particular can be omitted to
 prevent the official extractor from extracting anything.
 
 You can extract files from a HashFS archive with the [`HashFsReader`](xref:TruckLib.HashFs.HashFsReader) class.
+
+HashFS v2, introduced with game version 1.50, is supported, with one limitation: the packed .tobj format, which
+.tobj/.dds pairs are converted to in HashFS v2, can be extracted, but not unpacked.
 
 ## Opening an archive
 To open a HashFS file, call the static [`Open`](xref:TruckLib.HashFs.HashFsReader.Open*) method of the `HashFsReader` class:

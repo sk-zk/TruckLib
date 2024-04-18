@@ -52,6 +52,8 @@ This will of course expand as time goes on.
   coordinates are not known to it. Moving a locator node or a curve node which is tethered to a locator node will also cause issues.
   The editor will fix both of these once a curve node is moved or the properties dialog of the curve is closed.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
+* The HashFS v2 reader is able to extract, but not unpack, the packed .tobj format which .tobj/.dds pairs are converted to
+  in this version of the format.
 
 ## License
 TruckLib is licensed under GPL v2 except for `CityHash.cs`.

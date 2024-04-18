@@ -6,9 +6,9 @@ using System.Text;
 namespace TruckLib.HashFs
 {
     /// <summary>
-    /// Represents an entry header which contains metadata about a file in a HashFS archive.
+    /// Represents the metadata of an entry in a HashFS v1 archive.
     /// </summary>
-    public struct Entry
+    public struct EntryV1 : IEntry
     {
         /// <summary>
         /// Hash of the full path of the file.
@@ -19,8 +19,6 @@ namespace TruckLib.HashFs
         /// Start of the file contents in the archive.
         /// </summary>
         public ulong Offset { get; internal set; }
-
-        internal FlagField Flags { get; set; }
 
         /// <summary>
         /// CRC32 checksum of the file.
@@ -50,5 +48,7 @@ namespace TruckLib.HashFs
         public bool Verify => Flags[2]; // TODO: What is this?
 
         public bool IsEncrypted => Flags[3];
+
+        internal FlagField Flags { get; set; }
     }
 }

@@ -31,12 +31,7 @@ map.Save(@"<ETS2 folder>\mod\user_map\map");
 ```
 
 ## Documentation
-It's long overdue, but I've finally started working on cleaning this thing up a bit and writing some proper documentation
-for it. Here it is:
-
-https://sk-zk.github.io/trucklib/master/
-
-This will of course expand as time goes on.
+Documentation is available at https://sk-zk.github.io/trucklib/master/.
 
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map&nbsp;>&nbsp;Recompute map).

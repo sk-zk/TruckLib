@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TruckLib.HashFs
 {
-    public interface IHashFsReader
+    public interface IHashFsReader : IDisposable
     {
         /// <summary>
         /// Gets the file path of the HashFS archive which this reader is reading from.

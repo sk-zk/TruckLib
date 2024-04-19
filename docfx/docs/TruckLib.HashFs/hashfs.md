@@ -10,8 +10,6 @@ with the path of a directory, enumerating the files and subdirectories it contai
 files contain full directory listings, but mods may not &ndash; the top level listing in particular can be omitted to
 prevent the official extractor from extracting anything.
 
-You can extract files from a HashFS archive with the [`HashFsReader`](xref:TruckLib.HashFs.HashFsReader) class.
-
 HashFS v2, introduced with game version 1.50, is supported, with one limitation: the packed .tobj format, which
 .tobj/.dds pairs are converted to in HashFS v2, can be extracted, but not unpacked.
 
@@ -21,15 +19,16 @@ To open a HashFS file, call the static [`Open`](xref:TruckLib.HashFs.HashFsReade
 ```cs
 using TruckLib.HashFs;
 
-using HashFsReader reader = HashFsReader.Open(@"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\def.scs");
+using IHashFsReader reader = HashFsReader.Open(@"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\def.scs");
 ```
 
-This will create a `HashFsReader` instance which you can use to extract files from the archive.
+Depending on the HashFS version of the archive, this will create a `HashFsReaderV1` or 
+`HashFsReaderV2` instance as [`IHashFsReader`](xref:TruckLib.HashFs.IHashFsReader) which you can use to extract files.
 
 ## Finding entries
 
 ### Known paths
-The [`EntryExists`](xref:TruckLib.HashFs.HashFsReader.EntryExists*) method will tell you if the given path exists in the archive, 
+The [`EntryExists`](xref:TruckLib.HashFs.IHashFsReader.EntryExists*) method will tell you if the given path exists in the archive, 
 and if yes, whether it is a directory or a file:
 
 ```cs
@@ -39,7 +38,7 @@ EntryType type = reader.EntryExists("/def/world/prefab.sii");
 [`EntryType`](xref:TruckLib.HashFs.EntryType) has the values `Directory`, `File`, or `NotFound`.
 
 ### Directory listings
-You can retrieve the contents of a directory with the [`GetDirectoryListing`](xref:TruckLib.HashFs.HashFsReader.GetDirectoryListing*) method:
+You can retrieve the contents of a directory with the [`GetDirectoryListing`](xref:TruckLib.HashFs.IHashFsReader.GetDirectoryListing*) method:
 
 ```cs
 // Get the top level of the archive
@@ -49,14 +48,13 @@ var (subdirs, files) = reader.GetDirectoryListing("/");
 Keep in mind that, as mentioned above, directory listings are not required to exist.
 
 ## Extracting entries
-
-Use the [`Extract`](xref:TruckLib.HashFs.HashFsReader.Extract*) method to extract a file to a byte array:
+Use the [`Extract`](xref:TruckLib.HashFs.IHashFsReader.Extract*) method to extract a file to a byte array:
 
 ```cs
 byte[] data = reader.Extract("/def/world/prefab.sii");
 ```
 
-Alternatively, you can write the entry to disk with [`ExtractToFile`](xref:TruckLib.HashFs.HashFsReader.ExtractToFile*):
+Alternatively, you can write the entry to disk with [`ExtractToFile`](xref:TruckLib.HashFs.IHashFsReader.ExtractToFile*):
 
 ```cs
 reader.ExtractToFile("/def/world/prefab.sii", "./prefab.sii");

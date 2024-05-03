@@ -17,7 +17,6 @@ namespace TruckLib.HashFs
         public ulong Offset { get; internal set; }
 
         /// <inheritdoc/>
-
         public uint Size { get; internal set; }
 
         /// <inheritdoc/>

@@ -24,7 +24,7 @@ namespace TruckLib.Sii
         /// </summary>
         /// <param name="sii">The string containing the SII file.</param>
         /// <param name="siiDirectory">The path of the directory in which the SII file is located.
-        /// Required for inserting <c>@include</c>s. Can be ommitted if the file is known not to
+        /// Required for inserting <c>@include</c>s. Can be omitted if the file is known not to
         /// have <c>@include</c>s.</param>
         /// <returns>A SiiFile object.</returns>
         public static SiiFile Load(string sii, string siiDirectory = "") =>

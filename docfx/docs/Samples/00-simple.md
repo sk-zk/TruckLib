@@ -16,8 +16,7 @@ var map = new Map("example");
 `example.mbd`, and its sectors will be written to the `example` directory.
 
 ## Adding a road item
-
-Let's add a few road segments. For the sake of simplicity, we will be using hardcoded coordinates. Here's how
+Let's create a road. For the sake of simplicity, we will be using hardcoded coordinates. Here's how
 you can add one individual road item:
 
 ```cs

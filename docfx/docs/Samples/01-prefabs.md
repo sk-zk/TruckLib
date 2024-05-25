@@ -136,7 +136,7 @@ var userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/"
 map.Save(userMap, true);
 ```
 
-There should now be a `example.mbd` and a `example` directory in `mod/user_map/map` and 
+There should now be an `example.mbd` and an `example` directory in `mod/user_map/map` and 
 you should be able to load the map in the editor.
 
 Remember to **recompute the map** (Map > Recompute map). This is necessary because TruckLib

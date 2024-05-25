@@ -88,7 +88,7 @@ The road item now looks like this:
 ![](../../images/00-wip2.png)
 
 ## Appending to a road
-We will now continue this road by appending some more segments:
+We will now continue this road by appending some more items:
 
 ```cs
 r.Append(new Vector3(98, 0, 43.5f))
@@ -99,10 +99,10 @@ r.Append(new Vector3(98, 0, 43.5f))
 `Append` creates a new road item going from the forward node of the road you called it on
 to the given coordinate. Note that road items can only have one neighbor in either direction,
 and therefore can only be appended to once &ndash; the reason `Append` can be chained like this is
-because it returns the newly created road item.
+because the method returns the newly created item.
 
 We don't need to set all the properties again like we did with the first road item
-because, by default, `Append` copies all properties to the new segment.
+because, by default, `Append` copies all properties to the new item.
 
 Our map now looks like this:
 
@@ -136,7 +136,7 @@ var userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/"
 map.Save(userMap, true);
 ```
 
-There should now be a `example.mbd` and a `example` directory in `mod/user_map/map` and 
+There should now be an `example.mbd` and an `example` directory in `mod/user_map/map` and 
 you should be able to load the map in the editor.
 
 Remember to **recompute the map** (Map > Recompute map). This is necessary because TruckLib

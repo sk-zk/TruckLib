@@ -1,8 +1,9 @@
-# Sample #3: Real world data
+# Sample #3: Real-world data
 
 This sample demonstrates one possible approach for importing the course of a real road into a map for the purpose
 of 1:1 mapping. In particular, it deals with the essential steps of fetching elevation data and projecting the points.
-You can find the full source code at `Samples/02-RealRoad/Program.cs`.
+
+This page is meant to be read alongside the full source code, which you can find at `Samples/02-RealRoad/Program.cs`.
 
 ## Structs
 For convenience, we define the structs `GeographicCoordinate` and `ProjectedCoordinate`.
@@ -11,7 +12,7 @@ For convenience, we define the structs `GeographicCoordinate` and `ProjectedCoor
 ![](../../images/02-data.png)
 
 Where you actually get the data from is out of scope for this sample, so I've provided a CSV file containing
-WGS84 latitude/longitude coordinates describing the course of a road in Germany (© OpenStreetMap contributors).
+WGS84 latitude/longitude points describing the course of a road in Germany (© OpenStreetMap contributors).
 
 ```cs
 var coordinates = LoadCoordinates();

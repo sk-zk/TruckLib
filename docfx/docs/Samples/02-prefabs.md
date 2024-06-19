@@ -1,5 +1,5 @@
 # Sample #2: Prefabs
-In this sample, we will take a look at how to add prefabs to a map. You can find the full source code at `Samples/01-Prefabs/Program.cs`.
+In this sample, we will take a look at how to add prefabs to a map. You can find the full source code at `Samples/02-Prefabs/Program.cs`.
 
 ## Instantiating the map
 As before, we'll start with an empty map:
@@ -59,7 +59,7 @@ The library has also automatically created the necessary `Company` slave item.
 
 Here's our progress so far:
 
-![](../../images/01-wip1.png)
+![](../../images/02-wip1.png)
 
 ## Attaching prefabs
 Secondly, we will place a T junction and attach it to the entrance of the company. As above, we will again extract the `.ppd` file:
@@ -104,7 +104,7 @@ would like to merge.
 
 Our map now looks like this:
 
-![](../../images/01-wip2.png)
+![](../../images/02-wip2.png)
 
 ## Appending and attaching road
 As a final step, we will take a look at how prefabs and polyline items can be connected.
@@ -144,7 +144,7 @@ does not calculate the bounding boxes of items.
 
 Here's our final result:
 
-![](../../images/01-final.png)
+![](../../images/02-final.png)
 
 ## Further reading
 * [Working with prefabs](~/docs/TruckLib.ScsMap/prefabs.md)

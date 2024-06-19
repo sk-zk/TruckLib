@@ -3,9 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Prefabs</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\TruckLib.HashFs\TruckLib.HashFs.csproj" />
     <ProjectReference Include="..\..\TruckLib\TruckLib.csproj" />
   </ItemGroup>
 

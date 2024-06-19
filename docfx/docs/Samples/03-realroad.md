@@ -3,13 +3,13 @@
 This sample demonstrates one possible approach for importing the course of a real road into a map for the purpose
 of 1:1 mapping. In particular, it deals with the essential steps of fetching elevation data and projecting the points.
 
-This page is meant to be read alongside the full source code, which you can find at `Samples/02-RealRoad/Program.cs`.
+This page is meant to be read alongside the full source code, which you can find at `Samples/03-RealRoad/Program.cs`.
 
 ## Structs
 For convenience, we define the structs `GeographicCoordinate` and `ProjectedCoordinate`.
 
 ## Loading the data
-![](../../images/02-data.png)
+![](../../images/03-data.png)
 
 Where you actually get the data from is out of scope for this sample, so I've provided a CSV file containing
 WGS84 latitude/longitude points describing the course of a road in Germany (© OpenStreetMap contributors).
@@ -194,8 +194,8 @@ does not calculate the bounding boxes of items.
 
 This is what you should see:
 
-![](../../images/02-final.png)
+![](../../images/03-final.png)
 
 ## Further reading
-* [Sample #1: Simple example](~/docs/Samples/00-simple.md)
+* [Sample #1: Simple example](~/docs/Samples/01-simple.md)
 * [Working with polyline items](~/docs/TruckLib.ScsMap/polyline-items.md)

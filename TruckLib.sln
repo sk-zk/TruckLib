@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib", "TruckLib\TruckLib.csproj", "{D28F37E7-6A77-4925-B789-5F4B1AB363CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "00-SimpleExample", "Samples\00-SimpleExample\00-SimpleExample.csproj", "{488D9661-8899-4578-857D-2806B67F6E62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01-SimpleExample", "Samples\00-SimpleExample\01-SimpleExample.csproj", "{488D9661-8899-4578-857D-2806B67F6E62}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01-Prefabs", "Samples\01-Prefabs\01-Prefabs.csproj", "{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02-Prefabs", "Samples\01-Prefabs\02-Prefabs.csproj", "{FB172F99-9A3F-46F1-B45C-B9AAF8DB8F32}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{AC4C4972-7FD4-45EE-91EC-B6B3261687EB}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.HashFs", "TruckLib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLibTests", "TruckLibTests\TruckLibTests.csproj", "{FFB08224-0624-4EFC-B8B8-0A816CAEA056}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02-RealRoad", "Samples\02-RealRoad\02-RealRoad.csproj", "{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03-RealRoad", "Samples\02-RealRoad\03-RealRoad.csproj", "{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

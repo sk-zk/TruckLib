@@ -1,7 +1,7 @@
 # Sample #1: Simple example
 
 The following code demonstrates how to create a map, add items to it, and save it.
-You can find the full source code at `Samples/00-SimpleExample/Program.cs`. 
+You can find the full source code at `Samples/01-SimpleExample/Program.cs`. 
 
 ## Instantiating the map
 We begin by instantiating an empty map:
@@ -36,7 +36,7 @@ to the map. In this case, we're adding a road item going from (19, 0, 19.5) to (
 
 If you were to save the map here, it would look like this:
 
-![](../../images/00-wip1.png)
+![](../../images/01-wip1.png)
 
 ## Setting road properties
 The next lines of code set the appearance of the road.
@@ -85,7 +85,7 @@ Lastly, let's place some bollards:
 
 The road item now looks like this:
 
-![](../../images/00-wip2.png)
+![](../../images/01-wip2.png)
 
 ## Appending to a road
 We will now continue this road by appending some more items:
@@ -99,14 +99,14 @@ r.Append(new Vector3(98, 0, 43.5f))
 `Append` creates a new road item going from the forward node of the road you called it on
 to the given coordinate. Note that road items can only have one neighbor in either direction,
 and therefore can only be appended to once &ndash; the reason `Append` can be chained like this is
-because the method returns the newly created item.
+that the method returns the newly created item.
 
 We don't need to set all the properties again like we did with the first road item
 because, by default, `Append` copies all properties to the new item.
 
 Our map now looks like this:
 
-![](../../images/00-wip3.png)
+![](../../images/01-wip3.png)
 
 ## Adding models
 As the last step, we will place two models.
@@ -143,7 +143,7 @@ Remember to **recompute the map** (Map > Recompute map). This is necessary becau
 does not calculate the bounding boxes of items. Once you did, this is what the final map
 should look like:
 
-![](../../images/00-final.png)
+![](../../images/01-final.png)
 
 ## Further reading
 * [The Map class](/TruckLib.ScsMap/map-class.md)

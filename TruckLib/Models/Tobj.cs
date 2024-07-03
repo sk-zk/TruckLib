@@ -19,8 +19,7 @@ namespace TruckLib.Models
         // USAGE_TYPES = ("", "default", "tsnormal", "ui", "projected")
         // and probably more
 
-        private uint Version;
-        private uint SupportedVersion = 0x70b10a01;
+        private const uint SupportedVersion = 0x70b10a01;
 
         public byte Bias { get; set; }
 
@@ -50,13 +49,13 @@ namespace TruckLib.Models
         private uint unknown1;
         private uint unknown2;
         private uint unknown3;
-        private ushort unknown4;
+        public ushort Unknown4 { get; set; }
         private byte unknown5;
         private byte unknown6;
         private byte unknown7;
         private byte unknown8;
         private byte unknown9;
-        private byte unknown10;
+        public byte Unknown10 { get; set; }
         private byte unknown11;
 
         public static Tobj Open(string tobjPath)
@@ -79,15 +78,18 @@ namespace TruckLib.Models
 
         public void Deserialize(BinaryReader r, uint? version = null)
         {
-            Version = r.ReadUInt32();
-            if (Version != SupportedVersion)
-                throw new NotSupportedException($"Version {Version} is not supported.");
+            if (version != SupportedVersion)
+                throw new NotSupportedException($"Version {version} is not supported.");
+
+            version = r.ReadUInt32();
+            if (version != SupportedVersion)
+                throw new NotSupportedException($"Version {version} is not supported.");
 
             unknown0 = r.ReadUInt32();
             unknown1 = r.ReadUInt32();
             unknown2 = r.ReadUInt32();
             unknown3 = r.ReadUInt32();
-            unknown4 = r.ReadUInt16();
+            Unknown4 = r.ReadUInt16();
             Bias = r.ReadByte();
             unknown5 = r.ReadByte();
             Type = (TobjType)r.ReadByte();
@@ -103,12 +105,12 @@ namespace TruckLib.Models
             unknown8 = r.ReadByte(); 
             Anisotropic = r.ReadByte() != 1;
             unknown9 = r.ReadByte();            
-            unknown10 = r.ReadByte();
+            Unknown10 = r.ReadByte();
             ColorSpace = r.ReadByte();
             unknown11 = r.ReadByte(); 
 
             var txCount = Type == TobjType.CubeMap ? 6 : 1;
-            for(int i = 0; i < txCount; i++)
+            for (int i = 0; i < txCount; i++)
             {
                 TexturePaths.Add(r.ReadPascalString());
             }
@@ -116,13 +118,13 @@ namespace TruckLib.Models
 
         public void Serialize(BinaryWriter w)
         {
-            w.Write(Version);
+            w.Write(SupportedVersion);
 
             w.Write(unknown0);
             w.Write(unknown1);
             w.Write(unknown2);
             w.Write(unknown3);
-            w.Write(unknown4);
+            w.Write(Unknown4);
             w.Write(Bias);
             w.Write(unknown5);
             w.Write((byte)Type);
@@ -138,13 +140,13 @@ namespace TruckLib.Models
             w.Write(unknown8);
             w.Write((!Anisotropic).ToByte());
             w.Write(unknown9);
-            w.Write(unknown10);
+            w.Write(Unknown10);
             w.Write(ColorSpace);
             w.Write(unknown11);
 
-            foreach(var tx in TexturePaths)
+            foreach (var path in TexturePaths)
             {
-                w.WritePascalString(tx);
+                w.WritePascalString(path);
             }
         }
     }
@@ -167,6 +169,7 @@ namespace TruckLib.Models
 
     public enum TobjMipFilter
     {
+        Nearest = 0,
         Trilinear = 1,
         NoMips = 2,
         Default = 3

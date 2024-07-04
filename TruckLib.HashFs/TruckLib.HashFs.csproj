@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,11 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GisDeflate" Version="1.0.1" />
     <PackageReference Include="Iconic.Zlib.Netstandard" Version="1.0.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <Compile Include="../TruckLib/FlagField.cs" />
+	  <Compile Include="../TruckLib/FlagField.cs" />
+	  <Compile Include="../TruckLib/Extensions/MiscExtensions.cs" />
+	  <Compile Include="../TruckLib/Extensions/IOPascalStringExtensions.cs" />
+	  <Compile Include="../TruckLib/IBinarySerializable.cs" />
+	  <Compile Include="../TruckLib/Models/Tobj.cs" />
   </ItemGroup>
 
 </Project>

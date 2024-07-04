@@ -33,7 +33,7 @@ namespace Prefabs
             // If you find this inconvenient, you can also load an extracted
             // version with PrefabDescriptor.Open().
             var baseScs = HashFsReader.Open(Path.Combine(gameRoot, "base.scs"));
-            var companyDescriptorFile = baseScs.Extract("/prefab2/car_dealer/car_dealer_01_fr.ppd");
+            var companyDescriptorFile = baseScs.Extract("/prefab2/car_dealer/car_dealer_01_fr.ppd")[0];
             var companyDescriptor = PrefabDescriptor.Load(companyDescriptorFile);
 
             var company = Prefab.Add(map,
@@ -51,7 +51,7 @@ namespace Prefabs
 
             // 2)
             // Attach a T junction prefab to the entrance of the company.
-            var crossingDescriptorFile = baseScs.Extract("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd");
+            var crossingDescriptorFile = baseScs.Extract("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd")[0];
             var crossingDescriptor = PrefabDescriptor.Load(crossingDescriptorFile);
 
             var crossing = Prefab.Add(map, company.Nodes[0].Position, "387", 

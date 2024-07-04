@@ -1,5 +1,8 @@
 ﻿namespace TruckLib.HashFs
 {
+    /// <summary>
+    /// Represents the metadata of an entry in a HashFS archive.
+    /// </summary>
     public interface IEntry
     {
         /// <summary>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TruckLib.HashFs
+﻿namespace TruckLib.HashFs
 {
     /// <summary>
     /// Represents the metadata of an entry in a HashFS v2 archive.
@@ -29,9 +24,8 @@ namespace TruckLib.HashFs
         public bool IsCompressed { get; internal set; }
 
         /// <summary>
-        /// If true, the file is a packed .tobj/.dds hybrid.
-        /// (TruckLib is not yet able to unpack entries of this type.)
+        /// .tobj/.dds metadata if this entry is a packed .tobj/.dds file.
         /// </summary>
-        public bool IsTobj { get; internal set; }
+        public PackedTobjDdsMetadata? TobjMetadata { get; internal set; }
     }
 }

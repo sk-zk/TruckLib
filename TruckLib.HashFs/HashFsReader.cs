@@ -1,19 +1,15 @@
-﻿using Ionic.Zlib;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Reflection.PortableExecutable;
-using System.Text;
 
 namespace TruckLib.HashFs
 {
     /// <summary>
-    /// A simple HashFS reader for extracting files from HashFS archives.
+    /// Static factory class for creating the appropriate HashFsV*Reader depending on
+    /// the HashFS version.
     /// </summary>
     public static class HashFsReader
     {
-        private const uint Magic = 0x23534353; // as ascii: "SCS#"
+        private const uint Magic = 0x23534353; // "SCS#"
 
         /// <summary>
         /// Opens a HashFS archive.
@@ -22,7 +18,7 @@ namespace TruckLib.HashFs
         /// <param name="forceEntryTableAtEnd">If true, the entry table will be read
         /// from the end of the file, regardless of where the archive header says they are located.
         /// Only supported for v1.</param>
-        /// <returns>A IHashFsReader object.</returns>
+        /// <returns>A IHashFsReader.</returns>
         public static IHashFsReader Open(string path, bool forceEntryTableAtEnd = false)
         {
             var reader = new BinaryReader(new FileStream(path, FileMode.Open));
@@ -53,7 +49,7 @@ namespace TruckLib.HashFs
                     h2.ParseTables();
                     return h2;
                 default:
-                    throw new NotSupportedException($"Version {version} is not supported");
+                    throw new NotSupportedException($"HashFS version {version} is not supported");
             }
         }
     }

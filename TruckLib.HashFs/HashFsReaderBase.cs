@@ -40,37 +40,36 @@ namespace TruckLib.HashFs
         }
 
         /// <inheritdoc/>
-        public byte[] Extract(string path)
+        public byte[][] Extract(string path)
         {
             if (EntryExists(path) == EntryType.NotFound)
                 throw new FileNotFoundException();
 
             var entry = GetEntry(path);
-
-            return GetEntryContent(entry);
+            return Extract(entry, path);
         }
 
         /// <inheritdoc/>
-        public byte[] Extract(IEntry entry)
+        public virtual byte[][] Extract(IEntry entry, string path)
         {
             if (!Entries.ContainsValue(entry))
                 throw new FileNotFoundException();
 
-            return GetEntryContent(entry);
+            return new[] { GetEntryContent(entry) };
         }
 
         /// <inheritdoc/>
-        public void ExtractToFile(string path, string outputPath)
+        public void ExtractToFile(string entryPath, string outputPath)
         {
-            if (EntryExists(path) == EntryType.NotFound)
+            if (EntryExists(entryPath) == EntryType.NotFound)
                 throw new FileNotFoundException();
 
-            var entry = GetEntry(path);
-            ExtractToFile(entry, outputPath);
+            var entry = GetEntry(entryPath);
+            ExtractToFile(entry, entryPath, outputPath);
         }
 
         /// <inheritdoc/>
-        public virtual void ExtractToFile(IEntry entry, string outputPath)
+        public virtual void ExtractToFile(IEntry entry, string entryPath, string outputPath)
         {
             if (entry.IsDirectory)
             {
@@ -192,8 +191,15 @@ namespace TruckLib.HashFs
             byte[] file;
             if (entry.IsCompressed)
             {
-                file = Reader.ReadBytes((int)entry.CompressedSize);
-                file = ZlibStream.UncompressBuffer(file);
+                if (entry is EntryV2 v2 && v2.TobjMetadata != null)
+                {
+                    file = Reader.ReadBytes((int)entry.CompressedSize);
+                }
+                else
+                {
+                    file = Reader.ReadBytes((int)entry.CompressedSize);
+                    file = ZlibStream.UncompressBuffer(file);
+                }
             }
             else
             {

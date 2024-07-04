@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace TruckLib.HashFs
 {
+    /// <summary>
+    /// A HashFS reader for extracting files from HashFS archives.
+    /// </summary>
     public interface IHashFsReader : IDisposable
     {
         /// <summary>
@@ -31,29 +34,43 @@ namespace TruckLib.HashFs
         /// Extracts and decompresses an entry to memory.
         /// </summary>
         /// <param name="path">The path of the entry in the archive.</param>
-        /// <returns>The extracted entry as byte array.</returns>
-        byte[] Extract(string path);
+        /// <returns>
+        ///     <para>The extracted file(s) as byte array.</para>
+        ///     <para>This will always be one file, with one special case: In HashFS v2,
+        ///     extracting a packed .tobj/.dds entry will return the reconstructed
+        ///     .tobj and .dds files in that order.</para>
+        /// </returns>
+        byte[][] Extract(string path);
 
         /// <summary>
         /// Extracts and decompresses an entry to memory.
         /// </summary>
         /// <param name="entry">The entry metadata of the file to extract.</param>
-        /// <returns>The extracted entry as byte array.</returns>
-        byte[] Extract(IEntry entry);
+        /// <param name="path">The path of the entry in the archive.</param>
+        /// <returns>
+        ///     <para>The extracted file(s) as byte array.</para>
+        ///     <para>This will always be one file, with one special case: In HashFS v2,
+        ///     extracting a packed .tobj entry will return the reconstructed
+        ///     .tobj and .dds files in that order.</para>
+        /// </returns>
+        byte[][] Extract(IEntry entry, string path);
 
         /// <summary>
         /// Extracts and decompresses an entry to a file.
         /// </summary>
-        /// <param name="path">The path of the entry in the archive.</param>
+        /// <param name="entryPath">The path of the entry in the archive.</param>
         /// <param name="outputPath">The output path.</param>
-        void ExtractToFile(string path, string outputPath);
+        void ExtractToFile(string entryPath, string outputPath);
 
         /// <summary>
-        /// Extracts and decompresses an entry to a file.
+        /// <para>Extracts and decompresses an entry to a file.</para>
+        /// <para>In HashFS v2, extracting a packed .tobj entry will write both
+        /// the reconstructed .tobj and .dds file.</para>
         /// </summary>
         /// <param name="entry">The entry metadata of the file to extract.</param>
+        /// <param name="entryPath">The path of the entry in the archive.</param>
         /// <param name="outputPath">The output path.</param>
-        void ExtractToFile(IEntry entry, string outputPath);
+        void ExtractToFile(IEntry entry, string entryPath, string outputPath);
 
         /// <summary>
         /// Returns a list of subdirectories and files in the given directory.

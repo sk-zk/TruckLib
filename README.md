@@ -3,7 +3,7 @@
 **TruckLib** is a C# library for the map format of Euro Truck Simulator 2 / American Truck Simulator.
 The primary focus is programmatic map creation, but the library also handles various other tasks needed for this purpose, such as reading prefab descriptor files.
 
-The currently supported map format version is **900** (game version **1.48.5/1.49**).
+The currently supported map format version is **900** (game version **1.48.5&ndash;1.50**).
 
 (This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later, and breaking changes will happen on occasion.)
 
@@ -47,8 +47,6 @@ Documentation is available at https://sk-zk.github.io/trucklib/master/.
   coordinates are not known to it. Moving a locator node or a curve node which is tethered to a locator node will also cause issues.
   The editor will fix both of these once a curve node is moved or the properties dialog of the curve is closed.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
-* The HashFS v2 reader is able to extract, but not unpack, the packed .tobj format which .tobj/.dds pairs are converted to
-  in this version of the format.
 
 ## License
 TruckLib is licensed under GPL v2 except for `CityHash.cs`.

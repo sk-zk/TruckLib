@@ -56,7 +56,9 @@ namespace TruckLib.HashFs
         byte[][] Extract(IEntry entry, string path);
 
         /// <summary>
-        /// Extracts and decompresses an entry to a file.
+        /// <para>Extracts and decompresses an entry to a file.</para>
+        /// <para>In HashFS v2, when extracting a packed .tobj entry, both
+        /// the reconstructed .tobj and .dds files will be written.</para>
         /// </summary>
         /// <param name="entryPath">The path of the entry in the archive.</param>
         /// <param name="outputPath">The output path.</param>
@@ -64,8 +66,8 @@ namespace TruckLib.HashFs
 
         /// <summary>
         /// <para>Extracts and decompresses an entry to a file.</para>
-        /// <para>In HashFS v2, extracting a packed .tobj entry will write both
-        /// the reconstructed .tobj and .dds file.</para>
+        /// <para>In HashFS v2, when extracting a packed .tobj entry, both
+        /// the reconstructed .tobj and .dds files will be written.</para>
         /// </summary>
         /// <param name="entry">The entry metadata of the file to extract.</param>
         /// <param name="entryPath">The path of the entry in the archive.</param>

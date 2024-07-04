@@ -10,9 +10,9 @@ with the path of a directory, enumerating the files and subdirectories it contai
 files contain full directory listings, but mods may not &ndash; the top level listing in particular can be omitted to
 prevent the official extractor from extracting anything.
 
-HashFS v2, introduced with game version 1.50, is supported. Note that, in this version, .tobj/.dds pairs are
-dissolved into a packed .tobj entry from which TruckLib will reconstruct the original .tobj and .dds files
-when said .tobj entry is requested.
+HashFS v2, introduced with game version 1.50, is supported. Note that, in this version, `.tobj`/`.dds` pairs are
+dissolved into a packed `.tobj` entry from which TruckLib will reconstruct the original `.tobj` and `.dds` files
+when such a `.tobj` entry is requested.
 
 ## Opening an archive
 To open a HashFS file, call the static [`Open`](xref:TruckLib.HashFs.HashFsReader.Open*) method of the `HashFsReader` class:
@@ -57,8 +57,8 @@ byte[][] data = reader.Extract("/def/world/prefab.sii");
 
 This returns an array containing the extracted file(s) as `byte[]`.
 The method will return one file except in one special case: In HashFS v2,
-extracting a packed .tobj entry will return the reconstructed .tobj
-and .dds files in that order.
+extracting a packed `.tobj` entry will return the reconstructed `.tobj`
+and `.dds` files in that order.
 
 Alternatively, you can write the entry to disk with [`ExtractToFile`](xref:TruckLib.HashFs.IHashFsReader.ExtractToFile*):
 
@@ -66,5 +66,5 @@ Alternatively, you can write the entry to disk with [`ExtractToFile`](xref:Truck
 reader.ExtractToFile("/def/world/prefab.sii", "./prefab.sii");
 ```
 
-In HashFS v2, extracting a packed .tobj entry will write both the reconstructed .tobj
-and .dds file.
+In HashFS v2, extracting a packed `.tobj` entry will write both the reconstructed `.tobj`
+and `.dds` file.

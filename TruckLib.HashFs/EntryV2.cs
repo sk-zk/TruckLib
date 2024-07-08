@@ -18,7 +18,7 @@
         public uint CompressedSize { get; internal set; }
 
         /// <inheritdoc/>
-        public bool IsDirectory { get; internal set; }
+        public bool IsDirectory { get; set; }
 
         /// <inheritdoc/>
         public bool IsCompressed { get; internal set; }

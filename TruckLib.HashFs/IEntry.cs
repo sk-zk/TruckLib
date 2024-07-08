@@ -28,7 +28,7 @@
         /// <summary>
         /// If true, the entry is a directory listing.
         /// </summary>
-        bool IsDirectory { get; }
+        bool IsDirectory { get; set; }
 
         /// <summary>
         /// Whether the file is compressed.

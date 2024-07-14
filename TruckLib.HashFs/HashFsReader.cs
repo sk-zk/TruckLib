@@ -24,6 +24,8 @@ namespace TruckLib.HashFs
             var reader = new BinaryReader(new FileStream(path, FileMode.Open));
 
             uint magic = reader.ReadUInt32();
+            if ((magic & 0xFFFF) == 0x4B50) // "PK"
+                throw new InvalidDataException("This is a zip file.");
             if (magic != Magic)
                 throw new InvalidDataException("Probably not a HashFS file.");
 

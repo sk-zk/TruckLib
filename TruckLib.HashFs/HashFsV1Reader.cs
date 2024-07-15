@@ -11,28 +11,37 @@ namespace TruckLib.HashFs
         private uint entriesCount;
         private uint startOffset;
 
+        // Fixes Extractor#6; see comment in `ParseEntryTable`.
+        private List<IEntry> duplicateDirListings = new();
+
         /// <inheritdoc/>
         public override (List<string> Subdirs, List<string> Files) GetDirectoryListing(
             IEntry entry, bool filesOnly = false)
         {
-            var dirEntries = Encoding.ASCII.GetString(GetEntryContent(entry)).Split(new[] { '\r', '\n' });
-
-            const string dirMarker = "*";
             var subdirs = new List<string>();
             var files = new List<string>();
-            for (int i = 0; i < dirEntries.Length; i++)
+
+            var additional = duplicateDirListings.Where(x => x.Hash == entry.Hash);
+
+            foreach (var e in (new[] { entry }).Concat(additional)) 
             {
-                // is directory
-                if (dirEntries[i].StartsWith(dirMarker))
+                var entryContent = GetEntryContent(e);
+                var dirEntries = Encoding.ASCII.GetString(entryContent).Split(new[] { '\r', '\n' });
+                for (int i = 0; i < dirEntries.Length; i++)
                 {
-                    if (filesOnly) continue;
-                    var subPath = dirEntries[i][1..] + "/";
-                    subdirs.Add(subPath);
-                }
-                // is file
-                else
-                {
-                    files.Add(dirEntries[i]);
+                    const string dirMarker = "*";
+                    // is directory
+                    if (dirEntries[i].StartsWith(dirMarker))
+                    {
+                        if (filesOnly) continue;
+                        var subPath = dirEntries[i][1..] + "/";
+                        subdirs.Add(subPath);
+                    }
+                    // is file
+                    else
+                    {
+                        files.Add(dirEntries[i]);
+                    }
                 }
             }
             return (subdirs, files);
@@ -67,7 +76,25 @@ namespace TruckLib.HashFs
                     Size = Reader.ReadUInt32(),
                     CompressedSize = Reader.ReadUInt32()
                 };
-                Entries.Add(entry.Hash, entry);
+                var success = Entries.TryAdd(entry.Hash, entry);
+                if (!success)
+                {
+                    var existing = Entries[entry.Hash];
+                    if (existing.IsDirectory && entry.IsDirectory)
+                    {
+                        // Primitive fix for Extractor#6. If a directory listing
+                        // is fragmented across multiple entries (which therefore
+                        // have the same hash, because the hash is the path of
+                        // the directory), just toss the extra ones into
+                        // `duplicateDirListings` to be parsed when `GetDirectoryListing`
+                        // is called for that path.
+                        duplicateDirListings.Add(entry);
+                    }
+                    else
+                    {
+                        // just keep the first one.
+                    }
+                }
             }
         }
     }

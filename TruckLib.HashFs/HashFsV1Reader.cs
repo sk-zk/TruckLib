@@ -26,7 +26,8 @@ namespace TruckLib.HashFs
             foreach (var e in (new[] { entry }).Concat(additional)) 
             {
                 var entryContent = GetEntryContent(e);
-                var dirEntries = Encoding.ASCII.GetString(entryContent).Split(new[] { '\r', '\n' });
+                var dirEntries = Encoding.ASCII.GetString(entryContent)
+                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < dirEntries.Length; i++)
                 {
                     const string dirMarker = "*";

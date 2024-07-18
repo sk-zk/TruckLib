@@ -339,7 +339,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        internal const float FixedPointFactor = 256f;
+        private const float fixedPointFactor = 256f;
 
         /// <summary>
         /// Reads the node from a BinaryReader whose position is at the start of the object.
@@ -350,9 +350,9 @@ namespace TruckLib.ScsMap
             Uid = r.ReadUInt64();
 
             position = new Vector3(
-                r.ReadInt32() / FixedPointFactor,
-                r.ReadInt32() / FixedPointFactor,
-                r.ReadInt32() / FixedPointFactor
+                r.ReadInt32() / fixedPointFactor,
+                r.ReadInt32() / fixedPointFactor,
+                r.ReadInt32() / fixedPointFactor
             );
             UpdateEnvelope();
 
@@ -381,9 +381,9 @@ namespace TruckLib.ScsMap
         {
             w.Write(Uid);
 
-            w.Write((int)(Position.X * FixedPointFactor));
-            w.Write((int)(Position.Y * FixedPointFactor));
-            w.Write((int)(Position.Z * FixedPointFactor));
+            w.Write((int)(Position.X * fixedPointFactor));
+            w.Write((int)(Position.Y * fixedPointFactor));
+            w.Write((int)(Position.Z * fixedPointFactor));
 
             w.Write(Rotation);
 

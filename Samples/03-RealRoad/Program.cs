@@ -65,7 +65,7 @@ namespace RealRoad
             var road = Road.Add(map,
                 PointToNodePosition(points[0], center),
                 PointToNodePosition(points[1], center),
-                "ger1");
+                "ger4");
 
             for (int i = 2; i < points.Count; i++)
             {

@@ -224,6 +224,8 @@ namespace TruckLib.ScsMap
                 item.ForwardNode = this;
                 if (ForwardItem is not Prefab)
                     item.Recalculate();
+                else
+                    item.RecalculateLength();
                 n2.ForwardItem = null;
                 n2.BackwardItem = null;
                 n2.Parent.Delete(n2);

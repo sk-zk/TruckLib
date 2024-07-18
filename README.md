@@ -35,9 +35,6 @@ Documentation is available at https://sk-zk.github.io/trucklib/master/.
 
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map&nbsp;>&nbsp;Recompute map).
-* I've yet to figure out how the game calculates the length of roads etc. What I've come up with is
-  accurate enough to not be too annoying, but you'll notice while editing one of these items that they will slightly
-  change their path as the game recalculates its length.
 * Anything to do with prefabs may or may not break in unexpected ways.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
   fixed by recalculating.

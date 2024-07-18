@@ -216,16 +216,7 @@ namespace TruckLib.ScsMap
             if (Node is null)
                 return;
 
-            Vector3 p0 = BackwardItem is PolylineItem bw 
-                ? bw.Node.Position
-                : Node.Rotation.ToEuler();
-            Vector3 p1 = Node.Position;
-            Vector3 p2 = ForwardNode.Position;
-            Vector3 p3 = ForwardItem is PolylineItem fw
-                ? fw.ForwardNode.Position
-                : ForwardNode.Rotation.ToEuler();
-
-            Length = CardinalSpline.ApproximateLength(p0, p1, p2, p3, 1.2f);
+            Length = PolylineLength.Calculate(Node, ForwardNode);
         }
 
         internal void RecalculateRotation()

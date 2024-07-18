@@ -20,4 +20,4 @@ whenever this library updates to a newer version.
 Both HashFS v1 and v2 are supported.
 
 ### Prefab descriptors
-TruckLib can read .ppd versions 21, 22, and 23.
+TruckLib can read .ppd versions 21 to 24.

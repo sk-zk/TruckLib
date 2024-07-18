@@ -88,7 +88,7 @@ namespace TruckLib.ScsMap
         public float Stretch { get; set; }
 
         /// <summary>
-        /// If not 0, this forces the model to repeat every <i>n</i> meters, overriding the default.
+        /// If not 0, the model will repeat every <i>n</i> meters, overriding the default.
         /// </summary>
         public float FixedStep { get; set; }
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A City item, which declares a rectangular area as belonging to a city.
+    /// A City item, which declares a rectangular area around the item's node as belonging to a city.
     /// </summary>
     public class CityArea : SingleNodeItem
     {
@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceFar;
 
         /// <summary>
-        /// The unit name of the city.
+        /// The unit name of the city, as defined in <c>/def/city.sii</c>.
         /// </summary>
         public Token Name { get; set; }
 
@@ -77,7 +77,7 @@ namespace TruckLib.ScsMap
         /// Adds a city area to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="position">The position of the center of the area.</param>
+        /// <param name="position">The center point of the area.</param>
         /// <param name="name">The unit name of the city.</param>
         /// <param name="width">The width of the area.</param>
         /// <param name="height">The height of the area.</param>

@@ -37,7 +37,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The unit name of the prefab.
+        /// The unit name of the prefab, as defined in <c>/def/world/prefab.sii</c>.
         /// </summary>
         public Token Model { get; set; }
 

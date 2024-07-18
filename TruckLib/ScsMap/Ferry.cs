@@ -24,7 +24,7 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Unit name of the port.
+        /// Unit name of the port, as defined in <c>/def/ferry.sii</c>. 
         /// </summary>
         public Token Port { get; set; }
 

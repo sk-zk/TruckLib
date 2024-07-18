@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The unit name of the model.
+        /// The unit name of the model, as defined in <c>/def/world/model.sii</c>.
         /// </summary>
         public Token Name { get; set; }
 

@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap
         public List<Token> Tags { get; set; }
 
         /// <summary>
-        /// Unit name of the traffic rule.
+        /// Unit name of the traffic rule, as defined in <c>/def/world/traffic_rules.sii</c>.
         /// </summary>
         public Token Rule { get; set; }
 

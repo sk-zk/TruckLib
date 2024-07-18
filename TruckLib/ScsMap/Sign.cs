@@ -43,7 +43,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The unit name of the sign model.
+        /// The unit name of the sign model, as defined in <c>/def/world/sign.sii</c>.
         /// </summary>
         public Token Model { get; set; }
 
@@ -63,7 +63,7 @@ namespace TruckLib.ScsMap
         public SignBoard[] SignBoards { get; set; }
 
         /// <summary>
-        /// Full name of the sign template on this sign.
+        /// Full name of the sign template on this sign, as defined in <c>/def/sign/templates.sii</c>.
         /// </summary>
         public string SignTemplate { get; set; }
 

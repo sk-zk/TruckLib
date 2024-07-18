@@ -11,7 +11,7 @@ namespace TruckLib.ScsMap
     public struct EdgeOverride : IBinarySerializable
     {
         /// <summary>
-        /// Unit name of the edge model.
+        /// Unit name of the edge model, as defined in <c>/def/world/road_edge.sii</c>.
         /// </summary>
         public Token Edge { get; set; }
 

@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     public struct Railing
     {
         /// <summary>
-        /// Unit name of the model.
+        /// Unit name of the model, as defined in <c>/def/world/railing.sii</c>.
         /// </summary>
         public Token Model { get; set; }
 

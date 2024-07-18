@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Unit name of the model.
+        /// Unit name of the model, as defined in <c>/def/world/mover.sii</c>.
         /// </summary>
         public Token Model { get; set; }
 

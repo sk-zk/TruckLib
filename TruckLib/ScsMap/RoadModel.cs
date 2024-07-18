@@ -12,7 +12,7 @@ namespace TruckLib.ScsMap
     public class RoadModel
     {
         /// <summary>
-        /// Unit name of the model.
+        /// Unit name of the model, as defined in <c>/def/world/sign.sii</c>.
         /// </summary>
         public Token Name { get; set; }
 

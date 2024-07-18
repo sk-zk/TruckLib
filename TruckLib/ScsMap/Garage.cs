@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap
         public override ItemType ItemType => ItemType.Garage;
 
         /// <summary>
-        /// The city the garage is in.
+        /// The city in which the garage is located, as defined in <c>/def/city.sii</c>.
         /// </summary>
         public Token CityName { get; set; }
 

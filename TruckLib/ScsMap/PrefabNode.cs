@@ -34,7 +34,7 @@ namespace TruckLib.ScsMap
         public float DetailVegetationTo { get; set; }
 
         /// <summary>
-        /// The unit name of the corner model.
+        /// The unit name of the corner model, as defined in <c>/def/world/prefab_corner.sii</c>.
         /// </summary>
         public Token Model { get; set; }
 
@@ -70,7 +70,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Sets the PrefabCorner's properties to its default values.
+        /// Sets the properties of this object to its default values.
         /// </summary>
         protected void Init()
         {

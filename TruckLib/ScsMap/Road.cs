@@ -59,7 +59,8 @@ namespace TruckLib.ScsMap
         private FlagField tmpFlags = new();
 
         /// <summary>
-        /// The unit name of the road type.
+        /// The unit name of the road type, as defined in <c>/def/world/road_look.sii</c> (legacy) 
+        /// or <c>/def/world/road_look.template.sii</c> (template).
         /// </summary>
         public Token RoadType { get; set; }
 

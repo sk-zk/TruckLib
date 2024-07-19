@@ -10,11 +10,11 @@ namespace TruckLib.Models
 {
     public class Piece : IBinarySerializable
     {
-        public List<Vertex> Vertices { get; set; } = new List<Vertex>();
+        public List<Vertex> Vertices { get; set; } = [];
 
-        public List<Triangle> Triangles { get; set; } = new List<Triangle>();
+        public List<Triangle> Triangles { get; set; } = [];
 
-        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
+        public AxisAlignedBox BoundingBox { get; set; } = new();
 
         public Vector3 BoundingBoxCenter { get; set; } = Vector3.Zero;
 
@@ -38,13 +38,6 @@ namespace TruckLib.Models
 
         private int skeletonOffset_temp = 36;
 
-        /// <summary>
-        /// ! BE ADVISED ! <br />
-        /// I usually prefer deserialization to be forward-only,
-        /// but with this particular file structure, the reader 
-        /// has to jump back and forth a few times.
-        /// </summary>
-        /// <param name="r"></param>
         public void Deserialize(BinaryReader r, uint? version = null)
         {
             var edges = r.ReadUInt32();
@@ -262,7 +255,7 @@ namespace TruckLib.Models
 
         public void Serialize(BinaryWriter w)
         {
-            throw new NotImplementedException("Use the other Write* methods instead; see PmgFile");
+            throw new NotImplementedException();
         }
 
     }

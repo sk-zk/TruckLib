@@ -15,26 +15,26 @@ namespace TruckLib.Models
         private const string PmdExtension = "pmd";
 
         private const byte PmgVersion = 0x15;
-        private const string PmgSignature = "Pmg";
+        private readonly char[] PmgSignature = ['g', 'm', 'P'];
         private const string PmgExtension = "pmg";
 
         public string Name { get; set; } = "untitled";
 
-        public List<Look> Looks { get; set; } = new List<Look>();
+        public List<Look> Looks { get; set; } = [];
 
-        public List<Variant> Variants { get; set; } = new List<Variant>();
+        public List<Variant> Variants { get; set; } = [];
 
-        public AxisAlignedBox BoundingBox { get; set; } = new AxisAlignedBox();
+        public AxisAlignedBox BoundingBox { get; set; } = new();
 
         public Vector3 BoundingBoxCenter { get; set; } = Vector3.Zero;
 
         public float BoundingBoxDiagonalSize { get; set; }
 
-        public List<Bone> Skeleton { get; set; } = new List<Bone>();
+        public List<Bone> Skeleton { get; set; } = [];
 
-        public List<Part> Parts { get; set; } = new List<Part>();
+        public List<Part> Parts { get; set; } = [];
 
-        private List<string> strings = new List<string>();
+        private List<string> strings = [];
 
         public Model()
         {
@@ -83,20 +83,19 @@ namespace TruckLib.Models
 
         private void ReadPmd(BinaryReader r)
         {
-            // specifically check if the user passed in a 
-            // pmg file by accident
+            // specifically check if the user passed in a pmg file by accident
             r.BaseStream.Position = 1;
-            var pmgSigCheck = ReadPmgSignature(r);
-            if(pmgSigCheck == PmgSignature)
+            var pmgSigCheck = r.ReadChars(3);
+            if (Enumerable.SequenceEqual(pmgSigCheck, PmgSignature))
             {
-                throw new ArgumentException("Pass a pmd file, not a pmg file.");
+                throw new ArgumentException("This is a .pmg file, not a .pmd file.");
             }
             r.BaseStream.Position = 0;
 
             var version = r.ReadUInt32();
             if (version != PmdVersion)
             {
-                throw new NotSupportedException($"pmd version {version} is not supported.");
+                throw new NotSupportedException($".pmd version {version} is not supported.");
             }
 
             var materialCount = r.ReadUInt32();
@@ -190,13 +189,13 @@ namespace TruckLib.Models
             var version = r.ReadByte();
             if (version != PmgVersion)
             {
-                throw new NotSupportedException($"pmg version {version} is not supported.");
+                throw new NotSupportedException($".pmg version {version} is not supported.");
             }
 
-            var signature = ReadPmgSignature(r);
-            if (signature != PmgSignature)
+            var signature = r.ReadChars(3);
+            if (!Enumerable.SequenceEqual(signature, PmgSignature))
             {
-                throw new InvalidDataException($"Not a pmg file? Expected '{PmgSignature}', got '{signature}'");
+                throw new InvalidDataException($"Probably not a pmg file");
             }
 
             var pieceCount = r.ReadUInt32();
@@ -256,11 +255,6 @@ namespace TruckLib.Models
                 var stringsBytes = r.ReadBytes((int)stringPoolSize);
                 strings = StringUtils.CStringBytesToList(stringsBytes);
             }
-        }
-
-        private static string ReadPmgSignature(BinaryReader r)
-        {
-            return Encoding.ASCII.GetString(r.ReadBytes(3).Reverse().ToArray());
         }
 
         private void WritePmd(BinaryWriter w)

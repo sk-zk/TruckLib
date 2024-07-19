@@ -11,34 +11,33 @@ namespace TruckLib.Models.Ppd
     /// <summary>
     /// Represents a prefab descriptor (.ppd) file.
     /// </summary>
-    /// <remarks>This class supports ppd versions 21, 22 and 23.</remarks>
     public class PrefabDescriptor : IBinarySerializable
     {
         public uint Version { get; private set; }
 
-        public List<ControlNode> Nodes { get; set; } = new();
+        public List<ControlNode> Nodes { get; set; } = [];
 
-        public List<NavCurve> NavCurves { get; set; } = new ();
+        public List<NavCurve> NavCurves { get; set; } = [];
 
-        public List<Sign> Signs { get; set; } = new();
+        public List<Sign> Signs { get; set; } = [];
 
-        public List<Semaphore> Semaphores { get; set; } = new();
+        public List<Semaphore> Semaphores { get; set; } = [];
 
-        public List<SpawnPoint> SpawnPoints { get; set; } = new();
+        public List<SpawnPoint> SpawnPoints { get; set; } = [];
 
-        public List<Vector3> TerrainPointPositions { get; set; } = new();
+        public List<Vector3> TerrainPointPositions { get; set; } = [];
 
-        public List<Vector3> TerrainPointNormals { get; set; } = new();
+        public List<Vector3> TerrainPointNormals { get; set; } = [];
 
-        public List<TerrainPointVariant> TerrainPointVariants { get; set; } = new();
+        public List<TerrainPointVariant> TerrainPointVariants { get; set; } = [];
 
-        public List<MapPoint> MapPoints { get; set; } = new();
+        public List<MapPoint> MapPoints { get; set; } = [];
 
-        public List<TriggerPoint> TriggerPoints { get; set; } = new();
+        public List<TriggerPoint> TriggerPoints { get; set; } = [];
 
-        public List<Intersection> Intersections { get; set; } = new();
+        public List<Intersection> Intersections { get; set; } = [];
 
-        public List<uint[]> Unknown { get; set; } = new();
+        public List<uint[]> Unknown { get; set; } = [];
 
         /// <summary>
         /// Reads a .ppd file from disk.

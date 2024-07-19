@@ -8,7 +8,7 @@ namespace TruckLib.Models
     {
         public Token Name { get; set; }
 
-        public List<PartAttribute> Attributes { get; set; } = new List<PartAttribute>();
+        public List<PartAttribute> Attributes { get; set; } = [];
 
         public Variant(Token name)
         {

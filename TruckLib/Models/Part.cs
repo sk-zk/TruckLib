@@ -8,9 +8,9 @@ namespace TruckLib.Models
     {
         public Token Name { get; set; }
 
-        public List<Piece> Pieces { get; set; } = new List<Piece>();
+        public List<Piece> Pieces { get; set; } = [];
 
-        public List<Locator> Locators { get; set; } = new List<Locator>();
+        public List<Locator> Locators { get; set; } = [];
 
         public Part()
         {

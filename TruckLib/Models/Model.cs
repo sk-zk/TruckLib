@@ -95,7 +95,7 @@ namespace TruckLib.Models
             var version = r.ReadUInt32();
             if (version != PmdVersion)
             {
-                throw new NotSupportedException($".pmd version {version} is not supported.");
+                throw new UnsupportedVersionException($".pmd version {version} is not supported.");
             }
 
             var materialCount = r.ReadUInt32();
@@ -189,7 +189,7 @@ namespace TruckLib.Models
             var version = r.ReadByte();
             if (version != PmgVersion)
             {
-                throw new NotSupportedException($".pmg version {version} is not supported.");
+                throw new UnsupportedVersionException($".pmg version {version} is not supported.");
             }
 
             var signature = r.ReadChars(3);

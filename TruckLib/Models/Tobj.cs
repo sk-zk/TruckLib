@@ -79,11 +79,11 @@ namespace TruckLib.Models
         public void Deserialize(BinaryReader r, uint? version = null)
         {
             if (version != SupportedVersion)
-                throw new NotSupportedException($"Version {version} is not supported.");
+                throw new UnsupportedVersionException($"Version {version} is not supported.");
 
             version = r.ReadUInt32();
             if (version != SupportedVersion)
-                throw new NotSupportedException($"Version {version} is not supported.");
+                throw new UnsupportedVersionException($"Version {version} is not supported.");
 
             unknown0 = r.ReadUInt32();
             unknown1 = r.ReadUInt32();

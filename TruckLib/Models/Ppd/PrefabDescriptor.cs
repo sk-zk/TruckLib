@@ -94,7 +94,7 @@ namespace TruckLib.Models.Ppd
                     Deserialize18(r);
                     break;
                 default:
-                    throw new NotSupportedException($"Version {version} is not supported.");
+                    throw new UnsupportedVersionException($"Version {version} is not supported.");
             }
         }
 

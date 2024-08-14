@@ -50,7 +50,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.MapOverlay => new MapOverlaySerializer(),
                 ItemType.Model => new ModelSerializer(),
                 ItemType.Mover => new MoverSerializer(),
-                ItemType.NoWeatherArea => new NoWeatherAreaSerializer(),
+                ItemType.EnvironmentArea => new EnvironmentAreaSerializer(),
                 ItemType.Prefab => new PrefabSerializer(),
                 ItemType.Road => new RoadSerializer(),
                 ItemType.Service => new ServiceSerializer(),

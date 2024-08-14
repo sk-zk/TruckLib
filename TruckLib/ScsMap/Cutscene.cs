@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
         /// <inheritdoc/>
-        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceFar;
+        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceExtremelyFar;
 
         /// <summary>
         /// Tags of the item.

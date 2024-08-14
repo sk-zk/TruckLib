@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap
         public override ItemFile DefaultItemFile => ItemFile.Base;
 
         /// <inheritdoc/>
-        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceFar;
+        protected override ushort DefaultViewDistance => KdopItem.ViewDistanceExtremelyFar;
 
         /// <summary>
         /// The unit name of the city, as defined in <c>/def/city.sii</c>.

@@ -42,10 +42,13 @@ namespace TruckLib.ScsMap
         }
 
         // preset vals from the editor
-        public const ushort ViewDistanceShort = 120;
+        public const ushort ViewDistanceExtremelyShort = 80;
+        public const ushort ViewDistanceVeryShort = 120;
+        public const ushort ViewDistanceShort = 200;
         public const ushort ViewDistanceClose = 400;
-        public const ushort ViewDistanceMiddle = 950;
-        public const ushort ViewDistanceFar = 1400;
+        public const ushort ViewDistanceMiddle = 600;
+        public const ushort ViewDistanceFar = 900;
+        public const ushort ViewDistanceExtremelyFar = 1400;
 
         public KdopItem() : base() { }
 

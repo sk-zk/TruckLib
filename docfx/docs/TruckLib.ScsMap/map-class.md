@@ -44,7 +44,7 @@ All map items are stored in the [`MapItems`](xref:TruckLib.ScsMap.Map.MapItems) 
 ```cs
 bool exists = map.MapItems.TryGetValue(0x521CD80FA4000001, out MapItem item);
 
-var allMovers = map.MapItems.OfType<Mover>();
+var allMovers = map.MapItems.Where(x => x.Value is Mover);
 ```
 
 Do not modify this dictionary directly &ndash; see "Adding and deleting map items" for the intended way to do that.

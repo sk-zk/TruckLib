@@ -83,6 +83,7 @@ namespace TruckLib.HashFs
                 return;
             }
 
+            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(outputPath));
             Reader.BaseStream.Position = (long)entry.Offset;
             using var fileStream = new FileStream(outputPath, FileMode.Create);
             if (entry.IsCompressed)

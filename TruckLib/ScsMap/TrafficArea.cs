@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// If greater than 0, the traffic area is limited to a polyhedron with this height.
-        /// The polygon created by the nodes of this item are the bottom face.
+        /// The polygon created by the nodes of this item is the bottom face.
         /// </summary>
         public float Range { get; set; }
 

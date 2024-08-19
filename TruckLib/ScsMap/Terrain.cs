@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A standalone terrain segment which acts like a terrain-only road.
+    /// A standalone terrain item which acts like a terrain-only road.
     /// </summary>
     public class Terrain : PolylineItem
     {
@@ -28,7 +28,7 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Returns the minimum length of a terrain segment with the current step size setting.
+        /// Returns the minimum length of a terrain item with the current step size setting.
         /// </summary>
         public float MinLength => StepSize switch
         {
@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap
         };
 
         /// <summary>
-        /// The maximum length of a terrain segment.
+        /// The maximum length of a terrain item.
         /// </summary>
         public float MaxLength => 99999f;
 
@@ -148,7 +148,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Adds a single terrain segment to the map.
+        /// Adds a single terrain item to the map.
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="backwardPos">The position of the backward (red) node.</param>
@@ -156,7 +156,7 @@ namespace TruckLib.ScsMap
         /// <param name="material">The unit name of the terrain material.</param>
         /// <param name="leftSize">The terrain size on the left side.</param>        
         /// <param name="rightSize">The terrain size on the right side.</param>
-        /// <returns>The newly created terrain segment.</returns>
+        /// <returns>The newly created terrain item.</returns>
         public static Terrain Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token material,
             float leftSize, float rightSize)
         {
@@ -166,13 +166,13 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Appends a terrain segment to this terrain.
+        /// Appends a terrain item to this terrain.
         /// </summary>
-        /// <param name="position">The position of the forward node of the new terrain segment.</param>
+        /// <param name="position">The position of the forward node of the new terrain item.</param>
         /// <param name="material">The unit name of the terrain material.</param>
         /// <param name="leftSize">The terrain size on the left side.</param>        
         /// <param name="rightSize">The terrain size on the right side.</param>
-        /// <returns>The newly created terrain segment.</returns>
+        /// <returns>The newly created terrain item.</returns>
         public Terrain Append(Vector3 position, Token material, float leftSize, float rightSize)
         {
             var terrain = Append<Terrain>(position);

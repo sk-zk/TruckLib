@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A road segment.
+    /// A road item.
     /// </summary>
     public class Road : PolylineItem
     {
@@ -32,7 +32,7 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Returns the minimum length of a road segment with the current resolution setting.
+        /// Returns the minimum length of a road item with the current resolution setting.
         /// </summary>
         public float MinLength => Resolution switch
         {
@@ -43,7 +43,7 @@ namespace TruckLib.ScsMap
         };
 
         /// <summary>
-        /// The maximum length of a road segment.
+        /// The maximum length of a road item.
         /// </summary>
         public static readonly float MaxLength = 1000f;
 
@@ -143,7 +143,7 @@ namespace TruckLib.ScsMap
         public byte DlcGuard { get; set; }
 
         /// <summary>
-        /// Gets or sets if the satnav should avoid this road segment.
+        /// Gets or sets if the satnav should avoid this road item.
         /// </summary>
         public bool GpsAvoid
         {
@@ -303,7 +303,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Adds a road segment to the map.
+        /// Adds a road item to the map.
         /// </summary>
         /// <param name="map">The map .</param>
         /// <param name="backwardPos">The position of the backward (red) node.</param>
@@ -311,7 +311,7 @@ namespace TruckLib.ScsMap
         /// <param name="type">The unit name of the road.</param>
         /// <param name="leftTerrainSize">The terrain size on the left side.</param>
         /// <param name="rightTerrainSize">The terrain size on the right side.</param>
-        /// <returns>The newly created road segment.</returns>
+        /// <returns>The newly created road item.</returns>
         public static Road Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos,
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
@@ -321,11 +321,11 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Appends a road segment to this road. 
+        /// Appends a road item to this road. 
         /// </summary>
         /// <param name="position">The position of the ForwardNode of the new road.</param>
-        /// <param name="cloneSettings">Whether the new segment should have the same settings as this one.</param>
-        /// <returns>The newly created road segment.</returns>
+        /// <param name="cloneSettings">Whether the new item should have the same settings as this one.</param>
+        /// <returns>The newly created road item.</returns>
         public Road Append(Vector3 position, bool cloneSettings = true)
         {
             if (!cloneSettings)
@@ -357,13 +357,13 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Appends a road segment to this road. 
+        /// Appends a road item to this road. 
         /// </summary>
         /// <param name="position">The position of the ForwardNode of the new road.</param>
         /// <param name="type">The unit name of the road.</param>
         /// <param name="leftTerrainSize">The terrain size on the left side.</param>
         /// <param name="rightTerrainSize">The terrain size on the right side.</param>
-        /// <returns>The newly created road.</returns>
+        /// <returns>The newly created road item.</returns>
         public Road Append(Vector3 position, Token type, float leftTerrainSize = 0f, 
             float rightTerrainSize = 0f)
         {
@@ -374,23 +374,23 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Prepends a road segment to this road.
+        /// Prepends a road item to this road.
         /// </summary>
         /// <param name="position">The position of the backward node of the new road.</param>
-        /// <returns>The newly created road.</returns>
+        /// <returns>The newly created road item.</returns>
         public Road Prepend(Vector3 position)
         {
             return Prepend(position, RoadType);
         }
 
         /// <summary>
-        /// Prepends a road segment to this road.
+        /// Prepends a road item to this road.
         /// </summary>
         /// <param name="position">The position of the backward node of the new road.</param>
         /// <param name="type">The unit name of the road.</param>
         /// <param name="leftTerrainSize">The terrain size on the left side.</param>
         /// <param name="rightTerrainSize">The terrain size on the right side.</param>
-        /// <returns>The newly created road.</returns>
+        /// <returns>The newly created road item.</returns>
         public Road Prepend(Vector3 position, Token type, float leftTerrainSize = 0f,
             float rightTerrainSize = 0f)
         {

@@ -15,7 +15,7 @@ namespace TruckLib.HashFs
         public string Path { get; internal set; }
 
         /// <inheritdoc/>
-        public Dictionary<ulong, IEntry> Entries { get; } = new();
+        public Dictionary<ulong, IEntry> Entries { get; } = [];
 
         /// <inheritdoc/>
         public ushort Salt { get; set; }
@@ -55,7 +55,7 @@ namespace TruckLib.HashFs
             if (!Entries.ContainsValue(entry))
                 throw new FileNotFoundException();
 
-            return new[] { GetEntryContent(entry) };
+            return [GetEntryContent(entry)];
         }
 
         /// <inheritdoc/>
@@ -83,7 +83,7 @@ namespace TruckLib.HashFs
                 return;
             }
 
-            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(outputPath));
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(outputPath));
             Reader.BaseStream.Position = (long)entry.Offset;
             using var fileStream = new FileStream(outputPath, FileMode.Create);
             if (entry.IsCompressed)
@@ -107,7 +107,7 @@ namespace TruckLib.HashFs
         }
 
         /// <inheritdoc/>
-        public (List<string> Subdirs, List<string> Files) GetDirectoryListing(
+        public DirectoryListing GetDirectoryListing(
             string path, bool filesOnly = false, bool returnAbsolute = true)
         {
             path = RemoveTrailingSlash(path);
@@ -120,19 +120,19 @@ namespace TruckLib.HashFs
 
             var entry = GetEntry(path);
 
-            var (subdirs, files) = GetDirectoryListing(entry, filesOnly);
+            var dir = GetDirectoryListing(entry, filesOnly);
 
             if (returnAbsolute)
             {
-                MakePathsAbsolute(path, subdirs);
-                MakePathsAbsolute(path, files);
+                MakePathsAbsolute(path, dir.Subdirectories);
+                MakePathsAbsolute(path, dir.Files);
             }
 
-            return (subdirs, files);
+            return new DirectoryListing(dir.Subdirectories, dir.Files);
         }
 
         /// <inheritdoc/>
-        public abstract (List<string> Subdirs, List<string> Files) GetDirectoryListing(
+        public abstract DirectoryListing GetDirectoryListing(
             IEntry entry, bool filesOnly = false);
 
         /// <inheritdoc/>
@@ -146,7 +146,7 @@ namespace TruckLib.HashFs
         /// <inheritdoc/>
         public ulong HashPath(string path, uint? salt = null)
         {
-            if (path != "" && path.StartsWith("/"))
+            if (path != "" && path.StartsWith('/'))
                 path = path[1..];
 
             // TODO do salts work the same way in v2?
@@ -168,20 +168,20 @@ namespace TruckLib.HashFs
             Reader.Dispose();
         }
 
-        protected void MakePathsAbsolute(string parent, List<string> subdirs)
+        protected void MakePathsAbsolute(string parent, List<string> paths)
         {
-            for (int i = 0; i < subdirs.Count; i++)
+            for (int i = 0; i < paths.Count; i++)
             {
                 if (parent == RootPath)
-                    subdirs[i] = RootPath + subdirs[i];
+                    paths[i] = RootPath + paths[i];
                 else
-                    subdirs[i] = $"{parent}/{subdirs[i]}";
+                    paths[i] = $"{parent}/{paths[i]}";
             }
         }
 
         protected string RemoveTrailingSlash(string path)
         {
-            if (path.EndsWith("/") && path != RootPath)
+            if (path.EndsWith('/') && path != RootPath)
                 path = path[0..^1];
             return path;
         }

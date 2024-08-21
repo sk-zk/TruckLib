@@ -81,7 +81,7 @@ namespace TruckLib.HashFs
         /// <param name="filesOnly">Whether only files should be returned.</param>
         /// <param name="returnAbsolute">Whether the returned paths should be made absolute.</param>
         /// <returns>A list of subdirectories and files in the given directory.</returns>
-        (List<string> Subdirs, List<string> Files) GetDirectoryListing(string path, bool filesOnly = false, bool returnAbsolute = true);
+        DirectoryListing GetDirectoryListing(string path, bool filesOnly = false, bool returnAbsolute = true);
 
         /// <summary>
         /// Returns a list of subdirectories and files in the given directory.
@@ -89,7 +89,7 @@ namespace TruckLib.HashFs
         /// <param name="entry">The entry metadata of the directory.</param>
         /// <param name="filesOnly">Whether only files should be returned.</param>
         /// <returns>A list of subdirectories and files in the given directory.</returns>
-        (List<string> Subdirs, List<string> Files) GetDirectoryListing(IEntry entry, bool filesOnly = false);
+        DirectoryListing GetDirectoryListing(IEntry entry, bool filesOnly = false);
 
         /// <summary>
         /// Retrieves the entry metadata for the given path.

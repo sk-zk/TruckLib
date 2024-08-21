@@ -21,7 +21,7 @@ namespace TruckLib.HashFs
         private uint metadataTableLength;
 
         /// <inheritdoc/>
-        public override (List<string> Subdirs, List<string> Files) GetDirectoryListing(
+        public override DirectoryListing GetDirectoryListing(
             IEntry entry, bool filesOnly = false)
         {
             var bytes = GetEntryContent(entry);
@@ -38,7 +38,7 @@ namespace TruckLib.HashFs
             {
                 var str = Encoding.UTF8.GetString(dirReader.ReadBytes(stringLengths[i]));
                 // is directory
-                if (str.StartsWith("/"))
+                if (str.StartsWith('/'))
                 {
                     if (filesOnly) continue;
                     var subPath = str[1..] + "/";
@@ -51,7 +51,7 @@ namespace TruckLib.HashFs
                 }
             }
 
-            return (subdirs, files);
+            return new DirectoryListing(subdirs, files);
         }
 
         /// <inheritdoc/>
@@ -68,11 +68,11 @@ namespace TruckLib.HashFs
                 using var ddsMs = new MemoryStream();
                 RecreateDds(v2, ddsMs);
 
-                return new[] { tobjMs.ToArray(), ddsMs.ToArray() };
+                return [tobjMs.ToArray(), ddsMs.ToArray()];
             }
             else
             {
-                return new[] { GetEntryContent(entry) };
+                return [GetEntryContent(entry)];
             }
         }
 

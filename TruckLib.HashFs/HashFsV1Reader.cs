@@ -12,10 +12,12 @@ namespace TruckLib.HashFs
         private uint startOffset;
 
         // Fixes Extractor#6; see comment in `ParseEntryTable`.
-        private List<IEntry> duplicateDirListings = new();
+        private List<IEntry> duplicateDirListings = [];
+
+        private readonly char[] newlineChars = ['\r', '\n'];
 
         /// <inheritdoc/>
-        public override (List<string> Subdirs, List<string> Files) GetDirectoryListing(
+        public override DirectoryListing GetDirectoryListing(
             IEntry entry, bool filesOnly = false)
         {
             var subdirs = new List<string>();
@@ -27,7 +29,7 @@ namespace TruckLib.HashFs
             {
                 var entryContent = GetEntryContent(e);
                 var dirEntries = Encoding.ASCII.GetString(entryContent)
-                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    .Split(newlineChars, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < dirEntries.Length; i++)
                 {
                     const string dirMarker = "*";
@@ -45,7 +47,7 @@ namespace TruckLib.HashFs
                     }
                 }
             }
-            return (subdirs, files);
+            return new DirectoryListing(subdirs, files);
         }
 
         internal void ParseHeader()

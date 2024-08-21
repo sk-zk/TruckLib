@@ -43,7 +43,7 @@ You can retrieve the contents of a directory with the [`GetDirectoryListing`](xr
 
 ```cs
 // Get the top level of the archive
-var (subdirs, files) = reader.GetDirectoryListing("/");
+var directory = reader.GetDirectoryListing("/");
 ```
 
 Keep in mind that, as mentioned above, directory listings are not required to exist.

@@ -8,6 +8,8 @@ namespace TruckLib.HashFs
 {
     internal class HashFsV1Reader : HashFsReaderBase
     {
+        public override ushort Version => 1;
+
         private uint entriesCount;
         private uint startOffset;
 

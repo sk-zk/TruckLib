@@ -24,6 +24,11 @@ namespace TruckLib.HashFs
         ushort Salt { get; set; }
 
         /// <summary>
+        /// The version number of the HashFS archive.
+        /// </summary>
+        ushort Version { get; }
+
+        /// <summary>
         /// Checks if an entry exists and returns its type if it does.
         /// </summary>
         /// <param name="path">The path of the entry in the archive.</param>

@@ -12,7 +12,9 @@ using TruckLib.HashFs.Dds;
 namespace TruckLib.HashFs
 {
     internal class HashFsV2Reader : HashFsReaderBase
-    {    
+    {
+        public override ushort Version => 2;
+
         public Platform Platform { get; private set; }
 
         private ulong entryTableStart;

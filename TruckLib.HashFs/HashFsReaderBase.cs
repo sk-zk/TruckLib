@@ -20,6 +20,9 @@ namespace TruckLib.HashFs
         /// <inheritdoc/>
         public ushort Salt { get; set; }
 
+        /// <inheritdoc/>
+        public abstract ushort Version { get; }
+
         internal BinaryReader Reader { get; set; }
 
         protected const string RootPath = "/";

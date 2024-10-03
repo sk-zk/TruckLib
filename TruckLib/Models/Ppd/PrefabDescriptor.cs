@@ -120,7 +120,7 @@ namespace TruckLib.Models.Ppd
             NavCurves = r.ReadObjectList<NavCurve>(navCurveCount, version);
             Signs = r.ReadObjectList<Sign>(signCount);
             Semaphores = r.ReadObjectList<Semaphore>(semaphoreCount);
-            SpawnPoints = r.ReadObjectList<SpawnPoint>(spawnPointCount);
+            SpawnPoints = r.ReadObjectList<SpawnPoint>(spawnPointCount, version);
             TerrainPointPositions = r.ReadObjectList<Vector3>(terrainPointCount);
             TerrainPointNormals = r.ReadObjectList<Vector3>(terrainPointCount);
             TerrainPointVariants = r.ReadObjectList<TerrainPointVariant>(terrainPointVariantCount);
@@ -152,7 +152,7 @@ namespace TruckLib.Models.Ppd
             NavCurves = r.ReadObjectList<NavCurve>(navCurveCount, version);
             Signs = r.ReadObjectList<Sign>(signCount);
             Semaphores = r.ReadObjectList<Semaphore>(semaphoreCount);
-            SpawnPoints = r.ReadObjectList<SpawnPoint>(spawnPointCount);
+            SpawnPoints = r.ReadObjectList<SpawnPoint>(spawnPointCount, version);
             TerrainPointPositions = r.ReadObjectList<Vector3>(terrainPointCount);
             TerrainPointNormals = r.ReadObjectList<Vector3>(terrainPointCount);
             TerrainPointVariants = r.ReadObjectList<TerrainPointVariant>(terrainPointVariantCount);
@@ -195,7 +195,7 @@ namespace TruckLib.Models.Ppd
             NavCurves = r.ReadObjectList<NavCurve>(navCurveCount, version);
             Signs = r.ReadObjectList<Sign>(signCount);
             Semaphores = r.ReadObjectList<Semaphore>(semaphoreCount);
-            SpawnPoints = r.ReadObjectList<SpawnPoint>(spawnPointCount);
+            SpawnPoints = r.ReadObjectList<SpawnPoint>(spawnPointCount, version);
             TerrainPointPositions = r.ReadObjectList<Vector3>(terrainPointCount);
             TerrainPointNormals = r.ReadObjectList<Vector3>(terrainPointCount);
             TerrainPointVariants = r.ReadObjectList<TerrainPointVariant>(terrainPointVariantCount);

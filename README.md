@@ -36,7 +36,6 @@ Documentation is available at https://sk-zk.github.io/trucklib/master/.
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map&nbsp;>&nbsp;Recompute map).
 * Anything to do with prefabs may or may not break in unexpected ways.
-* Spawn points in .ppd version 18 are currently broken.
 * The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
   fixed by recalculating.
 * When adding a camera path, the positions of the control points in the Keyframe objects are not set to any default values

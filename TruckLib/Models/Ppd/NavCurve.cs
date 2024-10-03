@@ -109,6 +109,9 @@ namespace TruckLib.Models.Ppd
                 case 0x17:
                     Deserialize16to18(r);
                     break;
+                case 0x18:
+                    Deserialize16to18(r);
+                    break;
                 default:
                     throw new NotSupportedException($"Version {version} is not supported.");
             }

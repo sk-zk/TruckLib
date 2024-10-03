@@ -104,11 +104,7 @@ namespace TruckLib.Models.Ppd
                     Deserialize15(r);
                     break;
                 case 0x16:
-                    Deserialize16to18(r);
-                    break;
                 case 0x17:
-                    Deserialize16to18(r);
-                    break;
                 case 0x18:
                     Deserialize16to18(r);
                     break;

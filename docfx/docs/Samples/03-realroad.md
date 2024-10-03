@@ -3,7 +3,8 @@
 This sample demonstrates one possible approach for importing the course of a real road into a map for the purpose
 of 1:1 mapping. In particular, it deals with the essential steps of fetching elevation data and projecting the points.
 
-This page is meant to be read alongside the full source code, which you can find at `Samples/03-RealRoad/Program.cs`.
+This page is not a tutorial, but meant to be read alongside the full source code, so I won't go into detail on some of the
+boring bits. You can find the code at `Samples/03-RealRoad/Program.cs`.
 
 ## Structs
 For convenience, we define the structs `GeographicCoordinate` and `ProjectedCoordinate`.
@@ -22,7 +23,7 @@ We'll skip over `LoadCoordinates` here &ndash; it just loads the CSV file into a
 
 ## Elevation
 The majority of map data you will encounter will not have elevation data present, so we must fetch it ourselves. In this case,
-we will use the [DEM.Net](https://github.com/dem-net/DEM.Net) library, which has a simple interface for getting the elevation of
+we will use the [DEM.Net](https://github.com/dem-net/DEM.Net) library, which has a simple interface for fetching the elevation of
 points from several freely available elevation models.
 
 DEM.Net uses the `Microsoft.Extensions.DependencyInjection` package, so to get an instance of the `ElevationService` class we need,
@@ -138,7 +139,7 @@ var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
     sourceCrs, destCrs)[0];
 ```
 
-One last thing &ndash; the game has a minimum length for road segments, which in this case is 1.25 m.
+One last thing &ndash; the game has a minimum length for road segment, which in this case is 1.25 m.
 Further, segments shorter than 5 m can render quite strangely. Now that we have our projected points
 and know how long each segment will be in-game, we'll filter out these segments.
 (This sample has enough LOC as it is, so for the sake of simplicity, we just remove any point for which

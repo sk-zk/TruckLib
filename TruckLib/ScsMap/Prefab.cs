@@ -294,7 +294,7 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Appends a new road segment to a node of this prefab.
-        /// <remarks>If the node is the origin node, it will be prepended instead.</remarks>
+        /// (If the node is the origin node, it will be prepended instead.)
         /// </summary>
         /// <param name="node">The index of the prefab node 
         /// (in <see cref="Nodes"/>, not the .ppd file) to attach to.</param>

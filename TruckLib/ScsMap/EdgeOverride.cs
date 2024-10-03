@@ -17,14 +17,14 @@ namespace TruckLib.ScsMap
 
         /// <summary>
         /// Offset of the section at which the override begins, counted in forward direction.
-        /// <remarks>One section spans three road quads.</remarks>
         /// </summary>
+        /// <remarks>One section spans three road quads.</remarks>
         public ushort Offset { get; set; }
 
         /// <summary>
         /// Number of sections for which the override will repeat.
-        /// <remarks>One section spans three road quads.</remarks>
         /// </summary>
+        /// <remarks>One section spans three road quads.</remarks>
         public ushort Length { get; set; }
 
         /// <summary>

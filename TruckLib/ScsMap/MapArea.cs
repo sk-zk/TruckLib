@@ -33,7 +33,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The color of the map area, as an index for the <c>map_area_color</c> array
+        /// The color of the map area, as an index for the <c>map_area_*</c> arrays
         /// defined in <c>/def/map_data.sii</c>.
         /// </summary>
         public uint Color { get; set; }

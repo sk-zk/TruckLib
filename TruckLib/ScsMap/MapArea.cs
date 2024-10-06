@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Draws a polygon onto the UI map.
+    /// Defines a polygon which is drawn onto the UI map.
     /// </summary>
     public class MapArea : PolygonItem
     {
@@ -33,9 +33,10 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The color of the map area.
+        /// The color of the map area, as an index for the <c>map_area_color</c> array
+        /// defined in <c>/def/map_data.sii</c>.
         /// </summary>
-        public MapAreaColor Color { get; set; }
+        public uint Color { get; set; }
 
         public byte DlcGuard
         {
@@ -81,7 +82,6 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Color = MapAreaColor.Road;
         }
 
         /// <summary>

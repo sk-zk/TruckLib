@@ -12,11 +12,12 @@ namespace TruckLib
         /// <param name="arr">The array to append to.</param>
         /// <param name="item">The object to append.</param>
         /// <returns>The modified array.</returns>
-        internal static T[] Push<T>(this T[] arr, T item)
+        public static T[] Push<T>(this T[] arr, T item)
         {
             if (arr is null)
-                return new[] { item };
-            
+            {
+                return [item];
+            }        
             Array.Resize(ref arr, arr.Length + 1);
             arr[^1] = item;
             return arr;
@@ -27,7 +28,7 @@ namespace TruckLib
         /// </summary>
         /// <param name="b">The bool.</param>
         /// <returns>1 if true, 0 if false.</returns>
-        internal static byte ToByte(this bool b) =>
+        public static byte ToByte(this bool b) =>
             b ? (byte)1 : (byte)0;
     }
 }

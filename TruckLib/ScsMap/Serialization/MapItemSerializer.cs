@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace TruckLib.ScsMap.Serialization
 {
-    abstract class MapItemSerializer
+    internal abstract class MapItemSerializer
     {
         public abstract MapItem Deserialize(BinaryReader r);
 
@@ -52,8 +52,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void WriteKdopBounds(BinaryWriter w, MapItem item)
         {
-            foreach (var arr in new float[][] {
-                item.Kdop.Minimums, item.Kdop.Maximums })
+            foreach (var arr in new float[][] { item.Kdop.Minimums, item.Kdop.Maximums })
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -71,7 +70,21 @@ namespace TruckLib.ScsMap.Serialization
         public static List<T> ReadObjectList<T>(BinaryReader r) where T : new()
         {
             var count = r.ReadUInt32();
-            return r.ReadObjectList<T>(count);
+            if (typeof(T) == typeof(UnresolvedItem))
+            {
+                var list = new List<T>();
+                list.EnsureCapacity((int)count);
+                for (int i = 0; i < count; i++)
+                {
+                    var item = new UnresolvedItem(r.ReadUInt64());
+                    list.Add((T)Convert.ChangeType(item, typeof(T)));
+                }
+                return list;
+            }
+            else
+            {
+                return r.ReadObjectList<T>(count);
+            }
         }
 
         /// <summary>
@@ -89,7 +102,7 @@ namespace TruckLib.ScsMap.Serialization
             }
 
             w.Write((uint)list.Count);
-            w.WriteObjectList<T>(list);
+            w.WriteObjectList(list);
         }
 
         public static List<INode> ReadNodeRefList(BinaryReader r)

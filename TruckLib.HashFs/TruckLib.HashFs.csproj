@@ -13,12 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <Compile Include="../TruckLib/FlagField.cs" />
-	  <Compile Include="../TruckLib/Extensions/MiscExtensions.cs" />
-	  <Compile Include="../TruckLib/Extensions/IOPascalStringExtensions.cs" />
-	  <Compile Include="../TruckLib/IBinarySerializable.cs" />
-	  <Compile Include="../TruckLib/Models/Tobj.cs" />
-	  <Compile Include="../TruckLib/UnsupportedVersionException.cs" />
+    <ProjectReference Include="..\TruckLib.Core\TruckLib.Core.csproj" />
+	<ProjectReference Include="..\TruckLib.Models\TruckLib.Models.csproj" />
   </ItemGroup>
 
 </Project>

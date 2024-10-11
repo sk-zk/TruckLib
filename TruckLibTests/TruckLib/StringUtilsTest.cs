@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TruckLib;
+using TruckLib.Models;
 
 namespace TruckLibTests.TruckLib
 {
     public class StringUtilsTest
-    {
+    {     
         [Fact]
         public void CStringBytesToList()
         {
-            var input = Encoding.ASCII.GetBytes("abc\0def\0ghi\0");
-            var expected = new List<string> { "abc", "def", "ghi" };
+            byte[] input = Encoding.ASCII.GetBytes("abc\0def\0ghi\0");
+            List<string> expected = ["abc", "def", "ghi"];
             Assert.Equal(expected, StringUtils.CStringBytesToList(input));
         }
 
         [Fact]
         public void ListToCStringByteList()
         {
-            var expected = new List<byte[]> {
+            List<byte[]> expected = [
                 Encoding.ASCII.GetBytes("abc\0"),
                 Encoding.ASCII.GetBytes("def\0"),
                 Encoding.ASCII.GetBytes("ghi\0")
-            };
-            var input = new List<string> { "abc", "def", "ghi" };
+            ];
+            List<string> input = ["abc", "def", "ghi"];
             Assert.Equal(expected, StringUtils.ListToCStringByteList(input));
-        }
+        }        
     }
 }

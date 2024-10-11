@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("TruckLibTests")]
-namespace TruckLib
+namespace TruckLib.Models
 {
     internal static class StringUtils
     {

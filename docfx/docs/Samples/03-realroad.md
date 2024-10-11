@@ -151,7 +151,7 @@ points = RemoveShortSegments(points);
 
 ## Adding the road to the map
 We now have everything we need to add the road to a map. For this step, I will assume that you have read
-[Sample #1: Simple example](~/docs/Samples/00-simple.md).
+[Sample #1: Simple example](~/docs/Samples/01-simple.md).
 
 As with the previous samples, we create an empty map:
 

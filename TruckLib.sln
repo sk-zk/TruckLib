@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLibTests", "TruckLibTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03-RealRoad", "Samples\03-RealRoad\03-RealRoad.csproj", "{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckLib.Core", "TruckLib.Core\TruckLib.Core.csproj", "{6CD7053E-427F-49E7-9453-97A94D606292}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Core", "TruckLib.Core\TruckLib.Core.csproj", "{6CD7053E-427F-49E7-9453-97A94D606292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckLib.Models", "TruckLib.Models\TruckLib.Models.csproj", "{764F547A-6D66-4C5F-A64C-1C503222E87D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Models", "TruckLib.Models\TruckLib.Models.csproj", "{764F547A-6D66-4C5F-A64C-1C503222E87D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TruckLib.Sii", "TruckLib.Sii\TruckLib.Sii.csproj", "{778701B3-7AD1-41D3-B03F-847147200221}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{764F547A-6D66-4C5F-A64C-1C503222E87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{764F547A-6D66-4C5F-A64C-1C503222E87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{764F547A-6D66-4C5F-A64C-1C503222E87D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778701B3-7AD1-41D3-B03F-847147200221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778701B3-7AD1-41D3-B03F-847147200221}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778701B3-7AD1-41D3-B03F-847147200221}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778701B3-7AD1-41D3-B03F-847147200221}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

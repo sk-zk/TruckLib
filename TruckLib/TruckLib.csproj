@@ -13,18 +13,15 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="RBush" Version="3.2.0" />
-    <PackageReference Include="Sprache" Version="2.3.1" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TruckLib.Core\TruckLib.Core.csproj" />
+    <ProjectReference Include="..\TruckLib.HashFs\TruckLib.HashFs.csproj" />
     <ProjectReference Include="..\TruckLib.Models\TruckLib.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\TruckLib.Sii\TruckLib.Sii.csproj" />
   </ItemGroup>
 
 </Project>

@@ -47,10 +47,14 @@ namespace TruckLib.ScsMap.Serialization
             for (int i = 1; i < nodeCount; i++)
             {
                 var uid = r.ReadUInt64();
-                // There are two Far Models in the 1.46 map which have n models
-                // but n+1 model nodes. Which of them is the bugged one that
-                // should be dropped? I don't know, but I hope it's the last one
-                // becasue that's what I'm doing.
+                // As of 1.51, there are three Far Models in europe.mbd which have
+                // n models but n+1 model nodes. That last node is unused and
+                // therefore gets silently ignored here. The node itself still
+                // references the far model though, causing a "inconsistent linkage"
+                // warning when loading the map in the editor. (I could of course
+                // write a whole bunch of additional code to earmark these nodes for
+                // deletion at a later stage, but I can't really be bothered because
+                // the map shouldn't be malformed to begin with.)
                 if (i <= fm.Models.Count)
                 {
                     var farModelData = fm.Models[i-1];

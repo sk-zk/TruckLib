@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Defines a rectangular area in which weather effects are disabled.
+    /// Defines a rectangular area in which 
     /// </summary>
-    public class NoWeatherArea : SingleNodeItem
+    public class EnvironmentArea : SingleNodeItem
     {
         /// <inheritdoc/>
-        public override ItemType ItemType => ItemType.NoWeatherArea;
+        public override ItemType ItemType => ItemType.EnvironmentArea;
 
         /// <inheritdoc/>
         public override ItemFile DefaultItemFile => ItemFile.Aux;
@@ -34,9 +34,25 @@ namespace TruckLib.ScsMap
 
         public FogMask FogBehavior { get; set; }
 
-        public NoWeatherArea() : base() { }
+        /// <summary>
+        /// Unit name of the climate profile, as defined in <c>/def/climate.sii</c>. 
+        /// </summary>
+        public Token Climate { get; set; }
 
-        internal NoWeatherArea(bool initFields) : base(initFields)
+        /// <summary>
+        /// Unit name of the reflection cube, as defined in <c>/def/relightable_cubemaps.sii</c>(?). 
+        /// </summary>
+        public Token ReflectionCube { get; set; }
+
+        public bool Precipitation
+        {
+            get => !Kdop.Flags[0];
+            set => Kdop.Flags[0] = !value;
+        }
+
+        public EnvironmentArea() : base() { }
+
+        internal EnvironmentArea(bool initFields) : base(initFields)
         {
             if (initFields) Init();
         }
@@ -45,24 +61,26 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
+            Width = 200;
+            Height = 200;
         }
 
         /// <summary>
-        /// Adds a NoWeatherArea to the map.
+        /// Adds an environment area to the map.
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="position">The position of the center of the area.</param>
         /// <param name="width">The width of the area.</param>
         /// <param name="height">The height of the area.</param>
-        /// <returns>The newly created NoWeatherArea.</returns>
-        public static NoWeatherArea Add(IItemContainer map, Vector3 position, float width, float height)
+        /// <returns>The newly created environment area.</returns>
+        public static EnvironmentArea Add(IItemContainer map, Vector3 position, float width, float height)
         {
-            var nwa = Add<NoWeatherArea>(map, position);
+            var ea = Add<EnvironmentArea>(map, position);
 
-            nwa.Width = width;
-            nwa.Height = height;
+            ea.Width = width;
+            ea.Height = height;
 
-            return nwa;
+            return ea;
         }
     }
 }

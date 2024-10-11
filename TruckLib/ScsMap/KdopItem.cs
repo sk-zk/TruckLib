@@ -30,7 +30,7 @@ namespace TruckLib.ScsMap
         // The editor only lets you go up to 1500, but there are items in europe.mbd that exceed it.
         // Not sure if this is intentional and the game actually renders it like that, or if someone somehow
         // set those values by accident and the game caps them to 1500 again when loaded
-        private const ushort MaxDistance = 2100;
+        private const ushort MaxDistance = 2120;
         private ushort viewDistance = ViewDistanceClose;
         /// <summary>
         /// Gets or sets the view distance of an item in meters.
@@ -42,10 +42,13 @@ namespace TruckLib.ScsMap
         }
 
         // preset vals from the editor
-        public const ushort ViewDistanceShort = 120;
+        public const ushort ViewDistanceExtremelyShort = 80;
+        public const ushort ViewDistanceVeryShort = 120;
+        public const ushort ViewDistanceShort = 200;
         public const ushort ViewDistanceClose = 400;
-        public const ushort ViewDistanceMiddle = 950;
-        public const ushort ViewDistanceFar = 1400;
+        public const ushort ViewDistanceMiddle = 600;
+        public const ushort ViewDistanceFar = 900;
+        public const ushort ViewDistanceExtremelyFar = 1400;
 
         public KdopItem() : base() { }
 

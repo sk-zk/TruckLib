@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
         Service = 0x07,
         CutPlane = 0x08,
         Mover = 0x09,
-        NoWeatherArea = 0x0B,
+        EnvironmentArea = 0x0B,
         CityArea = 0x0C,
         Hinge = 0x0D,
         AnimatedModel = 0x0F,
@@ -206,33 +206,6 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The color of a <see cref="MapArea">Map Area</see>.
-    /// </summary>
-    public enum MapAreaColor
-    {
-        /// <summary>
-        /// The map area has the same color as roads.
-        /// </summary>
-        Road = 0,
-
-        /// <summary>
-        /// The map area is lighter than roads.
-        /// </summary>
-        Light = 1,
-
-        /// <summary>
-        /// The map area is darker than roads.
-        /// </summary>
-        Dark = 2,
-
-        /// <summary>
-        /// The map area has the same color as <see cref="MapAreaColor.Light">Light</see>
-        /// if undiscovered but is green once discovered.
-        /// </summary>
-        Green = 3
-    }
-
-    /// <summary>
     /// The spawn point type of a <see cref="Service"/> item.
     /// </summary>
     public enum ServiceType
@@ -316,7 +289,7 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Fog behavior in a <see cref="NoWeatherArea">No Weather Area</see>.
+    /// Fog behavior in a <see cref="EnvironmentArea">No Weather Area</see>.
     /// </summary>
     public enum FogMask
     {

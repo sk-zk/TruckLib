@@ -15,7 +15,7 @@ namespace TruckLib.ScsMap.Serialization
 
             area.Nodes = new PolygonNodeList(area);
             area.Nodes.AddRange(ReadNodeRefList(r));
-            area.Color = (MapAreaColor)r.ReadUInt32();
+            area.Color = r.ReadUInt32();
 
             return area;
         }
@@ -26,7 +26,7 @@ namespace TruckLib.ScsMap.Serialization
             WriteKdopItem(w, area);
 
             WriteNodeRefList(w, area.Nodes);
-            w.Write((uint)area.Color);
+            w.Write(area.Color);
         }
     }
 }

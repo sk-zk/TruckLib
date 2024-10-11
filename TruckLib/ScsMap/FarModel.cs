@@ -74,6 +74,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[1] = value;
         }
 
+        /// <summary>
+        /// Gets or sets whether far shadows will be rendered.
+        /// </summary>
+        public bool FarShadows
+        {
+            get => Kdop.Flags[2];
+            set => Kdop.Flags[2] = value;
+        }
+
         public FarModel() : base()
         {
         }

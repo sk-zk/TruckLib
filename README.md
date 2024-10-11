@@ -1,7 +1,7 @@
 # TruckLib
 
-**TruckLib** is a C# library for the map format of Euro Truck Simulator 2 / American Truck Simulator.
-The primary focus is programmatic map creation, but the library also handles various other tasks needed for this purpose, such as reading prefab descriptor files.
+**TruckLib** is a C# library for creating and editing maps for Euro Truck Simulator 2 / American Truck Simulator. The library also handles various
+other tasks needed for this purpose, such as reading prefab descriptors or writing .sii unit files.
 
 The currently supported [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) is **901** (game version **1.51**).
 

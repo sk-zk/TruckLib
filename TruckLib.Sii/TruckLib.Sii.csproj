@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<RootNamespace>TruckLib.Sii</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Sprache" Version="2.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TruckLib.Core\TruckLib.Core.csproj" />
+	</ItemGroup>
+
+</Project>

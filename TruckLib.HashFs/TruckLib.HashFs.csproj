@@ -14,7 +14,7 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\..\TruckLib.Core\TruckLib.Core\TruckLib.Core.csproj" />
-	<ProjectReference Include="..\TruckLib.Models\TruckLib.Models.csproj" />
+	<ProjectReference Include="..\..\TruckLib.Models\TruckLib.Models\TruckLib.Models.csproj" />
   </ItemGroup>
 
 </Project>

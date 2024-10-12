@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\TruckLib.Core\TruckLib.Core\TruckLib.Core.csproj" />
     <ProjectReference Include="..\..\TruckLib.Models\TruckLib.Models\TruckLib.Models.csproj" />
-    <ProjectReference Include="..\TruckLib.HashFs\TruckLib.HashFs.csproj" />
     <ProjectReference Include="..\TruckLib.Sii\TruckLib.Sii.csproj" />
     <ProjectReference Include="..\TruckLib\TruckLib.csproj" />
   </ItemGroup>

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly: InternalsVisibleTo("TruckLibTests")]
+[assembly: InternalsVisibleTo("TruckLib.Tests")]
 namespace TruckLib
 {
     internal static class Utils

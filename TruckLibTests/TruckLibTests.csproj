@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\MatParserTest\**" />
+    <EmbeddedResource Remove="Data\MatParserTest\**" />
+    <None Remove="Data\MatParserTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -24,14 +30,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\TruckLib.Core\TruckLib.Core\TruckLib.Core.csproj" />
     <ProjectReference Include="..\..\TruckLib.Models\TruckLib.Models\TruckLib.Models.csproj" />
-    <ProjectReference Include="..\TruckLib.Sii\TruckLib.Sii.csproj" />
     <ProjectReference Include="..\TruckLib\TruckLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\MatParserTest\sample.mat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Data\ModelSerializerTest\sec+0000+0000.aux">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -83,10 +85,6 @@
     <None Update="Data\SiiParserTest\sample.sii">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\MatParserTest\" />
   </ItemGroup>
 
 </Project>

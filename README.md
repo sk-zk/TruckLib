@@ -46,7 +46,7 @@ Documentation is available at https://sk-zk.github.io/trucklib/master/.
 * External map data (which is how the Winter Wonderland map was included in the game) is not yet supported.
 
 ## License
-TruckLib is licensed under GPL v2 except for `CityHash.cs`.
+TruckLib is licensed under GPL v2.
 
 ## Credits
 Parts of TruckLib are based on [ConverterPIX](https://github.com/mwl4/ConverterPIX)

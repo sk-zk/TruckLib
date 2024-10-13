@@ -21,13 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLibTests", "TruckLibTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03-RealRoad", "Samples\03-RealRoad\03-RealRoad.csproj", "{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Sii", "TruckLib.Sii\TruckLib.Sii.csproj", "{778701B3-7AD1-41D3-B03F-847147200221}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Core", "..\TruckLib.Core\TruckLib.Core\TruckLib.Core.csproj", "{184E3310-12BE-4AA5-BC87-BF291EE0C1E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Models", "..\TruckLib.Models\TruckLib.Models\TruckLib.Models.csproj", "{1A5D561D-ADEE-48E7-B423-D55D2B3CFF9C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.HashFs", "..\TruckLib.HashFs\TruckLib.HashFs\TruckLib.HashFs.csproj", "{0F30B190-D158-425F-9DD1-649876472D36}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Sii", "..\TruckLib.Sii\TruckLib.Sii\TruckLib.Sii.csproj", "{985D8B16-3D02-489D-8C7F-3E714ED26451}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,10 +55,6 @@ Global
 		{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}.Release|Any CPU.Build.0 = Release|Any CPU
-		{778701B3-7AD1-41D3-B03F-847147200221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{778701B3-7AD1-41D3-B03F-847147200221}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{778701B3-7AD1-41D3-B03F-847147200221}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{778701B3-7AD1-41D3-B03F-847147200221}.Release|Any CPU.Build.0 = Release|Any CPU
 		{184E3310-12BE-4AA5-BC87-BF291EE0C1E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{184E3310-12BE-4AA5-BC87-BF291EE0C1E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184E3310-12BE-4AA5-BC87-BF291EE0C1E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,6 +67,10 @@ Global
 		{0F30B190-D158-425F-9DD1-649876472D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F30B190-D158-425F-9DD1-649876472D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F30B190-D158-425F-9DD1-649876472D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985D8B16-3D02-489D-8C7F-3E714ED26451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985D8B16-3D02-489D-8C7F-3E714ED26451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985D8B16-3D02-489D-8C7F-3E714ED26451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985D8B16-3D02-489D-8C7F-3E714ED26451}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

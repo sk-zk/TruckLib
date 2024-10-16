@@ -11,7 +11,7 @@ and add them as project dependency to your project.
 ## Supported formats
 
 ### Map
-TruckLib supports [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) **900** (game version 1.48.5&ndash;1.50).
+TruckLib supports [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) **901** (game version 1.51/1.52).
 
 Support for more than one version at a time is not currently planned, so you will need to update existing maps in the editor
 whenever this library updates to a newer version.

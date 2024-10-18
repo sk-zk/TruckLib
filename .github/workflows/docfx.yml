@@ -22,7 +22,10 @@ jobs:
       run: dotnet tool update -g docfx
 
     - name: Build documentation
-      run: sh docfx/build.sh
+      run: |
+        cd TruckLib/docfx
+        sh ./build.sh
+        cd ../..
 
     - name: Publish to GitHub Pages
       run: |

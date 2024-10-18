@@ -6,7 +6,10 @@
           "src": "..",
           "files": [
             "TruckLib/*.csproj",
-            "TruckLib.*/*.csproj",
+            "docfx/TruckLib.Core/TruckLib.Core/TruckLib.Core.csproj",
+            "docfx/TruckLib.Models/TruckLib.Models/TruckLib.Models.csproj",
+            "docfx/TruckLib.Sii/TruckLib.Sii/TruckLib.Sii.csproj",
+            "docfx/TruckLib.HashFs/TruckLib.HashFs/TruckLib.HashFs.csproj",
           ]
         }
       ],

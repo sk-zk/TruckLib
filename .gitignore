@@ -334,3 +334,4 @@ coveragereport/
 # docfx
 docfx/_site/
 docfx/api/
+docfx/TruckLib*/

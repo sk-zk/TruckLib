@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\TruckLib.HashFs\TruckLib.HashFs\TruckLib.HashFs.csproj" />
-    <ProjectReference Include="..\..\..\TruckLib.Models\TruckLib.Models\TruckLib.Models.csproj" />
     <ProjectReference Include="..\..\TruckLib\TruckLib.csproj" />
   </ItemGroup>
 

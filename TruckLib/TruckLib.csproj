@@ -15,12 +15,10 @@
     <PackageReference Include="RBush" Version="3.2.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\TruckLib.Core\TruckLib.Core\TruckLib.Core.csproj" />
-    <ProjectReference Include="..\..\TruckLib.Models\TruckLib.Models\TruckLib.Models.csproj" />
-    <ProjectReference Include="..\TruckLib.Sii\TruckLib.Sii.csproj" />
+    <PackageReference Include="TruckLib.Core" Version="0.1.0" />
+    <PackageReference Include="TruckLib.HashFs" Version="0.1.0" />
+    <PackageReference Include="TruckLib.Models" Version="0.1.0" />
+    <PackageReference Include="TruckLib.Sii" Version="0.1.0" />
   </ItemGroup>
 
 </Project>

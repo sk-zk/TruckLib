@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.Models.Ppd;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     public class PrefabFixture
     {

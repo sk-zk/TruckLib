@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TruckLib.ScsMap;
 using TruckLib;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     [Collection("Prefab collection")]
     public class PrefabAddTest

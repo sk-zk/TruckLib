@@ -7,7 +7,7 @@ using TruckLib.ScsMap;
 using TruckLib.ScsMap.Collections;
 using System.Numerics;
 
-namespace TruckLibTests.TruckLib.ScsMap.Collections
+namespace TruckLib.Tests.TruckLib.ScsMap.Collections
 {
     public class NodeDictionaryTest
     {

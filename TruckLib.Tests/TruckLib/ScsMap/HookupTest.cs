@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TruckLib;
 using TruckLib.ScsMap;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     public class HookupTest
     {

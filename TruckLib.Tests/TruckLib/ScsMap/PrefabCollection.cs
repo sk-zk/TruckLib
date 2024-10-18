@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     [CollectionDefinition("Prefab collection")]
     public class PrefabCollection : ICollectionFixture<PrefabFixture>

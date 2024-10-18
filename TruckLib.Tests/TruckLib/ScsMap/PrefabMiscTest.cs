@@ -8,7 +8,7 @@ using TruckLib.Models.Ppd;
 using System.Numerics;
 using TruckLib;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     [Collection("Prefab collection")]
     public class PrefabMiscTest

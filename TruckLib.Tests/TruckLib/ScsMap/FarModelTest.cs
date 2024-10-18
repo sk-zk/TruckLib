@@ -7,7 +7,7 @@ using TruckLib.ScsMap;
 using System.Numerics;
 using System.Drawing;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     public class FarModelTest
     {

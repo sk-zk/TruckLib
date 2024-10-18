@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TruckLib.ScsMap;
 using System.Numerics;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     public class PolylineLengthTest
     {

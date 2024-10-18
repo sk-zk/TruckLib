@@ -7,7 +7,7 @@ using TruckLib;
 using TruckLib.ScsMap;
 using TruckLib.ScsMap.Serialization;
 
-namespace TruckLibTests.TruckLib.ScsMap.Serialization
+namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
 {
     public class ModelSerializerTest
     {

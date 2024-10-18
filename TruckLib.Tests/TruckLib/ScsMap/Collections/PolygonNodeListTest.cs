@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TruckLib.ScsMap;
 
-namespace TruckLibTests.TruckLib.ScsMap.Collections
+namespace TruckLib.Tests.TruckLib.ScsMap.Collections
 {
     public class PolygonNodeListTest
     {

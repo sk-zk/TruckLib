@@ -8,7 +8,7 @@ using TruckLib.ScsMap;
 using TruckLib;
 using System.Diagnostics;
 
-namespace TruckLibTests.TruckLib.ScsMap
+namespace TruckLib.Tests.TruckLib.ScsMap
 {
     public class GateTest
     {

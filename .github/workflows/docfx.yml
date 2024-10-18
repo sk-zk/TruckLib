@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - docfx-action
+      - pkg-refactor
 
 jobs:
   publish-docs:
@@ -22,7 +22,8 @@ jobs:
       run: dotnet tool update -g docfx
 
     - name: Build documentation
-      run: docfx docfx/docfx.json
+      run: |
+        sh docfx/build_gh.sh
 
     - name: Publish to GitHub Pages
       run: |

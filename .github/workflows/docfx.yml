@@ -23,9 +23,8 @@ jobs:
 
     - name: Build documentation
       run: |
-        cd TruckLib/docfx
+        ls
         sh ./build.sh
-        cd ../..
 
     - name: Publish to GitHub Pages
       run: |

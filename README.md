@@ -1,23 +1,28 @@
 # TruckLib
-
-**TruckLib** is a C# library for creating and editing maps for Euro Truck Simulator 2 / American Truck Simulator. The library also handles various
-other tasks needed for this purpose, such as reading prefab descriptors or writing .sii unit files.
+**TruckLib** is a C# library for programmatically creating and editing maps for Euro Truck Simulator 2 / American Truck Simulator
+without requiring the official editor.
+In addition to the ability to de/serialize the .scs map format, the library also handles various mapping-adjacent tasks,
+such as reading prefab descriptors or .sii unit files.
 
 The currently supported [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) is **901** (game version **1.51/1.52**).
 
 (This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later, and breaking changes will happen on occasion.)
 
 ## Namespaces
+### TruckLib
 **TruckLib.ScsMap**:  
-The main namespace of the library: classes for working with the map format.
+The main namespace of the library, containing classes for working with the map format.
 
-**TruckLib.Sii**:  
+### Packages
+The following packages are included in the main TruckLib package, but can also be used standalone.
+
+**[TruckLib.Sii](https://github.com/sk-zk/TruckLib.Sii)**:  
 Parsers for .sii and .mat files.
 
-**TruckLib.Models**:  
+**[TruckLib.Models](https://github.com/sk-zk/TruckLib.Models)**:  
 Rudimentary support for binary model files (.pm\*), prefab descriptors (.ppd), and binary .tobj files.
 
-**TruckLib.HashFs**:  
+**[TruckLib.HashFs](https://github.com/sk-zk/TruckLib.HashFs)**:  
 A reader for HashFS (.scs) files, the asset archive format of the game.
 
 ## Minimal example
@@ -31,7 +36,7 @@ map.Save(@"<ETS2 folder>\mod\user_map\map");
 ```
 
 ## Documentation
-Documentation is available at https://sk-zk.github.io/trucklib/master/.
+Documentation and an API reference is available at https://sk-zk.github.io/trucklib/master/.
 
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map&nbsp;>&nbsp;Recompute map).

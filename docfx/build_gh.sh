@@ -1,6 +1,4 @@
 #!/bin/bash
-scriptDir=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
-cd "$scriptDir"
 
 rm -rf ./_site
 git clone https://github.com/sk-zk/TruckLib.Core.git

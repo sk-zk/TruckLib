@@ -23,8 +23,7 @@ jobs:
 
     - name: Build documentation
       run: |
-        ls
-        sh ./build.sh
+        sh docfx/build.sh
 
     - name: Publish to GitHub Pages
       run: |

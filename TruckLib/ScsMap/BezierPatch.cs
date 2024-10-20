@@ -31,10 +31,26 @@ namespace TruckLib.ScsMap
 
         internal static readonly int ControlPointCols = 4;
         internal static readonly int ControlPointRows = 4;
+        private Vector3[,] controlPoints;
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
         /// </summary>
-        public Vector3[,] ControlPoints { get; set; }
+        public Vector3[,] ControlPoints { 
+            get => controlPoints;
+            set
+            {
+                if (value.GetLength(0) != ControlPointCols
+                    && value.GetLength(1) != ControlPointRows)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(ControlPoints),
+                        $"ControlPoints must be {ControlPointCols}x{ControlPointRows}.");
+                }
+                else
+                {
+                    controlPoints = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Amount of quads on the X axis.
@@ -72,6 +88,7 @@ namespace TruckLib.ScsMap
 
         private readonly int NoisePowerStart = 2;
         private readonly int NoisePowerLength = 2;
+
         /// <summary>
         /// Gets or sets the strength of random noise applied to the vertices of the terrain.
         /// </summary>
@@ -190,7 +207,7 @@ namespace TruckLib.ScsMap
             SmoothDetailVegetation = true;
             VegetationCollision = true;
             NoisePower = TerrainNoise.Percent100;
-            VegetationSpheres = new List<VegetationSphere>();
+            VegetationSpheres = [];
             QuadData = new TerrainQuadData();
         }
 
@@ -203,6 +220,13 @@ namespace TruckLib.ScsMap
         /// <returns>The newly created Bézier patch.</returns>
         public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints)
         {
+            if (controlPoints.GetLength(0) != ControlPointCols
+                && controlPoints.GetLength(1) != ControlPointRows)
+            {
+                throw new ArgumentOutOfRangeException(nameof(controlPoints),
+                    $"controlPoints must be {ControlPointCols}x{ControlPointRows}.");
+            }
+
             var bezier = Add<BezierPatch>(map, position);
 
             bezier.ControlPoints = controlPoints;

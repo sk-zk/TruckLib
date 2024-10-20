@@ -54,5 +54,24 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte ColoradoAndWyoming = 17;
         public static readonly byte IdahoAndWyoming = 18;
         public static readonly byte UtahAndWyoming = 19;
+        public static readonly byte Texas = 20;
+        public static readonly byte TexasAndNewMexico = 21;
+        public static readonly byte Montana = 22;
+        public static readonly byte MontanaAndIdaho = 23;
+        public static readonly byte MontanaAndWyoming = 24;
+        public static readonly byte Oklahoma = 25;
+        public static readonly byte OklahomaAndColorado = 26;
+        public static readonly byte OklahomaAndNewMexico = 27;
+        public static readonly byte OklahomaAndTexas = 28;
+        public static readonly byte Kansas = 29;
+        public static readonly byte KansasAndColorado = 30;
+        public static readonly byte KansasAndOklahoma = 31;
+        public static readonly byte Nebraska = 32;
+        public static readonly byte NebraskaAndColorado = 33;
+        public static readonly byte NebraskaAndKansas = 34;
+        public static readonly byte NebraskaAndWyoming = 35;
+        public static readonly byte Arkansas = 36;
+        public static readonly byte ArkansasAndOklahoma = 37;
+        public static readonly byte ArkansasAndTexas = 38;
     }
 }

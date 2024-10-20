@@ -12,8 +12,12 @@ namespace TruckLib.ScsMap.Lookup
     public sealed class CountryId
     {
         // Officially implemented:
+        public static readonly byte Albania = 14;
         public static readonly byte Austria = 1;
         public static readonly byte Belgium = 2;
+        public static readonly byte BosniaAndHerzegovina = 17;
+        public static readonly byte Bulgaria = 18;
+        public static readonly byte Croatia = 19;
         public static readonly byte Czechia = 3;
         public static readonly byte Denmark = 21;
         public static readonly byte Estonia = 22;
@@ -25,22 +29,26 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte Latvia = 28;
         public static readonly byte Lithuania = 30;
         public static readonly byte Luxembourg = 12;
+        public static readonly byte Montenegro = 34;
         public static readonly byte Netherlands = 7;
         public static readonly byte Norway = 35;
         public static readonly byte Poland = 8;
+        public static readonly byte Portugal = 36;
+        public static readonly byte RepublicOfMacedonia = 203;
+        public static readonly byte Romania = 37;
         public static readonly byte Russia = 38;
+        public static readonly byte Serbia = 40;
         public static readonly byte Slovakia = 11;
+        public static readonly byte Slovenia = 41;
+        public static readonly byte Spain = 42;
         public static readonly byte Sweden = 43;
         public static readonly byte Switzerland = 9;
+        public static readonly byte Turkey = 44;
         public static readonly byte UnitedKingdom = 10;
 
         // Recommended by SCS for mods:
-        public static readonly byte Albania = 14;
         public static readonly byte Andorra = 15;
         public static readonly byte Belarus = 16;
-        public static readonly byte BosniaAndHerzegovina = 17;
-        public static readonly byte Bulgaria = 18;
-        public static readonly byte Croatia = 19;
         public static readonly byte Cyprus = 20;
         public static readonly byte Georgia = 24;
         public static readonly byte Greece = 25;
@@ -50,16 +58,8 @@ namespace TruckLib.ScsMap.Lookup
         public static readonly byte Malta = 31;
         public static readonly byte Moldova = 32;
         public static readonly byte Monaco = 33;
-        public static readonly byte Montenegro = 34;
-        public static readonly byte Portugal = 36;
-        public static readonly byte Romania = 37;
         public static readonly byte SanMarino = 39;
-        public static readonly byte Serbia = 40;
-        public static readonly byte Slovenia = 41;
-        public static readonly byte Spain = 42;
-        public static readonly byte Turkey = 44;
         public static readonly byte Ukraine = 45;
-        public static readonly byte RepublicOfMacedonia = 203;
 
         public static readonly byte Afghanistan = 46;
         public static readonly byte Armenia = 47;

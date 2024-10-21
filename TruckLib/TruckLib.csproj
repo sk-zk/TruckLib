@@ -1,24 +1,46 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<RootNamespace>TruckLib</RootNamespace>
+		<Authors>skzk</Authors>
+		<Version>0.901.1.0</Version>
+		<Title>TruckLib</Title>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/sk-zk/TruckLib</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Description> create &amp; modify ETS2 / ATS maps</Description>
+		<PackageProjectUrl>https://github.com/sk-zk/TruckLib</PackageProjectUrl>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="RBush" Version="3.2.0" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="TruckLib.Core" Version="0.1.0" />
-    <PackageReference Include="TruckLib.HashFs" Version="0.1.0" />
-    <PackageReference Include="TruckLib.Models" Version="0.1.0" />
-    <PackageReference Include="TruckLib.Sii" Version="0.1.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="RBush" Version="3.2.0" />
+		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+		<PackageReference Include="TruckLib.Core" Version="0.1.0" />
+		<PackageReference Include="TruckLib.HashFs" Version="0.1.0" />
+		<PackageReference Include="TruckLib.Models" Version="0.1.0" />
+		<PackageReference Include="TruckLib.Sii" Version="0.1.0" />
+	</ItemGroup>
 
 </Project>

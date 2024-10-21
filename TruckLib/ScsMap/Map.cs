@@ -415,9 +415,9 @@ namespace TruckLib.ScsMap
             // deep cloning everything the lazy way
 
             var clonedItems = selection.MapItems.Select(x => (x.Key, x.Value.CloneItem()))
-                .ToDictionary(k => k.Item1, v => v.Item2);
+                .ToDictionary(k => k.Key, v => v.Item2);
             var clonedNodes = selection.Nodes.Select(x => (x.Key, (x.Value as Node).Clone()))
-                .ToDictionary(k => k.Item1, v => (INode)v.Item2);
+                .ToDictionary(k => k.Key, v => (INode)v.Item2);
 
             foreach (var (_, node) in clonedNodes)
             {

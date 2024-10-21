@@ -107,24 +107,14 @@ namespace TruckLib.ScsMap
         /// <returns>The amount of quad columns.</returns>
         private int CalculateQuadCols(StepSize stepSize, float length)
         {
-            int terrainSteps;
-            switch (stepSize)
+            var terrainSteps = stepSize switch
             {
-                case StepSize.Meters16:
-                    terrainSteps = 16;
-                    break;
-                case StepSize.Meters12:
-                    terrainSteps = 12;
-                    break;
-                case StepSize.Meters2:
-                    terrainSteps = 2;
-                    break;
-                case StepSize.Meters4:
-                default:
-                    terrainSteps = 4;
-                    break;
-            }
-
+                StepSize.Meters16 => 16,
+                StepSize.Meters12 => 12,
+                StepSize.Meters4 => 4,
+                StepSize.Meters2 => 2,
+                _ => 4,
+            };
             int cols = (int)(length / terrainSteps);
             return cols;
         }

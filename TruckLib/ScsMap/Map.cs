@@ -335,6 +335,7 @@ namespace TruckLib.ScsMap
         /// <returns>The newly created compound item.</returns>
         /// <exception cref="InvalidOperationException">Thrown if any of the map items or nodes
         /// are not parented by this map.</exception>
+        /// <exception cref="ArgumentException">Thrown if any of the map items is not an aux item.</exception>
         public Compound CompoundItems(IEnumerable<MapItem> items)
         {
             // Make sure everything checks out before moving the first item.

@@ -719,9 +719,9 @@ namespace TruckLib.ScsMap
                     .ForEach(f => f.Delete());
             }
 
-            var sectorItems = GetSectorItems();
-            var sectorNodes = GetSectorNodes();
-            foreach (var sectorCoord in sectorNodes.Keys)
+            var items = GetSectorItems();
+            var nodes = GetSectorNodes();
+            foreach (var sectorCoord in nodes.Keys)
             {
                 AddSector(sectorCoord);
             }
@@ -729,35 +729,39 @@ namespace TruckLib.ScsMap
 
             foreach (var (sectorCoord, sector) in Sectors)
             {
-                sectorItems.TryGetValue(sectorCoord, out var theItems);
-                theItems ??= [];
-                sectorNodes.TryGetValue(sectorCoord, out var theNodes);
-                theNodes ??= [];
-                if (theItems.Count > 0 || theNodes.Count > 0)
+                items.TryGetValue(sectorCoord, out var sectorItems);
+                sectorItems ??= [];
+                nodes.TryGetValue(sectorCoord, out var sectorNodes);
+                sectorNodes ??= [];
+                if (sectorItems.Count > 0 || sectorNodes.Count > 0)
                 {
                     Trace.WriteLine($"Writing sector {sector}");
                     sector.WriteDesc(GetSectorFilename(sectorCoord, sectorDirectory, Sector.DescExtension));
-                    SaveSector(sectorCoord, sectorDirectory, theItems, theNodes, visAreaShowObjectsChildren);
+                    var visAreaChildrenForThisSector = sectorItems
+                        .Where(item => visAreaShowObjectsChildren.Contains(item.Uid))
+                        .Select(item => item.Uid);
+                    SaveSector(sectorCoord, sectorDirectory, sectorItems, sectorNodes, 
+                        visAreaChildrenForThisSector);
                 }
             }
 
             var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");
             SaveMbd(mbdPath);
+        }
 
-            HashSet<ulong> GetVisAreaShowObjectsChildUids()
+        private HashSet<ulong> GetVisAreaShowObjectsChildUids()
+        {
+            var children = new HashSet<ulong>();
+            foreach (var (_, visArea) in MapItems.Where(
+                x => x.Value is VisibilityArea v &&
+                v.Behavior == VisibilityAreaBehavior.ShowObjects))
             {
-                var children = new HashSet<ulong>();
-                foreach (var (_, visArea) in MapItems.Where(
-                    x => x.Value is VisibilityArea v && 
-                    v.Behavior == VisibilityAreaBehavior.ShowObjects))
+                foreach (var child in (visArea as VisibilityArea).Children)
                 {
-                    foreach (var child in (visArea as VisibilityArea).Children)
-                    {
-                        children.Add(child.Uid);
-                    }
+                    children.Add(child.Uid);
                 }
-                return children;
             }
+            return children;
         }
 
         internal Dictionary<SectorCoordinate, List<MapItem>> GetSectorItems()
@@ -840,7 +844,7 @@ namespace TruckLib.ScsMap
         /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
         private void SaveSector(SectorCoordinate coord, string sectorDirectory, 
             List<MapItem> sectorItems, List<INode> sectorNodes,
-            HashSet<ulong> visAreaShowObjectsChildren)
+            IEnumerable<ulong> visAreaShowObjectsChildren)
         {
             WriteBase(GetSectorFilename(coord, sectorDirectory, Sector.BaseExtension), 
                 sectorItems, sectorNodes, visAreaShowObjectsChildren);
@@ -866,7 +870,7 @@ namespace TruckLib.ScsMap
         /// <param name="sectorNodes">A list of all nodes in this sector.</param>
         /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
         private void WriteBase(string path, List<MapItem> sectorItems,
-            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
+            List<INode> sectorNodes, IEnumerable<ulong> visAreaShowObjectsChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
@@ -884,7 +888,7 @@ namespace TruckLib.ScsMap
         /// <param name="sectorNodes">A list of all nodes in this sector.</param>
         /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
         private void WriteAux(string path, List<MapItem> sectorItems,
-            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
+            List<INode> sectorNodes, IEnumerable<ulong> visAreaShowObjectsChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
@@ -902,7 +906,7 @@ namespace TruckLib.ScsMap
         /// <param name="sectorNodes">A list of all nodes in this sector.</param>
         /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
         private void WriteSnd(string path, List<MapItem> sectorItems,
-            List<INode> sectorNodes, HashSet<ulong> visAreaShowObjectsChildren)
+            List<INode> sectorNodes, IEnumerable<ulong> visAreaShowObjectsChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
@@ -1008,26 +1012,15 @@ namespace TruckLib.ScsMap
         /// <param name="w">A BinaryWriter.</param>
         /// <param name="file">The item file which is being written.</param>
         /// <param name="visAreaShowObjectsChildren">UIDs of the map items which need to be written.</param>
-        private void WriteVisAreaChildren(BinaryWriter w, ItemFile file, HashSet<ulong> visAreaShowObjectsChildren)
+        private void WriteVisAreaChildren(BinaryWriter w, ItemFile file, IEnumerable<ulong> visAreaShowObjectsChildren)
         {
-            if (visAreaShowObjectsChildren.Count == 0)
-            {
-                w.Write(0L);
-                return;
-            }
+            List<ulong> uidsInFile = visAreaShowObjectsChildren
+                .Where(childUid => MapItems.TryGetValue(childUid, out var child) && child.ItemFile == file)
+                .Order()
+                .ToList();
 
-            var uids = new List<ulong>();
-            foreach (var childUid in visAreaShowObjectsChildren)
-            {
-                if (MapItems.TryGetValue(childUid, out var child) && child.ItemFile == file)
-                {
-                    uids.Add(childUid);
-                }
-            }
-            uids.Sort();
-
-            w.Write(uids.Count);
-            foreach (var childUid in uids)
+            w.Write(uidsInFile.Count);
+            foreach (var childUid in uidsInFile)
             {
                 w.Write(childUid);
             }

@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         public Curve Parent { get; init; }
 
-        private readonly List<INode> list = new();
+        private readonly List<INode> list = [];
 
         /// <summary>
         /// The maximum size of the list.
@@ -156,7 +156,7 @@ namespace TruckLib.ScsMap.Collections
             return list.GetEnumerator();
         }
 
-        private INode CreateNode(Vector3 position, Quaternion rotation)
+        private Node CreateNode(Vector3 position, Quaternion rotation)
         {
             var node = Parent.Node.Parent.AddNode(position, false);
             node.Rotation = rotation;

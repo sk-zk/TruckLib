@@ -18,7 +18,7 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         public FarModel Parent { get; init; }
 
-        private readonly List<FarModelData> list = new();
+        private readonly List<FarModelData> list = [];
 
         /// <summary>
         /// Instantiates an empty list.

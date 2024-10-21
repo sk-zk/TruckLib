@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap.Collections
 
         private IItemContainer container;
 
-        private readonly List<INode> list = new();
+        private readonly List<INode> list = [];
 
         /// <summary>
         /// Instantiates an empty list.

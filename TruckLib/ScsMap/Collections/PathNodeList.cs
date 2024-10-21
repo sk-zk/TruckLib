@@ -21,7 +21,7 @@ namespace TruckLib.ScsMap.Collections
 
         private IItemContainer container;
 
-        private readonly List<INode> nodes = new();
+        private readonly List<INode> nodes = [];
 
         /// <summary>
         /// Cached lengths of the path segments, if the parent is a <see cref="Mover"/> or <see cref="Walker"/>.
@@ -37,7 +37,7 @@ namespace TruckLib.ScsMap.Collections
         {
             Parent = parent;
             if (parent is IPathItemWithCachedLengths)
-                Lengths = new List<float>();
+                Lengths = [];
         }
 
         /// <inheritdoc/>

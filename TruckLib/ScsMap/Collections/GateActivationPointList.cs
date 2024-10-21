@@ -19,7 +19,7 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         public Gate Parent { get; init; }
 
-        private readonly List<GateActivationPoint> list = new();
+        private readonly List<GateActivationPoint> list = [];
 
         /// <summary>
         /// The maximum size of the list.

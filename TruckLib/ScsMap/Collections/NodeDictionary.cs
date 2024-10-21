@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap.Collections
     /// </summary>
     public class NodeDictionary : IDictionary<ulong, INode>
     {
-        private readonly Dictionary<ulong, INode> dictionary = new();
+        private readonly Dictionary<ulong, INode> dictionary = [];
         internal RBush<Node> Tree { get; } = new();
 
         public INode this[ulong key]

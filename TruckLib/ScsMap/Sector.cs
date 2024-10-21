@@ -36,11 +36,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Climate { get; set; } = "default";
 
-        /// <summary>
-        /// The header of this sector.
-        /// </summary>
-        private readonly Header header = new();
-
         // Always 2 in both ETS2 and ATS.
         private uint SectorDescVersion = 2;
 

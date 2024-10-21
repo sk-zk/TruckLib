@@ -270,10 +270,10 @@ namespace TruckLib.ScsMap
             base.Init();
             PrefabNodes = new PrefabNode[6].Select(h => new PrefabNode()).ToArray();
             Nodes = new List<INode>(2);
-            AdditionalParts = new List<Token>();
-            SlaveItems = new List<IMapItem>();
-            VegetationParts = new List<VegetationPart>();
-            VegetationSpheres = new List<VegetationSphere>();
+            AdditionalParts = [];
+            SlaveItems = [];
+            VegetationParts = [];
+            VegetationSpheres = [];
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Nodes = new List<INode>();
+            Nodes = [];
         }
 
         /// <summary>

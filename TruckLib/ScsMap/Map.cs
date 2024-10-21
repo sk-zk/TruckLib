@@ -44,18 +44,17 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Metadata of the map's sectors.
         /// </summary>
-        public Dictionary<SectorCoordinate, Sector> Sectors { get; set; } 
-            = new Dictionary<SectorCoordinate, Sector>();
+        public Dictionary<SectorCoordinate, Sector> Sectors { get; set; } = [];
 
         /// <summary>
         /// Contains the map's nodes.
         /// </summary>
-        public NodeDictionary Nodes { get; internal set; } = new();
+        public NodeDictionary Nodes { get; internal set; } = [];
 
         /// <summary>
         /// Contains the map's items.
         /// </summary>
-        public Dictionary<ulong, MapItem> MapItems { get; internal set; } = new();
+        public Dictionary<ulong, MapItem> MapItems { get; internal set; } = [];
 
         IDictionary<ulong, INode> IItemContainer.Nodes => Nodes;
 
@@ -248,8 +247,8 @@ namespace TruckLib.ScsMap
             List<INode> prefabNodes = null;
             if (item is PolylineItem poly)
             {
-                recalculatables = new();
-                prefabNodes = new();
+                recalculatables = [];
+                prefabNodes = [];
                 if (poly.BackwardItem is IRecalculatable bwRecalculatable)
                 {
                     recalculatables.Add(bwRecalculatable);
@@ -731,9 +730,9 @@ namespace TruckLib.ScsMap
             foreach (var (sectorCoord, sector) in Sectors)
             {
                 sectorItems.TryGetValue(sectorCoord, out var theItems);
-                theItems ??= new();
+                theItems ??= [];
                 sectorNodes.TryGetValue(sectorCoord, out var theNodes);
-                theNodes ??= new();
+                theNodes ??= [];
                 if (theItems.Count > 0 || theNodes.Count > 0)
                 {
                     Trace.WriteLine($"Writing sector {sector}");
@@ -770,7 +769,7 @@ namespace TruckLib.ScsMap
                 if (items.TryGetValue(sectorCoord, out var list))
                     list.Add(item);
                 else
-                    items.Add(sectorCoord, new List<MapItem>() { item });
+                    items.Add(sectorCoord, [item]);
             }
             return items;
         }
@@ -799,7 +798,7 @@ namespace TruckLib.ScsMap
                 if (nodes.TryGetValue(sectorCoord, out var list))
                     list.Add(node);
                 else
-                    nodes.Add(sectorCoord, new List<INode>() { node });
+                    nodes.Add(sectorCoord, [node]);
             }
             return nodes;
         }

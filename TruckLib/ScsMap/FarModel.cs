@@ -97,7 +97,7 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Models = new FarModelDataList(this);
-            Children = new List<IMapItem>();
+            Children = [];
         }
 
         /// <summary>

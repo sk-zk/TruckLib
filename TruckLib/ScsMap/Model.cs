@@ -188,7 +188,7 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Scale = new Vector3(1f, 1f, 1f);
-            AdditionalParts = new List<Token>();
+            AdditionalParts = [];
             TerrainColor = Color.White;
         }
 

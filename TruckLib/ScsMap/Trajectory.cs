@@ -103,9 +103,9 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             AccessRule = "_tj_default";
-            Rules = new List<TrajectoryRule>();
-            Checkpoints = new List<TrajectoryCheckpoint>();
-            Tags = new List<Token>();
+            Rules = [];
+            Checkpoints = [];
+            Tags = [];
         }
 
         /// <summary>

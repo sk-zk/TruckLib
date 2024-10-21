@@ -25,8 +25,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The overridden attributes of this object.
         /// </summary>
-        public List<ISignOverrideAttribute> Attributes { get; set; } 
-            = new List<ISignOverrideAttribute>();
+        public List<ISignOverrideAttribute> Attributes { get; set; } = [];
 
         /// <inheritdoc/>
         public void Deserialize(BinaryReader r, uint? version = null)

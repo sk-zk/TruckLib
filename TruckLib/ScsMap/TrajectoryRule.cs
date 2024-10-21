@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap
 
         public Token Rule { get; set; }
 
-        public List<float> RuleParameters { get; set; } = new List<float>();
+        public List<float> RuleParameters { get; set; } = [];
 
         public override string ToString()
         {
@@ -40,6 +40,5 @@ namespace TruckLib.ScsMap
                 w.Write(param);
             }
         }
-
     }
 }

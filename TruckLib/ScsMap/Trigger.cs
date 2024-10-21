@@ -118,8 +118,8 @@ namespace TruckLib.ScsMap
             PartialActivation = true;
             VehicleActivation = true;
             ConnectedTrailerActivation = true;
-            Tags = new List<Token>();
-            Actions = new List<TriggerAction>();
+            Tags = [];
+            Actions = [];
         }
 
         /// <summary>

@@ -15,8 +15,9 @@ namespace TruckLib.ScsMap
         /// Widths of terrain rows in meters. 
         /// <para>After row 15, every row is 100 meters wide.</para>
         /// </summary>
-        public static readonly int[] RowWidthSequence = new int[] { 1, 1, 1, 2, 6, 6, 10, 10, 10,
-                20, 40, 50, 50, 50, 100 };
+        public static readonly int[] RowWidthSequence = [ 
+            1, 1, 1, 2, 6, 6, 10, 10, 10, 20, 40, 50, 50, 50, 100 
+            ];
 
         private float size;
         /// <summary>

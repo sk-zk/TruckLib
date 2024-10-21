@@ -142,7 +142,7 @@ namespace TruckLib.ScsMap
             base.Init();
             RandomSeed = 1;
             Stretch = 1;
-            HeightOffsets = new List<float>();
+            HeightOffsets = [];
         }
 
         /// <summary>

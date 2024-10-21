@@ -293,7 +293,7 @@ namespace TruckLib.ScsMap
             CenterMaterialColor = Color.FromArgb(0xffffff);
             CenterVegetation = new CenterVegetation();
             CenterDetailVegetation = true;
-            VegetationSpheres = new List<VegetationSphere>();
+            VegetationSpheres = [];
             ShowInUiMap = true;
             AiVehicles = true;
             Boundary = true;
@@ -413,7 +413,7 @@ namespace TruckLib.ScsMap
             Right.Terrain.Size = rightTerrainSize;
             foreach (var side in new[] { Left, Right })
             {
-                side.Terrain.QuadData.BrushMaterials = new List<Material> { new Material("0") };
+                side.Terrain.QuadData.BrushMaterials = [new("0")];
                 side.Terrain.CalculateQuadGrid(Resolution, Length);
             }
         }

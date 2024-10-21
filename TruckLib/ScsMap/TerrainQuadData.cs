@@ -65,11 +65,11 @@ namespace TruckLib.ScsMap
 
         protected void Init()
         {
-            BrushMaterials = new List<Material> { new Material("0") };
-            BrushColors = new List<Color>() { Color.FromArgb(0, 255, 255, 255) };
-            Quads = new List<TerrainQuad>();
-            Offsets = new List<VertexData>();
-            Normals = new List<VertexData>();
+            BrushMaterials = [new("0")];
+            BrushColors = [Color.FromArgb(0, 255, 255, 255)];
+            Quads = [];
+            Offsets = [];
+            Normals = [];
         }
 
         public void Deserialize(BinaryReader r, uint? version = null)

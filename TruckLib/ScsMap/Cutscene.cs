@@ -60,8 +60,8 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Tags = new List<Token>();
-            Actions = new List<CutsceneAction>();
+            Tags = [];
+            Actions = [];
         }
 
         /// <summary>

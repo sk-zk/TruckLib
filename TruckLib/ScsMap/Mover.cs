@@ -210,7 +210,7 @@ namespace TruckLib.ScsMap
             ActiveDuringBadWeather = true;
             FollowDir = true;
             UseCurvedPath = true;
-            Tags = new List<Token>();
+            Tags = [];
             Speed = 1;
             Count = 1;
         }

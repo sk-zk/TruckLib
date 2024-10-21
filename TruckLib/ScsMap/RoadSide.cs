@@ -109,7 +109,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Unit names of enabled additional parts.
         /// </summary>
-        public List<Token> AdditionalParts { get; set; } = new List<Token>();
+        public List<Token> AdditionalParts { get; set; } = [];
 
         /// <summary>
         /// Edge model overrides on this side of the road.
@@ -150,8 +150,8 @@ namespace TruckLib.ScsMap
         protected void Init()
         {
             Terrain = new RoadTerrain();
-            EdgeOverrides = new List<EdgeOverride>();
-            VariantOverrides = new List<VariantOverride>();
+            EdgeOverrides = [];
+            VariantOverrides = [];
             DetailVegetation = true;
         }
 

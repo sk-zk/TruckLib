@@ -13,11 +13,11 @@ namespace TruckLib.ScsMap
     /// </summary>
     public abstract class ActionBase : IBinarySerializable
     {
-        public List<float> NumParams { get; set; } = new();
+        public List<float> NumParams { get; set; } = [];
 
-        public List<string> StringParams { get; set; } = new();
+        public List<string> StringParams { get; set; } = [];
 
-        public List<Token> TargetTags { get; set; } = new();
+        public List<Token> TargetTags { get; set; } = [];
 
         public float TargetRange { get; set; }
 

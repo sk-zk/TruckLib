@@ -39,7 +39,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Tags = new List<Token>();
+            Tags = [];
         }
 
         /// <summary>

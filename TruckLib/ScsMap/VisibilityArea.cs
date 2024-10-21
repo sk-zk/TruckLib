@@ -59,7 +59,7 @@ namespace TruckLib.ScsMap
             base.Init();
             Width = 20;
             Height = 20;
-            Children = new List<IMapItem>();
+            Children = [];
         }
 
         /// <inheritdoc/>

@@ -144,7 +144,7 @@ namespace TruckLib.ScsMap
             Right = new TerrainSide();
             Railings = new Railings();
             StepSize = StepSize.Meters4;
-            VegetationSpheres = new List<VegetationSphere>();
+            VegetationSpheres = [];
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace TruckLib.ScsMap
             Right.Terrain.Size = rightSize;
             foreach (var side in new[] { Left, Right })
             {
-                side.Terrain.QuadData.BrushMaterials = new List<Material> { new Material("0") };
+                side.Terrain.QuadData.BrushMaterials = [new(material)];
                 side.Terrain.CalculateQuadGrid(StepSize, Length);
             }
         }

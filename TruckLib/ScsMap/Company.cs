@@ -44,7 +44,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            SpawnPoints = new();
+            SpawnPoints = [];
         }
 
         /// <summary>

@@ -236,7 +236,7 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Look = "default";
-            HeightOffsets = new List<float>();
+            HeightOffsets = [];
             Stretch = 1f;
             Scale = 1f;
             TerrainColor = Color.White;

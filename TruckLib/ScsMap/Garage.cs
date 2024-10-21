@@ -46,7 +46,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            TrailerSpawnPoints = new List<INode>();
+            TrailerSpawnPoints = [];
         }
 
         /// <summary>

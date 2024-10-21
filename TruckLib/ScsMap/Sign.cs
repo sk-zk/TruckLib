@@ -113,7 +113,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            SignOverrides = new List<SignOverride>();
+            SignOverrides = [];
         }
 
         /// <summary>

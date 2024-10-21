@@ -60,9 +60,9 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Tags = new List<Token>();
-            TrackPoints = new List<INode>();
-            Keyframes = new List<Keyframe>();
+            Tags = [];
+            TrackPoints = [];
+            Keyframes = [];
             CameraSpeed = 1f;
         }
 

@@ -75,10 +75,7 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item
-            if (MapItems.ContainsKey(item.Uid))
-            {
-                MapItems.Remove(item.Uid);
-            }
+            MapItems.Remove(item.Uid);
 
             // remove item from its nodes, 
             // and delete them if they're orphaned now
@@ -106,10 +103,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public void Delete(INode node)
         {
-            if (Nodes.ContainsKey(node.Uid))
-            {
-                Nodes.Remove(node.Uid);
-            }
+            Nodes.Remove(node.Uid);
 
             if (node.ForwardItem is MapItem fw)
             {
@@ -154,7 +148,7 @@ namespace TruckLib.ScsMap
 
         private void ReadNodes(BinaryReader r, uint nodeCount)
         {
-            Nodes = new();
+            Nodes = [];
             for (int i = 0; i < nodeCount; i++)
             {
                 var node = new Node(false);
@@ -169,7 +163,7 @@ namespace TruckLib.ScsMap
 
         private void ReadItems(BinaryReader r, uint itemCount)
         {
-            MapItems = new();
+            MapItems = [];
             for (int i = 0; i < itemCount; i++)
             {
                 var itemType = (ItemType)r.ReadInt32();

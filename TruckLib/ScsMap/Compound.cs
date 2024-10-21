@@ -102,8 +102,8 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            MapItems = new();
-            Nodes = new();
+            MapItems = [];
+            Nodes = [];
         }
 
         /// <summary>
@@ -168,10 +168,7 @@ namespace TruckLib.ScsMap
         public void Delete(MapItem item)
         {
             // delete item from compound
-            if (MapItems.ContainsKey(item.Uid))
-            {
-                MapItems.Remove(item.Uid);
-            }
+            MapItems.Remove(item.Uid);
 
             // remove item from its nodes, 
             // and delete them if they're orphaned now
@@ -199,10 +196,7 @@ namespace TruckLib.ScsMap
         /// <param name="node">The node to delete.</param>
         public void Delete(INode node)
         {
-            if (Nodes.ContainsKey(node.Uid))
-            {
-                Nodes.Remove(node.Uid);
-            }
+            Nodes.Remove(node.Uid);
 
             if (node.ForwardItem is MapItem fw)
             {

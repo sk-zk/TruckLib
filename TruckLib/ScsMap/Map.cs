@@ -747,10 +747,11 @@ namespace TruckLib.ScsMap
             HashSet<ulong> GetVisAreaShowObjectsChildUids()
             {
                 var children = new HashSet<ulong>();
-                foreach (var visArea in MapItems.OfType<VisibilityArea>()
-                    .Where(x => x.Behavior == VisibilityAreaBehavior.ShowObjects))
+                foreach (var (_, visArea) in MapItems.Where(
+                    x => x.Value is VisibilityArea v && 
+                    v.Behavior == VisibilityAreaBehavior.ShowObjects))
                 {
-                    foreach (var child in visArea.Children)
+                    foreach (var child in (visArea as VisibilityArea).Children)
                     {
                         children.Add(child.Uid);
                     }

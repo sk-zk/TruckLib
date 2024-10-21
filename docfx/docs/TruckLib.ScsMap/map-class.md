@@ -50,7 +50,7 @@ var allMovers = map.MapItems.Where(x => x.Value is Mover);
 Do not modify this dictionary directly &ndash; see "Adding and deleting map items" for the intended way to do that.
 
 ## Nodes
-Likewise, the [`Nodes`](xref:TruckLib.ScsMap.Map.Nodes) property is a dictionary plus R-tree containing all nodes in the map.
+Similarly, the [`Nodes`](xref:TruckLib.ScsMap.Map.Nodes) property is a dictionary plus R-tree containing all nodes in the map.
 
 You can retrieve nodes by UID just like any dictionary:
 

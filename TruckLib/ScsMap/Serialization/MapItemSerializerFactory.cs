@@ -6,8 +6,7 @@ namespace TruckLib.ScsMap.Serialization
 {
     internal class MapItemSerializerFactory
     {
-        private static readonly Dictionary<ItemType, MapItemSerializer> cache
-            = new Dictionary<ItemType, MapItemSerializer>();
+        private static readonly Dictionary<ItemType, MapItemSerializer> cache = [];
 
         public static MapItemSerializer Get(ItemType type)
         {

@@ -242,7 +242,7 @@ namespace TruckLib.ScsMap.Collections
             return nodes.GetEnumerator();
         }
 
-        private INode CreateNode(Vector3 position, bool isIndex0 = false)
+        private Node CreateNode(Vector3 position, bool isIndex0 = false)
         {
             container ??= Parent.Parent;
             var node = container.AddNode(position, isIndex0);

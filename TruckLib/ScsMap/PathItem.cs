@@ -41,7 +41,7 @@ namespace TruckLib.ScsMap
         {
             var item = new T();
             item.Parent = map;
-            item.CreateNodes(map, positions);
+            item.CreateNodes(positions);
             map.AddItem(item);
             return item;
         }
@@ -83,9 +83,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Creates map nodes for this item. 
         /// </summary>
-        /// <param name="map">The map.</param>
         /// <param name="positions">The positions of the nodes.</param>
-        protected void CreateNodes(IItemContainer map, IList<Vector3> positions)
+        protected void CreateNodes(IList<Vector3> positions)
         {
             if (Nodes.Count != 0)
                 throw new InvalidOperationException("Map item already has nodes.");
@@ -95,7 +94,6 @@ namespace TruckLib.ScsMap
 
             Recalculate();
         }
-
 
         /// <inheritdoc/>
         public virtual void Recalculate()

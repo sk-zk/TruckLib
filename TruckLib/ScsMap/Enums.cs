@@ -289,14 +289,30 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Fog behavior in a <see cref="EnvironmentArea">No Weather Area</see>.
+    /// Fog behavior in a <see cref="EnvironmentArea">Environment Area</see>.
     /// </summary>
     public enum FogMask
     {
         None = 0,
+
+        /// <summary>
+        /// No fog falloff.
+        /// </summary>
         Indoor = 1,
+
+        /// <summary>
+        /// Short directional falloff.
+        /// </summary>
         Tunnel = 2,
+
+        /// <summary>
+        /// Long directional falloff.
+        /// </summary>
         Overpass = 3,
+
+        /// <summary>
+        /// Long bidirectional falloff.
+        /// </summary>
         OpenArea = 4,
     }
 

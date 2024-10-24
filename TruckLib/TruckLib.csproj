@@ -12,7 +12,7 @@
 		<RepositoryUrl>https://github.com/sk-zk/TruckLib</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Description> create &amp; modify ETS2 / ATS maps</Description>
+		<Description>Create and modify ETS2 / ATS maps</Description>
 		<PackageProjectUrl>https://github.com/sk-zk/TruckLib</PackageProjectUrl>
 	</PropertyGroup>
 

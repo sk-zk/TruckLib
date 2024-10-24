@@ -8,6 +8,11 @@ The currently supported [map format version](https://github.com/sk-zk/map-docs/w
 
 (This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later, and breaking changes will happen on occasion.)
 
+## Install
+```
+dotnet add package TruckLib
+```
+
 ## Namespaces
 ### TruckLib
 **TruckLib.ScsMap**:  

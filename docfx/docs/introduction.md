@@ -2,11 +2,13 @@
 
 This is the documentation for [**TruckLib**](https://github.com/sk-zk/TruckLib), a library for the map format of Euro Truck Simulator 2 and American Truck Simulator.
 
+## Install
+```
+dotnet add package TruckLib
+```
+
 ## Getting started
 To get started with the library, check out the [Creating and modifying maps](~/docs/TruckLib.ScsMap/map-class.md) section and the sample code.
-
-There are no builds or NuGet packages at this time, so you will need to clone the repo, add the project(s) to your solution,
-and add them as project dependency to your project.
 
 ## Supported formats
 

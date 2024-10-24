@@ -38,7 +38,7 @@
 		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 		<PackageReference Include="TruckLib.Core" Version="0.1.0" />
-		<PackageReference Include="TruckLib.HashFs" Version="0.1.0" />
+		<PackageReference Include="TruckLib.HashFs" Version="0.1.1" />
 		<PackageReference Include="TruckLib.Models" Version="0.1.0" />
 		<PackageReference Include="TruckLib.Sii" Version="0.1.0" />
 	</ItemGroup>

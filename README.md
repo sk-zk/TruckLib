@@ -4,7 +4,7 @@ without requiring the official editor.
 In addition to the ability to de/serialize the .mbd map format, the library also handles various mapping-adjacent tasks,
 such as reading prefab descriptors or .sii unit files.
 
-The currently supported [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) is **901** (game version **1.51/1.52**).
+The currently supported [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) is **901** (game version **1.51&ndash;1.53 beta**).
 
 (This project is pretty much a perpetual alpha, so you'll probably run into a few issues sooner or later, and breaking changes will happen on occasion.)
 

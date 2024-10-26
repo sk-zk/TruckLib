@@ -13,8 +13,14 @@ namespace TruckLib.ScsMap
     /// </summary>
     public interface IItemContainer
     {
+        /// <summary>
+        /// The nodes parented by this container.
+        /// </summary>
         IDictionary<ulong, INode> Nodes { get; }
 
+        /// <summary>
+        /// The map items parented by this container.
+        /// </summary>
         Dictionary<ulong, MapItem> MapItems { get; }
 
         /// <summary>

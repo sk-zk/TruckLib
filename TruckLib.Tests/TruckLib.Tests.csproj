@@ -32,34 +32,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\ModelSerializerTest\sec+0000+0000.aux">
+    <None Update="Data\ModelSerializerTest\modeltest.mbd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ModelSerializerTest\sec+0000+0000.base">
+    <None Update="Data\ModelSerializerTest\modeltest\sec+0000+0000.aux">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ModelSerializerTest\sec+0000+0000.data">
+    <None Update="Data\ModelSerializerTest\modeltest\sec+0000+0000.base">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ModelSerializerTest\sec+0000+0000.desc">
+    <None Update="Data\ModelSerializerTest\modeltest\sec+0000+0000.data">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ModelSerializerTest\test.mbd">
+    <None Update="Data\ModelSerializerTest\modeltest\sec+0000+0000.desc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.aux">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.base">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.data">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.desc">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\ModelSerializerTest\test\sec+0000+0000.layer">
+    <None Update="Data\ModelSerializerTest\modeltest\sec+0000+0000.layer">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Data\PrefabTest\blkw_r1_x_r1_narrow_tmpl.ppd">

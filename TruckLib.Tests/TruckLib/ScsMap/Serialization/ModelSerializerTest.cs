@@ -10,16 +10,14 @@ using TruckLib.ScsMap.Serialization;
 namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
 {
     public class ModelSerializerTest
-    {
-        /*
-        private readonly Sector sector;
+    {   
+        private readonly Map map;
         private readonly Model model;
 
         public ModelSerializerTest()
         {
-            sector = new Sector();
-            sector.ReadSector("Data/ModelSerializerTest/sec+0000+0000.base");
-            model = (Model)sector.MapItems.First().Value;
+            map = Map.Open("Data/ModelSerializerTest/modeltest.mbd");
+            model = (Model)map.MapItems.First().Value;
         }
 
         [Fact]
@@ -37,9 +35,9 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
             Assert.False(model.Shadows);
             Assert.True(model.WaterReflection);
             Assert.True(model.Collision);
-            Assert.Equal((Nibble)2, model.ColorVariant);
+            Assert.Equal((Nibble)1, model.ColorVariant);
 
-            Assert.Equal(400, model.ViewDistance);
+            Assert.Equal(720, model.ViewDistance);
         }
 
         [Fact]
@@ -56,6 +54,5 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
             var clonedModel = (Model)serializer.Deserialize(reader);
             TestProperties(clonedModel);
         }
-        */
     }
 }

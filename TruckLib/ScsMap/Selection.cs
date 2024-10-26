@@ -32,6 +32,47 @@ namespace TruckLib.ScsMap
         IDictionary<ulong, INode> IItemContainer.Nodes => Nodes;
 
         /// <summary>
+        /// Reads a selection file from disk.
+        /// </summary>
+        /// <param name="sbdPath">Path to the .sbd file.</param>
+        /// <returns>A Selection object.</returns>
+        public static Selection Open(string sbdPath)
+        {
+            return Open(sbdPath, new DiskFileSystem());
+        }
+
+        /// <summary>
+        /// Reads a selection file from disk.
+        /// </summary>
+        /// <param name="sbdPath">Path to the .sbd file.</param>
+        /// <param name="fs">The file system to load the map from. This accepts 
+        /// a <see cref="TruckLib.HashFs.IHashFsReader">HashFS reader</see>.</param>
+        /// <returns>A Selection object.</returns>
+        public static Selection Open(string sbdPath, IFileSystem fs)
+        {
+            var s = new Selection();
+            using var fileStream = fs.Open(sbdPath);
+            using var r = new BinaryReader(fileStream);
+
+            s.header = new Header();
+            s.header.Deserialize(r);
+
+            s.Origin = new Vector3(r.ReadInt32() / 256f, r.ReadInt32() / 256f, r.ReadInt32() / 256f);
+            s.KdopBounds = new KdopBounds();
+            MapItemSerializer.ReadKdopBounds(r, s.KdopBounds);
+
+            var itemCount = r.ReadUInt32();
+            var nodeCount = r.ReadUInt32();
+
+            s.ReadItems(r, itemCount);
+            s.ReadNodes(r, nodeCount);
+
+            s.UpdateInternalReferences();
+
+            return s;
+        }
+
+        /// <summary>
         /// Adds a node to the selection.
         /// </summary>
         /// <inheritdoc/>
@@ -118,34 +159,6 @@ namespace TruckLib.ScsMap
             }
         }
 
-        /// <summary>
-        /// Reads a selection file from disk.
-        /// </summary>
-        /// <param name="sbdPath">Path to the .sbd file.</param>
-        /// <returns>A Selection object.</returns>
-        public static Selection Open(string sbdPath)
-        {
-            var s = new Selection();
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(sbdPath)));
-
-            s.header = new Header();
-            s.header.Deserialize(r);
-
-            s.Origin = new Vector3(r.ReadInt32() / 256f, r.ReadInt32() / 256f, r.ReadInt32() / 256f);
-            s.KdopBounds = new KdopBounds();
-            MapItemSerializer.ReadKdopBounds(r, s.KdopBounds);
-
-            var itemCount = r.ReadUInt32();
-            var nodeCount = r.ReadUInt32();
-
-            s.ReadItems(r, itemCount);
-            s.ReadNodes(r, nodeCount);
-
-            s.UpdateInternalReferences();
-
-            return s;
-        }
-
         private void ReadNodes(BinaryReader r, uint nodeCount)
         {
             Nodes = [];
@@ -199,6 +212,5 @@ namespace TruckLib.ScsMap
                 }
             }
         }
-
     }
 }

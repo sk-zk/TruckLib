@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using TruckLib;
+using TruckLib.HashFs;
 using TruckLib.ScsMap.Collections;
 using TruckLib.ScsMap.Serialization;
 
@@ -128,15 +129,28 @@ namespace TruckLib.ScsMap
         /// <returns>A Map object.</returns>
         public static Map Open(string mbdPath, IList<SectorCoordinate> sectors = null)
         {
+            return Open(mbdPath, new DiskFileSystem(), sectors);
+        }
+
+        /// <summary>
+        /// Opens a map.
+        /// </summary>
+        /// <param name="mbdPath">Path to the .mbd file of the map.</param>
+        /// <param name="fs">The file system to load the map from. This accepts 
+        /// a <see cref="TruckLib.HashFs.IHashFsReader">HashFS reader</see>.</param>
+        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        /// <returns>A Map object.</returns>
+        public static Map Open(string mbdPath, IFileSystem fs, IList<SectorCoordinate> sectors = null)
+        {
             Trace.WriteLine("Loading map " + mbdPath);
             var name = Path.GetFileNameWithoutExtension(mbdPath);
-            var mapDirectory = Directory.GetParent(mbdPath).FullName;
-            var sectorDirectory = Path.Combine(mapDirectory, name);
+            var mapDirectory = fs.GetParent(mbdPath);
+            var sectorDirectory = $"{mapDirectory}{fs.DirectorySeparator}{name}";
 
             var map = new Map(name);
-            map.ReadMbd(mbdPath);
+            map.ReadMbd(mbdPath, fs);
             Trace.WriteLine("Parsing sectors");
-            map.ReadSectors(sectorDirectory, sectors);
+            map.ReadSectors(sectorDirectory, fs, sectors);
 
             Trace.WriteLine("Updating references");
             map.UpdateReferences();
@@ -441,9 +455,10 @@ namespace TruckLib.ScsMap
         /// Reads the .mbd file of a map.
         /// </summary>
         /// <param name="mbdPath">The path to the .mbd file.</param>
-        private void ReadMbd(string mbdPath)
+        private void ReadMbd(string mbdPath, IFileSystem fs)
         {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(mbdPath)));
+            using var fileStream = fs.Open(mbdPath);
+            using var r = new BinaryReader(fileStream);
 
             var header = new Header();
             header.Deserialize(r);
@@ -467,9 +482,9 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="mapDirectory">The main map directory.</param>
         /// <param name="sectors">If set, only the given sectors will be loaded.</param>
-        private void ReadSectors(string mapDirectory, IList<SectorCoordinate> sectors = null)
+        private void ReadSectors(string mapDirectory, IFileSystem fs, IList<SectorCoordinate> sectors = null)
         {
-            var baseFiles = Directory.GetFiles(mapDirectory, "*.base");
+            var baseFiles = fs.GetFiles(mapDirectory).Where(f => Path.GetExtension(f) == ".base");
 
             // create itemless instances for all the sectors first;
             // this is so we have references to the sectors
@@ -490,39 +505,8 @@ namespace TruckLib.ScsMap
             foreach (var (_, sector) in Sectors)
             {
                 Trace.WriteLine($"Reading sector {sector}");
-                sector.ReadDesc(Path.ChangeExtension(sector.BasePath, Sector.DescExtension));
-                ReadSector(sector.BasePath);
-            }
-        }
-
-        /// <summary>
-        /// Reads the .layer file of the sector.
-        /// </summary>
-        /// <param name="path">The .layer file of the sector.</param>
-        /// <exception cref="KeyNotFoundException"></exception>
-        private void ReadLayer(string path)
-        {
-            if (!File.Exists(path))
-                return;
-
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
-
-            var header = new Header();
-            header.Deserialize(r);
-
-            while (r.BaseStream.Position < r.BaseStream.Length)
-            {
-                var uid = r.ReadUInt64();
-                if (uid == EofMarker)
-                    break;
-
-                if (!MapItems.TryGetValue(uid, out MapItem item))
-                {
-                    throw new KeyNotFoundException($"{ToString()}.{Sector.LayerExtension} contains " +
-                        $"unknown UID {uid} - can't continue.");
-                }
-                var layer = r.ReadByte();
-                item.Layer = layer;
+                sector.ReadDesc(Path.ChangeExtension(sector.BasePath, Sector.DescExtension), fs);
+                ReadSector(sector.BasePath, fs);
             }
         }
 
@@ -531,22 +515,26 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="basePath">The path to the .base file of the sector. The paths of the other
         /// sector files will be derived automatically.</param>
-        private void ReadSector(string basePath)
+        /// <param name="fs">The file system to load the sector files from.</param>
+        private void ReadSector(string basePath, IFileSystem fs)
         {
-            ReadBase(basePath);
-            ReadData(Path.ChangeExtension(basePath, Sector.DataExtension));
-            ReadAux(Path.ChangeExtension(basePath, Sector.AuxExtenstion));
-            ReadSnd(Path.ChangeExtension(basePath, Sector.SndExtension));
-            ReadLayer(Path.ChangeExtension(basePath, Sector.LayerExtension));
+            ReadBase(basePath, fs);
+            ReadData(Path.ChangeExtension(basePath, Sector.DataExtension), fs);
+            ReadAux(Path.ChangeExtension(basePath, Sector.AuxExtenstion), fs);
+            ReadSnd(Path.ChangeExtension(basePath, Sector.SndExtension), fs);
+            ReadLayer(Path.ChangeExtension(basePath, Sector.LayerExtension), fs);
         }
 
         /// <summary>
         /// Reads the .base file of the sector.
         /// </summary>
         /// <param name="path">The .base file of the sector.</param>
-        private void ReadBase(string path)
+        /// <param name="fs">The file system to load the file from.</param>
+        private void ReadBase(string path, IFileSystem fs)
         {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+            using var fileStream = fs.Open(path);
+            using var r = new BinaryReader(fileStream);
+
             header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
@@ -558,9 +546,12 @@ namespace TruckLib.ScsMap
         /// Reads the .aux file of the sector.
         /// </summary>
         /// <param name="path">The .aux file of the sector.</param>
-        private void ReadAux(string path)
+        /// <param name="fs">The file system to load the file from.</param>
+        private void ReadAux(string path, IFileSystem fs)
         {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+            using var fileStream = fs.Open(path);
+            using var r = new BinaryReader(fileStream); 
+
             var header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Aux);
@@ -572,9 +563,11 @@ namespace TruckLib.ScsMap
         /// Reads the .data file of the sector.
         /// </summary>
         /// <param name="path">The .data file of the sector.</param>
-        private void ReadData(string path)
+        /// <param name="fs">The file system to load the file from.</param>
+        private void ReadData(string path, IFileSystem fs)
         {
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+            using var fileStream = fs.Open(path);
+            using var r = new BinaryReader(fileStream);
 
             // Header
             var header = new Header();
@@ -601,17 +594,53 @@ namespace TruckLib.ScsMap
         /// Reads the .snd file of the sector.
         /// </summary>
         /// <param name="path">The .snd file of the sector.</param>
-        private void ReadSnd(string path)
+        /// <param name="fs">The file system to load the file from.</param>
+        private void ReadSnd(string path, IFileSystem fs)
         {
-            if (!File.Exists(path))
+            if (!fs.FileExists(path))
                 return;
 
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+            using var fileStream = fs.Open(path);
+            using var r = new BinaryReader(fileStream);
+
             var header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Snd);
             ReadNodes(r);
             ReadVisArea(r);
+        }
+
+        /// <summary>
+        /// Reads the .layer file of the sector.
+        /// </summary>
+        /// <param name="path">The .layer file of the sector.</param>
+        /// <param name="fs">The file system to load the file from.</param>
+        /// <exception cref="KeyNotFoundException"></exception>
+        private void ReadLayer(string path, IFileSystem fs)
+        {
+            if (!fs.FileExists(path))
+                return;
+
+            using var fileStream = fs.Open(path);
+            using var r = new BinaryReader(fileStream);
+
+            var header = new Header();
+            header.Deserialize(r);
+
+            while (r.BaseStream.Position < r.BaseStream.Length)
+            {
+                var uid = r.ReadUInt64();
+                if (uid == EofMarker)
+                    break;
+
+                if (!MapItems.TryGetValue(uid, out MapItem item))
+                {
+                    throw new KeyNotFoundException($"{ToString()}.{Sector.LayerExtension} contains " +
+                        $"unknown UID {uid} - can't continue.");
+                }
+                var layer = r.ReadByte();
+                item.Layer = layer;
+            }
         }
 
         /// <summary>

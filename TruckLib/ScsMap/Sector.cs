@@ -76,7 +76,7 @@ namespace TruckLib.ScsMap
         /// Reads the .desc file of the sector.
         /// </summary>
         /// <param name="path">The .desc file of the sector.</param>
-        internal void ReadDesc(string path)
+        internal void ReadDesc(string path, IFileSystem fs)
         {
             // TODO: 
             // - figure out if there are any desc flags (ets2 & ats 
@@ -85,7 +85,8 @@ namespace TruckLib.ScsMap
             //   they work, because they seem to relate to items
             //   at the borders of the sector
 
-            using var r = new BinaryReader(new MemoryStream(File.ReadAllBytes(path)));
+            using var fileStream = fs.Open(path);
+            using var r = new BinaryReader(fileStream);
 
             SectorDescVersion = r.ReadUInt32();
 

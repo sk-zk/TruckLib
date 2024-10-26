@@ -35,6 +35,9 @@
     <None Update="Data\ModelSerializerTest\modeltest.mbd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\ModelSerializerTest\modeltest.scs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Data\ModelSerializerTest\modeltest\sec+0000+0000.aux">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

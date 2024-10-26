@@ -13,8 +13,10 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Selection : IItemContainer
     {
-        private Header header;
-
+        /// <summary>
+        /// The origin point of the items, which the official editor will subtract from
+        /// all node positions upon import. This is typically the center of the nodes.
+        /// </summary>
         public Vector3 Origin { get; set; }
 
         protected KdopBounds KdopBounds;
@@ -29,7 +31,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Dictionary<ulong, INode> Nodes { get; set; }
 
+        /// <inheritdoc/>
         IDictionary<ulong, INode> IItemContainer.Nodes => Nodes;
+
+        private Header header;
 
         /// <summary>
         /// Reads a selection file from disk.
@@ -53,23 +58,30 @@ namespace TruckLib.ScsMap
             var s = new Selection();
             using var fileStream = fs.Open(sbdPath);
             using var r = new BinaryReader(fileStream);
+            s.ReadSbd(r);
+            return s;
+        }
 
-            s.header = new Header();
-            s.header.Deserialize(r);
+        private void ReadSbd(BinaryReader r)
+        {
+            header = new Header();
+            header.Deserialize(r);
 
-            s.Origin = new Vector3(r.ReadInt32() / 256f, r.ReadInt32() / 256f, r.ReadInt32() / 256f);
-            s.KdopBounds = new KdopBounds();
-            MapItemSerializer.ReadKdopBounds(r, s.KdopBounds);
+            const float fixedPointFactor = 256f;
+            Origin = new Vector3(
+                r.ReadInt32() / fixedPointFactor,
+                r.ReadInt32() / fixedPointFactor,
+                r.ReadInt32() / fixedPointFactor);
+            KdopBounds = new KdopBounds();
+            MapItemSerializer.ReadKdopBounds(r, KdopBounds);
 
             var itemCount = r.ReadUInt32();
             var nodeCount = r.ReadUInt32();
 
-            s.ReadItems(r, itemCount);
-            s.ReadNodes(r, nodeCount);
+            ReadItems(r, itemCount);
+            ReadNodes(r, nodeCount);
 
-            s.UpdateInternalReferences();
-
-            return s;
+            UpdateInternalReferences();
         }
 
         /// <summary>

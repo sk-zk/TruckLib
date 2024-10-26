@@ -59,6 +59,12 @@
     <None Update="Data\PrefabTest\car_dealer_01_fr.ppd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\SelectionSerializerTest\selectiontest.sbd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\SelectionSerializerTest\selectiontest.scs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

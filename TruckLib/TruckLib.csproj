@@ -6,7 +6,7 @@
 		<Nullable>disable</Nullable>
 		<RootNamespace>TruckLib</RootNamespace>
 		<Authors>skzk</Authors>
-		<Version>0.1.0.0</Version>
+		<Version>0.1.1.0</Version>
 		<Title>TruckLib</Title>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/sk-zk/TruckLib</RepositoryUrl>

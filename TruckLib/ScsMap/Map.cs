@@ -426,27 +426,38 @@ namespace TruckLib.ScsMap
         /// <param name="position">The point relative to which the items will be inserted.</param>
         public void Import(Selection selection, Vector3 position)
         {
-            // deep cloning everything the lazy way
-
+            // 1) deep cloning everything the lazy way
             var clonedItems = selection.MapItems.Select(x => (x.Key, x.Value.CloneItem()))
                 .ToDictionary(k => k.Key, v => v.Item2);
             var clonedNodes = selection.Nodes.Select(x => (x.Key, (x.Value as Node).Clone()))
                 .ToDictionary(k => k.Key, v => (INode)v.Item2);
 
-            foreach (var (_, node) in clonedNodes)
+            foreach (var node in clonedNodes.Values)
             {
                 node.Position += position - selection.Origin;
                 node.UpdateItemReferences(clonedItems);
                 var coord = GetSectorOfCoordinate(node.Position);
                 AddSector(coord);
-                Nodes.Add(node.Uid, node);
             }
 
-            foreach (var (_, item) in clonedItems)
+            foreach (var item in clonedItems.Values)
             {
                 item.UpdateNodeReferences(clonedNodes);
                 if (item is IItemReferences itemRefs)
                     itemRefs.UpdateItemReferences(clonedItems);
+            }
+
+            // 2) change UIDs (to allow importing the same selection
+            // multiple times), then add the nodes and items to the map
+            foreach (var node in clonedNodes.Values)
+            {
+                node.Uid = Utils.GenerateUuid();
+                Nodes.Add(node.Uid, node);
+            }
+
+            foreach (var item in clonedItems.Values)
+            {
+                item.Uid = Utils.GenerateUuid();
                 (this as IItemContainer).AddItem(item);
             }
         }

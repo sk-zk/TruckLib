@@ -178,6 +178,15 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Sets the <see cref="Origin">Origin</see> of the selection to the
+        /// center of its nodes.
+        /// </summary>
+        public void CenterOrigin()
+        {
+            Origin = MathEx.GetCenter(Nodes.Values);
+        }
+
         private void ReadNodes(BinaryReader r, uint nodeCount)
         {
             Nodes = [];

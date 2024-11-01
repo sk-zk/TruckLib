@@ -43,6 +43,7 @@ namespace TruckLib.ScsMap
             MapItems = [];
             KdopBounds = new();
         }
+
         /// <summary>
         /// Reads a selection file from disk.
         /// </summary>
@@ -69,12 +70,13 @@ namespace TruckLib.ScsMap
             return s;
         }
 
+        const float fixedPointFactor = 256f;
+
         private void ReadSbd(BinaryReader r)
         {
             header = new Header();
             header.Deserialize(r);
 
-            const float fixedPointFactor = 256f;
             Origin = new Vector3(
                 r.ReadInt32() / fixedPointFactor,
                 r.ReadInt32() / fixedPointFactor,
@@ -89,6 +91,43 @@ namespace TruckLib.ScsMap
             ReadNodes(r, nodeCount);
 
             UpdateInternalReferences();
+        }
+
+        /// <summary>
+        /// Saves the selection in binary format.
+        /// </summary>
+        /// <param name="sbdPath">The output path.</param>
+        public void Save(string sbdPath)
+        {
+            using var fs = new FileStream(sbdPath, FileMode.Create);
+            using var w = new BinaryWriter(fs);
+
+            Serialize(w);
+        }
+
+        private void Serialize(BinaryWriter w)
+        {
+            header.Serialize(w);
+
+            w.Write((int)(Origin.X * fixedPointFactor));
+            w.Write((int)(Origin.Y * fixedPointFactor));
+            w.Write((int)(Origin.Z * fixedPointFactor));
+            MapItemSerializer.WriteKdopBounds(w, KdopBounds.Minimums, KdopBounds.Maximums);
+
+            w.Write(MapItems.Count);
+            w.Write(Nodes.Count);
+
+            foreach (var (_, item) in MapItems)
+            {
+                w.Write((int)item.ItemType);
+                var serializer = MapItemSerializerFactory.Get(item.ItemType);
+                serializer.Serialize(w, item);
+            }
+
+            foreach (var (_, node) in Nodes)
+            {
+                node.Serialize(w);
+            }
         }
 
         /// <summary>

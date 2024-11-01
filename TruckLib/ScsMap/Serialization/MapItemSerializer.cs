@@ -52,12 +52,19 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void WriteKdopBounds(BinaryWriter w, MapItem item)
         {
-            foreach (var arr in new float[][] { item.Kdop.Minimums, item.Kdop.Maximums })
+            WriteKdopBounds(w, item.Kdop.Minimums, item.Kdop.Maximums);
+        }
+
+        public static void WriteKdopBounds(BinaryWriter w, float[] minimums, float[] maximums)
+        {
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 5; i++)
-                {
-                    w.Write(arr[i]);
-                }
+                w.Write(minimums[i]);
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                w.Write(maximums[i]);
             }
         }
 

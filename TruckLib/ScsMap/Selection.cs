@@ -36,6 +36,13 @@ namespace TruckLib.ScsMap
 
         private Header header;
 
+        public Selection()
+        {
+            header = new();
+            Nodes = [];
+            MapItems = [];
+            KdopBounds = new();
+        }
         /// <summary>
         /// Reads a selection file from disk.
         /// </summary>

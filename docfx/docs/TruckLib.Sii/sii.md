@@ -23,7 +23,18 @@ of the included files are relative to. (`Open` resolves this automatically.)
 SiiFile sii = SiiFile.Load(siiStr, "/path/where/included/files/are/located");
 ```
 
-If an included file does not exist, `FileNotFoundException` is thrown.
+If an included file does not exist, `FileNotFoundException` is thrown unless the `ignoreMissingIncludes` parameter is set to true.
+
+There are additional overloads which allow loading a .sii file directly from a .scs file using a
+[`IHashFsReader`](~/docs/TruckLib.HashFs/hashfs.md): 
+
+```cs
+using TruckLib.HashFs;
+using TruckLib.Sii;
+
+IHashFsReader reader = HashFsReader.Open("def.scs");
+SiiFile sii = SiiFile.Open("/def/country.sii", reader);
+```
 
 ### Data types
 * Numbers which have a decimal component are parsed to `float`; numbers without will be the smallest of

@@ -23,6 +23,17 @@ Map map = Map.Open(@"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\ext
 If you would like to load specific sectors only, use the optional `sectors` parameter.
 It expects a list or array of [sector coordinates](xref:TruckLib.ScsMap.SectorCoordinate).
 
+There is an additional overload which allows loading a map directly from a .scs file using a
+[`IHashFsReader`](~/docs/TruckLib.HashFs/hashfs.md): 
+
+```cs
+using TruckLib.HashFs;
+using TruckLib.ScsMap;
+
+IHashFsReader reader = HashFsReader.Open("base_map.scs");
+Map map = Map.Open("/map/europe.mbd", reader);
+```
+
 ## Saving a map
 To save a map, call the [`Save`](xref:TruckLib.ScsMap.Map.Save*) method of the map object. The map will be
 written to the specified directory.

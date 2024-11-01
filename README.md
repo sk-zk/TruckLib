@@ -2,7 +2,7 @@
 **TruckLib** is a C# library for programmatically creating and editing maps for Euro Truck Simulator 2 / American Truck Simulator
 without requiring the official editor.
 In addition to the ability to de/serialize the .mbd map format, the library also handles various mapping-adjacent tasks,
-such as reading prefab descriptors or .sii unit files.
+such as reading prefab descriptors or .sii files.
 
 The currently supported [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) is **901** (game version **1.51&ndash;1.53 beta**).
 
@@ -22,7 +22,7 @@ The main namespace of the library, containing classes for working with the map f
 The following packages are included in the main TruckLib package, but can also be used standalone.
 
 **[TruckLib.Sii](https://github.com/sk-zk/TruckLib.Sii)**:  
-Parsers for .sii and .mat files.
+Parsers for .sii and .mat files. Encrypted and 3nK-encoded SII files are supported.
 
 **[TruckLib.Models](https://github.com/sk-zk/TruckLib.Models)**:  
 Rudimentary support for binary model files (.pm\*), prefab descriptors (.ppd), and binary .tobj files.
@@ -59,5 +59,4 @@ Documentation and an API reference is available at https://sk-zk.github.io/truck
 TruckLib is licensed under GPL v2.
 
 ## Credits
-Parts of TruckLib are based on [ConverterPIX](https://github.com/mwl4/ConverterPIX)
-and [SCS Blender Tools](https://github.com/SCSSoftware/BlenderTools/).
+Parts of TruckLib are based on [ConverterPIX](https://github.com/mwl4/ConverterPIX), [SCS Blender Tools](https://github.com/SCSSoftware/BlenderTools/), and [SII_Decrypt](https://github.com/TheLazyTomcat/SII_Decrypt).

@@ -11,3 +11,5 @@ items:
     href: prefabs.md
   - name: Compounds
     href: compounds.md
+  - name: Selections
+    href: selection-class.md

@@ -6,7 +6,7 @@ Mods may also be distributed in this format, though a ZIP file renamed to `.scs`
 In a HashFS archive, the identifier of the contained files is a CityHash64 hash of its full path (encoded as UTF-8).
 This means that a file can be retrieved by its path, but it is not possible to list every path in the archive, as the hashes
 cannot be reversed. To deal with this, archives can optionally contain directory listings, which are special files
-with the path of a directory, enumerating the files and subdirectories it contains. All but three of the games' `.scs`
+with the path of a directory, listing the files and subdirectories it contains. All but three of the games' `.scs`
 files contain full directory listings, but mods may not &ndash; the top level listing in particular can be omitted to
 prevent the official extractor from extracting anything.
 

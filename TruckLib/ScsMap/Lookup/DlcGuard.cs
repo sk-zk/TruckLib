@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TruckLib.ScsMap.Lookup
+﻿namespace TruckLib.ScsMap.Lookup
 {
     /// <summary>
     /// DLC guard values used in ETS2 and ATS.
@@ -36,6 +30,9 @@ namespace TruckLib.ScsMap.Lookup
             public static readonly byte WestBalkansAndEast = 17;
             public static readonly byte WestBalkansAndBlackSea = 18;
             public static readonly byte Feldbinder = 19;
+            public static readonly byte Greece = 20;
+            public static readonly byte GreeceAndEastBalkans = 21;
+            public static readonly byte GreeceAndWestBalkans = 22;
         }
 
         /// <summary>

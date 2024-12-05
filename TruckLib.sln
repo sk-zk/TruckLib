@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruckLib.Tests", "TruckLib.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03-RealRoad", "Samples\03-RealRoad\03-RealRoad.csproj", "{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dbg", "Dbg\Dbg.csproj", "{311DF001-ABCD-49DB-A170-920F7C8507B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA35216-1AEA-42A1-B5DE-A6B2F69D1C46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{311DF001-ABCD-49DB-A170-920F7C8507B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{311DF001-ABCD-49DB-A170-920F7C8507B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{311DF001-ABCD-49DB-A170-920F7C8507B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{311DF001-ABCD-49DB-A170-920F7C8507B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

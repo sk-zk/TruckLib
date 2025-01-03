@@ -49,12 +49,12 @@ namespace RealRoad
             // Now that we have our projected points and know how long each segment will be
             // in-game, we'll filter out these segments.
             // For the sake of simplicity, we'll remove any point for which
-            // [i] - [i-1] is smaller than 5 m.
+            // [i] - [i-1] is less than 5 m.
             points = RemoveShortSegments(points);
 
 
             // 4)
-            // Create or open a map.
+            // Create an empty map.
             var map = new Map("example");
 
 

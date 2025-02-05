@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Properties of one side of a terrain item.
+    /// Properties of one side of a <see cref="Terrain"/> item.
     /// </summary>
     public class TerrainSide
     {

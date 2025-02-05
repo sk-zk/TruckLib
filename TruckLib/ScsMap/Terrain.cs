@@ -65,7 +65,7 @@ namespace TruckLib.ScsMap
         public TerrainSide Right { get; set; }
 
         /// <summary>
-        /// The terrain quad density.
+        /// The length of one terrain quad.
         /// </summary>
         public StepSize StepSize { get; set; }
 

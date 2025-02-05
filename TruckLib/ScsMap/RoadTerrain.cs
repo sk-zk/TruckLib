@@ -18,8 +18,10 @@ namespace TruckLib.ScsMap
         public TerrainNoise Noise { get; set; }
 
         /// <summary>
-        /// Length of terrain transition to neighboring segment.
+        /// Length of the terain transition from the profile of the backward road item
+        /// to this one, given as the number of quads.
         /// </summary>
+        /// <remarks>Note that the <see cref="RoadResolution"/> flag affects this.</remarks>
         public TerrainTransition Transition { get; set; }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace TruckLib.ScsMap
         {
             base.Init();
             Noise = TerrainNoise.Percent100;
-            Transition = TerrainTransition._16;
+            Transition = TerrainTransition.Quads16;
         }
 
         /// <summary>

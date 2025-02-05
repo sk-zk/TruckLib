@@ -69,14 +69,14 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// Allowed transition values for terrain in meters(?).
+    /// Allowed transition values for terrain in number of quads.
     /// </summary>
     public enum TerrainTransition
     {
-        _4 = 2,
-        _8 = 1,
-        _16 = 0,
-        _32 = 3
+        Quads4 = 2,
+        Quads8 = 1,
+        Quads16 = 0,
+        Quads32 = 3
     }
 
     /// <summary>

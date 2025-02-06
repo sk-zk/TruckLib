@@ -40,7 +40,7 @@ Prefab prefab = Prefab.Add(map, new Vector3(12.3f, 0, 23.4f), "dlc_fr_14", ppd, 
 The position passed to this method will be the position of the 0th control node. 
 
 Rotation is handled the same way as it is ingame: no matter how the model's geometry is actually oriented, it will
-always be rotated such that the 0th control node has a direction of (0, 0, -1). This means that if you pass e.g.
+always initially be rotated such that the 0th control node has a direction of (0, 0, -1). This means that if you pass e.g.
 a yaw of 90°, the model will be rotated the same way as it would be if you specified 90° in the new item dialog
 of the editor.
 
@@ -105,7 +105,7 @@ prefab.Attach(road);
 In both cases, the leftover node of the polyline item will be deleted.
 
 ## Appending a road
-In addition to attaching an existing road, you can append a new road to a prefab node with the
+In addition to attaching an existing road, you can append a new road item to a prefab node with the
 [`AppendRoad`](xref:TruckLib.ScsMap.Prefab.AppendRoad*) method:
 
 ```cs

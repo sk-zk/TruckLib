@@ -20,7 +20,7 @@ Note that, just like with maps, a recalculation (Map > Recompute map) is require
 because TruckLib does not calculate the bounding boxes of items.
 
 ## Origin
-Selections have an origin point which the editor subtracts from all nodes before adding the items. You can modify this origin point via the
+Selections have an origin point which the editor subtracts from all nodes before adding the items. You can modify it via the
 [`Origin`](xref:TruckLib.ScsMap.Selection.Origin) property. In addition, there is a [`CenterOrigin`](xref:TruckLib.ScsMap.Selection.CenterOrigin*)
 method which sets the origin to the center of all nodes, which is what the official editor does when exporting a selection.
 
@@ -28,7 +28,7 @@ method which sets the origin to the center of all nodes, which is what the offic
 You can import a selection into a map by calling [`Import`](xref:TruckLib.ScsMap.Map.Import*):
 
 ```cs
-map.Import(selection, new(72.7f, 0f, 27.2f));
+map.Import(selection, new Vector3(72.7f, 0f, 27.2f));
 ```
 
 This will add a copy of the items in `selection` to `map` at the specified offset.

@@ -6,7 +6,7 @@ add and configure map nodes for the item, add the item to the map, and then retu
 
 Let's [add a Model](xref:TruckLib.ScsMap.Model.Add*) to the map. The first parameter of any `Add` method is the map,
 compound or Selection the item will be added to; what follows next depends on the item type. In this case, it is the 
-position of the model, the unit name of the model, and its variant and look:
+position of the item, the unit name of the model, and its variant and look:
 
 ```cs
 Model model = Model.Add(
@@ -31,7 +31,7 @@ To delete an item from a map, call the map's [`Delete`](xref:TruckLib.ScsMap.IIt
 method with the item:
 
 ```cs
-map.Delete(model);
+map.Delete(theItem);
 ```
 
 Nodes which are exclusively used by this item will also be deleted.

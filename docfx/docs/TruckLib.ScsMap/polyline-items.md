@@ -66,4 +66,4 @@ PolylineItem end = road.FindLastItem();
 ```
 
 `start` and `end` are now the first and last polyline item of the chain `road` is a part of. Keep in mind that all polyline item types
-can attach to each other, so `start` end `end` are not guaranteed to be of the same type as `road`.
+can attach to each other, so `start` and `end` are not guaranteed to be of the same type as `road`.

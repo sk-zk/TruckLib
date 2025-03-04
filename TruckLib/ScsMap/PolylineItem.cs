@@ -265,8 +265,8 @@ namespace TruckLib.ScsMap
             Recalculate();
         }
 
-        internal override IEnumerable<INode> GetItemNodes() =>
-            new[] { Node, ForwardNode };
+        internal override IEnumerable<INode> GetItemNodes() => 
+            [Node, ForwardNode];
 
         internal override Vector3 GetCenter() => 
             (Node.Position + ForwardNode.Position) / 2;

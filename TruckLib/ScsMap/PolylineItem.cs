@@ -191,10 +191,10 @@ namespace TruckLib.ScsMap
 
         private static void SetMiddleRotation(INode left, INode middle, INode right)
         {
-            var rightRot = right.Rotation.ToEuler();
-            var leftMiddleDirRot = MathEx.GetNodeRotation(left.Position, middle.Position).ToEuler();
-            var middleEuler = (rightRot + leftMiddleDirRot) / 2;
-            middle.Rotation = Quaternion.CreateFromYawPitchRoll(middleEuler.Y, middleEuler.X, middleEuler.Z);
+            middle.Rotation = Quaternion.Slerp(
+                MathEx.GetNodeRotation(left.Position, middle.Position), 
+                right.Rotation, 
+                0.5f);
         }
 
         /// <summary>

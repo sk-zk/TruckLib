@@ -10,11 +10,10 @@ namespace TruckLib.ScsMap
 {
     internal static class PolylineLength
     {
-        // Lots of incomprehensible SIMD math decompiled with IDA.
-        // I don't have the faintest fucking clue what's happening here, let alone
-        // which algorithm this is, but the output is correct, and that's good
-        // enough for me. It's taken me six goddamn years to get here, and I can only
-        // hope that I'll never have to touch it ever again.
+        // Crazy SIMD math decompiled with IDA.
+        // I don't know which algorithm this is so I'm unable to refactor this
+        // into a more readable form, but the output is correct and that's
+        // good enough for me.
 
         /// <summary>
         /// Calculates the cached length property of one polyline item.
@@ -32,15 +31,15 @@ namespace TruckLib.ScsMap
             float deltaZ; // edi
             Vector128<float> v9; // xmm8
             Vector128<float> v10; // xmm9
-            Vector128<float> v11; // xmm11
-            Vector128<float> v12; // xmm12
+            Vector128<float> bwRot; // xmm11
+            Vector128<float> fwRot; // xmm12
             Vector128<float> v13; // xmm0
             Vector128<float> v14; // xmm1
-            Vector128<float> v15; // xmm15
+            Vector128<float> invFwRot; // xmm15
             Vector128<float> v16; // xmm7
-            Vector128<float> v17; // xmm14
+            Vector128<float> invBwRot; // xmm14
             Vector128<float> v18; // xmm11
-            float v19; // xmm2_4
+            float bwRotW; // xmm2_4
             Vector128<float> v20; // xmm12
             Vector128<float> v21; // xmm3
             Vector128<float> v22; // xmm4
@@ -67,7 +66,7 @@ namespace TruckLib.ScsMap
             Vector128<float> v43; // xmm1
 
             Vector128<float> v45; // [rsp+48h] [rbp-C0h] BYREF
-            float v46; // [rsp+58h] [rbp-B0h]
+            float bwRotW_2; // [rsp+58h] [rbp-B0h]
             Vector128<float> v47 = new(); // [rsp+68h] [rbp-A0h]
             Vector128<float> v48 = new(); // [rsp+78h] [rbp-90h]
             Vector128<float> v49 = new(); // [rsp+88h] [rbp-80h]
@@ -90,26 +89,26 @@ namespace TruckLib.ScsMap
             v5 = v5Initial;
             v9 = v9Initial;
             v10 = v10Initial;
-            v11 = Vector128.Create(bwNode.Rotation.W, bwNode.Rotation.X, bwNode.Rotation.Y, bwNode.Rotation.Z);
-            v12 = Vector128.Create(fwNode.Rotation.W, fwNode.Rotation.X, fwNode.Rotation.Y, fwNode.Rotation.Z);
-            v13 = Sse.Shuffle(v11, v11, 1);
-            v14 = Sse.Shuffle(v11, v11, 251);
-            v15 = Sse.Subtract(Vector128<float>.Zero, v12);
-            v16 = Sse.Shuffle(v12, v12, 1);
+            bwRot = Vector128.Create(bwNode.Rotation.W, bwNode.Rotation.X, bwNode.Rotation.Y, bwNode.Rotation.Z);
+            fwRot = Vector128.Create(fwNode.Rotation.W, fwNode.Rotation.X, fwNode.Rotation.Y, fwNode.Rotation.Z);
+            v13 = Sse.Shuffle(bwRot, bwRot, 1);
+            v14 = Sse.Shuffle(bwRot, bwRot, 251);
+            invFwRot = Sse.Subtract(Vector128<float>.Zero, fwRot);
+            v16 = Sse.Shuffle(fwRot, fwRot, 1);
             v54 = v13;
-            v17 = Sse.Subtract(Vector128<float>.Zero, v11);
+            invBwRot = Sse.Subtract(Vector128<float>.Zero, bwRot);
             v55 = v14;
-            v18 = Sse.Shuffle(v11, v11, 156);
+            v18 = Sse.Shuffle(bwRot, bwRot, 156);
             v56 = v16;
-            v19 = -v17[0];
-            v50 = Sse.Shuffle(v12, v12, 251);
-            v46 = -v17[0];
-            v20 = Sse.Shuffle(v12, v12, 156);
+            bwRotW = -invBwRot[0];
+            v50 = Sse.Shuffle(fwRot, fwRot, 251);
+            bwRotW_2 = -invBwRot[0];
+            v20 = Sse.Shuffle(fwRot, fwRot, 156);
 
             for (i = 4; i > 0; i--)
             {
-                v21 = v17;
-                v21 = v21.WithElement(0, v19);
+                v21 = invBwRot;
+                v21 = v21.WithElement(0, bwRotW);
                 v22 = Sse.Subtract(
                     Sse.Add(Sse.Multiply(v5, v13), Sse.Multiply(v9, v14)),
                     Sse.Multiply(v10, v18));
@@ -119,7 +118,7 @@ namespace TruckLib.ScsMap
                     Sse.Multiply(Sse.Shuffle(v22, v22, 1), Sse.Shuffle(v21, v21, 229)),
                     Sse.Multiply(Sse.Shuffle(v22, v22, 102), Sse.Shuffle(v21, v21, 130)));
                 v25 = Sse.Multiply(Sse.Shuffle(v22, v22, 156), Sse.Shuffle(v21, v21, 120));
-                v26 = v15;
+                v26 = invFwRot;
                 v27 = Sse.Subtract(Sse.Add(v24, v23), v25);
                 v27 = v27.WithElement(0, -v27[0]);
                 v28 = Sse.Subtract(
@@ -127,7 +126,7 @@ namespace TruckLib.ScsMap
                     Sse.Multiply(v9Initial, v50)),
                     Sse.Multiply(v10Initial, v20));
                 v28 = v28.WithElement(0, -v28[0]);
-                v26 = v26.WithElement(0, -v15[0]);
+                v26 = v26.WithElement(0, -invFwRot[0]);
                 v29 = Sse.Subtract(
                     Sse.Add(
                         Sse.Multiply(Sse.Shuffle(v28, v28, 251), Sse.Shuffle(v26, v26, 31)),
@@ -173,7 +172,7 @@ namespace TruckLib.ScsMap
                 length = Sub14106F6C0(ref v53, ref v52, ref v51, ref v45, a5, a6, a7);
 
                 v13 = v54;
-                v19 = v46;
+                bwRotW = bwRotW_2;
                 v14 = v55;
                 v16 = v56;
                 v5 = v5Initial;

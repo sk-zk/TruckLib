@@ -189,14 +189,12 @@ namespace TruckLib.ScsMap
             return newItem;
         }
 
-        private static void SetMiddleRotation(INode pBackw, INode pMiddle, INode pNew)
+        private static void SetMiddleRotation(INode left, INode middle, INode right)
         {
-            var pNewRot = pNew.Rotation.ToEuler();
-
-            var backMiddleDirRot = MathEx.GetNodeRotation(pBackw.Position, pMiddle.Position).ToEuler();
-            var middleYaw = (pNewRot.Y + backMiddleDirRot.Y) / 2;
-            var middlePitch = (pNewRot.X + backMiddleDirRot.X) / 2;
-            pMiddle.Rotation = Quaternion.CreateFromYawPitchRoll(middleYaw, middlePitch, 0);
+            var rightRot = right.Rotation.ToEuler();
+            var leftMiddleDirRot = MathEx.GetNodeRotation(left.Position, middle.Position).ToEuler();
+            var middleEuler = (rightRot + leftMiddleDirRot) / 2;
+            middle.Rotation = Quaternion.CreateFromYawPitchRoll(middleEuler.Y, middleEuler.X, middleEuler.Z);
         }
 
         /// <summary>

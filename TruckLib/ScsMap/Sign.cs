@@ -123,6 +123,18 @@ namespace TruckLib.ScsMap
         /// <param name="map">The map.</param>
         /// <param name="position">The position of the sign.</param>
         /// <param name="model">The unit name of the model.</param>
+        /// <returns>The newly created sign.</returns>
+        public static Sign Add(IItemContainer map, Vector3 position, Token model)
+        {
+            return Add(map, position, model, "");
+        }
+
+        /// <summary>
+        /// Adds a sign to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The position of the sign.</param>
+        /// <param name="model">The unit name of the model.</param>
         /// <param name="template">The full name of the sign template.</param>
         /// <returns>The newly created sign.</returns>
         public static Sign Add(IItemContainer map, Vector3 position, Token model, string template)

@@ -19,6 +19,7 @@ namespace Example
             // Create an empty map
             var map = new Map("example");
 
+
             // Add a road segment:
             // Use the [Item Type].Add method to create a new item
             // and automatically add it to the map.
@@ -60,7 +61,7 @@ namespace Example
 
                 // Road models:
                 // Let's add some bollards as well.
-                side.Models[0].Name = "219"; // "reflective post"
+                side.Models[0].Name = "ch_2y07d"; // "reflective post de"
                 side.Models[0].Distance = 50;
                 side.Models[0].Offset = 6;
             }

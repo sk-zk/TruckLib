@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -263,6 +264,100 @@ namespace TruckLib.ScsMap
             Node.Move(Node.Position + translation);
             ForwardNode.Move(ForwardNode.Position + translation);
             Recalculate();
+        }
+
+        /// <summary>
+        /// Creates map items at equidistant intervals along the path of a chain of polyline items. 
+        /// </summary>
+        /// <param name="start">The polyline item (inclusive) where items will begin to be placed.</param>
+        /// <param name="end">The polyline item (exclusive) where items will stop being placed.
+        /// If null, the method will stop at the last polyline item connected to <paramref name="start"/>.</param>
+        /// <param name="interval">The interval between items, in meters.</param>
+        /// <param name="createItemFunction">The function which creates the map item 
+        /// given an <see cref="OrientedPoint"/>. The return value is a list or array 
+        /// of the created items.</param>
+        /// <returns>A list of all map items which were created.</returns>
+        public static List<MapItem> CreateItemsAlongPath(PolylineItem start, PolylineItem end,
+            float interval, Func<IItemContainer, OrientedPoint, IList<MapItem>> createItemFunction)
+        {
+            return CreateItemsAlongPath(start, end, interval, 0, 0, createItemFunction);
+        }
+
+        /// <summary>
+        /// Creates map items at equidistant intervals along the path of a chain of polyline items. 
+        /// </summary>
+        /// <param name="start">The polyline item (inclusive) where items will begin to be placed.</param>
+        /// <param name="end">The polyline item (exclusive) where items will stop being placed.
+        /// If null, the method will stop at the last polyline item connected to <paramref name="start"/>.</param>
+        /// <param name="interval">The interval between items, in meters.</param>
+        /// <param name="startOffset">The distance from the starting point where
+        /// points will begin to be generated.</param>
+        /// <param name="endOffset">The distance from the ending point where
+        /// points will cease to be generated.</param>
+        /// <param name="createItemFunction">The function which creates the map item 
+        /// given an <see cref="OrientedPoint"/>. The return value is a list or array 
+        /// of the created items.</param>
+        /// <returns>A list of all map items which were created.</returns>
+        public static List<MapItem> CreateItemsAlongPath(PolylineItem start, PolylineItem end,
+            float interval, float startOffset, float endOffset,
+            Func<IItemContainer, OrientedPoint, IList<MapItem>> createItemFunction)
+        {
+            if (start is null)
+                throw new ArgumentException("The starting item must not be null.", nameof(start));
+
+            if (interval <= 0)
+                throw new ArgumentOutOfRangeException(nameof(interval),
+                    "The interval must be greater than 0.");
+
+            if (startOffset < 0)
+                throw new ArgumentOutOfRangeException(nameof(startOffset),
+                    "The start offset must not be below 0.");
+
+            if (endOffset < 0)
+                throw new ArgumentOutOfRangeException(nameof(startOffset),
+                    "The end offset must not be below 0.");
+
+            var container = start.Node.Parent;
+            var items = new List<MapItem>();
+
+            PolylineItem currentItem = start;
+            float dist = -(startOffset - interval);
+            while (currentItem is not null && currentItem != end)
+            {
+                if (dist + currentItem.Length < interval)
+                {
+                    dist += currentItem.Length;
+                }
+                else
+                {
+                    bool isFinalItem = currentItem.ForwardItem is not PolylineItem
+                        || currentItem.ForwardItem == end;
+                    float currentEndOffset = isFinalItem ? endOffset : 0;
+
+                    float currentOffset = Math.Max(0, interval - dist);
+
+                    var points = HermiteSpline.GetEquidistantPoints(currentItem.Node,
+                        currentItem.ForwardNode, interval, currentOffset, currentEndOffset);
+
+                    if (points.Count == 0)
+                    {
+                        dist += currentItem.Length;
+                    }
+                    else
+                    {
+                        foreach (var point in points)
+                        {
+                            items.AddRange(createItemFunction(container, point));
+                        }
+
+                        dist = (currentItem.ForwardNode.Position - points[^1].Position).Length();
+                    }
+                }
+
+                currentItem = currentItem.ForwardItem is PolylineItem pli ? pli : null;
+            }
+
+            return items;
         }
 
         internal override IEnumerable<INode> GetItemNodes() => 

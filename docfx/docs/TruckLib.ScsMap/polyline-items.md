@@ -67,3 +67,43 @@ PolylineItem end = road.FindLastItem();
 
 `start` and `end` are now the first and last polyline item of the chain `road` is a part of. Keep in mind that all polyline item types
 can attach to each other, so `start` and `end` are not guaranteed to be of the same type as `road`.
+
+## Placing items along the path of a polyline item
+
+The method [`CreateItemsAlongPath`](xref:TruckLib.ScsMap.PolylineItem.CreateItemsAlongPath*) can be used to place objects at equidistant
+intervals along the path of a chain of polyline items. It takes as parameters the starting and ending item, the interval in meters,
+and a callback function in which you create the map item.
+
+In its simplest form, calling the method can look like this:
+
+```cs
+PolylineItem.CreateItemsAlongPath(start, end, 10f, (container, point) =>
+{
+    Model model = Model.Add(container, point.Position, "greece_29000", "var1", "default");
+    model.Node.Rotation = point.Rotation;
+    return [model];
+});
+```
+
+This will create a Model item every 10 meters from the backward node of `start` to the backward node of `end`.
+
+Here is a more complicated example, which places German reflector posts along both sides of a road with
+the correct orientation:
+
+```cs
+PolylineItem.CreateItemsAlongPath(start, end, 50f, (container, point) =>
+{
+    Vector3 normal = Vector3.Normalize(Vector3.Transform(Vector3.UnitX, point.Rotation));
+
+    float distFromRoad = 6;
+    Vector3 leftPos = point.Position + normal * -distFromRoad;
+    Vector3 rightPos = point.Position + normal * distFromRoad;
+
+    Sign leftPost = Sign.Add(container, leftPos, "ch_2y07d");
+    leftPost.Node.Rotation = point.Rotation * Quaternion.CreateFromYawPitchRoll((float)Math.PI, 0, 0);
+    Sign rightPost = Sign.Add(container, rightPos, "ch_2y07d");
+    rightPost.Node.Rotation = point.Rotation;
+
+    return [leftPost, rightPost];
+});
+```

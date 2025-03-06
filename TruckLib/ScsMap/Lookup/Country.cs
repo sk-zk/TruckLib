@@ -242,6 +242,7 @@ namespace TruckLib.ScsMap.Lookup
             public static readonly byte Colorado = 7;
             public static readonly byte Idaho = 13;
             public static readonly byte Kansas = 17;
+            public static readonly byte Missouri = 26;
             public static readonly byte Montana = 27;
             public static readonly byte Nebraska = 28;
             public static readonly byte Nevada = 2;
@@ -272,7 +273,6 @@ namespace TruckLib.ScsMap.Lookup
             public static readonly byte Michigan = 23;
             public static readonly byte Minnesota = 24;
             public static readonly byte Mississippi = 25;
-            public static readonly byte Missouri = 26;
             public static readonly byte NewHampshire = 29;
             public static readonly byte NewJersey = 30;
             public static readonly byte NewYork = 32;

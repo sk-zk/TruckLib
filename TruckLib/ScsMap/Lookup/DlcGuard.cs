@@ -79,6 +79,11 @@
             public static readonly byte Arkansas = 36;
             public static readonly byte ArkansasAndOklahoma = 37;
             public static readonly byte ArkansasAndTexas = 38;
+            public static readonly byte Missouri = 39;
+            public static readonly byte MissouriAndArkansas = 40;
+            public static readonly byte MissouriAndKansas = 41;
+            public static readonly byte MissouriAndNebraska = 42;
+            public static readonly byte MissouriAndOklahoma = 43;
         }
     }
 }

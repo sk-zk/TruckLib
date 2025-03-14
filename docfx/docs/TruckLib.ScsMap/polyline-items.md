@@ -68,8 +68,12 @@ PolylineItem end = road.FindLastItem();
 `start` and `end` are now the first and last polyline item of the chain `road` is a part of. Keep in mind that all polyline item types
 can attach to each other, so `start` and `end` are not guaranteed to be of the same type as `road`.
 
-## Placing items along the path of a polyline item
+## Interpolating the curve
+A point on the curve drawn through the nodes of the item can be calculated with the [`InterpolateCurve`](xref:TruckLib.ScsMap.PolylineItem.InterpolateCurve*)
+and [`InterpolateCurveDist`](xref:TruckLib.ScsMap.PolylineItem.InterpolateCurveDist*) methods. The former takes an interpolation parameter
+between 0 and 1; the latter expects a distance in meters and returns the point which is _n_ meters away from the backward node.
 
+## Placing items along the path
 The method [`CreateItemsAlongPath`](xref:TruckLib.ScsMap.PolylineItem.CreateItemsAlongPath*) can be used to place objects at equidistant
 intervals along the path of a chain of polyline items. It takes as parameters the starting and ending item, the interval in meters,
 and a callback function in which you create the map item.

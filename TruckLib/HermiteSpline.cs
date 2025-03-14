@@ -59,19 +59,21 @@ namespace TruckLib
         /// </summary>
         /// <param name="n1">The starting point.</param>
         /// <param name="n2">The ending point.</param>
-        /// <param name="interval">The distance between points.</param>
+        /// <param name="intervals">The distances between points.</param>
         /// <param name="startOffset">The distance from the starting point where
         /// points will begin to be generated.</param>
         /// <param name="endOffset">The distance from the ending point where
         /// points will cease to be generated.</param>
-        /// <returns>An ordered list of equidistant oriented points.</returns>
-        public static List<OrientedPoint> GetEquidistantPoints(INode n1, INode n2, float interval, 
-            float startOffset = 0, float endOffset = 0)
+        /// <param name="repeat">Whether the given intervals should repeat. If false, the method
+        /// will cease to create points after each interval has been used once.</param>
+        /// <returns>An ordered list of oriented points.</returns>
+        public static List<OrientedPoint> GetSpacedPoints(INode n1, INode n2, float[] intervals, 
+            float startOffset = 0, float endOffset = 0, bool repeat = true)
         {
             // via http://www.planetclegg.com/projects/WarpingTextToSplines.html
 
-            if (interval <= 0)
-                throw new ArgumentOutOfRangeException(nameof(interval), "The interval must be greater than 0.");
+            if (intervals.Any(x => x < 0))
+                throw new ArgumentOutOfRangeException(nameof(intervals), "Intervals must be greater than 0.");
 
             if (startOffset < 0)
                 throw new ArgumentOutOfRangeException(nameof(startOffset), "The start offset must not be below 0.");
@@ -84,12 +86,16 @@ namespace TruckLib
             float[] arcLengths = ApproximateLengths(n1.Position, n2.Position, tanStart, tanEnd);
             float splineLength = arcLengths[^1];
 
-            interval /= splineLength;
+            for (int i = 0; i < intervals.Length; i++)
+            {
+                intervals[i] /= splineLength;
+            }
             startOffset /= splineLength;
             endOffset = (splineLength - endOffset) / splineLength;
 
             var equiPoints = new List<OrientedPoint>();
-            for (float u = startOffset; u < endOffset; u += interval)
+            int intervalIdx = 0;
+            for (float u = startOffset; u < endOffset; u += intervals[intervalIdx])
             {
                 float targetArcLength = u * splineLength;
                 int index = IndexOfLargestValueSmallerThan(arcLengths, targetArcLength);
@@ -108,9 +114,34 @@ namespace TruckLib
                 var position = Interpolate(n1.Position, n2.Position, tanStart, tanEnd, t);
                 var rotation = MathEx.GetNodeRotation(Derivative(n1.Position, n2.Position, tanStart, tanEnd, t));
                 equiPoints.Add(new(position, rotation));
+
+                if (++intervalIdx > intervals.Length - 1)
+                {
+                    if (repeat)
+                        intervalIdx = 0;
+                    else
+                        break;
+                }
             }
 
             return equiPoints;
+        }
+
+        /// <summary>
+        /// Calculates equidistant points along the curve.
+        /// </summary>
+        /// <param name="n1">The starting point.</param>
+        /// <param name="n2">The ending point.</param>
+        /// <param name="interval">The distance between points.</param>
+        /// <param name="startOffset">The distance from the starting point where
+        /// points will begin to be generated.</param>
+        /// <param name="endOffset">The distance from the ending point where
+        /// points will cease to be generated.</param>
+        /// <returns>An ordered list of equidistant oriented points.</returns>
+        public static List<OrientedPoint> GetEquidistantPoints(INode n1, INode n2, float interval,
+            float startOffset = 0, float endOffset = 0)
+        {
+            return GetSpacedPoints(n1, n2, [interval], startOffset, endOffset);
         }
 
         private static float[] ApproximateLengths(Vector3 p0, Vector3 p1, Vector3 m0, Vector3 m1)

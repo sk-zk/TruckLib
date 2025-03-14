@@ -360,6 +360,31 @@ namespace TruckLib.ScsMap
             return items;
         }
 
+        /// <summary>
+        /// Interpolates the spline between the two nodes at <em>t</em>.
+        /// </summary>
+        /// <param name="t">The interpolation parameter between 0 and 1.</param>
+        /// <returns>The position and rotation of the point at <em>t</em>.</returns>
+        public OrientedPoint InterpolateCurve(float t)
+        {
+            var position = HermiteSpline.InterpolatePolyline(Node, ForwardNode, t);
+            var rotation = MathEx.GetNodeRotation(HermiteSpline.DerivativePolyline(Node, ForwardNode, t));
+            return new OrientedPoint(position, rotation);
+        }
+
+        /// <summary>
+        /// Calculates the point on the spline which is <em>n</em> meters
+        /// away from the <see cref="Node">backward node</see>.
+        /// </summary>
+        /// <param name="n">The distance in meters.</param>
+        /// <returns>The position and rotation of the point, 
+        /// or null if the curve is shorter than <em>n</em>.</returns>
+        public OrientedPoint? InterpolateCurveDist(float n)
+        {
+            var list = HermiteSpline.GetSpacedPoints(Node, ForwardNode, [n], n, repeat: false);
+            return list.Count == 0 ? null : list[0];
+        }
+
         internal override IEnumerable<INode> GetItemNodes() => 
             [Node, ForwardNode];
 

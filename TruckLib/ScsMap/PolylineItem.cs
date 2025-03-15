@@ -95,6 +95,8 @@ namespace TruckLib.ScsMap
             newItem.Node = backwardNode;
             newItem.ForwardNode = forwardNode;
 
+            newItem.Length = (backwardPos - forwardPos).Length();
+
             // rotation:
             // for the first two nodes, the Rotation of the nodes is just
             // the angle formed by pos2-pos1 and the Z axis
@@ -150,6 +152,7 @@ namespace TruckLib.ScsMap
             p3.Parent.MapItems.Add(newItem.Uid, newItem);
 
             RecalculateLength();
+            newItem.RecalculateLength();
 
             return newItem;
         }
@@ -181,11 +184,9 @@ namespace TruckLib.ScsMap
             p0.ForwardItem = newItem;
             p1.BackwardItem = newItem;
 
-            newItem.RecalculateRotation();
+            newItem.Recalculate();
 
             p1.Parent.MapItems.Add(newItem.Uid, newItem);
-
-            RecalculateLength();
 
             return newItem;
         }

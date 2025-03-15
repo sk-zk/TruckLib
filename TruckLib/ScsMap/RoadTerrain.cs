@@ -65,7 +65,7 @@ namespace TruckLib.ScsMap
         /// <param name="resolution">The resolution of the road.</param>
         /// <param name="length">The length of the road.</param>
         /// <returns>The amount of quad columns.</returns>
-        private int CalculateQuadCols(RoadResolution resolution, float length)
+        private static int CalculateQuadCols(RoadResolution resolution, float length)
         {
             int interval;
             int colsPerInterval;
@@ -107,7 +107,7 @@ namespace TruckLib.ScsMap
         /// <param name="stepSize">The step size of the standalone terrain.</param>
         /// <param name="length">The length of the standalone terrain.</param>
         /// <returns>The amount of quad columns.</returns>
-        private int CalculateQuadCols(StepSize stepSize, float length)
+        private static int CalculateQuadCols(StepSize stepSize, float length)
         {
             var terrainSteps = stepSize switch
             {

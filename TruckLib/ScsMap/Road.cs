@@ -370,6 +370,7 @@ namespace TruckLib.ScsMap
             var road = Append<Road>(position);
             road.InitFromAddOrAppend(ForwardNode.Position, position, type, leftTerrainSize, rightTerrainSize);
             road.Material = Material;
+            RecalculateTerrain();
             return road;
         }
 
@@ -397,6 +398,7 @@ namespace TruckLib.ScsMap
             var road = Prepend<Road>(position);
             road.InitFromAddOrAppend(position, Node.Position, type, leftTerrainSize, rightTerrainSize);
             road.Material = Material;
+            RecalculateTerrain();
             return road;
         }
 
@@ -407,7 +409,6 @@ namespace TruckLib.ScsMap
             Token type, float leftTerrainSize = 0f, float rightTerrainSize = 0f)
         {
             RoadType = type;
-            Length = Vector3.Distance(backwardPos, forwardPos);
 
             Left.Terrain.Size = leftTerrainSize;
             Right.Terrain.Size = rightTerrainSize;
@@ -422,8 +423,13 @@ namespace TruckLib.ScsMap
         public override void Recalculate()
         {
             base.Recalculate();
+            RecalculateTerrain();
+        }
+
+        private void RecalculateTerrain()
+        {
             Left.Terrain.CalculateQuadGrid(Resolution, Length);
             Right.Terrain.CalculateQuadGrid(Resolution, Length);
-        }      
+        }
     }
 }

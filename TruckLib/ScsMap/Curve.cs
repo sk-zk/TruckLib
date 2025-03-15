@@ -254,9 +254,7 @@ namespace TruckLib.ScsMap
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)
         {
             var curve = Add<Curve>(map, backwardPos, forwardPos);
-
             curve.InitFromAddOrAppend(backwardPos, forwardPos, model);
-
             return curve;
         }
 
@@ -297,7 +295,6 @@ namespace TruckLib.ScsMap
         private void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token model)
         {
             Model = model;
-            Length = Vector3.Distance(backwardPos, forwardPos);
         }
 
         public override void Move(Vector3 newPos)

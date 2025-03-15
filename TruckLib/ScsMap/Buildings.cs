@@ -166,7 +166,6 @@ namespace TruckLib.ScsMap
         private void InitFromAddOrAppend(Token name, Vector3 backwardPos, Vector3 forwardPos)
         {
             Name = name;
-            Length = Vector3.Distance(backwardPos, forwardPos);
         }
 
         /// <summary>

@@ -177,6 +177,7 @@ namespace TruckLib.ScsMap
         {
             var terrain = Append<Terrain>(position);
             terrain.InitFromAddOrAppend(ForwardNode.Position, position, material, leftSize, rightSize);
+            RecalculateTerrain();
             return terrain;
         }
 
@@ -186,7 +187,6 @@ namespace TruckLib.ScsMap
         internal void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token material,
             float leftSize, float rightSize)
         {
-            Length = Vector3.Distance(backwardPos, forwardPos);
             Left.Terrain.Size = leftSize;
             Right.Terrain.Size = rightSize;
             foreach (var side in new[] { Left, Right })
@@ -200,6 +200,11 @@ namespace TruckLib.ScsMap
         public override void Recalculate()
         {
             base.Recalculate();
+            RecalculateTerrain();
+        }
+
+        private void RecalculateTerrain()
+        {
             Left.Terrain.CalculateQuadGrid(StepSize, Length);
             Right.Terrain.CalculateQuadGrid(StepSize, Length);
         }

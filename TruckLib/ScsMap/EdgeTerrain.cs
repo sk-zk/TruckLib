@@ -88,7 +88,7 @@ namespace TruckLib.ScsMap
                 }
                 else
                 {
-                    remainder -= RowWidthSequence.Last();
+                    remainder -= RowWidthSequence[^1];
                 }
                 rows++;
             }

@@ -156,29 +156,36 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Makes a deep copy of this object.
+        /// Copies the properties of this RoadSide object to another.
         /// </summary>
-        /// <returns>A deep copy of this object.</returns>
-        public RoadSide Clone()
+        /// <param name="other">The object to copy properties to.</param>
+        public void CopyTo(RoadSide other)
         {
-            var cloned = (RoadSide)MemberwiseClone();
-            cloned.Terrain = Terrain.Clone();
-            cloned.Sidewalk = Sidewalk.Clone();
+            other.Variant = Variant;
+            other.Look = Look;
+            other.TrafficRule = TrafficRule;
+            other.RightEdge = RightEdge;
+            other.LeftEdge = LeftEdge;
+            other.HeightOffset = HeightOffset;
+            other.NoDetailVegetationFrom = NoDetailVegetationFrom;
+            other.NoDetailVegetationTo = NoDetailVegetationTo;
+
+            Terrain.CopyTo(other.Terrain);
+
+            other.Sidewalk = Sidewalk.Clone();
             for(int i = 0; i < Vegetation.Length; i++)
             {
-                cloned.Vegetation[i] = Vegetation[i].Clone();
+                other.Vegetation[i] = Vegetation[i].Clone();
             }
             for (int i = 0; i < Models.Length; i++)
             {
-                cloned.Models[i] = Models[i].Clone();
+                other.Models[i] = Models[i].Clone();
             }
-            cloned.Railings = Railings.Clone();
-            cloned.AdditionalParts = new List<Token>(AdditionalParts);
-            cloned.EdgeOverrides = new List<EdgeOverride>(EdgeOverrides);
-            cloned.VariantOverrides = new List<VariantOverride>(VariantOverrides);
-            cloned.tmpFlags = tmpFlags;
-            return cloned;
+            other.Railings = Railings.Clone();
+            other.AdditionalParts = new List<Token>(AdditionalParts);
+            other.EdgeOverrides = new List<EdgeOverride>(EdgeOverrides);
+            other.VariantOverrides = new List<VariantOverride>(VariantOverrides);
+            other.tmpFlags = tmpFlags;
         }
     }
-
 }

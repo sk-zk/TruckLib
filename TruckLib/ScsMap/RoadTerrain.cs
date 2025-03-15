@@ -125,11 +125,15 @@ namespace TruckLib.ScsMap
         /// Makes a deep copy of this object.
         /// </summary>
         /// <returns>A deep copy of this object.</returns>
-        public RoadTerrain Clone()
+        public void CopyTo(RoadTerrain other)
         {
-            var rt = (RoadTerrain)MemberwiseClone();
-            rt.QuadData = QuadData.Clone();
-            return rt;
+            other.Size = Size;
+            other.Profile = Profile;
+            other.Coefficient = Coefficient;
+            other.Noise = Noise;
+            other.Transition = Transition;
+            other.QuadData.BrushMaterials = new(QuadData.BrushMaterials);
+            other.QuadData.BrushColors = new(QuadData.BrushColors);
         }
     }
 }

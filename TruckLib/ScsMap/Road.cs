@@ -334,16 +334,16 @@ namespace TruckLib.ScsMap
             }
 
             var r = Append(position, RoadType, Left.Terrain.Size, Right.Terrain.Size);
-            CopySettingsTo(r);
+            CopyTo(r);
             return r;
         }
 
-        private void CopySettingsTo(Road r)
+        private void CopyTo(Road r)
         {
             // don't forget to remove tmpflags after the kdopitem migration
 
-            r.Left = Left.Clone();
-            r.Right = Right.Clone();
+            Left.CopyTo(r.Left);
+            Right.CopyTo(r.Right);
             r.CenterMaterial = CenterMaterial;
             r.CenterMaterialColor = CenterMaterialColor;
             r.CenterVegetation = CenterVegetation.Clone();

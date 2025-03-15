@@ -122,9 +122,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Makes a deep copy of this object.
+        /// Copies the properties of this RoadTerrain object to another.
         /// </summary>
-        /// <returns>A deep copy of this object.</returns>
+        /// <param name="other">The object to copy properties to.</param>
         public void CopyTo(RoadTerrain other)
         {
             other.Size = Size;

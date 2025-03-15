@@ -57,8 +57,12 @@ namespace TruckLib.Tests.TruckLib.ScsMap
                 new(0, 0.862924f, 0, -0.505333f),
                 new(0, 0.938026f, 0, -0.346565f)
             };
+            var expectedTerrainColumns = new int[]
+            {
+                9, 9, 6
+            };
 
-            var road1 = Road.Add(map, points[0], points[1], "bar");
+            var road1 = Road.Add(map, points[0], points[1], "bar", 30, 30);
             road1.IgnoreCutPlanes = true;
             road1.Left.Variant = "baz";
             road1.Left.ShoulderBlocked = true;
@@ -91,6 +95,12 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             AssertEx.Equal(expectedRotations[1], road1.ForwardNode.Rotation, 0.001f);
             AssertEx.Equal(expectedRotations[2], road2.ForwardNode.Rotation, 0.001f);
             AssertEx.Equal(expectedRotations[3], road3.ForwardNode.Rotation, 0.001f);
+            Assert.Equal(expectedTerrainColumns[0], road1.Left.Terrain.QuadData.Cols);
+            Assert.Equal(expectedTerrainColumns[0], road1.Right.Terrain.QuadData.Cols);
+            Assert.Equal(expectedTerrainColumns[1], road2.Left.Terrain.QuadData.Cols);
+            Assert.Equal(expectedTerrainColumns[1], road2.Right.Terrain.QuadData.Cols);
+            Assert.Equal(expectedTerrainColumns[2], road3.Left.Terrain.QuadData.Cols);
+            Assert.Equal(expectedTerrainColumns[2], road3.Right.Terrain.QuadData.Cols);
         }
 
         [Fact]

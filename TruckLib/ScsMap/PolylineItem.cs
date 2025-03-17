@@ -51,25 +51,37 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Returns the first item of the polyline chain this item is a part of.
         /// </summary>
-        /// <returns>The first item of the polyline chain this item is a part of.</returns>
+        /// <returns>The first item of the polyline chain this item is a part of.
+        /// If the items form a loop, the item the method was called on is returned.</returns>
         public PolylineItem FindFirstItem()
         {
             var first = this;
-            while (first.BackwardItem is PolylineItem pli)
-                first = pli;
-            return first;
+            var current = this;
+            while (current.BackwardItem is PolylineItem pli)
+            {
+                current = pli;
+                if (current == first)
+                    break;
+            }
+            return current;
         }
 
         /// <summary>
         /// Returns the last item of the polyline chain this item is a part of.
         /// </summary>
-        /// <returns>The last item of the polyline chain this item is a part of.</returns>
+        /// <returns>The last item of the polyline chain this item is a part of.
+        /// If the items form a loop, the item the method was called on is returned.</returns>
         public PolylineItem FindLastItem()
         {
             var last = this;
-            while (last.ForwardItem is PolylineItem pli)
-                last = pli;
-            return last;
+            var current = this;
+            while (current.ForwardItem is PolylineItem pli)
+            {
+                current = pli;
+                if (current == last)
+                    break;
+            }
+            return current;
         }
 
         /// <summary>
@@ -229,24 +241,37 @@ namespace TruckLib.ScsMap
             // it's dumb, but it works
 
             var first = FindFirstItem();
-            var initialRot = MathEx.GetNodeRotation(first.Node.Position, first.ForwardNode.Position);
+            var current = first;
+            var initialRot = MathEx.GetNodeRotation(current.Node.Position, current.ForwardNode.Position);
 
-            if (first.BackwardItem is not Prefab)
-                first.Node.Rotation = initialRot;
-            if (first.ForwardItem is not Prefab)
-                first.ForwardNode.Rotation = initialRot;
+            if (current.BackwardItem is not Prefab)
+                current.Node.Rotation = initialRot;
+            if (current.ForwardItem is not Prefab)
+                current.ForwardNode.Rotation = initialRot;
 
-            var next = first;
-            while (next.ForwardItem is PolylineItem fw)
+            while (current.ForwardItem is PolylineItem fw)
             {
-                var p1 = next.Node;
-                var p2 = next.ForwardNode;
+                var p1 = current.Node;
+                var p2 = current.ForwardNode;
                 var p3 = fw.ForwardNode;
 
-                if (p3.ForwardItem is not Prefab)
-                    p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
-                SetMiddleRotation(p1, p2, p3);
-                next = fw;
+                if (fw == first)
+                {
+                    // items form a cycle and we've looped back around to the start
+                    var newRot = p1.Rotation.ToEuler() + p3.Rotation.ToEuler();
+                    p2.Rotation = Quaternion.CreateFromYawPitchRoll(newRot.Y, newRot.X, newRot.Z);
+                    break;
+                }
+                else
+                {
+                    if (p3.ForwardItem is not Prefab)
+                    {
+                        p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
+                    }
+                    SetMiddleRotation(p1, p2, p3);
+                }
+
+                current = fw;
             }
         }
 

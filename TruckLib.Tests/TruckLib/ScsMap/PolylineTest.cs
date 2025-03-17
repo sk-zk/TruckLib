@@ -35,5 +35,82 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             var actual = r2.InterpolateCurveDist(999f);
             Assert.Null(actual);
         }
+
+        [Fact]
+        public void FindFirstItem()
+        {
+            var map = new Map("foo");
+            var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
+            var r2 = r1.Append(new(42, 0, 30));
+            var r3 = r2.Append(new(25, 0, 18));
+            var r4 = r3.Append(new(42, 0, 0));
+
+            Assert.Equal(r1, r4.FindFirstItem());
+            Assert.Equal(r1, r3.FindFirstItem());
+            Assert.Equal(r1, r2.FindFirstItem());
+            Assert.Equal(r1, r1.FindFirstItem());
+        }
+
+        [Fact]
+        public void FindLastItem()
+        {
+            var map = new Map("foo");
+            var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
+            var r2 = r1.Append(new(42, 0, 30));
+            var r3 = r2.Append(new(25, 0, 18));
+            var r4 = r3.Append(new(42, 0, 0));
+
+            Assert.Equal(r4, r4.FindLastItem());
+            Assert.Equal(r4, r3.FindLastItem());
+            Assert.Equal(r4, r2.FindLastItem());
+            Assert.Equal(r4, r1.FindLastItem());
+        }
+
+        [Fact]
+        public void FindFirstItemWithLoop()
+        {
+            var map = new Map("foo");
+            var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
+            var r2 = r1.Append(new(42, 0, 30));
+            var r3 = r2.Append(new(25, 0, 18));
+            var r4 = r3.Append(new(42, 0, 0));
+            r1.Node.Merge(r4.ForwardNode);
+
+            Assert.Equal(r1, r1.FindFirstItem());
+            Assert.Equal(r2, r2.FindFirstItem());
+            Assert.Equal(r3, r3.FindFirstItem());
+            Assert.Equal(r4, r4.FindFirstItem());
+        }
+
+        [Fact]
+        public void FindLastItemWithLoop()
+        {
+            var map = new Map("foo");
+            var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
+            var r2 = r1.Append(new(42, 0, 30));
+            var r3 = r2.Append(new(25, 0, 18));
+            var r4 = r3.Append(new(42, 0, 0));
+            r1.Node.Merge(r4.ForwardNode);
+
+            Assert.Equal(r1, r1.FindLastItem());
+            Assert.Equal(r2, r2.FindLastItem());
+            Assert.Equal(r3, r3.FindLastItem());
+            Assert.Equal(r4, r4.FindLastItem());
+        }
+
+        [Fact]
+        public void ClosedLoopHasCorrectNodeRotation()
+        {
+            var map = new Map("foo");
+            var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
+            var r2 = r1.Append(new(42, 0, 30));
+            var r3 = r2.Append(new(25, 0, 18));
+            var r4 = r3.Append(new(42, 0, 0));
+            r1.Node.Merge(r4.ForwardNode);
+
+            AssertEx.Equal(new(0, 0.72112f, 0, 0.69281f), r3.Node.Rotation, 0.001f);
+            AssertEx.Equal(new(0, 0.0498041f, 0, 0.998759f), r4.Node.Rotation, 0.001f);
+        }
+
     }
 }

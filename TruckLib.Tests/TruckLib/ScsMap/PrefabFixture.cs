@@ -14,5 +14,11 @@ namespace TruckLib.Tests.TruckLib.ScsMap
 
         public PrefabDescriptor CompanyPpd { get; } =
             PrefabDescriptor.Open("Data/PrefabTest/car_dealer_01_fr.ppd");
+
+        public PrefabDescriptor ServicePpd { get; } =
+            PrefabDescriptor.Open("Data/PrefabTest/gas_plaza_01_ger.ppd");
+
+        public Models.Model ServicePmd { get; } =
+            Models.Model.Open("Data/PrefabTest/gas_plaza_01_ger.pmd");
     }
 }

@@ -37,8 +37,8 @@
 		<PackageReference Include="RBush" Version="4.0.0" />
 		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<PackageReference Include="TruckLib.HashFs" Version="0.1.10" />
-		<PackageReference Include="TruckLib.Models" Version="0.1.3" />
+		<PackageReference Include="TruckLib.HashFs" Version="0.1.11" />
+		<PackageReference Include="TruckLib.Models" Version="0.2.0" />
 		<PackageReference Include="TruckLib.Sii" Version="0.1.5" />
 	</ItemGroup>
 

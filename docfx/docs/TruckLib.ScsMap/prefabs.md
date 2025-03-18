@@ -23,8 +23,7 @@ using TruckLib.Models.Ppd;
 using TruckLib.HashFs;
 
 HashFsReader baseScs = HashFsReader.Open("<game root>/base.scs");
-byte[] ppdBytes = baseScs.Extract("/prefab2/car_dealer/car_dealer_01_fr.ppd");
-PrefabDescriptor ppd = PrefabDescriptor.Load(ppdBytes);
+PrefabDescriptor ppd = PrefabDescriptor.Open("/prefab2/car_dealer/car_dealer_01_fr.ppd", baseScs);
 ```
 
 Note that this will not work while the game is running because the game locks the file.
@@ -43,6 +42,24 @@ Rotation is handled the same way as it is ingame: no matter how the model's geom
 always initially be rotated such that the 0th control node has a direction of (0, 0, -1). This means that if you pass e.g.
 a yaw of 90°, the model will be rotated the same way as it would be if you specified 90° in the new item dialog
 of the editor.
+
+### Terrain
+The most convenient way to use prefab terrain is to pass the `.pmd` file
+to the `Add` method as well, enabling the library to handle the terrain point stuff automatically:
+
+```cs
+HashFsReader baseScs = HashFsReader.Open("<game root>/base.scs");
+PrefabDescriptor ppd = PrefabDescriptor.Open("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd", baseScs);
+TruckLib.Models.Model model = TruckLib.Models.Model.Open("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.pmd", baseScs);
+
+Prefab crossing = Prefab.Add(map, new Vector3(12.3f, 0, 23.4f), "387", ppd, model);
+crossing.Variant = "shoul_fr_1";  // Note that a valid variant must be set
+crossing.Look = "gray_fr";
+crossing.PrefabNodes[2].Terrain.Size = 30;
+```
+
+If you don't need terrain, this additional step is not necessary. On first load, the editor will complain
+that the "terrain point count doesn't match the saved value", but since the terrain size is 0, this warning is harmless.
 
 ## Changing the origin
 On occasion, the origin node of a prefab must be changed to allow for connections which would otherwise not be possible.

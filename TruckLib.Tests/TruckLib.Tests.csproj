@@ -59,6 +59,15 @@
     <None Update="Data\PrefabTest\car_dealer_01_fr.ppd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\PrefabTest\gas_plaza_01_ger.pmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\PrefabTest\gas_plaza_01_ger.pmg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\PrefabTest\gas_plaza_01_ger.ppd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Data\SelectionSerializerTest\selectiontest.sbd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

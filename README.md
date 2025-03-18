@@ -46,8 +46,6 @@ Documentation and an API reference is available at https://sk-zk.github.io/truck
 ## Known issues and limitations
 * The library does not calculate the bounding boxes of items, so you'll need to recalculate on load (Map&nbsp;>&nbsp;Recompute map).
 * Anything to do with prefabs may or may not break in unexpected ways.
-* The prefab object creator doesn't handle terrain points yet. Unless you need prefab terrain, this is also
-  fixed by recalculating.
 * When adding a camera path, the positions of the control points in the Keyframe objects are not set to any default values
   and therefore left at (0, 0, 0).
 * Helper locators of curve items, if used by the model, are not placed automatically by the library because their 

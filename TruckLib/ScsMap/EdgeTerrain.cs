@@ -12,12 +12,11 @@ namespace TruckLib.ScsMap
     public abstract class EdgeTerrain
     {
         /// <summary>
-        /// Widths of terrain rows in meters. 
-        /// <para>After row 15, every row is 100 meters wide.</para>
+        /// Lengths of terrain rows in meters. 
+        /// <para>After row 15, every row is 100 meters in size.</para>
         /// </summary>
-        public static readonly int[] RowWidthSequence = [ 
-            1, 1, 1, 2, 6, 6, 10, 10, 10, 20, 40, 50, 50, 50, 100 
-            ];
+        public static readonly int[] RowWidthSequence = 
+            [1, 1, 1, 2, 6, 6, 10, 10, 10, 20, 40, 50, 50, 50, 100];
 
         private float size;
         /// <summary>
@@ -26,9 +25,14 @@ namespace TruckLib.ScsMap
         public float Size
         {
             get => size;
-            set => size = Utils.SetIfInRange(value, 0, 6500);
+            set 
+            {
+                size = Utils.SetIfInRange(value, 0, 6500);
+                QuadData.Rows = (ushort)CalculateQuadRows(size);
+                UpdateQuadList();
+            }
         }
-
+        
         /// <summary>
         /// Unit name of the terrain profile.
         /// </summary>
@@ -61,11 +65,9 @@ namespace TruckLib.ScsMap
         /// <returns>The width of a terrain quad row at that index.</returns>
         public static int GetRowWidthAt(int index)
         {
-            if (index < RowWidthSequence.Length)
-            {
-                return RowWidthSequence[index];
-            }
-            return RowWidthSequence[^1];
+            return index < RowWidthSequence.Length 
+                ? RowWidthSequence[index] 
+                : RowWidthSequence[^1];
         }
 
         /// <summary>
@@ -73,55 +75,54 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="terrainSize">The terrain size.</param>
         /// <returns>The amount of quad rows.</returns>
-        protected int CalculateQuadRows(float terrainSize)
+        protected static int CalculateQuadRows(float terrainSize)
         {
             // get the amt of rows by subtracting the sequence of widths
             // from the terrain size until it is 0 or negative.
             // TODO: Check if the game ever uses a width > 100.
-            var rows = 0;
+            var rowIdx = 0;
             var remainder = terrainSize;
             while (remainder > 0)
             {
-                if (rows < RowWidthSequence.Length)
+                if (rowIdx < RowWidthSequence.Length)
                 {
-                    remainder -= RowWidthSequence[rows];
+                    remainder -= RowWidthSequence[rowIdx];
                 }
                 else
                 {
                     remainder -= RowWidthSequence[^1];
                 }
-                rows++;
+                rowIdx++;
             }
-
-            return rows;
+            return rowIdx;
         }
 
-        protected void UpdateQuadAmount()
+        protected void UpdateQuadList()
         {
-            var amt = QuadData.Cols * QuadData.Rows;
+            var amount = QuadData.Cols * QuadData.Rows;
 
             var quads = QuadData.Quads;
-            if (amt == 0)
+            if (amount == 0)
             {
                 quads.Clear();
                 return;
             }
 
-            if (amt == quads.Count)
+            if (amount == quads.Count)
                 return;
 
-            if (quads.Count < amt)
+            if (quads.Count < amount)
             {
-                var missing = amt - quads.Count;
+                var missing = amount - quads.Count;
                 quads.Capacity += missing;
                 for (int i = 0; i < missing; i++)
                 {
-                    quads.Add(new TerrainQuad());
+                    quads.Add(new());
                 }
             }
             else
             {
-                quads.RemoveRange(amt, quads.Count - amt);
+                quads.RemoveRange(amount, quads.Count - amount);
             }
         }
     }

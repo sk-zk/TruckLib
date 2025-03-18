@@ -26,12 +26,11 @@ var baseScs = HashFsReader.Open(Path.Combine(gameRoot, "base.scs"));
 Note that the game must be closed for this because it locks the file.
 
 ## Placing a prefab
-Let's now place a company prefab. The first step is to extract the prefab descriptor:
+Let's now place a company prefab. The first step is to load the prefab descriptor:
 ```cs
 using TruckLib.Models.Ppd;
 
-var companyDescriptorFile = baseScs.Extract("/prefab2/car_dealer/car_dealer_01_fr.ppd");
-var companyDescriptor = PrefabDescriptor.Load(companyDescriptorFile);
+var companyDescriptor = PrefabDescriptor.Open("/prefab2/car_dealer/car_dealer_01_fr.ppd", baseScs);
 ```
 
 With this, we can call the `Prefab.Add` method, which will add a prefab to the map.
@@ -62,11 +61,10 @@ Here's our progress so far:
 ![](../../images/02-wip1.png)
 
 ## Attaching prefabs
-Secondly, we will place a T junction and attach it to the entrance of the company. As above, we will again extract the `.ppd` file:
+Next, we will place a T junction and attach it to the entrance of the company. As above, we will again extract the `.ppd` file:
 
 ```cs
-var crossingDescriptorFile = baseScs.Extract("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd");
-var crossingDescriptor = PrefabDescriptor.Load(crossingDescriptorFile);
+var crossingDescriptor = PrefabDescriptor.Open("/prefab2/cross_temp/fr/fr_r1_x_r1_t_narrow_tmpl.ppd", baseScs);
 ```
 
 We can now add the junction to the map:

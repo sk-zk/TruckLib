@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using TruckLib.Models.Ppd;
+using TruckLib.Models;
 
 namespace TruckLib.ScsMap
 {
@@ -41,10 +42,19 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Model { get; set; }
 
+        private Token variant;
         /// <summary>
         /// The model variant.
         /// </summary>
-        public Token Variant { get; set; }
+        public Token Variant 
+        {
+            get => variant;
+            set
+            {
+                variant = value;
+                UpdateTerrainCols();
+            }
+        }
 
         /// <summary>
         /// The model look.
@@ -247,6 +257,10 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[5] = value;
         }
 
+        internal List<ControlNode> PpdNodes { get; set; }
+
+        internal List<Variant> Variants { get; set; }
+
         public Prefab() : base() 
         {
             Init();
@@ -277,19 +291,40 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Creates a prefab item from a prefab descriptor file and adds it to the map.
+        /// Creates a prefab item from a prefab descriptor and adds it to the map.
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="unitName">The unit name of the prefab.</param>
         /// <param name="position">The position of node 0.</param>
-        /// <param name="ppd">The prefab descriptor file defining the prefab.</param>
+        /// <param name="ppd">The prefab descriptor defining the prefab's properties.</param>
         /// <param name="rotation">The rotation of the prefab.</param>
         /// <returns>The newly created prefab.</returns>
         public static Prefab Add(IItemContainer map, Vector3 position, Token unitName,
             PrefabDescriptor ppd, Quaternion? rotation = null)
         {
-            return new PrefabCreator().FromPpd(map, unitName, ppd, position,
+            return Add(map, position, unitName, ppd, null, rotation);
+        }
+
+        /// <summary>
+        /// Creates a prefab item from a prefab descriptor and adds it to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="unitName">The unit name of the prefab.</param>
+        /// <param name="position">The position of node 0.</param>
+        /// <param name="ppd">The prefab descriptor defining the prefab.</param>
+        /// <param name="model">The model defining the prefab's geometry.</param>
+        /// <param name="rotation">The rotation of the prefab.</param>
+        /// <returns>The newly created prefab.</returns>
+        public static Prefab Add(IItemContainer map, Vector3 position, Token unitName,
+            PrefabDescriptor ppd, Models.Model model, Quaternion? rotation = null)
+        {
+            var prefab = new PrefabCreator().FromPpd(map, unitName, ppd, position,
                 rotation ?? Quaternion.Identity);
+
+            prefab.PpdNodes = ppd.Nodes;
+            prefab.Variants = model?.Variants;
+
+            return prefab;
         }
 
         /// <summary>
@@ -597,6 +632,26 @@ namespace TruckLib.ScsMap
                 acc += node.Position;
             }
             return acc / Nodes.Count;
+        }
+
+        private void UpdateTerrainCols()
+        {
+            if (Variants is null || Variants.Count == 0)
+                return;
+
+            if (PpdNodes is null || PpdNodes.Count == 0)
+                return;
+
+            int variantIndex = Variants.FindIndex(0, Variants.Count, x => x.Name == Variant);
+
+            if (variantIndex != -1)
+            {
+                for (int i = 0; i < PpdNodes.Count; i++)
+                {
+                    PrefabNodes[i].Terrain.TerrainPointCount = PpdNodes[i].TerrainPoints[variantIndex].Count;
+                    PrefabNodes[i].Terrain.CalculateQuadGrid();
+                }
+            }
         }
     }
 }

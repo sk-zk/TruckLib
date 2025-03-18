@@ -56,7 +56,7 @@ namespace TruckLib.ScsMap
         {
             QuadData.Cols = (ushort)CalculateQuadCols(resolution, length);
             QuadData.Rows = (ushort)CalculateQuadRows(Size);
-            UpdateQuadAmount();
+            UpdateQuadList();
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace TruckLib.ScsMap
         {
             QuadData.Cols = (ushort)CalculateQuadCols(stepSize, length);
             QuadData.Rows = (ushort)CalculateQuadRows(Size);
-            UpdateQuadAmount();
+            UpdateQuadList();
         }
 
         /// <summary>

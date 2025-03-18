@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.IO;
-using System.Collections;
-using System.Xml.Linq;
 using RBush;
 
 namespace TruckLib.ScsMap
@@ -14,7 +12,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Represents a map node.
     /// </summary>
-    public class Node : INode, IItemReferences, IMapObject, IBinarySerializable, ISpatialData
+    public class Node : INode, IItemReferences, ISpatialData
     {
         /// <summary>
         /// The UID of this node.
@@ -22,9 +20,7 @@ namespace TruckLib.ScsMap
         public ulong Uid { get; set; }
 
         private Vector3 position;
-        /// <summary>
-        /// Position of the node. Note that this will be serialized as fixed point values.
-        /// </summary>
+        /// <inheritdoc/>
         public Vector3 Position
         {
             get => position;
@@ -40,9 +36,7 @@ namespace TruckLib.ScsMap
         }
 
         private Quaternion rotation;
-        /// <summary>
-        /// Rotation of the node.
-        /// </summary>
+        /// <inheritdoc/>
         public Quaternion Rotation
         {
             get => rotation;
@@ -52,85 +46,64 @@ namespace TruckLib.ScsMap
             }
         }
 
-        /// <summary>
-        /// The backward item belonging to this node. 
-        /// </summary>
+        /// <inheritdoc/>
         public IMapObject BackwardItem { get; set; }
 
-        /// <summary>
-        /// The forward item belonging to this node. 
-        /// </summary>
+        /// <inheritdoc/>
         public IMapObject ForwardItem { get; set; }
 
         private FlagField flags;
 
-        /// <summary>
-        /// Gets or sets if this node is red or green.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsRed
         {
             get => flags[0];
             set => flags[0] = value;
         }
 
-        /// <summary>
-        /// Gets or sets if the game will use whichever rotation is specified without
-        /// reverting to its default rotation when the node is updated.
-        /// </summary>
+        /// <inheritdoc/>
         public bool FreeRotation
         {
             get => flags[2];
             set => flags[2] = value;
         }
 
-        /// <summary>
-        /// Gets or sets if this node is a country border.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsCountryBorder
         {
             get => flags[1];
             set => flags[1] = value;
         }
 
-        /// <summary>
-        /// Gets or sets if this node represents a curve locator.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsCurveLocator
         {
             get => flags[3];
             set => flags[3] = value;
         }
 
-        /// <summary>
-        /// Gets or sets if this node can be moved or deleted in the editor.
-        /// </summary>
+        /// <inheritdoc/>
         public bool Locked
         {
             get => flags[26];
             set => flags[26] = value;
         }
 
-        /// <summary>
-        /// The country of the backward item if this node is a country border.
-        /// </summary>
+        /// <inheritdoc/>
         public byte BackwardCountry
         {
             get => flags.GetByte(2);
             set => flags.SetByte(2, value);
         }
 
-        /// <summary>
-        /// The country of the forward item if this node is a country border.
-        /// </summary>
+        /// <inheritdoc/>
         public byte ForwardCountry
         {
             get => flags.GetByte(1);
             set => flags.SetByte(1, value);
         }
 
-        /// <summary>
-        /// The map, selection or compound which contains this node.
-        /// </summary>
+        /// <inheritdoc/>
         public IItemContainer Parent { get; set; }
 
         private Envelope envelope;
@@ -160,36 +133,22 @@ namespace TruckLib.ScsMap
             flags = new FlagField();
         }
 
-        /// <summary>
-        /// Returns whether the node has no ForwardItem and no BackwardItem.
-        /// </summary>
-        /// <returns>Whether the node has no ForwardItem and no BackwardItem.</returns>
+        /// <inheritdoc/>
         public bool IsOrphaned() => ForwardItem is null && BackwardItem is null;
 
-        /// <summary>
-        /// Moves the node to another position.
-        /// </summary>
-        /// <param name="newPos">The new position of the node.</param>
+        /// <inheritdoc/>
         public void Move(Vector3 newPos)
         {
             Position = newPos;
         }
 
-        /// <summary>
-        /// Translates the node by the given vector.
-        /// </summary>
-        /// <param name="translation">The translation vector.</param>
+        /// <inheritdoc/>
         public void Translate(Vector3 translation)
         {
             Move(Position + translation);
         }
 
-        /// <summary>
-        /// Merges the node <i>n2</i> into this one, if possible, and then deletes <i>n2</i>.
-        /// Note that the flags and rotation of <i>n2</i> will not be preserved.
-        /// </summary>
-        /// <param name="n2">The node to merge into this one.</param>
-        /// <exception cref="InvalidOperationException">Thrown if the nodes can't be merged.</exception>
+        /// <inheritdoc/>
         public void Merge(INode n2)
         {
             // TODO put some of the prefab stuff in here
@@ -256,14 +215,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        /// <summary>
-        /// Splits this node into one node holding the backward item and one node 
-        /// holding the forward item.
-        /// This method is the opposite of <see cref="Merge(INode)">Merge</see>.
-        /// </summary>
-        /// <returns>The newly created node. If no action was performed because
-        /// this node is already only used by one item, the method returns null.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the node can't be split.</exception>
+        /// <inheritdoc/>
         public INode Split()
         {
             if (ForwardItem is null || BackwardItem is null)
@@ -401,11 +353,7 @@ namespace TruckLib.ScsMap
             return $"{Uid:X16} ({Position.X}|{Position.Y}|{Position.Z})";
         }
 
-        /// <summary>
-        /// Searches a list of all map items for the map items referenced by UID by this node
-        /// and updates the respective references.
-        /// </summary>
-        /// <param name="allItems">A dictionary of all items in the entire map.</param>
+        /// <inheritdoc/>
         public void UpdateItemReferences(Dictionary<ulong, MapItem> allItems)
         {
             if (ForwardItem is UnresolvedItem

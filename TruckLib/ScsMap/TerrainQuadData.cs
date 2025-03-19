@@ -44,7 +44,8 @@ namespace TruckLib.ScsMap
 
         // TODO: Change implementation of this data to be easier to work with
         /// <summary>
-        /// Offsets of terrain vertices.
+        /// Offsets of terrain vertices. Positions are relative to the position of 
+        /// the backward node.
         /// </summary>
         public List<VertexData> Offsets { get; set; }
 

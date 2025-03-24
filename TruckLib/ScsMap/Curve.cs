@@ -196,9 +196,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if only flat textures are used as vegetation.
+        /// Forces the use of low LOD versions of models.
         /// </summary>
-        public bool LowPolyVegetation
+        public bool LowDetail
         {
             get => Kdop.Flags[20];
             set => Kdop.Flags[20] = value;

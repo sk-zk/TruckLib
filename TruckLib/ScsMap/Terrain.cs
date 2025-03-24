@@ -129,9 +129,9 @@ namespace TruckLib.ScsMap
         private bool adaptiveTessellation = false;
         /// <summary>
         /// Changes the step size in two specific scenarios.
-        /// <para>If <see cref="StepSize">StepSize</see> is 2 and <see cref="Length">Length</see>
+        /// <para>If <see cref="StepSize">StepSize</see> is 2 and <see cref="PolylineItem.Length">Length</see>
         /// is less than 2, the actual step size is 0.2.</para>
-        /// <para>If <see cref="StepSize">StepSize</see> is 16 and <see cref="Length">Length</see>
+        /// <para>If <see cref="StepSize">StepSize</see> is 16 and <see cref="PolylineItem.Length">Length</see>
         /// is greater than 64, the actual step size is 32.</para>
         /// </summary>
         public bool AdaptiveTessellation

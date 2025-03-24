@@ -126,6 +126,27 @@ namespace TruckLib.ScsMap
         /// </summary>
         public bool SmoothDetailVegetation { get; set; } = false;
 
+        private bool adaptiveTessellation = false;
+        /// <summary>
+        /// Changes the step size in two specific scenarios.
+        /// <para>If <see cref="StepSize">StepSize</see> is 2 and <see cref="Length">Length</see>
+        /// is less than 2, the actual step size is 0.2.</para>
+        /// <para>If <see cref="StepSize">StepSize</see> is 16 and <see cref="Length">Length</see>
+        /// is greater than 64, the actual step size is 32.</para>
+        /// </summary>
+        public bool AdaptiveTessellation
+        {
+            get => adaptiveTessellation;
+            set 
+            {
+                if (adaptiveTessellation != value)
+                {
+                    adaptiveTessellation = value;
+                    RecalculateTerrain();
+                }
+            }
+        }
+
         public bool Unknown { get; set; } = false;
         public bool Unknown2 { get; set; } = false;
 
@@ -161,7 +182,7 @@ namespace TruckLib.ScsMap
             float leftSize, float rightSize)
         {
             var terrain = Add<Terrain>(map, backwardPos, forwardPos);
-            terrain.InitFromAddOrAppend(backwardPos, forwardPos, material, leftSize, rightSize);
+            terrain.InitFromAddOrAppend(material, leftSize, rightSize);
             return terrain;
         }
 
@@ -176,7 +197,7 @@ namespace TruckLib.ScsMap
         public Terrain Append(Vector3 position, Token material, float leftSize, float rightSize)
         {
             var terrain = Append<Terrain>(position);
-            terrain.InitFromAddOrAppend(ForwardNode.Position, position, material, leftSize, rightSize);
+            terrain.InitFromAddOrAppend(material, leftSize, rightSize);
             RecalculateTerrain();
             return terrain;
         }
@@ -184,15 +205,14 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Initializes a terrain which has been created via Add or Append.
         /// </summary>
-        internal void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token material,
-            float leftSize, float rightSize)
+        internal void InitFromAddOrAppend(Token material, float leftSize, float rightSize)
         {
             Left.Terrain.Size = leftSize;
             Right.Terrain.Size = rightSize;
             foreach (var side in new[] { Left, Right })
             {
                 side.Terrain.QuadData.BrushMaterials = [new(material)];
-                side.Terrain.CalculateQuadGrid(StepSize, Length);
+                side.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
             }
         }
 
@@ -205,8 +225,8 @@ namespace TruckLib.ScsMap
 
         private void RecalculateTerrain()
         {
-            Left.Terrain.CalculateQuadGrid(StepSize, Length);
-            Right.Terrain.CalculateQuadGrid(StepSize, Length);
+            Left.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
+            Right.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
         }
     }
 }

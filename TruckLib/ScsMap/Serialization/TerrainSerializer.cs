@@ -49,6 +49,7 @@ namespace TruckLib.ScsMap.Serialization
             var karr3 = new BitArray(new[] { kflag3 });
             t.TerrainShadows = !karr3[0];
             t.SmoothDetailVegetation = karr3[2];
+            t.AdaptiveTessellation = karr3[3];
             t.Unknown2 = karr3[5];
             t.Unknown = karr3[7];
 
@@ -145,6 +146,7 @@ namespace TruckLib.ScsMap.Serialization
             kflag3 |= (byte)(t.Unknown.ToByte() << 7);
             kflag3 |= (byte)(t.Unknown2.ToByte() << 5);
             kflag3 |= (byte)(t.SmoothDetailVegetation.ToByte() << 2);
+            kflag3 |= (byte)(t.AdaptiveTessellation.ToByte() << 3);
             kflag3 |= (!t.TerrainShadows).ToByte();
             w.Write(kflag3);
 

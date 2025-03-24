@@ -94,9 +94,10 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="stepSize">The step size of the standalone terrain.</param>
         /// <param name="length">The length of the standalone terrain.</param>
-        public void CalculateQuadGrid(StepSize stepSize, float length)
+        /// <param name="adaptiveTessellation">Whether adaptive tessellation is enabled.</param>
+        public void CalculateQuadGrid(StepSize stepSize, float length, bool adaptiveTessellation)
         {
-            QuadData.Cols = (ushort)CalculateQuadCols(stepSize, length);
+            QuadData.Cols = (ushort)CalculateQuadCols(stepSize, length, adaptiveTessellation);
             QuadData.Rows = (ushort)CalculateQuadRows(Size);
             UpdateQuadList();
         }
@@ -106,18 +107,31 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="stepSize">The step size of the standalone terrain.</param>
         /// <param name="length">The length of the standalone terrain.</param>
+        /// <param name="adaptiveTessellation">Whether adaptive tessellation is enabled.</param>
         /// <returns>The amount of quad columns.</returns>
-        private static int CalculateQuadCols(StepSize stepSize, float length)
+        private static int CalculateQuadCols(StepSize stepSize, float length, bool adaptiveTessellation)
         {
-            var terrainSteps = stepSize switch
+            float terrainSteps;
+            if (adaptiveTessellation && stepSize == StepSize.Meters2 && length < 2)
             {
-                StepSize.Meters16 => 16,
-                StepSize.Meters12 => 12,
-                StepSize.Meters4 => 4,
-                StepSize.Meters2 => 2,
-                _ => 4,
-            };
-            int cols = (int)(length / terrainSteps);
+                terrainSteps = 0.2f;
+            }
+            else if (adaptiveTessellation && stepSize == StepSize.Meters16 && length > 64)
+            {
+                terrainSteps = 32f;
+            }
+            else
+            {
+                terrainSteps = stepSize switch
+                {
+                    StepSize.Meters16 => 16,
+                    StepSize.Meters12 => 12,
+                    StepSize.Meters4 => 4,
+                    StepSize.Meters2 => 2,
+                    _ => 4,
+                };
+            }
+            int cols = (int)Math.Ceiling(length / terrainSteps);
             return cols;
         }
 

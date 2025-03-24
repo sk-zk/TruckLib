@@ -225,8 +225,10 @@ namespace TruckLib.ScsMap
 
         private void RecalculateTerrain()
         {
-            Left.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
-            Right.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
+            if (Left.Terrain.QuadData is not null)
+                Left.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
+            if (Right.Terrain.QuadData is not null)
+                Right.Terrain.CalculateQuadGrid(StepSize, Length, AdaptiveTessellation);
         }
     }
 }

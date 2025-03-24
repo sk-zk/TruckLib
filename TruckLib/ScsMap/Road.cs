@@ -428,8 +428,10 @@ namespace TruckLib.ScsMap
 
         private void RecalculateTerrain()
         {
-            Left.Terrain.CalculateQuadGrid(Resolution, Length);
-            Right.Terrain.CalculateQuadGrid(Resolution, Length);
+            if (Left.Terrain.QuadData is not null)
+                Left.Terrain.CalculateQuadGrid(Resolution, Length);
+            if (Right.Terrain.QuadData is not null)
+                Right.Terrain.CalculateQuadGrid(Resolution, Length);
         }
     }
 }

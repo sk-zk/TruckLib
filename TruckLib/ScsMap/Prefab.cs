@@ -222,7 +222,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if this prefab is the last prefab before a <see cref="ScsMap.Ferry"/>.
+        /// Gets or sets if this prefab is the last prefab before a <see cref="ScsMap.Ferry">Ferry</see>.
         /// </summary>
         public bool IsFerryEntrance
         {
@@ -255,6 +255,12 @@ namespace TruckLib.ScsMap
         {
             get => Kdop.Flags[5];
             set => Kdop.Flags[5] = value;
+        }
+
+        public bool MergeRoads
+        {
+            get => Kdop.Flags[6];
+            set => Kdop.Flags[6] = value;
         }
 
         internal List<ControlNode> PpdNodes { get; set; }

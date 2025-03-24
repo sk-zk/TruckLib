@@ -30,7 +30,7 @@ Depending on the HashFS version of the archive, this will create a `HashFsReader
 
 ### Known paths
 The [`EntryExists`](xref:TruckLib.HashFs.IHashFsReader.EntryExists*) method will tell you if the given path exists in the archive, 
-and if yes, whether it is a directory or a file:
+and if so, whether it is a directory or a file:
 
 ```cs
 EntryType type = reader.EntryExists("/def/world/prefab.sii");

@@ -28,8 +28,11 @@ namespace TruckLib.ScsMap
             set 
             {
                 size = Utils.SetIfInRange(value, 0, 6500);
-                QuadData.Rows = (ushort)CalculateQuadRows(size);
-                UpdateQuadList();
+                if (QuadData is not null)
+                {
+                    QuadData.Rows = (ushort)CalculateQuadRows(size);
+                    UpdateQuadList();
+                }
             }
         }
         

@@ -32,9 +32,9 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             AssertEx.Equal(new(58.8359f, 0, 100.0547f), prefab.Nodes[1].Position, 0.01f);
 
             var company = prefab.SlaveItems[0] as Company;
-            company.SpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
+            var orderedSpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
             AssertEx.Equal(new Vector3(81.0938f, 0, 89.9648f), company.Node.Position, 0.01f);
-            AssertEx.Equal(new(33.1367f, 0, 124.434f), company.SpawnPoints[0].Node.Position, 0.01f);
+            AssertEx.Equal(new(33.1367f, 0, 124.434f), orderedSpawnPoints[0].Node.Position, 0.01f);
         }
 
         [Fact]

@@ -98,7 +98,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             Assert.True(company.Node.IsRed);
             Assert.Equal(prefab, company.Prefab);
 
-            company.SpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
+            var orderedSpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
             expectedPositions = [
                 new(45.5664f, 0, 23.1367f), new(56.7188f, 0, 43.4961f), new(57.0586f, 0, 34.0781f),
                 new(57.7266f, 0, 29.1563f), new(92.3828f, 0, 54.582f)
@@ -109,10 +109,10 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             ];
             for (int i = 0; i < expectedPositions.Length; i++)
             {
-                Assert.True(map.Nodes.ContainsKey(company.SpawnPoints[i].Node.Uid));
-                AssertEx.Equal(expectedPositions[i], company.SpawnPoints[i].Node.Position, 0.01f);
-                AssertEx.Equal(expectedRotations[i], company.SpawnPoints[i].Node.Rotation, 0.01f);
-                Assert.False(company.SpawnPoints[i].Node.IsRed);
+                Assert.True(map.Nodes.ContainsKey(orderedSpawnPoints[i].Node.Uid));
+                AssertEx.Equal(expectedPositions[i], orderedSpawnPoints[i].Node.Position, 0.01f);
+                AssertEx.Equal(expectedRotations[i], orderedSpawnPoints[i].Node.Rotation, 0.01f);
+                Assert.False(orderedSpawnPoints[i].Node.IsRed);
             }
         }
 
@@ -148,7 +148,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             Assert.True(company.Node.IsRed);
             Assert.Equal(prefab, company.Prefab);
 
-            company.SpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
+            var orderedSpawnPoints = company.SpawnPoints.OrderBy(x => x.Node.Position.X).ToList();
             expectedPositions = [
                 new(23.1367f, 0, 114.434f), new(29.1563f, 0, 102.273f), new(34.0781f, 0, 102.941f),
                 new(43.4961f, 0, 103.281f), new(54.582f, 0, 67.6172f),
@@ -159,10 +159,10 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             ];
             for (int i = 0; i < expectedPositions.Length; i++)
             {
-                Assert.True(map.Nodes.ContainsKey(company.SpawnPoints[i].Node.Uid));
-                AssertEx.Equal(expectedPositions[i], company.SpawnPoints[i].Node.Position, 0.01f);
-                AssertEx.Equal(expectedRotations[i], company.SpawnPoints[i].Node.Rotation, 0.01f);
-                Assert.False(company.SpawnPoints[i].Node.IsRed);
+                Assert.True(map.Nodes.ContainsKey(orderedSpawnPoints[i].Node.Uid));
+                AssertEx.Equal(expectedPositions[i], orderedSpawnPoints[i].Node.Position, 0.01f);
+                AssertEx.Equal(expectedRotations[i], orderedSpawnPoints[i].Node.Rotation, 0.01f);
+                Assert.False(orderedSpawnPoints[i].Node.IsRed);
             }
         }
 

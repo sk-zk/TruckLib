@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
+using TruckLib.ScsMap.Collections;
 
 namespace TruckLib.ScsMap
 {
@@ -31,7 +31,7 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Additional nodes placed for parking spots and trailer spawn points.
         /// </summary>
-        public List<CompanySpawnPoint> SpawnPoints { get; set; }
+        public CompanySpawnPointList SpawnPoints { get; set; }
 
         public Company() : base() { }
 
@@ -44,7 +44,7 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            SpawnPoints = [];
+            SpawnPoints = new(this);
         }
 
         /// <summary>

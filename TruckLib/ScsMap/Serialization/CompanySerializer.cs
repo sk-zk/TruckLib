@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap.Serialization
             company.Node = new UnresolvedNode(r.ReadUInt64());
 
             var spawnPointUids = ReadNodeRefList(r);
-            company.SpawnPoints = new List<CompanySpawnPoint>(spawnPointUids.Count);
+            company.SpawnPoints = new(company);
             for (int i = 0; i < spawnPointUids.Count; i++)
             {
                 var flags = r.ReadUInt32();

@@ -10,7 +10,7 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class KdopBounds
     {
-        private const int arrSize = 5;
+        internal const int KdopArrayLength = 5;
 
         /// <summary>
         /// Minimums of the k-DOP bounding box.
@@ -27,16 +27,16 @@ namespace TruckLib.ScsMap
         /// </summary>
         public KdopBounds()
         {
-            Minimums = new float[arrSize];
-            Maximums = new float[arrSize];
+            Minimums = new float[KdopArrayLength];
+            Maximums = new float[KdopArrayLength];
 
             Init();
         }
 
         internal KdopBounds(bool initFields)
         {
-            Minimums = new float[arrSize];
-            Maximums = new float[arrSize];
+            Minimums = new float[KdopArrayLength];
+            Maximums = new float[KdopArrayLength];
 
             if (initFields) Init();
         }

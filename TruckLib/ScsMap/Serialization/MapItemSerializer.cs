@@ -14,7 +14,7 @@ namespace TruckLib.ScsMap.Serialization
 
         public abstract void Serialize(BinaryWriter w, MapItem item);
 
-        private const int viewDistanceFactor = 10;
+        private const int ViewDistanceFactor = 10;
 
         public static void ReadKdopItem(BinaryReader r, MapItem item)
         {
@@ -22,7 +22,7 @@ namespace TruckLib.ScsMap.Serialization
             item.Kdop.Uid = r.ReadUInt64();
             ReadKdopBounds(r, item);
             item.Kdop.Flags = new FlagField(r.ReadUInt32());
-            item.Kdop.ViewDistance = (ushort)((int)r.ReadByte() * viewDistanceFactor);
+            item.Kdop.ViewDistance = (ushort)((int)r.ReadByte() * ViewDistanceFactor);
         }
 
         public static void ReadKdopBounds(BinaryReader r, MapItem item)
@@ -32,14 +32,11 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void ReadKdopBounds(BinaryReader r, KdopBounds kb)
         {
-            ReadKbArr(r, kb.Minimums);
-            ReadKbArr(r, kb.Maximums);
+            for (int i = 0; i < KdopBounds.KdopArrayLength; i++)
+                kb.Minimums[i] = r.ReadSingle();
 
-            static void ReadKbArr(BinaryReader r, float[] arr)
-            {
-                for (int i = 0; i < arr.Length; i++)
-                    arr[i] = r.ReadSingle();
-            }
+            for (int i = 0; i < KdopBounds.KdopArrayLength; i++)
+                kb.Maximums[i] = r.ReadSingle();
         }
 
         public static void WriteKdopItem(BinaryWriter w, MapItem item)
@@ -47,7 +44,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(item.Kdop.Uid);
             WriteKdopBounds(w, item);
             w.Write(item.Kdop.Flags.Bits);
-            w.Write((byte)(item.Kdop.ViewDistance / viewDistanceFactor));
+            w.Write((byte)(item.Kdop.ViewDistance / ViewDistanceFactor));
         }
 
         public static void WriteKdopBounds(BinaryWriter w, MapItem item)
@@ -57,15 +54,11 @@ namespace TruckLib.ScsMap.Serialization
 
         public static void WriteKdopBounds(BinaryWriter w, float[] minimums, float[] maximums)
         {
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < KdopBounds.KdopArrayLength; i++)
                 w.Write(minimums[i]);
-            }
 
-            for (int i = 0; i < 5; i++)
-            {
+            for (int i = 0; i < KdopBounds.KdopArrayLength; i++)
                 w.Write(maximums[i]);
-            }
         }
 
         /// <summary>

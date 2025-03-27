@@ -82,9 +82,12 @@ namespace TruckLib.ScsMap.Collections
         /// Creates a map node at the specified position and adds it to the end of the list.
         /// </summary>
         /// <param name="position">The position of the node.</param>
-        public void Add(Vector3 position)
+        /// <returns>The newly created node.</returns>
+        public INode Add(Vector3 position)
         {
-            Add(CreateNode(position));
+            var node = CreateNode(position);
+            Add(node);
+            return node;
         }
 
         /// <summary>
@@ -144,9 +147,12 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         /// <param name="index">The zero-based index at which the object should be inserted.</param>
         /// <param name="position">The position of the node.</param>
-        public void Insert(int index, Vector3 position)
+        /// <returns>The newly created node.</returns>
+        public INode Insert(int index, Vector3 position)
         {
-            Insert(index, CreateNode(position, index == 0));
+            var node = CreateNode(position, index == 0);
+            Insert(index, node);
+            return node;
         }
 
         /// <summary>

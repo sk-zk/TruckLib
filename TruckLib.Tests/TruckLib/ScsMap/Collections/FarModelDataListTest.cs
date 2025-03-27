@@ -48,8 +48,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
-            fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
-            var fmData = fm.Models[0];
+            var fmData = fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
             fm.Models.RemoveAt(0);
 
             Assert.False(map.Nodes.ContainsKey(fmData.Node.Uid));
@@ -61,10 +60,8 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
-            fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
-            var fmData1 = fm.Models[0];
-            fm.Models.Add(new Vector3(12, 34, 56), "baz", Vector3.One);
-            var fmData2 = fm.Models[1];
+            var fmData1 = fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
+            var fmData2 = fm.Models.Add(new Vector3(12, 34, 56), "baz", Vector3.One);
             fm.Models.Clear();
 
             Assert.Empty(fm.Models);

@@ -40,8 +40,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
-            curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
-            var node = curve.Locators[0];
+            var node = curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
             curve.Locators.RemoveAt(0);
 
             Assert.Empty(curve.Locators);
@@ -54,8 +53,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
-            curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
-            var node = curve.Locators[0];
+            var node = curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
             var success = curve.Locators.Remove(node);
 
             Assert.True(success);
@@ -69,10 +67,8 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
-            curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
-            var node1 = curve.Locators[0];
-            curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity);
-            var node2 = curve.Locators[1];
+            var node1 = curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
+            var node2 = curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity);
             curve.Locators.Clear();
 
             Assert.Empty(curve.Locators);

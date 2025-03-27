@@ -63,11 +63,14 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="position">The position of the node.</param>
         /// <param name="rotation">The rotation of the node.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
-        public void Add(Vector3 position, Quaternion rotation)
+        /// <returns>The newly created node.</returns>
+        public INode Add(Vector3 position, Quaternion rotation)
         {
             if (list.Count >= MaxSize)
                 throw new IndexOutOfRangeException();
-            Add(CreateNode(position, rotation));
+            var node = CreateNode(position, rotation);
+            Add(node);
+            return node;
         }
 
         /// <inheritdoc/>
@@ -119,11 +122,14 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="position">The position of the node.</param>
         /// <param name="rotation">The rotation of the node.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
-        public void Insert(int index, Vector3 position, Quaternion rotation)
+        /// <returns>The newly created node.</returns>
+        public INode Insert(int index, Vector3 position, Quaternion rotation)
         {
             if (list.Count >= MaxSize)
                 throw new IndexOutOfRangeException();
-            Insert(index, CreateNode(position, rotation));
+            var node = CreateNode(position, rotation);
+            Insert(index, node);
+            return node;
         }
 
         /// <summary>

@@ -47,8 +47,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
-            gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
-            var point = gate.ActivationPoints[0];
+            var point = gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
             gate.ActivationPoints.RemoveAt(0);
 
             Assert.Empty(gate.ActivationPoints);
@@ -61,8 +60,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
-            gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
-            var point = gate.ActivationPoints[0];
+            var point = gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
             var success = gate.ActivationPoints.Remove(point);
 
             Assert.True(success);
@@ -76,10 +74,8 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map("foo");
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
-            gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
-            var point1 = gate.ActivationPoints[0];
-            gate.ActivationPoints.Insert(0, new Vector3(-30, 0, -20), "bbb");
-            var point2 = gate.ActivationPoints[1];
+            var point1 = gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
+            var point2 = gate.ActivationPoints.Insert(0, new Vector3(-30, 0, -20), "bbb");
             gate.ActivationPoints.Clear();
 
             Assert.Empty(gate.ActivationPoints);

@@ -55,9 +55,12 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="position">The position of the node.</param>
         /// <param name="model">The unit name of the model.</param>
         /// <param name="scale">The scale of the model.</param>
-        public void Add(Vector3 position, Token model, Vector3 scale)
+        /// <returns>The newly created object.</returns>
+        public FarModelData Add(Vector3 position, Token model, Vector3 scale)
         {
-            Add(new FarModelData(CreateNode(position), model, scale));
+            var obj = new FarModelData(CreateNode(position), model, scale);
+            Add(obj);
+            return obj;
         }
 
         /// <inheritdoc/>
@@ -106,9 +109,12 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="position">The position of the node.</param>
         /// <param name="model">The unit name of the model.</param>
         /// <param name="scale">The scale of the model.</param>
-        public void Insert(int index, Vector3 position, Token model, Vector3 scale)
+        /// <returns>The newly created object.</returns>
+        public FarModelData Insert(int index, Vector3 position, Token model, Vector3 scale)
         {
-            Insert(index, new FarModelData(CreateNode(position), model, scale));
+            var obj = new FarModelData(CreateNode(position), model, scale);
+            Insert(index, obj);
+            return obj;
         }
 
         /// <summary>

@@ -64,11 +64,14 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="position">The position of the node.</param>
         /// <param name="trigger">The name of the trigger.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
-        public void Add(Vector3 position, string trigger)
+        /// <returns>The newly created activation point.</returns>
+        public GateActivationPoint Add(Vector3 position, string trigger)
         {
             if (list.Count >= MaxSize)
                 throw new IndexOutOfRangeException();
-            Add(new GateActivationPoint(CreateNode(position), trigger));
+            var point = new GateActivationPoint(CreateNode(position), trigger);
+            Add(point);
+            return point;
         }
 
         /// <inheritdoc/>
@@ -120,11 +123,14 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="position">The position of the node.</param>
         /// <param name="trigger">The name of the trigger.</param>
         /// <exception cref="IndexOutOfRangeException">Thrown if the list is full.</exception>
-        public void Insert(int index, Vector3 position, string trigger)
+        /// <returns>The newly created activation point.</returns>
+        public GateActivationPoint Insert(int index, Vector3 position, string trigger)
         {
             if (list.Count >= MaxSize)
                 throw new IndexOutOfRangeException();
-            Insert(index, new GateActivationPoint(CreateNode(position), trigger));
+            var point = new GateActivationPoint(CreateNode(position), trigger);
+            Insert(index, point);
+            return point;
         }
 
         /// <summary>

@@ -39,7 +39,14 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(company.CompanyName);
             w.Write(company.CityName);
 
-            w.Write(company.Prefab.Uid);
+            if (company.Prefab is null)
+            {
+                w.Write(0UL);
+            }
+            else
+            {
+                w.Write(company.Prefab.Uid);
+            }
 
             w.Write(company.Node.Uid);
 

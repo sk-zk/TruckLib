@@ -52,7 +52,7 @@ namespace TruckLib.ScsMap
         {
             var item = Add<T>(map, position);
             item.Prefab = parent;
-            parent.SlaveItems.Add(item);
+            parent?.SlaveItems.Add(item);
             return item;
         }
 

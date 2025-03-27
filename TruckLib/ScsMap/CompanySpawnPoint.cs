@@ -16,12 +16,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         public INode Node { get; set; }
 
-        internal FlagField Flags { get; set; }
+        internal FlagField Flags;
 
         /// <summary>
         /// The spawn point type.
         /// </summary>
-        public CompanySpawnPointType Type {
+        public CompanySpawnPointType Type 
+        {
             get => (CompanySpawnPointType)Flags.GetBitString(0, 4);
             set => Flags.SetBitString(0, 4, (byte)value);
         }

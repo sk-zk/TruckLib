@@ -405,6 +405,17 @@ namespace TruckLib.ScsMap
         LoadPoint = 5,
     }
 
+    public enum CompanySpawnPointTrailerType
+    {
+        Any = 0,
+        Box = 1,
+        Tank = 2,
+        DumpAndBulk = 3,
+        PlatformLogAndContainer = 4,
+        Livestock = 5,
+        Log = 6,
+    }
+
     /// <summary>
     /// Action type for <see cref="Trigger">triggers</see>.
     /// </summary>

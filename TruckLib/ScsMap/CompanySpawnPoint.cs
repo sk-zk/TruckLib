@@ -9,7 +9,7 @@ namespace TruckLib.ScsMap
     /// <summary>
     /// Represents a prefab spawn point belonging to a <see cref="Company"/> item.
     /// </summary>
-    public struct CompanySpawnPoint
+    public class CompanySpawnPoint
     {
         /// <summary>
         /// The node of the spawn point.
@@ -25,6 +25,42 @@ namespace TruckLib.ScsMap
         {
             get => (CompanySpawnPointType)Flags.GetBitString(0, 4);
             set => Flags.SetBitString(0, 4, (byte)value);
+        }
+
+        private const byte UnlimitedLengthValue = 15;
+        /// <summary>
+        /// Length of the trailer, between 14 and 28 inclusively. 0 means unlimited.
+        /// </summary>
+        public byte TrailerLength
+        {
+            get
+            {
+                var value = Flags.GetBitString(4, 4);
+                if (value == UnlimitedLengthValue) 
+                    return 0;
+                return (byte)(value + 14);
+            }
+            set
+            {
+                if (value != 0 && (value < 14 || value > 28))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(TrailerLength),
+                        "Value must be 0 or between 14 and 28 inclusively.");
+                }
+                value = (value == 0) 
+                    ? UnlimitedLengthValue 
+                    : (byte)(value - 14);
+                Flags.SetBitString(4, 4, value);
+            }
+        }
+
+        /// <summary>
+        /// The trailer type.
+        /// </summary>
+        public CompanySpawnPointTrailerType TrailerType
+        {
+            get => (CompanySpawnPointTrailerType)Flags.GetBitString(16, 4);
+            set => Flags.SetBitString(16, 4, (byte)value);
         }
 
         /// <summary>

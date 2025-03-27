@@ -399,6 +399,10 @@ namespace TruckLib.ScsMap
         /// Trailer spawn point.
         /// </summary>
         Trailer = 4,
+        /// <summary>
+        /// Not sure what this is (or whether the name is even correct).
+        /// </summary>
+        LoadPoint = 5,
     }
 
     /// <summary>

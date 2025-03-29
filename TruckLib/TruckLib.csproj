@@ -6,7 +6,7 @@
 		<Nullable>disable</Nullable>
 		<RootNamespace>TruckLib</RootNamespace>
 		<Authors>skzk</Authors>
-		<Version>0.1.5.0</Version>
+		<Version>0.1.6.0</Version>
 		<Title>TruckLib</Title>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/sk-zk/TruckLib</RepositoryUrl>
@@ -39,13 +39,13 @@
 		<PackageReference Include="RBush" Version="4.0.0" />
 		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<PackageReference Include="TruckLib.HashFs" Version="0.1.12" />
-		<PackageReference Include="TruckLib.Models" Version="0.2.0" />
-		<PackageReference Include="TruckLib.Sii" Version="0.1.5" />
+		<PackageReference Include="TruckLib.HashFs" Version="0.1.13" />
+		<PackageReference Include="TruckLib.Models" Version="0.2.1" />
+		<PackageReference Include="TruckLib.Sii" Version="0.1.6" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 	</ItemGroup>
 
 </Project>

@@ -29,11 +29,11 @@ Depending on the HashFS version of the archive, this will create a `HashFsReader
 ## Finding entries
 
 ### Known paths
-The [`EntryExists`](xref:TruckLib.HashFs.IHashFsReader.EntryExists*) method will tell you if the given path exists in the archive, 
-and if so, whether it is a directory or a file:
+The [`TryGetEntry`](xref:TruckLib.HashFs.IHashFsReader.TryGetEntry*) method retrieves metadata of the entry with the given path
+if it exists.
 
 ```cs
-EntryType type = reader.EntryExists("/def/world/prefab.sii");
+EntryType type = reader.TryGetEntry("/def/world/prefab.sii", out IEntry entry);
 ```
 
 [`EntryType`](xref:TruckLib.HashFs.EntryType) has the values `Directory`, `File`, or `NotFound`.

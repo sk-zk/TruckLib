@@ -98,7 +98,8 @@ namespace TruckLib
             for (float u = startOffset; u < endOffset; u += intervals[intervalIdx])
             {
                 float targetArcLength = u * splineLength;
-                int index = IndexOfLargestValueSmallerThan(arcLengths, targetArcLength);
+                const float epsilon = 0.001f;
+                int index = IndexOfLargestValueSmallerThan(arcLengths, targetArcLength + epsilon);
 
                 float segmentLength = index >= arcLengths.Length - 1 
                     ? arcLengths[index] - arcLengths[index - 1] 

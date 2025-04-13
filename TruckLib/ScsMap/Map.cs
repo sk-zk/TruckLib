@@ -546,7 +546,7 @@ namespace TruckLib.ScsMap
             using var fileStream = fs.Open(path);
             using var r = new BinaryReader(fileStream);
 
-            header = new Header();
+            var header = new Header();
             header.Deserialize(r);
             ReadItems(r, ItemFile.Base);
             ReadNodes(r);

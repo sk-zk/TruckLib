@@ -159,6 +159,8 @@ As with the previous samples, we create an empty map:
 using TruckLib.ScsMap;
 
 var map = new Map("example");
+map.NormalScale = 1;
+map.CityScale = 1;
 ```
 
 The road items can now be created as follows:

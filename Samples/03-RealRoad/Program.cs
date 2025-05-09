@@ -56,6 +56,8 @@ namespace RealRoad
             // 4)
             // Create an empty map.
             var map = new Map("example");
+            map.NormalScale = 1;
+            map.CityScale = 1;
 
 
             // 5)

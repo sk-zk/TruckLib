@@ -149,7 +149,7 @@ namespace TruckLib.ScsMap
         /// Adds a building segment to the map.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <param name="name">Unit name of the building.</param>
+        /// <param name="name">The unit name of the building scheme, as defined in <c>/def/world/building_scheme.sii</c>.</param>
         /// <param name="backwardPos">The position of the backward (red) node.</param>
         /// <param name="forwardPos">The position of the forward (green) node.</param>
         /// <returns>The newly created building segment.</returns>
@@ -200,9 +200,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Appends a building segment to the end of this one with the given model and look.
         /// </summary>
-        /// <param name="position">The position of the ForwardNode of the
+        /// <param name="position">The position of the <see cref="PolylineItem.ForwardNode">forward node</see> of the
         /// new building segment.</param>
-        /// <param name="name">The unit name of the building.</param>
+        /// <param name="name">The unit name of the building scheme, as defined in <c>/def/world/building_scheme.sii</c>.</param>
         /// <param name="look">The look.</param>
         /// <returns>The newly created building segment.</returns>
         public Buildings Append(Vector3 position, Token name, Token look)

@@ -23,8 +23,6 @@ var gameRoot = @"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2";
 var baseScs = HashFsReader.Open(Path.Combine(gameRoot, "base.scs"));
 ```
 
-Note that the game must be closed for this because it locks the file.
-
 ## Placing a prefab
 Let's now place a company prefab. The first step is to load the prefab descriptor:
 ```cs

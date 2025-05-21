@@ -29,9 +29,6 @@ namespace Prefabs
             // and slave items.
 
             // Here, we grab the .ppd file straight from base.scs.
-            // The game must be closed for this because it locks the file.
-            // If you find this inconvenient, you can also load an extracted
-            // version with PrefabDescriptor.Open().
             var baseScs = HashFsReader.Open(Path.Combine(gameRoot, "base.scs"));
             var companyDescriptor = PrefabDescriptor.Open(
                 "/prefab2/car_dealer/car_dealer_01_fr.ppd", baseScs);

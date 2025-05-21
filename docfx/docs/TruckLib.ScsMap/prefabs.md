@@ -26,8 +26,6 @@ HashFsReader baseScs = HashFsReader.Open("<game root>/base.scs");
 PrefabDescriptor ppd = PrefabDescriptor.Open("/prefab2/car_dealer/car_dealer_01_fr.ppd", baseScs);
 ```
 
-Note that this will not work while the game is running because the game locks the file.
-
 ### Creating the prefab
 Now that we have the prefab descriptor, we can call [`Prefab.Add`](xref:TruckLib.ScsMap.Prefab.Add*)
 to add the prefab to the map:

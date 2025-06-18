@@ -16,6 +16,10 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public override ItemType ItemType => ItemType.FuelPump;
 
+        public FuelPump() : base() { }
+
+        internal FuelPump(bool initFields) : base(initFields) { }
+
         /// <summary>
         /// Adds a fuel pump to the map.
         /// </summary>

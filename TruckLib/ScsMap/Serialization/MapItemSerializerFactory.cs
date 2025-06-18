@@ -40,7 +40,7 @@ namespace TruckLib.ScsMap.Serialization
                 ItemType.Cutscene => new CutsceneSerializer(),
                 ItemType.FarModel => new FarModelSerializer(),
                 ItemType.Ferry => new FerrySerializer(),
-                ItemType.FuelPump => new ServiceSerializer(),
+                ItemType.FuelPump => new FuelPumpSerializer(),
                 ItemType.Garage => new GarageSerializer(),
                 ItemType.Gate => new GateSerializer(),
                 ItemType.Hinge => new HingeSerializer(),

@@ -411,6 +411,18 @@ namespace TruckLib.ScsMap
             return list.Count == 0 ? null : list[0];
         }
 
+        internal static float SumPrecedingLengths<T>(T start) where T : PolylineItem
+        {
+            IMapItem current = start.BackwardItem;
+            float length = 0;
+            while (current != start && current is T t)
+            {
+                length += t.Length;
+                current = t.BackwardItem;
+            }
+            return length;
+        }
+
         internal override IEnumerable<INode> GetItemNodes() => 
             [Node, ForwardNode];
 

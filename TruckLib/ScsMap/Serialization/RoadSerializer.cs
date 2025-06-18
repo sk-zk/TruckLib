@@ -301,6 +301,7 @@ namespace TruckLib.ScsMap.Serialization
             road.CenterMaterialRotation = r.ReadUInt16();
 
             road.RandomSeed = r.ReadUInt32();
+            r.ReadSingle(); // previous_length - we don't need to read this in
             road.CenterVegetation = new CenterVegetation
             {
                 Name = r.ReadToken(),
@@ -364,6 +365,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(road.CenterMaterialColor);
             w.Write(road.CenterMaterialRotation);
             w.Write(road.RandomSeed);
+            w.Write(PolylineItem.SumPrecedingLengths(road));
             w.Write(road.CenterVegetation.Name);
             w.Write((ushort)(road.CenterVegetation.Density * centerVegDensityFactor));
             w.Write((byte)road.CenterVegetation.Scale);

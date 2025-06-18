@@ -70,6 +70,7 @@ namespace TruckLib.ScsMap.Serialization
             t.ForwardNodeOffset = r.ReadVector3();
 
             t.Length = r.ReadSingle();
+            r.ReadSingle(); // previous_length - we don't need to read this in
 
             t.RandomSeed = r.ReadUInt32();
 
@@ -166,6 +167,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(t.ForwardNodeOffset);
 
             w.Write(t.Length);
+            w.Write(PolylineItem.SumPrecedingLengths(t)); 
 
             w.Write(t.RandomSeed);
 

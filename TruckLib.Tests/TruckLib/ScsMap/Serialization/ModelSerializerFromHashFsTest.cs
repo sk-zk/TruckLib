@@ -37,7 +37,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
             Assert.False(model.Shadows);
             Assert.True(model.WaterReflection);
             Assert.True(model.Collision);
-            Assert.Equal((Nibble)1, model.ColorVariant);
+            Assert.Equal((Nibble)3, model.ColorVariant);
 
             Assert.Equal(720, model.ViewDistance);
         }

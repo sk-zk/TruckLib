@@ -41,7 +41,7 @@
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 		<PackageReference Include="TruckLib.HashFs" Version="0.1.15" />
 		<PackageReference Include="TruckLib.Models" Version="0.2.2" />
-		<PackageReference Include="TruckLib.Sii" Version="0.1.10" />
+		<PackageReference Include="TruckLib.Sii" Version="0.1.11" />
 	</ItemGroup>
 
 	<ItemGroup>

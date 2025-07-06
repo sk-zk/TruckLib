@@ -147,8 +147,13 @@ namespace TruckLib.ScsMap
             }
         }
 
-        public bool Unknown { get; set; } = false;
-        public bool Unknown2 { get; set; } = false;
+        public bool UnknownB7 { get; set; } = false;
+        public bool UnknownC1 { get; set; } = false;
+        public bool UnknownC4 { get; set; } = false;
+        public bool UnknownC5 { get; set; } = false;
+        public bool UnknownC6 { get; set; } = false;
+        public bool UnknownC7 { get; set; } = false;
+
 
         public Terrain() : base() { }
 

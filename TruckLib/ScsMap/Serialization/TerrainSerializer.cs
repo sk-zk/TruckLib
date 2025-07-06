@@ -44,14 +44,18 @@ namespace TruckLib.ScsMap.Serialization
             t.StretchTerrain = karr2[4];
             t.LowPolyVegetation = karr2[5];
             t.IgnoreCutPlanes = karr2[6];
+            t.UnknownB7 = karr2[7];
 
             var kflag3 = r.ReadByte();
             var karr3 = new BitArray(new[] { kflag3 });
             t.TerrainShadows = !karr3[0];
+            t.UnknownC1 = karr3[1];
             t.SmoothDetailVegetation = karr3[2];
             t.AdaptiveTessellation = karr3[3];
-            t.Unknown2 = karr3[5];
-            t.Unknown = karr3[7];
+            t.UnknownC4 = karr3[4];
+            t.UnknownC5 = karr3[5];
+            t.UnknownC6 = karr3[6];
+            t.UnknownC7 = karr3[7];
 
             var kflag4 = r.ReadByte();
             var karr4 = new BitArray(new[] { kflag4 });
@@ -134,6 +138,7 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(kflag1);
 
             byte kflag2 = 0;
+            kflag2 |= (byte)(t.UnknownB7.ToByte() << 7);
             kflag2 |= (byte)(t.IgnoreCutPlanes.ToByte() << 6);
             kflag2 |= (byte)(t.LowPolyVegetation.ToByte() << 5);
             kflag2 |= (byte)(t.StretchTerrain.ToByte() << 4);
@@ -144,10 +149,13 @@ namespace TruckLib.ScsMap.Serialization
             w.Write(kflag2);
 
             byte kflag3 = 0;
-            kflag3 |= (byte)(t.Unknown.ToByte() << 7);
-            kflag3 |= (byte)(t.Unknown2.ToByte() << 5);
-            kflag3 |= (byte)(t.SmoothDetailVegetation.ToByte() << 2);
+            kflag3 |= (byte)(t.UnknownC7.ToByte() << 7);
+            kflag3 |= (byte)(t.UnknownC6.ToByte() << 6);
+            kflag3 |= (byte)(t.UnknownC5.ToByte() << 5);
+            kflag3 |= (byte)(t.UnknownC4.ToByte() << 4);
             kflag3 |= (byte)(t.AdaptiveTessellation.ToByte() << 3);
+            kflag3 |= (byte)(t.SmoothDetailVegetation.ToByte() << 2);
+            kflag3 |= (byte)(t.UnknownC1.ToByte() << 1);
             kflag3 |= (!t.TerrainShadows).ToByte();
             w.Write(kflag3);
 

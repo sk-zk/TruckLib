@@ -41,11 +41,15 @@ namespace TruckLib.ScsMap.Collections
                 list[index] = value;
                 if (index == 0)
                 {
-                    container = list[0].Parent;
                     if (list[0] is not UnresolvedNode)
+                    {
+                        container = list[0].Parent;
                         list[0].IsRed = true;
+                    }
                     if (Count > 1 && list[1] is not UnresolvedNode)
+                    {
                         list[1].IsRed = false;
+                    }
                 }
             }
         }

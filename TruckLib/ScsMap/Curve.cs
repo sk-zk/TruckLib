@@ -297,6 +297,7 @@ namespace TruckLib.ScsMap
             Model = model;
         }
 
+        /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
             var offset = newPos - Node.Position;
@@ -307,6 +308,7 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <inheritdoc/>
         public override void Translate(Vector3 translation)
         {
             base.Translate(translation);
@@ -333,6 +335,7 @@ namespace TruckLib.ScsMap
             c.HeightOffsets = new List<float>(HeightOffsets);
         }
 
+        /// <inheritdoc/>
         internal override IEnumerable<INode> GetItemNodes()
         {
             var list = new List<INode>(Locators.Count + 2)
@@ -342,6 +345,16 @@ namespace TruckLib.ScsMap
             };
             list.AddRange(Locators);
             return list;
+        }
+
+        /// <inheritdoc/>
+        internal override void UpdateNodeReferences(IDictionary<ulong, INode> allNodes)
+        {
+            base.UpdateNodeReferences(allNodes);
+            for (int i = 0; i < Locators.Count; i++)
+            {
+                Locators[i] = ResolveNodeReference(Locators[i], allNodes);
+            }
         }
     }
 }

@@ -99,12 +99,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// The map's header.
         /// </summary>
-        private Header header = new();
+        private readonly Header header = new();
 
         /// <summary>
         /// The size of a sector in engine units (= meters).
         /// </summary>
-        public static readonly int SectorSize = 4000;
+        public const int SectorSize = 4000;
 
         /// <summary>
         /// EOF marker of .data and .layer files.
@@ -475,16 +475,12 @@ namespace TruckLib.ScsMap
             header.Deserialize(r);
 
             EditorMapId = r.ReadUInt64();
-
             StartPosition = r.ReadVector3();
             StartSectorOrSomething = r.ReadUInt32();
             StartRotation = r.ReadQuaternion();
-
             gameTag = r.ReadUInt32();
-
             NormalScale = r.ReadSingle();
             CityScale = r.ReadSingle();
-
             EuropeMapUiCorrections = (r.ReadByte() == 1);
         }
 
@@ -594,7 +590,7 @@ namespace TruckLib.ScsMap
                 if (!MapItems.TryGetValue(uid, out MapItem item))
                 {
                     throw new KeyNotFoundException($"{ToString()}.{Sector.DataExtension} contains " +
-                        $"unknown UID {uid} - can't continue.");
+                        $"unknown UID {uid:X} - can't continue.");
                 }
                 var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
                 serializer.DeserializeDataPayload(r, item);
@@ -647,7 +643,7 @@ namespace TruckLib.ScsMap
                 if (!MapItems.TryGetValue(uid, out MapItem item))
                 {
                     throw new KeyNotFoundException($"{ToString()}.{Sector.LayerExtension} contains " +
-                        $"unknown UID {uid} - can't continue.");
+                        $"unknown UID {uid:X} - can't continue.");
                 }
                 var layer = r.ReadByte();
                 item.Layer = layer;
@@ -674,10 +670,6 @@ namespace TruckLib.ScsMap
                 if (item is Sign sign && file != sign.DefaultItemFile)
                 {
                     sign.ItemFile = file;
-                }
-                else if (item.DefaultItemFile != file)
-                {
-                    Trace.WriteLine($"{itemType} {item.Uid} in {file}?");
                 }
 
                 MapItems.Add(item.Uid, item);
@@ -755,38 +747,61 @@ namespace TruckLib.ScsMap
             Directory.CreateDirectory(sectorDirectory);
             if (cleanSectorDirectory)
             {
-                new DirectoryInfo(sectorDirectory).GetFiles().ToList()
-                    .ForEach(f => f.Delete());
+                var files = new DirectoryInfo(sectorDirectory).GetFiles();
+                foreach (var file in files)
+                    file.Delete();
             }
 
-            var items = GetSectorItems();
-            var nodes = GetSectorNodes();
-            foreach (var sectorCoord in nodes.Keys)
-            {
-                AddSector(sectorCoord);
-            }
+            var farModelChildren = GetFarModelChildren();
+            var allItemsBySector = GetSectorItems(farModelChildren);
             var visAreaShowObjectsChildren = GetVisAreaShowObjectsChildUids();
 
             foreach (var (sectorCoord, sector) in Sectors)
             {
-                items.TryGetValue(sectorCoord, out var sectorItems);
-                sectorItems ??= [];
-                nodes.TryGetValue(sectorCoord, out var sectorNodes);
-                sectorNodes ??= [];
-                if (sectorItems.Count > 0 || sectorNodes.Count > 0)
+                if (allItemsBySector.TryGetValue(sectorCoord, out var sectorItems))
                 {
+                    var sectorNodes = GetSectorNodes(sectorItems, farModelChildren);
                     Trace.WriteLine($"Writing sector {sector}");
-                    sector.WriteDesc(GetSectorFilename(sectorCoord, sectorDirectory, Sector.DescExtension));
-                    var visAreaChildrenForThisSector = sectorItems
+                    var sectorVisAreaChildren = sectorItems.BaseItems.Concat(sectorItems.AuxItems)
                         .Where(item => visAreaShowObjectsChildren.Contains(item.Uid))
                         .Select(item => item.Uid);
                     SaveSector(sectorCoord, sectorDirectory, sectorItems, sectorNodes, 
-                        visAreaChildrenForThisSector);
+                        sectorVisAreaChildren);
+                    sector.WriteDesc(GetSectorFilename(sectorCoord, sectorDirectory, Sector.DescExtension));
                 }
             }
 
             var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");
             SaveMbd(mbdPath);
+        }
+
+        private static SectorNodes GetSectorNodes(SectorItems sectorItems, HashSet<IMapItem> farModelChildren)
+        {
+            var sectorNodes = new SectorNodes();
+
+            foreach (var item in sectorItems.BaseItems)
+                AddTo(sectorNodes.BaseNodes, item);
+
+            foreach (var item in sectorItems.AuxItems)
+            {
+                if (farModelChildren.Contains(item))
+                    AddTo(sectorNodes.BaseNodes, item);
+                else
+                    AddTo(sectorNodes.AuxNodes, item);
+            }
+
+            foreach (var item in sectorItems.SndItems)
+                AddTo(sectorNodes.SndNodes, item);
+
+            return sectorNodes;
+
+            static void AddTo(HashSet<Node> nodeSet, MapItem item)
+            {
+                nodeSet.UnionWith(
+                    item.GetItemNodes()
+                    .Where(x => x is not UnresolvedNode)
+                    .Cast<Node>());
+            }
         }
 
         private HashSet<ulong> GetVisAreaShowObjectsChildUids()
@@ -804,48 +819,53 @@ namespace TruckLib.ScsMap
             return children;
         }
 
-        internal Dictionary<SectorCoordinate, List<MapItem>> GetSectorItems()
+        private Dictionary<SectorCoordinate, SectorItems> GetSectorItems(HashSet<IMapItem> farModelChildren)
         {
-            var items = new Dictionary<SectorCoordinate, List<MapItem>>();
+            var items = new Dictionary<SectorCoordinate, SectorItems>();
+
             foreach (var (_, item) in MapItems)
             {
                 var center = item.GetCenter();
                 var sectorCoord = GetSectorOfCoordinate(center);
-                if (items.TryGetValue(sectorCoord, out var list))
-                    list.Add(item);
-                else
-                    items.Add(sectorCoord, [item]);
+
+                if (!items.TryGetValue(sectorCoord, out SectorItems sectorItems))
+                {
+                    sectorItems = new SectorItems();
+                    items.Add(sectorCoord, sectorItems);
+                }
+
+                switch (item.ItemFile)
+                {
+                    case ItemFile.Base:
+                        sectorItems.BaseItems.Add(item);
+                        break;
+                    case ItemFile.Aux:
+                        if (farModelChildren.Contains(item))
+                            sectorItems.BaseItems.Add(item);
+                        else
+                            sectorItems.AuxItems.Add(item);
+                        break;
+                    case ItemFile.Snd:
+                        sectorItems.SndItems.Add(item);
+                        break;
+                    default:
+                        throw new Exception($"Invalid item.ItemFile value {item.ItemFile}");
+                }
             }
+
             return items;
         }
 
-        internal Dictionary<SectorCoordinate, List<INode>> GetSectorNodes()
+        private HashSet<IMapItem> GetFarModelChildren()
         {
-            var nodes = new Dictionary<SectorCoordinate, List<INode>>();
-            foreach (var (_, node) in Nodes)
+            var farModelChildren = new HashSet<IMapItem>();
+            foreach (var fm in MapItems.Where(x => x.Value is FarModel).Select(x => x.Value as FarModel))
             {
-                if (node.ForwardItem is null && node.BackwardItem is null)
-                    continue;
-                if (node.ForwardItem is UnresolvedItem && node.BackwardItem is null)
-                    continue;
-                if (node.ForwardItem is null && node.BackwardItem is UnresolvedItem)
-                    continue;
-                if (node.ForwardItem is UnresolvedItem && node.BackwardItem is UnresolvedItem)
-                    continue;
-
-                // this may blow up in my face one day
-                if (node.BackwardItem is UnresolvedItem)
-                    node.BackwardItem = null;
-                if (node.ForwardItem is UnresolvedItem)
-                    node.ForwardItem = null;
-
-                var sectorCoord = GetSectorOfCoordinate(node.Position);
-                if (nodes.TryGetValue(sectorCoord, out var list))
-                    list.Add(node);
-                else
-                    nodes.Add(sectorCoord, [node]);
+                if (fm.UseMapItems)
+                    farModelChildren.UnionWith(fm.Children);
             }
-            return nodes;
+
+            return farModelChildren;
         }
 
         /// <summary>
@@ -860,17 +880,12 @@ namespace TruckLib.ScsMap
             header.Serialize(w);
 
             w.Write(EditorMapId);
-
             w.Write(StartPosition);
             w.Write(StartSectorOrSomething);
-
             w.Write(StartRotation);
-
             w.Write(gameTag);
-
             w.Write(NormalScale);
             w.Write(CityScale);
-
             w.Write(EuropeMapUiCorrections.ToByte());
         }
 
@@ -879,96 +894,94 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="coord">The coordinate of the sector to write.</param>
         /// <param name="sectorDirectory">The sector directory.</param>
-        /// <param name="sectorItems">A list of all items in this sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in this sector.</param>
-        /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
+        /// <param name="sectorItems">Items which belong to this sector.</param>
+        /// <param name="sectorNodes">Nodes which belong to this sector.</param>
+        /// <param name="sectorVisAreaChildren">UIDs of VisAreaChildren for this sector.</param>
         private void SaveSector(SectorCoordinate coord, string sectorDirectory, 
-            List<MapItem> sectorItems, List<INode> sectorNodes,
-            IEnumerable<ulong> visAreaShowObjectsChildren)
+            SectorItems sectorItems, SectorNodes sectorNodes,
+            IEnumerable<ulong> sectorVisAreaChildren)
         {
             WriteBase(GetSectorFilename(coord, sectorDirectory, Sector.BaseExtension), 
-                sectorItems, sectorNodes, visAreaShowObjectsChildren);
+                sectorItems.BaseItems, sectorNodes.BaseNodes, sectorVisAreaChildren);
             WriteData(GetSectorFilename(coord, sectorDirectory, Sector.DataExtension), 
-                sectorItems);
+                sectorItems.BaseItems);
             WriteAux(GetSectorFilename(coord, sectorDirectory, Sector.AuxExtenstion), 
-                sectorItems, sectorNodes, visAreaShowObjectsChildren);
+                sectorItems.AuxItems, sectorNodes.AuxNodes, sectorVisAreaChildren);
             WriteSnd(GetSectorFilename(coord, sectorDirectory, Sector.SndExtension), 
-                sectorItems, sectorNodes, visAreaShowObjectsChildren);
+                sectorItems.SndItems, sectorNodes.SndNodes);
             WriteLayer(GetSectorFilename(coord, sectorDirectory, Sector.LayerExtension),
                 sectorItems);
         }
 
-        private string GetSectorFilename(SectorCoordinate coord, 
-            string sectorDirectory, string ext) =>
+        private static string GetSectorFilename(SectorCoordinate coord, string sectorDirectory, string ext) =>
             Path.Combine(sectorDirectory, $"{Sector.SectorFileNameFromSectorCoords(coord)}.{ext}");
 
         /// <summary>
         /// Writes the .base part of this sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="sectorItems">A list of all items in this sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in this sector.</param>
-        /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
-        private void WriteBase(string path, List<MapItem> sectorItems,
-            List<INode> sectorNodes, IEnumerable<ulong> visAreaShowObjectsChildren)
+        /// <param name="baseItems">A list of all items which belong to the base part of this sector.</param>
+        /// <param name="baseNodes">A set of all nodes which belong to the base part of this sector.</param>
+        /// <param name="sectorVisAreaChildren">UIDs of VisAreaChildren for this sector.</param>
+        private void WriteBase(string path, List<MapItem> baseItems,
+            HashSet<Node> baseNodes, IEnumerable<ulong> sectorVisAreaChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
-            WriteItems(w, ItemFile.Base, sectorItems);
-            WriteNodes(w, ItemFile.Base, sectorNodes);
-            WriteVisAreaChildren(w, ItemFile.Base, visAreaShowObjectsChildren);
+            WriteItems(w, baseItems);
+            WriteNodes(w, baseNodes);
+            WriteVisAreaChildren(w, ItemFile.Base, sectorVisAreaChildren);
         }
 
         /// <summary>
         /// Writes the .aux part of the sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="sectorItems">A list of all items in this sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in this sector.</param>
-        /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
-        private void WriteAux(string path, List<MapItem> sectorItems,
-            List<INode> sectorNodes, IEnumerable<ulong> visAreaShowObjectsChildren)
+        /// <param name="auxItems">A list of all items which belong to the aux part of this sector.</param>
+        /// <param name="auxNodes">A set of all nodes which belong to the aux part of this sector.</param>
+        /// <param name="sectorVisAreaChildren">UIDs of VisAreaChildren for this sector.</param>
+        private void WriteAux(string path, List<MapItem> auxItems,
+             HashSet<Node> auxNodes, IEnumerable<ulong> sectorVisAreaChildren)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
-            WriteItems(w, ItemFile.Aux, sectorItems);
-            WriteNodes(w, ItemFile.Aux, sectorNodes);
-            WriteVisAreaChildren(w, ItemFile.Aux, visAreaShowObjectsChildren);
+            WriteItems(w, auxItems);
+            WriteNodes(w, auxNodes);
+            WriteVisAreaChildren(w, ItemFile.Aux, sectorVisAreaChildren);
         }
 
         /// <summary>
         /// Writes the .snd part of the sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="sectorItems">A list of all items in this sector.</param>
-        /// <param name="sectorNodes">A list of all nodes in this sector.</param>
-        /// <param name="visAreaShowObjectsChildren">UIDs of VisAreaChildren for this sector.</param>
-        private void WriteSnd(string path, List<MapItem> sectorItems,
-            List<INode> sectorNodes, IEnumerable<ulong> visAreaShowObjectsChildren)
+        /// <param name="sndItems">A list of all items which belong to the snd part of this sector.</param>
+        /// <param name="sndNodes">A set of all nodes which belong to the snd part of this sector.</param>
+        private void WriteSnd(string path, List<MapItem> sndItems,
+            HashSet<Node> sndNodes)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
             header.Serialize(w);
-            WriteItems(w, ItemFile.Snd, sectorItems);
-            WriteNodes(w, ItemFile.Snd, sectorNodes);
-            WriteVisAreaChildren(w, ItemFile.Snd, visAreaShowObjectsChildren);
+            WriteItems(w, sndItems);
+            WriteNodes(w, sndNodes);
+            w.Write(0); // vis_area_child_count
         }
 
         /// <summary>
         /// Writes the .data part of this sector.
         /// </summary>
         /// <param name="path">The path of the output file.</param>
-        /// <param name="sectorItems">A list of all items in this sector.</param>
-        private void WriteData(string path, List<MapItem> sectorItems)
+        /// <param name="baseItems">A list of all base items in this sector.</param>
+        private void WriteData(string path, List<MapItem> baseItems)
         {
             using var stream = new FileStream(path, FileMode.Create);
             using var w = new BinaryWriter(stream);
 
             header.Serialize(w);
 
-            foreach (var item in sectorItems.Where(x => x.HasDataPayload))
+            foreach (var item in baseItems.Where(x => x.HasDataPayload))
             {
                 w.Write(item.Uid);
                 var serializer = (IDataPayload)MapItemSerializerFactory.Get(item.ItemType);
@@ -983,9 +996,13 @@ namespace TruckLib.ScsMap
         /// </summary>
         /// <param name="path">The path of the output file.</param>
         /// <param name="sectorItems">A list of all items in this sector.</param>
-        private void WriteLayer(string path, List<MapItem> sectorItems)
+        private void WriteLayer(string path, SectorItems sectorItems)
         {
-            var itemsWithSetLayers = sectorItems.Where(x => x.Layer != MapItem.DefaultLayer);
+            var itemsWithSetLayers = 
+                sectorItems.BaseItems
+                .Concat(sectorItems.AuxItems)
+                .Concat(sectorItems.SndItems)
+                .Where(x => x.Layer != MapItem.DefaultLayer);
             if (!itemsWithSetLayers.Any())
                 return;
 
@@ -1005,23 +1022,11 @@ namespace TruckLib.ScsMap
         /// Writes the node part of a .base/.aux/.snd file.
         /// </summary>
         /// <param name="w">The writer.</param>
-        /// <param name="file">The sector file to write.</param>
-        /// <param name="sectorNodes">A list of all nodes in this sector.</param>
-        private void WriteNodes(BinaryWriter w, ItemFile file, List<INode> sectorNodes)
+        /// <param name="nodes">The nodes to write.</param>
+        private static void WriteNodes(BinaryWriter w, HashSet<Node> nodes)
         {
-            // get base nodes only || get aux nodes only
-            var nodes = new List<INode>(32);
-            foreach (var node in sectorNodes)
-            {
-                if ((node.ForwardItem is MapItem fw && fw.ItemFile == file)
-                    || (node.BackwardItem is MapItem bw && bw.ItemFile == file))
-                {
-                    nodes.Add(node);
-                }
-            }
-
             w.Write(nodes.Count);
-            foreach (var node in nodes)
+            foreach (var node in nodes.OrderBy(x => x.Uid))
             {
                 node.Serialize(w);
             }
@@ -1030,15 +1035,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Writes .base/.aux/.snd items to a .base/.aux/.snd file.
         /// </summary>
-        /// <param name="file">The sector file to write.</param>
         /// <param name="w">The writer.</param>
-        /// <param name="sectorItems">A list of all items in this sector.</param>
-        private void WriteItems(BinaryWriter w, ItemFile file, List<MapItem> items)
+        /// <param name="sectorItems">The items to write.</param>
+        private static void WriteItems(BinaryWriter w, List<MapItem> items)
         {
-            var fileItems = items.Where(x => x.ItemFile == file);
-
-            w.Write(fileItems.Count());
-            foreach (var item in fileItems)
+            w.Write(items.Count);
+            foreach (var item in items.OrderBy(x => x.Uid))
             {
                 w.Write((int)item.ItemType);
                 var serializer = MapItemSerializerFactory.Get(item.ItemType);
@@ -1064,6 +1066,20 @@ namespace TruckLib.ScsMap
             {
                 w.Write(childUid);
             }
+        }
+
+        private class SectorItems()
+        {
+            public List<MapItem> BaseItems { get; } = [];
+            public List<MapItem> AuxItems { get; } = [];
+            public List<MapItem> SndItems { get; } = [];
+        }
+
+        private class SectorNodes()
+        {
+            public HashSet<Node> BaseNodes { get; } = [];
+            public HashSet<Node> AuxNodes { get; } = [];
+            public HashSet<Node> SndNodes { get; } = [];
         }
     }
 }

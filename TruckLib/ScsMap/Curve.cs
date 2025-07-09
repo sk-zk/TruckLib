@@ -28,12 +28,12 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Minimum length of a Curve item.
         /// </summary>
-        public float MinLength => 0f;
+        public const float MinLength = 0f;
 
         /// <summary>
         /// Maximum length of a Curve item.
         /// </summary>
-        public float MaxLength => 1000;
+        public const float MaxLength = 1000;
 
         /// <summary>
         /// Gets or sets the view distance of the item in meters.
@@ -254,7 +254,7 @@ namespace TruckLib.ScsMap
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)
         {
             var curve = Add<Curve>(map, backwardPos, forwardPos);
-            curve.InitFromAddOrAppend(backwardPos, forwardPos, model);
+            curve.Model = model;
             return curve;
         }
 
@@ -288,13 +288,8 @@ namespace TruckLib.ScsMap
         public Curve Append(Vector3 position, Token model)
         {
             var curve = Append<Curve>(position);
-            curve.InitFromAddOrAppend(ForwardNode.Position, position, model);
+            curve.Model = model;
             return curve;
-        }
-
-        private void InitFromAddOrAppend(Vector3 backwardPos, Vector3 forwardPos, Token model)
-        {
-            Model = model;
         }
 
         /// <inheritdoc/>

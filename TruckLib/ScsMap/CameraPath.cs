@@ -71,6 +71,7 @@ namespace TruckLib.ScsMap
         {
             base.UpdateNodeReferences(allNodes);
             ResolveNodeReferences(TrackPoints, allNodes);
+            ResolveNodeReferences(ControlNodes, allNodes);
         }
 
         public static CameraPath Add(IItemContainer map, IList<Vector3> positions)

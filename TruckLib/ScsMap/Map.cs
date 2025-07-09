@@ -85,7 +85,7 @@ namespace TruckLib.ScsMap
         public Quaternion StartRotation { get; set; } = Quaternion.Identity;
 
         /// <summary>
-        /// <para>Gets or sets if SCS's Europe map UI corrections are enabled.</para>
+        /// <para>Whether SCS's Europe map UI corrections are enabled.</para>
         /// <para>Nobody seems to know definitively what this does, but it might have
         /// something to do with the scale of the UK in <c>europe.mbd.</c></para>
         /// </summary>

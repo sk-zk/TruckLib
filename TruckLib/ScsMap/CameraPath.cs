@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 
@@ -89,5 +90,11 @@ namespace TruckLib.ScsMap
 
         /// <inheritdoc/>
         protected override void RecalculateRotation(int i) { }
+
+        /// <inheritdoc/>
+        internal override IEnumerable<INode> GetItemNodes()
+        {
+            return base.GetItemNodes().Concat(TrackPoints).Concat(ControlNodes);
+        }
     }
 }

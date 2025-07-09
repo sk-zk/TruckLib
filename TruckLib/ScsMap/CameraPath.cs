@@ -94,7 +94,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         internal override IEnumerable<INode> GetItemNodes()
         {
-            return base.GetItemNodes().Concat(TrackPoints).Concat(ControlNodes);
+            return base.GetItemNodes().Concat(TrackPoints ?? []).Concat(ControlNodes ?? []);
         }
     }
 }

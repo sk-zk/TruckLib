@@ -351,10 +351,7 @@ namespace TruckLib.ScsMap
         internal override void UpdateNodeReferences(IDictionary<ulong, INode> allNodes)
         {
             base.UpdateNodeReferences(allNodes);
-            for (int i = 0; i < Locators.Count; i++)
-            {
-                Locators[i] = ResolveNodeReference(Locators[i], allNodes);
-            }
+            ResolveNodeReferences(Locators, allNodes);
         }
     }
 }

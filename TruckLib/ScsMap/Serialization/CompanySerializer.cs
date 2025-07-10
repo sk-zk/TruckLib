@@ -10,12 +10,13 @@ namespace TruckLib.ScsMap.Serialization
         public override MapItem Deserialize(BinaryReader r)
         {
             var company = new Company(false);
+
+            // economy_link_item
             ReadKdopItem(r, company);
+            company.CityName = r.ReadToken();
+            company.Prefab = new UnresolvedItem(r.ReadUInt64());
 
             company.CompanyName = r.ReadToken();
-            company.CityName = r.ReadToken();
-
-            company.Prefab = new UnresolvedItem(r.ReadUInt64());
 
             company.Node = new UnresolvedNode(r.ReadUInt64());
 
@@ -34,11 +35,10 @@ namespace TruckLib.ScsMap.Serialization
         public override void Serialize(BinaryWriter w, MapItem item)
         {
             var company = item as Company;
+
+            // economy_link_item
             WriteKdopItem(w, company);
-
-            w.Write(company.CompanyName);
             w.Write(company.CityName);
-
             if (company.Prefab is null)
             {
                 w.Write(0UL);
@@ -47,6 +47,8 @@ namespace TruckLib.ScsMap.Serialization
             {
                 w.Write(company.Prefab.Uid);
             }
+
+            w.Write(company.CompanyName);
 
             w.Write(company.Node.Uid);
 

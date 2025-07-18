@@ -29,15 +29,9 @@ namespace TruckLib.ScsMap
         public Token Look { get; set; }
 
         /// <summary>
-        /// Determines which zoom levels the overlay will be visible for. (Not yet implemented;
-        /// will throw <see cref="NotImplementedException"/>.)
+        /// Determines which zoom levels the overlay will be visible for.
         /// </summary>
-        public bool[] HideForZoomLevel
-        {
-            // TODO
-            get => throw new NotImplementedException(); //Kdop.Flags.GetByteAsBools(0);
-            set => throw new NotImplementedException();
-        }
+        public KdopItemFlagFieldSubView HideForZoomLevel { get; internal set; }
 
         public byte DlcGuard
         {
@@ -55,7 +49,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if this overlay is only visible in the UI map once discovered.
+        /// Whether this overlay is only visible in the UI map once discovered.
         /// </summary>
         public bool Secret
         {
@@ -63,11 +57,15 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[16] = value;
         }
 
-        public MapOverlay() : base() { }
+        public MapOverlay() : base() 
+        {
+            HideForZoomLevel = new(Kdop, 17, 8);
+        }
 
         internal MapOverlay(bool initFields) : base(initFields)
         {
             if (initFields) Init();
+            // HideForZoomLevel is initialized in MapOverlaySerializer.
         }
 
         /// <inheritdoc/>
@@ -86,10 +84,43 @@ namespace TruckLib.ScsMap
         public static MapOverlay Add(IItemContainer map, Vector3 position, OverlayType type)
         {
             var overlay = Add<MapOverlay>(map, position);
-
             overlay.Type = type;
-
             return overlay;
+        }    
+    }
+
+    public class KdopItemFlagFieldSubView
+    {
+        private readonly KdopItem kdop;
+        private readonly int start;
+        private readonly int length;
+
+        public bool this[int index]
+        {
+            get
+            {
+                var realIndex = index + start;
+                AssertInRange(realIndex, start, start + length - 1);
+                return kdop.Flags[realIndex];
+            }
+            set
+            {
+                var realIndex = index + start;
+                AssertInRange(realIndex, start, start + length - 1);
+                kdop.Flags[realIndex] = value;
+            }
+        }
+        internal KdopItemFlagFieldSubView(KdopItem kdop, int start, int length)
+        {
+            this.kdop = kdop;
+            this.start = start;
+            this.length = length;
+        }
+
+        private static void AssertInRange(int i, int min, int max)
+        {
+            if (i > max || i < min)
+                throw new IndexOutOfRangeException();
         }
     }
 }

@@ -12,6 +12,8 @@ namespace TruckLib.ScsMap.Serialization
             var overlay = new MapOverlay(false);
             ReadKdopItem(r, overlay);
 
+            overlay.HideForZoomLevel = new(overlay.Kdop, 17, 8);
+
             overlay.Look = r.ReadToken();
             overlay.Node = new UnresolvedNode(r.ReadUInt64());
 

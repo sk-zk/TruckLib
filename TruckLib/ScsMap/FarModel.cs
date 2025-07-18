@@ -145,15 +145,7 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         internal override Vector3 GetCenter()
         {
-            if (UseMapItems)
-                return Node.Position;
-
-            var acc = Node.Position;
-            foreach (var model in Models)
-            {
-                acc += model.Node.Position;
-            }
-            return acc / (Models.Count + 1);
+            return UseMapItems ? Node.Position : base.GetCenter();
         }
 
         /// <inheritdoc/>

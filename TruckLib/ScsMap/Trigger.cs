@@ -78,8 +78,8 @@ namespace TruckLib.ScsMap
         
         public bool InitDisabled
         {
-            get => Kdop.Flags[8];
-            set => Kdop.Flags[8] = value;
+            get => Kdop.Flags[16];
+            set => Kdop.Flags[16] = value;
         }
 
         public bool FarViewDistance

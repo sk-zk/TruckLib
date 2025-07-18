@@ -28,7 +28,7 @@ namespace TruckLib.ScsMap.Serialization
             }
 
             gate.ActivationPoints = new GateActivationPointList(gate);
-            for (int i = 0; i < GateActivationPointList.MaxSize; i++)
+            for (int i = 0; i < GateActivationPointList.MaxCapacity; i++)
             {
                 var trigger = r.ReadPascalString();
                 var nodeIndex = r.ReadInt32();
@@ -66,7 +66,7 @@ namespace TruckLib.ScsMap.Serialization
                 w.WritePascalString(gate.ActivationPoints[i].Trigger);
                 w.Write(i + 1);
             }
-            for (int i = listSize; i < GateActivationPointList.MaxSize; i++)
+            for (int i = listSize; i < GateActivationPointList.MaxCapacity; i++)
             {
                 w.WritePascalString("");
                 w.Write(UnusedActivationPointIndex);

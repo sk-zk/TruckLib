@@ -19,12 +19,12 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         public Gate Parent { get; init; }
 
-        private readonly List<GateActivationPoint> list = [];
+        private readonly LimitedList<GateActivationPoint> list = new(MaxCapacity);
 
         /// <summary>
         /// The maximum size of the list.
         /// </summary>
-        public const int MaxSize = 2;
+        public const int MaxCapacity = 2;
 
         /// <summary>
         /// Instantiates an empty list.
@@ -52,7 +52,7 @@ namespace TruckLib.ScsMap.Collections
         /// <inheritdoc/>
         public void Add(GateActivationPoint item)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             list.Add(item);
         }
@@ -67,7 +67,7 @@ namespace TruckLib.ScsMap.Collections
         /// <returns>The newly created activation point.</returns>
         public GateActivationPoint Add(Vector3 position, string trigger)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             var point = new GateActivationPoint(CreateNode(position), trigger);
             Add(point);
@@ -110,7 +110,7 @@ namespace TruckLib.ScsMap.Collections
         /// <inheritdoc/>
         public void Insert(int index, GateActivationPoint item)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             list.Insert(index, item);
         }
@@ -126,7 +126,7 @@ namespace TruckLib.ScsMap.Collections
         /// <returns>The newly created activation point.</returns>
         public GateActivationPoint Insert(int index, Vector3 position, string trigger)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             var point = new GateActivationPoint(CreateNode(position), trigger);
             Insert(index, point);

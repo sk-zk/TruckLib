@@ -19,12 +19,12 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         public Curve Parent { get; init; }
 
-        private readonly List<INode> list = [];
+        private readonly LimitedList<INode> list = new(MaxCapacity);
 
         /// <summary>
         /// The maximum size of the list.
         /// </summary>
-        public const int MaxSize = 2;
+        public const int MaxCapacity = 2;
 
         /// <summary>
         /// Instantiates an empty list.
@@ -52,7 +52,7 @@ namespace TruckLib.ScsMap.Collections
         /// <inheritdoc/>
         public void Add(INode item)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             list.Add(item);
         }
@@ -66,7 +66,7 @@ namespace TruckLib.ScsMap.Collections
         /// <returns>The newly created node.</returns>
         public INode Add(Vector3 position, Quaternion rotation)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             var node = CreateNode(position, rotation);
             Add(node);
@@ -109,7 +109,7 @@ namespace TruckLib.ScsMap.Collections
         /// <inheritdoc/>
         public void Insert(int index, INode item)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             list.Insert(index, item);
         }
@@ -125,7 +125,7 @@ namespace TruckLib.ScsMap.Collections
         /// <returns>The newly created node.</returns>
         public INode Insert(int index, Vector3 position, Quaternion rotation)
         {
-            if (list.Count >= MaxSize)
+            if (list.Count >= MaxCapacity)
                 throw new IndexOutOfRangeException();
             var node = CreateNode(position, rotation);
             Insert(index, node);

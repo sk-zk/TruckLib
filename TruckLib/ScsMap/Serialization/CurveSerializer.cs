@@ -64,7 +64,7 @@ namespace TruckLib.ScsMap.Serialization
             {
                 w.Write(curve.Locators[i].Uid);
             }
-            for (int i = listSize; i < CurveLocatorList.MaxSize; i++)
+            for (int i = listSize; i < CurveLocatorList.MaxCapacity; i++)
             {
                 w.Write(0UL);
             }

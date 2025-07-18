@@ -125,7 +125,8 @@ namespace TruckLib.ScsMap
         /// <inheritdoc/>
         public override void Move(Vector3 newPos)
         {
-            throw new NotImplementedException();
+            var translation = newPos - Node.Position;
+            Translate(translation);
         }
 
         /// <inheritdoc/>

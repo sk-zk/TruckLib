@@ -40,6 +40,20 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         }
 
         [Fact]
+        public void Move()
+        {
+            var map = new Map("foo");
+            var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
+
+            fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
+
+            fm.Move(new Vector3(10, 20, 30));
+
+            Assert.Equal(new Vector3(10, 20, 30), fm.Node.Position);
+            Assert.Equal(new Vector3(29, 62, -20), fm.Models[0].Node.Position);
+        }
+
+        [Fact]
         public void GetCenterWithMapItems()
         {
             var map = new Map("foo");

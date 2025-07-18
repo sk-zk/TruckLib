@@ -119,7 +119,7 @@ namespace TruckLib.ScsMap
             }
         }
 
-        private AttributeType TypeToEnum(Type type)
+        private static AttributeType TypeToEnum(Type type)
         {
             if (type == typeof(sbyte)) return AttributeType.SByte;
             if (type == typeof(int)) return AttributeType.Int32;
@@ -140,6 +140,5 @@ namespace TruckLib.ScsMap
             String = 5,
             UInt64 = 6
         }
-
     }
 }

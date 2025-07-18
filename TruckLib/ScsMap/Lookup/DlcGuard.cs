@@ -21,8 +21,8 @@
             public static readonly byte BalticAndScandinavia = 8;
             public static readonly byte BlackSea = 9;
             public static readonly byte BlackSeaAndEast = 10;
-            public static readonly byte Ibera = 11;
-            public static readonly byte IberaAndFrance = 12;
+            public static readonly byte Iberia = 11;
+            public static readonly byte IberiaAndFrance = 12;
             public static readonly byte Russia = 13;
             public static readonly byte BalticAndRussia = 14;
             public static readonly byte Krone = 15;

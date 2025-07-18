@@ -84,6 +84,9 @@
             public static readonly byte MissouriAndKansas = 41;
             public static readonly byte MissouriAndNebraska = 42;
             public static readonly byte MissouriAndOklahoma = 43;
+            public static readonly byte Iowa = 44;
+            public static readonly byte IowaAndMissouri = 45;
+            public static readonly byte IowaAndNebraska = 46;
         }
     }
 }

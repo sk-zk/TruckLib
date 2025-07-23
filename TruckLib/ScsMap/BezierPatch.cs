@@ -29,8 +29,8 @@ namespace TruckLib.ScsMap
             set => base.ViewDistance = value;
         }
 
-        internal static readonly int ControlPointCols = 4;
-        internal static readonly int ControlPointRows = 4;
+        internal const int ControlPointCols = 4;
+        internal const int ControlPointRows = 4;
         private Vector3[,] controlPoints;
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
@@ -53,12 +53,12 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Amount of quads on the X axis.
+        /// Amount of quads on the X axis. A value of <i>n</i> will result in in <i>n</i>+1 quads.
         /// </summary>
         public ushort XTesselation { get; set; }
 
         /// <summary>
-        /// Amount of quads on the Z axis.
+        /// Amount of quads on the Z axis. A value of <i>n</i> will result in in <i>n</i>+1 quads.
         /// </summary>
         public ushort ZTesselation { get; set; }
 
@@ -197,13 +197,6 @@ namespace TruckLib.ScsMap
             XTesselation = 4;
             ZTesselation = 4;
             ControlPoints = new Vector3[ControlPointCols, ControlPointRows];
-            for (int i = 0; i > ControlPointCols; i++)
-            {
-                for (int j = 0; j > ControlPointRows; j++)
-                {
-                    ControlPoints[i, j] = new Vector3();
-                }
-            }
             SmoothDetailVegetation = true;
             VegetationCollision = true;
             NoisePower = TerrainNoise.Percent100;

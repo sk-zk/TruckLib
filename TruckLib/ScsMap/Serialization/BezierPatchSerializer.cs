@@ -27,8 +27,8 @@ namespace TruckLib.ScsMap.Serialization
             }
             bp.ControlPoints = Utils.MirrorX(bp.ControlPoints);
 
-            bp.XTesselation = r.ReadUInt16();
-            bp.ZTesselation = r.ReadUInt16();
+            // Read into field to not trigger recalculation
+            bp.tesselation = new(r.ReadUInt16(), r.ReadUInt16());
 
             bp.Node = new UnresolvedNode(r.ReadUInt64());
 
@@ -62,8 +62,8 @@ namespace TruckLib.ScsMap.Serialization
                 }
             }
 
-            w.Write(bp.XTesselation);
-            w.Write(bp.ZTesselation);
+            w.Write(bp.Tesselation.X);
+            w.Write(bp.Tesselation.Z);
 
             w.Write(bp.Node.Uid);
 

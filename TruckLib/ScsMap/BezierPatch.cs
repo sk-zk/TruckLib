@@ -32,6 +32,7 @@ namespace TruckLib.ScsMap
         internal const int ControlPointCols = 4;
         internal const int ControlPointRows = 4;
         private Vector3[,] controlPoints;
+
         /// <summary>
         /// Control points of the bezier patch, relative to the item node.
         /// </summary>
@@ -52,15 +53,24 @@ namespace TruckLib.ScsMap
             }
         }
 
+        internal Tesselation tesselation;
         /// <summary>
-        /// Amount of quads on the X axis. A value of <i>n</i> will result in in <i>n</i>+1 quads.
+        /// <para>The resolution of the terrain quad grid along the X and Z axes.
+        /// A value of <i>n</i> will result in in <i>n</i>+1 quads.</para>
+        /// <para>Changing this value will modify the <see cref="BezierPatch.QuadData">QuadData</see>.</para>
         /// </summary>
-        public ushort XTesselation { get; set; }
-
-        /// <summary>
-        /// Amount of quads on the Z axis. A value of <i>n</i> will result in in <i>n</i>+1 quads.
-        /// </summary>
-        public ushort ZTesselation { get; set; }
+        public Tesselation Tesselation 
+        { 
+            get => tesselation;
+            set
+            {
+                if (QuadData?.Rows != value.X + 1 || QuadData?.Cols != value.Z + 1)
+                {
+                    tesselation = value;
+                    RecalculateTerrain();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the seed for the RNG which determines which vegetation models
@@ -79,8 +89,6 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<VegetationSphere> VegetationSpheres { get; set; }
 
-        private static readonly ushort DefaultQuadRows = 5;
-        private static readonly ushort DefaultQuadCols = 5;
         /// <summary>
         /// Gets or sets the terrain quad data of this Bézier patch.
         /// </summary>
@@ -144,6 +152,9 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[6] = !value;
         }
 
+        /// <summary>
+        /// Whether terrain shadows are enabled.
+        /// </summary>
         public bool TerrainShadows
         {
             get => !Kdop.Flags[7];
@@ -194,14 +205,13 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            XTesselation = 4;
-            ZTesselation = 4;
             ControlPoints = new Vector3[ControlPointCols, ControlPointRows];
+            tesselation = new(4, 4);
+            QuadData = new TerrainQuadData();
             SmoothDetailVegetation = true;
             VegetationCollision = true;
             NoisePower = TerrainNoise.Percent100;
             VegetationSpheres = [];
-            QuadData = new TerrainQuadData();
         }
 
         /// <summary>
@@ -210,8 +220,9 @@ namespace TruckLib.ScsMap
         /// <param name="map">The map.</param>
         /// <param name="position">The center point of the item.</param>
         /// <param name="controlPoints">The control points of the item.</param>
+        /// <param name="tesselation">The resolution of the terrain quad grid along the X and Z axes.</param>
         /// <returns>The newly created Bézier patch.</returns>
-        public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints)
+        public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints, Tesselation tesselation)
         {
             if (controlPoints.GetLength(0) != ControlPointCols
                 && controlPoints.GetLength(1) != ControlPointRows)
@@ -223,14 +234,36 @@ namespace TruckLib.ScsMap
             var bezier = Add<BezierPatch>(map, position);
 
             bezier.ControlPoints = controlPoints;
-            bezier.QuadData.Cols = DefaultQuadCols;
-            bezier.QuadData.Rows = DefaultQuadRows;
-            for (int i = 0; i < DefaultQuadCols * DefaultQuadCols; i++)
-            {
-                bezier.QuadData.Quads.Add(new TerrainQuad());
-            }
+            bezier.Tesselation = tesselation;
 
             return bezier;
+        }
+
+        /// <summary>
+        /// Adds a new Bézier patch to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The center point of the item.</param>
+        /// <param name="controlPoints">The control points of the item.</param>
+        /// <returns>The newly created Bézier patch.</returns>
+        public static BezierPatch Add(IItemContainer map, Vector3 position, Vector3[,] controlPoints)
+        {
+            return Add(map, position, controlPoints, new(4, 4));
+        }
+
+        /// <summary>
+        /// Adds a new Bézier patch to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="position">The center point of the item.</param>
+        /// <param name="width">Width of the item.</param>
+        /// <param name="height">Height of the item.</param>
+        /// <param name="tesselation">The resolution of the terrain quad grid along the X and Z axes.</param>
+        /// <returns>The newly created Bézier patch.</returns>
+        public static BezierPatch Add(IItemContainer map, Vector3 position, float width, float height, Tesselation tesselation)
+        {
+            var points = CreateControlPointsFromDimensions(width, height);
+            return Add(map, position, points, tesselation);
         }
 
         /// <summary>
@@ -244,7 +277,7 @@ namespace TruckLib.ScsMap
         public static BezierPatch Add(IItemContainer map, Vector3 position, float width, float height)
         {
             var points = CreateControlPointsFromDimensions(width, height);
-            return Add(map, position, points);
+            return Add(map, position, points, new(4,4));
         }
 
         private static Vector3[,] CreateControlPointsFromDimensions(float width, float height)
@@ -266,5 +299,35 @@ namespace TruckLib.ScsMap
 
             return points;
         }
+
+        private void RecalculateTerrain()
+        {
+            QuadData ??= new(true);
+
+            QuadData.Rows = (ushort)(Tesselation.X + 1);
+            QuadData.Cols = (ushort)(Tesselation.Z + 1);
+            var amount = QuadData.Rows * QuadData.Cols;
+            var quads = QuadData.Quads;
+            if (quads.Count < amount)
+            {
+                var missing = amount - quads.Count;
+                quads.Capacity += missing;
+                for (int i = 0; i < missing; i++)
+                {
+                    quads.Add(new());
+                }
+            }
+            else
+            {
+                quads.RemoveRange(amount, quads.Count - amount);
+            }
+        }
     }
+
+    /// <summary>
+    /// Stores the resolution of the terrain quad grid of a Beziér patch item.
+    /// </summary>
+    /// <param name="X">The amount of terrain quads on the X axis.</param>
+    /// <param name="Z">The amount of terrain quads on the Z axis.</param>
+    public record struct Tesselation(ushort X, ushort Z);
 }

@@ -86,8 +86,16 @@ namespace TruckLib.ScsMap
         /// </summary>
         public List<VegetationSphere> VegetationSpheres { get; set; }
 
+        /// <summary>
+        /// When the terrain geometry is generated, this offset is added to the position
+        /// of the backward node.
+        /// </summary>
         public Vector3 NodeOffset { get; set; }
 
+        /// <summary>
+        /// When the terrain geometry is generated, this offset is added to the position
+        /// of the forward node.
+        /// </summary>
         public Vector3 ForwardNodeOffset { get; set; }
 
         /// <summary>
@@ -153,7 +161,6 @@ namespace TruckLib.ScsMap
         public bool UnknownC5 { get; set; } = true;
         public bool UnknownC6 { get; set; } = false;
         public bool UnknownC7 { get; set; } = true;
-
 
         public Terrain() : base() { }
 

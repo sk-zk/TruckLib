@@ -8,7 +8,7 @@ using TruckLib.ScsMap;
 
 namespace TruckLib
 {
-    internal static class MathEx
+    public static class MathEx
     {
         public static double Deg(double rad) => rad * (180.0 / Math.PI);
         public static float Deg(float rad) => (float)(rad * (180.0 / Math.PI));
@@ -34,7 +34,7 @@ namespace TruckLib
             return Vector3.Transform(point - pivot, rot) + pivot;
         }
 
-        public static double AngleOffAroundAxis(Vector3 v, Vector3 forward, Vector3 axis, bool clockwise = false)
+        internal static double AngleOffAroundAxis(Vector3 v, Vector3 forward, Vector3 axis, bool clockwise = false)
         {
             // via https://forum.unity.com/threads/how-to-find-the-360-angle-between-2-vectors.511650/#post-3355049
 
@@ -68,7 +68,7 @@ namespace TruckLib
         /// <param name="nodes">The nodes.</param>
         /// <returns>The center point of the nodes.</returns>
         /// <exception cref="ArgumentException">Thrown if the collection is empty.</exception>
-        public static Vector3 GetCenter(IEnumerable<INode> nodes)
+        internal static Vector3 GetCenter(IEnumerable<INode> nodes)
         {
             return GetCenter(nodes.Select(x => x.Position));
         }
@@ -79,7 +79,7 @@ namespace TruckLib
         /// <param name="points">The points.</param>
         /// <returns>The center point of the nodes.</returns>
         /// <exception cref="ArgumentException">Thrown if the collection is empty.</exception>
-        public static Vector3 GetCenter(IEnumerable<Vector3> points)
+        internal static Vector3 GetCenter(IEnumerable<Vector3> points)
         {
             if (!points.Any())
                 throw new ArgumentException("Collection must not be empty.");

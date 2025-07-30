@@ -158,7 +158,7 @@ namespace TruckLib.ScsMap
             p3.BackwardItem = newItem;
 
             p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
-            SetMiddleRotation(p1, p2, p3);
+            SetMiddleRotation(p1, p2, p3.Rotation);
 
             p2.IsRed = true;
             p3.Parent.MapItems.Add(newItem.Uid, newItem);
@@ -203,11 +203,11 @@ namespace TruckLib.ScsMap
             return newItem;
         }
 
-        private static void SetMiddleRotation(INode left, INode middle, INode right)
+        private static void SetMiddleRotation(INode left, INode middle, Quaternion rightRot)
         {
             middle.Rotation = Quaternion.Slerp(
-                MathEx.GetNodeRotation(left.Position, middle.Position), 
-                right.Rotation, 
+                MathEx.GetNodeRotation(left.Position, middle.Position),
+                rightRot, 
                 0.5f);
         }
 
@@ -244,9 +244,9 @@ namespace TruckLib.ScsMap
             var current = first;
             var initialRot = MathEx.GetNodeRotation(current.Node.Position, current.ForwardNode.Position);
 
-            if (current.BackwardItem is not Prefab)
+            if (current.BackwardItem is not Prefab && !current.Node.FreeRotation)
                 current.Node.Rotation = initialRot;
-            if (current.ForwardItem is not Prefab)
+            if (current.ForwardItem is not Prefab && !current.ForwardNode.FreeRotation)
                 current.ForwardNode.Rotation = initialRot;
 
             while (current.ForwardItem is PolylineItem fw)
@@ -258,19 +258,25 @@ namespace TruckLib.ScsMap
                 if (fw == first)
                 {
                     // items form a cycle and we've looped back around to the start
-                    var newRot = p1.Rotation.ToEuler() + p3.Rotation.ToEuler();
-                    p2.Rotation = Quaternion.CreateFromYawPitchRoll(newRot.Y, newRot.X, newRot.Z);
+                    if (!p2.FreeRotation)
+                    {
+                        var newRot = p1.Rotation.ToEuler() + p3.Rotation.ToEuler();
+                        p2.Rotation = Quaternion.CreateFromYawPitchRoll(newRot.Y, newRot.X, newRot.Z);
+                    }
                     break;
                 }
                 else
                 {
-                    if (p3.ForwardItem is not Prefab)
-                    {
-                        p3.Rotation = MathEx.GetNodeRotation(p2.Position, p3.Position);
-                    }
-                    SetMiddleRotation(p1, p2, p3);
-                }
+                    var p3Rot = p3.ForwardItem is Prefab 
+                        ? p3.Rotation 
+                        : MathEx.GetNodeRotation(p2.Position, p3.Position);
 
+                    if (!p3.FreeRotation)
+                        p3.Rotation = p3Rot;
+
+                    if (!p2.FreeRotation)
+                        SetMiddleRotation(p1, p2, p3Rot);
+                }
                 current = fw;
             }
         }

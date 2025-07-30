@@ -64,6 +64,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             AssertEx.Equal(new Vector3(32, 0, 32), prefab.Nodes[0].Position, 0.01f);
             Assert.True(prefab.Nodes[0].IsRed);
             Assert.False(prefab.Nodes[1].IsRed);
+            Assert.False(prefab.Nodes[2].IsRed);
         }
 
         [Fact]

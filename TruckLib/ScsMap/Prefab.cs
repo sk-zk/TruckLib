@@ -593,8 +593,8 @@ namespace TruckLib.ScsMap
                     "affected nodes have an item attached to them");
             }
 
-            Nodes[newOriginIdxInList].IsRed = Nodes[0].IsRed 
-                && Nodes[0].BackwardItem == null;
+            Nodes[0].IsRed = Nodes[0].BackwardItem != null;
+            Nodes[newOriginIdxInList].IsRed = true;
 
             Nodes = Utils.Rotate(Nodes, newOrigin - Origin);
             Origin = newOrigin;

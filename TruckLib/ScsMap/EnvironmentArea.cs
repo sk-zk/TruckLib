@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Defines a rectangular area in which 
+    /// Defines a rectangular area in which various environmental graphical effects are different.
     /// </summary>
     public class EnvironmentArea : SingleNodeItem
     {

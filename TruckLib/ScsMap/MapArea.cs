@@ -54,12 +54,21 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Gets or sets if this map area is drawn on top of other items.
+        /// Gets or sets if this map area is drawn above other items.
         /// </summary>
         public bool DrawOver
         {
             get => Kdop.Flags[0];
             set => Kdop.Flags[0] = value;
+        }
+
+        /// <summary>
+        /// Gets or sets if this map area is drawn beneath other items.
+        /// </summary>
+        public bool DrawUnder
+        {
+            get => Kdop.Flags[5];
+            set => Kdop.Flags[5] = value;
         }
 
         /// <summary>

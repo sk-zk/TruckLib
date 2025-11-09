@@ -16,6 +16,11 @@ namespace TruckLib.ScsMap
         public Token Edge { get; set; }
 
         /// <summary>
+        /// Look of the edge model.
+        /// </summary>
+        public Token Look { get; set; }
+
+        /// <summary>
         /// Offset of the section at which the override begins, counted in forward direction.
         /// </summary>
         /// <remarks>One section spans three road quads.</remarks>
@@ -31,14 +36,21 @@ namespace TruckLib.ScsMap
         /// Instantiates an EdgeOverride.
         /// </summary>
         /// <param name="edge">Unit name of the edge model.</param>
+        /// <param name="look">Look of the edge model.</param>
         /// <param name="offset">Offset of the section at which the override begins,
         /// counted in forward direction.</param>
         /// <param name="length">Number of road sections for which the override will repeat.</param>
-        public EdgeOverride(Token edge, ushort offset, ushort length)
+        public EdgeOverride(Token edge, Token look, ushort offset, ushort length)
         {
             Edge = edge;
+            Look = look;
             Offset = offset;
             Length = length;
+        }
+
+        public EdgeOverride(Token edge, ushort offset, ushort length) 
+            : this(edge, "", offset, length)
+        {         
         }
 
         /// <inheritdoc/>
@@ -47,6 +59,7 @@ namespace TruckLib.ScsMap
             Offset = r.ReadUInt16();
             Length = r.ReadUInt16();
             Edge = r.ReadToken();
+            Look = r.ReadToken();
         }
 
         /// <inheritdoc/>
@@ -55,6 +68,7 @@ namespace TruckLib.ScsMap
             w.Write(Offset);
             w.Write(Length);
             w.Write(Edge);
+            w.Write(Look);
         }
     }
 }

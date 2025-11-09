@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using TruckLib;
@@ -333,13 +334,17 @@ namespace TruckLib.ScsMap.Serialization
 
             road.Left.VariantOverrides = ReadObjectList<VariantOverride>(r);
             road.Right.VariantOverrides = ReadObjectList<VariantOverride>(r);
+
+            road.Right.RightEdgeLook = r.ReadToken();
+            road.Right.LeftEdgeLook = r.ReadToken();
+            road.Left.RightEdgeLook = r.ReadToken();
+            road.Left.LeftEdgeLook = r.ReadToken();
         }
 
         public void SerializeDataPayload(BinaryWriter w, MapItem item)
         {
             var road = item as Road;
 
-            // overlay scheme
             w.Write(road.Overlay);
 
             foreach (var side in new[] { road.Right, road.Left }) // repeated for both sides of the road
@@ -392,6 +397,11 @@ namespace TruckLib.ScsMap.Serialization
             
             WriteObjectList(w, road.Left.VariantOverrides);
             WriteObjectList(w, road.Right.VariantOverrides);
+
+            w.Write(road.Right.RightEdgeLook);
+            w.Write(road.Right.LeftEdgeLook);
+            w.Write(road.Left.RightEdgeLook);
+            w.Write(road.Left.LeftEdgeLook);
         }
     }
 }

@@ -104,6 +104,55 @@ namespace TruckLib.ScsMap
         }
 
         /// <inheritdoc/>
+        public bool PlayerVehicleTypeChange
+        {
+            get => flags[4];
+            set => flags[4] = value;
+        }
+
+        /// <inheritdoc/>
+        public bool FwdTruck
+        {
+            get => flags[5];
+            set => flags[5] = value;
+        }
+
+        /// <inheritdoc/>
+        public bool FwdBus
+        {
+            get => flags[6];
+            set => flags[6] = value;
+        }
+
+        /// <inheritdoc/>
+        public bool FwdCar
+        {
+            get => flags[7];
+            set => flags[7] = value;
+        }
+
+        /// <inheritdoc/>
+        public bool BwdTruck
+        {
+            get => flags[28];
+            set => flags[28] = value;
+        }
+
+        /// <inheritdoc/>
+        public bool BwdBus
+        {
+            get => flags[29];
+            set => flags[29] = value;
+        }
+
+        /// <inheritdoc/>
+        public bool BwdCar
+        {
+            get => flags[30];
+            set => flags[30] = value;
+        }
+
+        /// <inheritdoc/>
         public IItemContainer Parent { get; set; }
 
         private Envelope envelope;

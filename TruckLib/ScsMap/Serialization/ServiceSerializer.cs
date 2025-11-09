@@ -24,7 +24,16 @@ namespace TruckLib.ScsMap.Serialization
             var service = item as Service;
             WriteKdopItem(w, service);
             w.Write(service.Node.Uid);
-            w.Write(service.Prefab.Uid);
+
+            if (service.Prefab is null)
+            {
+                w.Write(0UL);
+            }
+            else
+            {
+                w.Write(service.Prefab.Uid);
+            }
+
             WriteNodeRefList(w, service.Nodes);
         }
     }

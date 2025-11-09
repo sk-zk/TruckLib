@@ -80,6 +80,7 @@ namespace TruckLib.ScsMap.Serialization
             if (superfine) road.Resolution = RoadResolution.Superfine;
             road.IgnoreCutPlanes = rarr1[2];
             road.Unknown3 = rarr1[3];
+            road.CenterBlocked = rarr1[4];
             road.Right.Models[1].Shift = rarr1[5];
             road.Left.Models[1].Shift = rarr1[6];
             road.TerrainShadows = !rarr1[7];
@@ -201,6 +202,7 @@ namespace TruckLib.ScsMap.Serialization
             rflag1 |= (byte)((road.Resolution == RoadResolution.Superfine).ToByte() << 1);
             rflag1 |= (byte)(road.IgnoreCutPlanes.ToByte() << 2);
             rflag1 |= (byte)(road.Unknown3.ToByte() << 3);
+            rflag1 |= (byte)(road.CenterBlocked.ToByte() << 4);
             rflag1 |= (byte)(road.Right.Models[1].Shift.ToByte() << 5);
             rflag1 |= (byte)(road.Left.Models[1].Shift.ToByte() << 6);
             rflag1 |= (byte)((!road.TerrainShadows).ToByte() << 7);

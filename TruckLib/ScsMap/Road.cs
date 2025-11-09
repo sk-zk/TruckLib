@@ -275,6 +275,12 @@ namespace TruckLib.ScsMap
             set => tmpFlags[16] = value;
         }
 
+        public bool CenterBlocked
+        {
+            get => tmpFlags[17];
+            set => tmpFlags[17] = value;
+        }
+
         public Road() : base() { }
 
         internal Road(bool initFields) : base(initFields)

@@ -12,7 +12,7 @@ using TruckLib.ScsMap;
 var map = new Map("example");
 ```
 
-`"example"` is the filename of the map, meaning that, when the map is saved, it will be named
+`"example"` is the filename of the map: when the map is saved, it will be named
 `example.mbd`, and its sectors will be written to the `example` directory.
 
 ## Adding a road item

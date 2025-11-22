@@ -122,33 +122,55 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Opens a map.
+        /// <para>Deserializes a map.</para>
+        /// <para>If the given path points to an .mbd file, metadata is read from it and
+        /// the sectors are loaded from a sibling subdirectory with the same name.</para>
+        /// <para>If the path points to a sector directory, the metadata fields that would
+        /// otherwise have been read from the .mbd file, such as <see cref="NormalScale"/>,
+        /// are left at their default values.
+        /// </para>
         /// </summary>
-        /// <param name="mbdPath">Path to the .mbd file of the map.</param>
-        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        /// <param name="path">Path to the .mbd file or sector directory of the map.</param>
+        /// <param name="sectors">If set, only the specified sectors will be loaded.</param>
         /// <returns>A Map object.</returns>
-        public static Map Open(string mbdPath, IList<SectorCoordinate> sectors = null)
+        public static Map Open(string path, IList<SectorCoordinate> sectors = null)
         {
-            return Open(mbdPath, new DiskFileSystem(), sectors);
+            return Open(path, new DiskFileSystem(), sectors);
         }
 
         /// <summary>
-        /// Opens a map.
+        /// <para>Deserializes a map.</para>
+        /// <para>If the given path points to an .mbd file, metadata is read from it and
+        /// the sectors are loaded from a sibling subdirectory with the same name.</para>
+        /// <para>If the path points to a sector directory, the metadata fields that would
+        /// otherwise have been read from the .mbd file, such as <see cref="NormalScale"/>,
+        /// are left at their default values.
+        /// </para>
         /// </summary>
-        /// <param name="mbdPath">Path to the .mbd file of the map.</param>
+        /// <param name="path">Path to the .mbd file or sector directory of the map.</param>
         /// <param name="fs">The file system to load the map from. This accepts 
-        /// a <see cref="TruckLib.HashFs.IHashFsReader">HashFS reader</see>.</param>
-        /// <param name="sectors">If set, only the given sectors will be loaded.</param>
+        /// a <see cref="IHashFsReader">HashFS reader</see>.</param>
+        /// <param name="sectors">If set, only the specified sectors will be loaded.</param>
         /// <returns>A Map object.</returns>
-        public static Map Open(string mbdPath, IFileSystem fs, IList<SectorCoordinate> sectors = null)
+        public static Map Open(string path, IFileSystem fs, IList<SectorCoordinate> sectors = null)
         {
-            Trace.WriteLine("Loading map " + mbdPath);
-            var name = Path.GetFileNameWithoutExtension(mbdPath);
-            var mapDirectory = fs.GetParent(mbdPath);
-            var sectorDirectory = $"{mapDirectory}{fs.DirectorySeparator}{name}";
+            path = Path.TrimEndingDirectorySeparator(path);
+
+            Trace.WriteLine("Loading map " + path);
+
+            var loadingFromMbd = fs.FileExists(path);
+            var name = Path.GetFileNameWithoutExtension(path);
+            var sectorDirectory = loadingFromMbd 
+                ? $"{fs.GetParent(path)}{fs.DirectorySeparator}{name}" 
+                : path;
 
             var map = new Map(name);
-            map.ReadMbd(mbdPath, fs);
+            if (loadingFromMbd)
+            {
+                Trace.WriteLine("Parsing .mbd");
+                map.ReadMbd(path, fs);
+            }
+
             Trace.WriteLine("Parsing sectors");
             map.ReadSectors(sectorDirectory, fs, sectors);
 

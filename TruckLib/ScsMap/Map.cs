@@ -761,17 +761,25 @@ namespace TruckLib.ScsMap
         /// Saves the map in binary format. If the sector directory does not yet exist, it will be created.
         /// </summary>
         /// <param name="mapDirectory">The path of the directory to save the map into.</param>
-        /// <param name="cleanSectorDirectory">If true, the sector directory will be emptied
-        /// before saving the map.</param>
+        /// <param name="cleanSectorDirectory">If true, existing sector files will be removed 
+        /// from the sector directory before saving the map.</param>
         public void Save(string mapDirectory, bool cleanSectorDirectory = true)
         {
             var sectorDirectory = Path.Combine(mapDirectory, Name);
             Directory.CreateDirectory(sectorDirectory);
+
             if (cleanSectorDirectory)
             {
                 var files = new DirectoryInfo(sectorDirectory).GetFiles();
-                foreach (var file in files)
-                    file.Delete();
+                HashSet<string> sectorExtensions = [".base", ".aux", ".snd", ".data", ".desc", ".layer"];
+                foreach (var file in files) 
+                {
+                    var ext = file.Extension.ToLowerInvariant();
+                    if (sectorExtensions.Contains(ext))
+                    {
+                        file.Delete();
+                    }
+                }
             }
 
             var farModelChildren = GetFarModelChildren();

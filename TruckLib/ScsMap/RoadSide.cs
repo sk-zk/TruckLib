@@ -33,10 +33,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token RightEdge { get; set; }
 
+        public Token RightEdgeLook { get; set; }
+
         /// <summary>
         /// Unit name of the left edge model, as defined in <c>/def/world/road_edge.sii</c>.
         /// </summary>
         public Token LeftEdge { get; set; }
+
+        public Token LeftEdgeLook { get; set; }
 
         /// <summary>
         /// Height offset of this side in meters.

@@ -35,6 +35,13 @@ namespace TruckLib.ScsMap
         public Quaternion Rotation { get => throw new InvalidOperationException(); set => throw new InvalidOperationException(); }
         public IItemContainer Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool IsCurveLocator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool PlayerVehicleTypeChange { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool FwdTruck { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool FwdBus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool FwdCar { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool BwdTruck { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool BwdBus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool BwdCar { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public bool IsOrphaned() => throw new InvalidOperationException();
         public void Move(Vector3 newPos) => throw new InvalidOperationException();

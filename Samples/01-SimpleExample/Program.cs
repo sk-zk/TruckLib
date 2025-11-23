@@ -11,7 +11,7 @@ namespace Example
         {
             // This example program places a few road segments
             // and models at hardcoded locations into an empty map
-            // and saves the map into the mod folder.
+            // and saves the map into the mod directory.
             // You can find a more detailed walkthrough of the code in
             // the documentation.
 
@@ -20,8 +20,8 @@ namespace Example
             var map = new Map("example");
 
 
-            // Add a road segment:
-            // Use the [Item Type].Add method to create a new item
+            // Add a road item:
+            // Use the [Item Type].Add() method to create a new item
             // and automatically add it to the map.
             var r = Road.Add(map,
                 new Vector3(19, 0, 19.5f), // position of backward (red) node
@@ -67,7 +67,7 @@ namespace Example
             }
 
 
-            // Append some more segments:
+            // Append some more road items:
             // By default, Append will copy all settings.
             r.Append(new Vector3(98, 0, 43.5f))
                 .Append(new Vector3(146.5f, 0, 25))

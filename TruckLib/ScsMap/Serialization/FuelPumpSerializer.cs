@@ -26,7 +26,16 @@ namespace TruckLib.ScsMap.Serialization
             var pump = item as FuelPump;
             WriteKdopItem(w, pump);
             w.Write(pump.Node.Uid);
-            w.Write(pump.Prefab.Uid);
+
+            if (pump.Prefab is null)
+            {
+                w.Write(0UL);
+            }
+            else
+            {
+                w.Write(pump.Prefab.Uid);
+            }
+
             WriteNodeRefList(w, pump.Nodes);
         }
     }

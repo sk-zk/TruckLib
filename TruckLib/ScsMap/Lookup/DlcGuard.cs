@@ -33,6 +33,9 @@
             public static readonly byte Greece = 20;
             public static readonly byte GreeceAndEastBalkans = 21;
             public static readonly byte GreeceAndWestBalkans = 22;
+            public static readonly byte Nordic = 23;
+            public static readonly byte NordicAndBaltic = 24;
+            public static readonly byte NordicAndScandinavia = 25;
         }
 
         /// <summary>
@@ -87,6 +90,9 @@
             public static readonly byte Iowa = 44;
             public static readonly byte IowaAndMissouri = 45;
             public static readonly byte IowaAndNebraska = 46;
+            public static readonly byte Louisiana = 47;
+            public static readonly byte LouisianaAndArkansas = 48;
+            public static readonly byte LouisianaAndTexas = 49;
         }
     }
 }

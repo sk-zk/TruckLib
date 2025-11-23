@@ -68,6 +68,19 @@ namespace TruckLib.ScsMap
         /// </summary>
         bool IsCurveLocator { get; set; }
 
+        bool PlayerVehicleTypeChange { get; set; }
+
+        bool FwdTruck { get; set; }
+
+        bool FwdBus { get; set; }
+
+        bool FwdCar { get; set; }
+
+        bool BwdTruck { get; set; }
+
+        bool BwdBus { get; set; }
+
+        bool BwdCar { get; set; }
 
         /// <summary>
         /// Returns whether the node has no ForwardItem and no BackwardItem.

@@ -49,7 +49,7 @@ company.Look = "green_fr";
 ```
 
 The map now contains a `car_dealer_01_fr` prefab whose control node 0 is at
-(55, 0, 70) and which is rotated the same way as it would be if you set the
+(55, 0, 70) and which is rotated the same way as it would be if you had set the
 rotation of said node to this value in the editor.
 
 The library has also automatically created the necessary `Company` slave item.

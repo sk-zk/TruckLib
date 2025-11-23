@@ -139,8 +139,8 @@ var center = Project(new[] { new GeographicCoordinate(54.744101, 9.799639) },
     sourceCrs, destCrs)[0];
 ```
 
-One last thing &ndash; the game has a minimum length for road segment, which in this case is 1.25 m.
-Further, segments shorter than 5 m can render quite strangely. Now that we have our projected points
+One last thing &ndash; the game has a minimum length for road items, which in this case is 1.25 m.
+Further, items shorter than 5 m can render quite strangely. Now that we have our projected points
 and know how long each segment will be in-game, we'll filter out these segments.
 (This sample has enough LOC as it is, so for the sake of simplicity, we just remove any point for which
 || n<sub>i</sub> - n<sub>i-1</sub> || < 5.)

@@ -13,7 +13,7 @@ To get started with the library, check out the [Creating and modifying maps](~/d
 ## Supported formats
 
 ### Map
-TruckLib supports [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) **903** (game version 1.55/1.56).
+TruckLib supports [map format version](https://github.com/sk-zk/map-docs/wiki/Map-format-version) **905** (game version 1.57).
 
 Support for more than one version at a time is not planned, so you will need to update existing maps in the editor
 whenever this library updates to a newer version.

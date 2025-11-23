@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using TruckLib;
@@ -80,6 +81,7 @@ namespace TruckLib.ScsMap.Serialization
             if (superfine) road.Resolution = RoadResolution.Superfine;
             road.IgnoreCutPlanes = rarr1[2];
             road.Unknown3 = rarr1[3];
+            road.CenterBlocked = rarr1[4];
             road.Right.Models[1].Shift = rarr1[5];
             road.Left.Models[1].Shift = rarr1[6];
             road.TerrainShadows = !rarr1[7];
@@ -201,6 +203,7 @@ namespace TruckLib.ScsMap.Serialization
             rflag1 |= (byte)((road.Resolution == RoadResolution.Superfine).ToByte() << 1);
             rflag1 |= (byte)(road.IgnoreCutPlanes.ToByte() << 2);
             rflag1 |= (byte)(road.Unknown3.ToByte() << 3);
+            rflag1 |= (byte)(road.CenterBlocked.ToByte() << 4);
             rflag1 |= (byte)(road.Right.Models[1].Shift.ToByte() << 5);
             rflag1 |= (byte)(road.Left.Models[1].Shift.ToByte() << 6);
             rflag1 |= (byte)((!road.TerrainShadows).ToByte() << 7);
@@ -331,13 +334,17 @@ namespace TruckLib.ScsMap.Serialization
 
             road.Left.VariantOverrides = ReadObjectList<VariantOverride>(r);
             road.Right.VariantOverrides = ReadObjectList<VariantOverride>(r);
+
+            road.Right.RightEdgeLook = r.ReadToken();
+            road.Right.LeftEdgeLook = r.ReadToken();
+            road.Left.RightEdgeLook = r.ReadToken();
+            road.Left.LeftEdgeLook = r.ReadToken();
         }
 
         public void SerializeDataPayload(BinaryWriter w, MapItem item)
         {
             var road = item as Road;
 
-            // overlay scheme
             w.Write(road.Overlay);
 
             foreach (var side in new[] { road.Right, road.Left }) // repeated for both sides of the road
@@ -390,6 +397,11 @@ namespace TruckLib.ScsMap.Serialization
             
             WriteObjectList(w, road.Left.VariantOverrides);
             WriteObjectList(w, road.Right.VariantOverrides);
+
+            w.Write(road.Right.RightEdgeLook);
+            w.Write(road.Right.LeftEdgeLook);
+            w.Write(road.Left.RightEdgeLook);
+            w.Write(road.Left.LeftEdgeLook);
         }
     }
 }

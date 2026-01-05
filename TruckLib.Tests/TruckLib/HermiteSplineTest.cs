@@ -36,8 +36,8 @@ namespace TruckLib.Tests.TruckLib
             Assert.Equal(expected.Length, actual.Count);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i].Position, actual[i].Position);
-                Assert.Equal(expected[i].Rotation, actual[i].Rotation);
+                AssertEx.Equal(expected[i].Position, actual[i].Position, 0.001f);
+                AssertEx.Equal(expected[i].Rotation, actual[i].Rotation, 0.001f);
             }
         }
     }

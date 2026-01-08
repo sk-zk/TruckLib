@@ -24,7 +24,7 @@ If you would like to load specific sectors only, use the optional `sectors` para
 It expects a list or array of [sector coordinates](xref:TruckLib.ScsMap.SectorCoordinate).
 
 There is an additional overload which allows loading a map directly from a .scs file using a
-[`IHashFsReader`](~/docs/TruckLib.HashFs/hashfs.md): 
+[`IHashFsReader`](~/docs/TruckLib.HashFs/reader.md): 
 
 ```cs
 using TruckLib.HashFs;

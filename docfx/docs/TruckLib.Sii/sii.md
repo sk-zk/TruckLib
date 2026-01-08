@@ -26,7 +26,7 @@ SiiFile sii = SiiFile.Load(siiStr, "/path/where/included/files/are/located");
 If an included file does not exist, `FileNotFoundException` is thrown unless the `ignoreMissingIncludes` parameter is set to true.
 
 There are additional overloads which allow loading a .sii file directly from a .scs file using a
-[`IHashFsReader`](~/docs/TruckLib.HashFs/hashfs.md): 
+[`IHashFsReader`](~/docs/TruckLib.HashFs/reader.md): 
 
 ```cs
 using TruckLib.HashFs;

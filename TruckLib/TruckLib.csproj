@@ -35,10 +35,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="5.0.0" />
-		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="RBush" Version="4.0.0" />
-		<PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 		<PackageReference Include="TruckLib.HashFs" Version="0.2.0" />
 		<PackageReference Include="TruckLib.Models" Version="0.4.0" />
 		<PackageReference Include="TruckLib.Sii" Version="0.2.0" />

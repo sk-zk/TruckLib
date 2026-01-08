@@ -7,6 +7,8 @@ for writing HashFS v1 and v2 archives respectively.
 First, construct a new writer and stage files for packing with the `Add` method:
 
 ```cs
+using TruckLib.HashFs;
+
 HashFsV2Writer writer = new();
 writer.Add(@"D:\foo\bar\manifest.sii", "/manifest.sii");
 writer.Add(@"C:\stuff\my_house.pmd", "/model/building/my_house.pmd");

@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<RootNamespace>TruckLib</RootNamespace>
 		<Authors>skzk</Authors>
-		<Version>0.3.0.0</Version>
+		<Version>0.3.1.0</Version>
 		<Title>TruckLib</Title>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/sk-zk/TruckLib</RepositoryUrl>
@@ -34,14 +34,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
-		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="5.0.0" />
 		<PackageReference Include="RBush" Version="4.0.0" />
-		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-		<PackageReference Include="TruckLib.HashFs" Version="0.1.18" />
-		<PackageReference Include="TruckLib.Models" Version="0.3.1" />
-		<PackageReference Include="TruckLib.Sii" Version="0.1.13" />
+		<PackageReference Include="TruckLib.HashFs" Version="0.2.1" />
+		<PackageReference Include="TruckLib.Models" Version="0.4.1" />
+		<PackageReference Include="TruckLib.Sii" Version="0.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

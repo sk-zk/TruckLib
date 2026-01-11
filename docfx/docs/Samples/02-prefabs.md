@@ -144,4 +144,4 @@ Here's our final result:
 
 ## Further reading
 * [Working with prefabs](~/docs/TruckLib.ScsMap/prefabs.md)
-* [Reading HashFS (.scs) archives](~/docs/TruckLib.HashFs/hashfs.md)
+* [Reading HashFS (.scs) archives](~/docs/TruckLib.HashFs/reader.md)

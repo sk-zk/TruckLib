@@ -21,8 +21,8 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             var actual = r2.InterpolateCurveDist(4.2f);
 
             Assert.NotNull(actual);
-            Assert.Equal(new(68.90782f, 0, 24.699467f), actual?.Position);
-            Assert.Equal(new(0, -0.85898876f, 0, 0.5119944f), actual?.Rotation);
+            AssertEx.Equal(new(68.90782f, 0, 24.699467f), actual.Value.Position, 0.0001f);
+            AssertEx.Equal(new(0, -0.85898876f, 0, 0.5119944f), actual.Value.Rotation, 0.0001f);
         }
 
         [Fact]

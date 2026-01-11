@@ -11,7 +11,7 @@ files contain full directory listings, but mods may not &ndash; the top level li
 prevent the official extractor from extracting anything.
 
 HashFS v2, introduced with game version 1.50, is supported. Note that, in this version, `.tobj`/`.dds` pairs are
-dissolved into a packed `.tobj` entry from which TruckLib will reconstruct the original `.tobj` and `.dds` files
+dissolved into a single `.tobj` entry from which TruckLib will reconstruct the original `.tobj` and `.dds` files
 when such a `.tobj` entry is requested.
 
 ## Opening an archive
@@ -23,8 +23,8 @@ using TruckLib.HashFs;
 using IHashFsReader reader = HashFsReader.Open(@"E:\SteamLibrary\steamapps\common\Euro Truck Simulator 2\def.scs");
 ```
 
-Depending on the HashFS version of the archive, this will create a `HashFsReaderV1` or 
-`HashFsReaderV2` instance as [`IHashFsReader`](xref:TruckLib.HashFs.IHashFsReader) which you can use to extract files.
+Depending on the HashFS version of the archive, this will create a `HashFsV1Reader` or 
+`HashFsV2Reader` instance as [`IHashFsReader`](xref:TruckLib.HashFs.IHashFsReader) which you can use to extract files.
 
 ## Finding entries
 

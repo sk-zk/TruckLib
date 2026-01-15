@@ -14,7 +14,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             Assert.Equal(new Vector3(50, 0, 50), fm.Node.Position);
@@ -26,7 +26,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
@@ -42,7 +42,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
@@ -56,7 +56,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void GetCenterWithMapItems()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
             var model1 = Model.Add(map, new Vector3(10, 0, 10), "aaa", "bbb", "ccc");
             var model2 = Model.Add(map, new Vector3(-42, 0, -727), "aaa", "bbb", "ccc");
@@ -74,7 +74,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void GetCenterWithFarModelItems()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
             var model1 = Model.Add(map, new Vector3(10, 0, 10), "aaa", "bbb", "ccc");
             var model2 = Model.Add(map, new Vector3(-42, 0, -727), "aaa", "bbb", "ccc");

@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
             curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
@@ -37,7 +37,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void RemoveAt()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
             var node = curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
@@ -50,7 +50,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Remove()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
             var node = curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
@@ -64,7 +64,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Clear()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
             var node1 = curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
@@ -79,7 +79,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void AddThrowsIfFull()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
 
             curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);

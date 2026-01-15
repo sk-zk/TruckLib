@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
             c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
@@ -32,7 +32,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Insert()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
             c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
@@ -52,7 +52,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void RemoveAt()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
             var p1 = c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
@@ -67,7 +67,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Clear()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
             var p1 = c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);

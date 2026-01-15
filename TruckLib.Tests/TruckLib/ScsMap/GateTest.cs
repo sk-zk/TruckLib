@@ -15,7 +15,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
             Assert.True(map.MapItems.ContainsKey(gate.Uid));
@@ -32,7 +32,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
             gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
             var point = gate.ActivationPoints[0];

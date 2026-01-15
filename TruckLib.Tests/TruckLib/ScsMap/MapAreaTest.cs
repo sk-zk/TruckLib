@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -30,7 +30,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -46,7 +46,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void MoveWithDifferentAnchor()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -62,7 +62,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -78,7 +78,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 

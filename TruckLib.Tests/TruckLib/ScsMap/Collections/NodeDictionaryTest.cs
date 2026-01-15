@@ -79,7 +79,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void MoveNode()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var node = map.AddNode(new Vector3(10, 0, 10));
 
             node.Move(new Vector3(150, 0, 150));

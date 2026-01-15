@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
             gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
@@ -31,7 +31,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Insert()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
             gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
@@ -44,7 +44,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void RemoveAt()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
             var point = gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
@@ -57,7 +57,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Remove()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
             var point = gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
@@ -71,7 +71,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Clear()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(10, 0, 10), "bar", GateType.TriggerActivated);
 
             var point1 = gate.ActivationPoints.Add(new Vector3(-50, 0, -50), "aaa");
@@ -86,7 +86,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void AddThrowsIfFull()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var gate = Gate.Add(map, new Vector3(50, 0, 50), "bar", GateType.TriggerActivated);
 
             gate.ActivationPoints.Add(new Vector3(69, 42, 0), "aaa");

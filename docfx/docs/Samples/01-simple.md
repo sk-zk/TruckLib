@@ -9,11 +9,8 @@ We begin by instantiating an empty map:
 ```cs
 using TruckLib.ScsMap;
 
-var map = new Map("example");
+var map = new Map();
 ```
-
-`"example"` is the filename of the map: when the map is saved, it will be named
-`example.mbd`, and its sectors will be written to the `example` directory.
 
 ## Adding a road item
 Let's create a road. For the sake of simplicity, we will be using hardcoded coordinates. Here's how
@@ -133,7 +130,7 @@ on Windows, this will probably need to be adjusted):
 ```cs
 var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 var userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/");
-map.Save(userMap, true);
+map.Save(userMap, "example", true);
 ```
 
 There should now be an `example.mbd` and an `example` directory in `mod/user_map/map` and 

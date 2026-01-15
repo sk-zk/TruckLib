@@ -15,7 +15,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings = Buildings.Add(map, new Vector3(-15, 0, 35), new Vector3(35, 0, -15), "bar");
 
             Assert.Equal(buildings.Name, "bar");
@@ -32,7 +32,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Append()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings1 = Buildings.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
 
             // set some settings we expect to get cloned
@@ -57,7 +57,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DisallowAppendIfForwardItemExists()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings1 = Buildings.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
             var buildings2 = buildings1.Append(new Vector3(-10, 0, -10), true);
 
@@ -68,7 +68,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings = Buildings.Add(map, new Vector3(-20, 0, -20), new Vector3(-10, 0, -10), "bar");
 
             buildings.Move(new Vector3(30, 0, 30));
@@ -80,7 +80,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings = Buildings.Add(map, new Vector3(-20, 0, -20), new Vector3(-10, 0, -10), "bar");
 
             buildings.Translate(new Vector3(30, 0, 30));
@@ -92,7 +92,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteIndividual()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings = Buildings.Add(map, new Vector3(10, 0, 10), new Vector3(-10, 0, -10), "bar");
 
             map.Delete(buildings);
@@ -104,7 +104,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteInChain()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var buildings1 = Buildings.Add(map, new Vector3(10, 0, 10), new Vector3(20, 0, 20), "bar");
             var buildings2 = buildings1.Append(new Vector3(30, 0, 30));
             var buildings3 = buildings2.Append(new Vector3(40, 0, 40));

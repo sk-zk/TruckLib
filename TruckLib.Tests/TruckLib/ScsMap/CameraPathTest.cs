@@ -20,7 +20,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
                 new(12.89f, 0, 14.29f)
             };
 
-            var map = new Map("foo");
+            var map = new Map();
             var path = CameraPath.Add(map, points);
 
             Assert.Equal(4, path.Keyframes.Count);
@@ -44,7 +44,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var path = CameraPath.Add(map, new List<Vector3>() {
                 new(-30, 0, -30),
                 new(-10, 0, -10),
@@ -59,7 +59,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var path = CameraPath.Add(map, new List<Vector3>() {
                 new(-30, 0, -30),
                 new(-10, 0, -10),
@@ -74,7 +74,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var path = CameraPath.Add(map, new List<Vector3>() {
                 new(-13.11f, 0, 14.21f),
                 new(-4.35f, 0, 3.08f),

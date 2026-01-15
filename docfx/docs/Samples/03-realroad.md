@@ -158,7 +158,7 @@ As with the previous samples, we create an empty map:
 ```cs
 using TruckLib.ScsMap;
 
-var map = new Map("example");
+var map = new Map();
 map.NormalScale = 1;
 map.CityScale = 1;
 ```
@@ -189,7 +189,7 @@ Let's save the map:
 ```cs
 var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 var userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/");
-map.Save(userMap, true);
+map.Save(userMap, "example", true);
 ```
 
 Remember to **recompute the map** (Map > Recompute map). This is necessary because TruckLib

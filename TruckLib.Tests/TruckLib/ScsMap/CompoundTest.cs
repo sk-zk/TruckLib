@@ -15,7 +15,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(10, 0, 10));
 
             Assert.True(map.MapItems.ContainsKey(compound.Uid));
@@ -29,7 +29,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddToCompound()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(10, 0, 10));
             var model = Model.Add(compound, new Vector3(20, 0, 20), "aaa", "bbb", "ccc");
 
@@ -43,7 +43,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteFromCompound()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(10, 0, 10));
             var model = Model.Add(compound, new Vector3(20, 0, 20), "aaa", "bbb", "ccc");
 
@@ -56,7 +56,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(10, 0, 10));
             var model = Model.Add(compound, new Vector3(20, 0, 20), "aaa", "bbb", "ccc");
 
@@ -69,7 +69,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(10, 0, 10));
             var model = Model.Add(compound, new Vector3(20, 0, 20), "aaa", "bbb", "ccc");
 
@@ -82,7 +82,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(10, 0, 10));
             Model.Add(compound, new Vector3(20, 0, 20), "aaa", "bbb", "ccc");
 

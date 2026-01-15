@@ -23,7 +23,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddCrossing()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
 
             var expectedPositions = new Vector3[] {
@@ -47,7 +47,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddCrossingRotated()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
@@ -70,7 +70,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddCompany()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", fixture.CompanyPpd);
 
             // test prefab item
@@ -119,7 +119,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddCompanyRotated()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(80, 0, 80), "dlc_fr_14", fixture.CompanyPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(90f), 0, 0));
 
@@ -169,7 +169,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddServiceWithTerrain()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var service = Prefab.Add(map, new(30, 0, 30), "bla", 
                 fixture.ServicePpd, fixture.ServicePmd);
 

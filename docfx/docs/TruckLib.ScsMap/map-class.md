@@ -2,12 +2,11 @@
 
 ## Creating a map
 To create a new, empty map, call the [constructor of `Map`](xref:TruckLib.ScsMap.Map.%23ctor*).
-The `name` parameter is what the `.mbd` file and the sector directory of the map will be named when it is saved.
 
 ```cs
 using TruckLib.ScsMap;
 
-Map map = new Map("example");
+Map map = new Map();
 ```
 
 ## Opening a map
@@ -41,8 +40,10 @@ written to the specified directory.
 ```cs
 string documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 string userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/");
-map.Save(userMap, true);
+map.Save(userMap, "map_name", true);
 ```
+
+The `name` parameter is what the `.mbd` file and the sector directory of the map will be named when it is saved.
 
 If the optional parameter `cleanSectorDirectory` is set to true, which it is by default, the sector directory
 will be emptied before saving the map.

@@ -22,7 +22,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AppendRoad()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
@@ -42,7 +42,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AppendRoadThrowsIfNodeNotFree()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
@@ -54,7 +54,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void PrependRoad()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
@@ -72,7 +72,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void PrependRoadThrowsIfNodeNotFree()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
 
@@ -85,7 +85,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AttachPrefabs()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
 
@@ -102,7 +102,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AttachPrefabsP1Origin()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var prefab2 = Prefab.Add(map, new Vector3(48, 0, 89), "dlc_blkw_02", fixture.CrossingPpd);
 
@@ -119,7 +119,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AttachPrefabsP2Origin()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
             prefab2.ChangeOrigin(1);
@@ -137,7 +137,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AttachThrowsIfNodeOccupied()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);
 
@@ -149,7 +149,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AttachThrowsIfBothNodesAreOrigin()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab1 = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd);
             prefab1.ChangeOrigin(3);
             var prefab2 = Prefab.Add(map, new Vector3(100, 0, 55), "dlc_blkw_02", fixture.CrossingPpd);

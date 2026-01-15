@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void InterpolateCurveDist()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(19, 0, 19.5f), new(65, 0, 23), "ger1");
             var r2 = r1.Append(new(98, 0, 43.5f));
             var r3 = r2.Append(new(146.5f, 0, 25));
@@ -28,7 +28,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void InterpolateCurveDistNullIfTooFar()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(19, 0, 19.5f), new(65, 0, 23), "ger1");
             var r2 = r1.Append(new(98, 0, 43.5f));
 
@@ -39,7 +39,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void FindFirstItem()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
             var r2 = r1.Append(new(42, 0, 30));
             var r3 = r2.Append(new(25, 0, 18));
@@ -54,7 +54,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void FindLastItem()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
             var r2 = r1.Append(new(42, 0, 30));
             var r3 = r2.Append(new(25, 0, 18));
@@ -69,7 +69,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void FindFirstItemWithLoop()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
             var r2 = r1.Append(new(42, 0, 30));
             var r3 = r2.Append(new(25, 0, 18));
@@ -85,7 +85,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void FindLastItemWithLoop()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
             var r2 = r1.Append(new(42, 0, 30));
             var r3 = r2.Append(new(25, 0, 18));
@@ -101,7 +101,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void ClosedLoopHasCorrectNodeRotation()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var r1 = Road.Add(map, new(42, 0, 0), new(60, 0, 15), "ger1");
             var r2 = r1.Append(new(42, 0, 30));
             var r3 = r2.Append(new(25, 0, 18));
@@ -115,7 +115,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void RecalculateWithFreeRotationNodeInTheMiddle()
         {
-            var map = new Map("foo");
+            var map = new Map();
 
             var r1 = Road.Add(map, new(16,0,23), new(66,0,8), "ger1");
             var r2 = r1.Append(new(125,0,17));
@@ -138,7 +138,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void RecalculateWithFreeRotationNodeAtTheStart()
         {
-            var map = new Map("foo");
+            var map = new Map();
 
             var r1 = Road.Add(map, new(16, 0, 23), new(66, 0, 8), "ger1");
             var r2 = r1.Append(new(125, 0, 17));
@@ -161,7 +161,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void RecalculateWithFreeRotationNodeAtTheEnd()
         {
-            var map = new Map("foo");
+            var map = new Map();
 
             var r1 = Road.Add(map, new(16, 0, 23), new(66, 0, 8), "ger1");
             var r2 = r1.Append(new(125, 0, 17));

@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
@@ -32,7 +32,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Insert()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
@@ -45,7 +45,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void RemoveAt()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             var fmData = fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);
@@ -57,7 +57,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Clear()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var fm = FarModel.Add(map, new Vector3(50, 0, 50), 60, 50);
 
             var fmData1 = fm.Models.Add(new Vector3(69, 42, 0), "bar", Vector3.One);

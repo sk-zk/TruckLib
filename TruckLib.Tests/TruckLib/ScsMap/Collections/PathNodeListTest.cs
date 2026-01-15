@@ -19,7 +19,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
                 new(60, 10, 16),
                 new(44, 2, 31)
             };
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
 
             mover.Nodes.Add(new Vector3(56, 0, 45));
@@ -42,7 +42,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
                 new(60, 10, 16),
                 new(44, 2, 31)
             };
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
 
             mover.Nodes.Insert(2, new Vector3(44, 0, 15));
@@ -65,7 +65,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
                 new(60, 10, 16),
                 new(44, 2, 31)
             };
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
 
             var nodeToRemove = mover.Nodes[3];

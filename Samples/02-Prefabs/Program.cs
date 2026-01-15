@@ -16,7 +16,7 @@ namespace Prefabs
             // You can find a more detailed walkthrough of the code in
             // the documentation.
 
-            var map = new Map("example");
+            var map = new Map();
 
             // (modify this path before running)
             var gameRoot = @"D:\SteamLibrary\steamapps\common\Euro Truck Simulator 2";
@@ -80,7 +80,7 @@ namespace Prefabs
             // Save the map
             var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var userMapFolder = Path.Combine(documentsFolder, "Euro Truck Simulator 2/mod/user_map/map/");
-            map.Save(userMapFolder, true);
+            map.Save(userMapFolder, "example", true);
 
 
             // Remember to recalculate (Map > Recompute map) after loading it in the editor for the first time.

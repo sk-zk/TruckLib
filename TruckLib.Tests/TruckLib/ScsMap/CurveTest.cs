@@ -14,7 +14,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new Vector3(-15, 0, 35), new Vector3(35, 0, -15), "bar");
 
             Assert.Equal(curve.Model, "bar");
@@ -31,7 +31,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Append()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve1 = Curve.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
 
             // set some settings we expect to get cloned
@@ -64,7 +64,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DisallowAppendIfForwardItemExists()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve1 = Curve.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
             var curve2 = curve1.Append(new Vector3(-10, 0, -10), true);
 
@@ -75,7 +75,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new Vector3(-20, 0, -20), new Vector3(-10, 0, -10), "bar");
 
             curve.Move(new Vector3(30, 0, 30));
@@ -87,7 +87,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new Vector3(-20, 0, -20), new Vector3(-10, 0, -10), "bar");
 
             curve.Translate(new Vector3(30, 0, 30));
@@ -99,7 +99,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteIndividual()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve = Curve.Add(map, new(10, 0, 10), new(30, 0, 10), "bar");
             curve.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);
             curve.Locators.Add(new(29.71f, 0, 7.97f), Quaternion.Identity);
@@ -113,7 +113,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteInChain()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var curve1 = Curve.Add(map, new Vector3(-10, 0, -10), new Vector3(10, 0, 10), "bar");
             var curve2 = curve1.Append(new Vector3(30, 0, 10));
             curve2.Locators.Add(new(10.29f, 0, 7.97f), Quaternion.Identity);

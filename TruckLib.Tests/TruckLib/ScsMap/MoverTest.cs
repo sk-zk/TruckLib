@@ -27,7 +27,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
                 new(-0.0691682f, 0.903593f, 0.159656f, 0.391465f)
             };
 
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
 
             Assert.Equal(4, mover.Nodes.Count);
@@ -51,7 +51,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, new List<Vector3>() {
                 new(-30, 0, -30),
                 new(-10, 0, -10),
@@ -66,7 +66,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, new List<Vector3>() {
                 new(-30, 0, -30),
                 new(-10, 0, -10),
@@ -81,7 +81,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, new List<Vector3>() {
                 new(-13.11f, 0, 14.21f),
                 new(-4.35f, 0, 3.08f),
@@ -104,7 +104,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
                 new(60, 10, 16),
                 new(44, 2, 31)
             };
-            var map = new Map("foo");
+            var map = new Map();
             var mover = Mover.Add(map, points, "aaa", "bbb", "ccc");
 
             mover.Nodes[1].Move(new Vector3(24, 5, 24));

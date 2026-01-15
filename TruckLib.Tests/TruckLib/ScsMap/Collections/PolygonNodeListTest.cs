@@ -13,7 +13,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -27,7 +27,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void InsertAtZero()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -42,7 +42,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void Remove()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30), new(10, 0, 10) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -56,7 +56,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void RemoveAt()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30), new(10, 0, 10) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -70,7 +70,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void RemoveZero()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30), new(10, 0, 10) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 
@@ -84,7 +84,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
         [Fact]
         public void ClearThenReadd()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new Vector3[] { new(30, 0, 10), new(45, 0, 30), new(10, 0, 30), new(10, 0, 10) };
             var area = MapArea.Add(map, points, MapAreaType.Visual);
 

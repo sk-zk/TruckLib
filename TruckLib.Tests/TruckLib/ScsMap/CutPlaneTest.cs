@@ -14,7 +14,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var cutPlane = CutPlane.Add(map, new List<Vector3>()
             {
                 new(10, 0, 10),
@@ -41,7 +41,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var cutPlane = CutPlane.Add(map, new List<Vector3>() {
                 new(-30, 0, -30),
                 new(-10, 0, -10),
@@ -56,7 +56,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var cutPlane = CutPlane.Add(map, new List<Vector3>() {
                 new(-30, 0, -30),
                 new(-10, 0, -10),
@@ -71,7 +71,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var cutPlane = CutPlane.Add(map, new List<Vector3>()
             {
                 new(10, 0, 10),

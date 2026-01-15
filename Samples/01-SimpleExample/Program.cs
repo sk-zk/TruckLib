@@ -17,7 +17,7 @@ namespace Example
 
 
             // Create an empty map
-            var map = new Map("example");
+            var map = new Map();
 
 
             // Add a road item:
@@ -92,7 +92,7 @@ namespace Example
             // Save the map
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var userMap = Path.Combine(documents, "Euro Truck Simulator 2/mod/user_map/map/");
-            map.Save(userMap, true);
+            map.Save(userMap, "example", true);
 
             // Remember to recalculate (Map > Recompute map) after loading it in the editor for the first time.
         }

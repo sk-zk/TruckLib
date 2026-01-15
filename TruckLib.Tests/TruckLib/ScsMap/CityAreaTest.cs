@@ -14,7 +14,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var city = CityArea.Add(map, new Vector3(10, 0, 10), "bar", 50, 60);
 
             Assert.True(map.MapItems.ContainsKey(city.Uid));
@@ -32,7 +32,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var city = CityArea.Add(map, new Vector3(10, 0, 10), "bar", 50, 60);
 
             city.Move(new Vector3(-10, -20, -30));
@@ -43,7 +43,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var city = CityArea.Add(map, new Vector3(10, 0, 10), "bar", 50, 60);
 
             city.Translate(new Vector3(-20, -20, -40));
@@ -54,7 +54,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var city = CityArea.Add(map, new Vector3(10, 0, 10), "bar", 50, 60);
 
             map.Delete(city);

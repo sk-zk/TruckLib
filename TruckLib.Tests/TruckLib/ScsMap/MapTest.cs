@@ -11,18 +11,9 @@ namespace TruckLib.Tests.TruckLib.ScsMap
     public class MapTest
     {
         [Fact]
-        public void ThrowIfNameInvalid()
-        {
-            var map = new Map("foo");
-            Assert.Throws<ArgumentNullException>(() => map.Name = null);
-            Assert.Throws<ArgumentNullException>(() => map.Name = " ");
-            Assert.Throws<ArgumentException>(() => map.Name = "a/b");
-        }
-
-        [Fact]
         public void AddSector()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var sector = map.AddSector(-5, 5);
 
             Assert.Single(map.Sectors);
@@ -34,7 +25,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void AddNode()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var node = map.AddNode(new(-69, 0, -420), true);
 
             Assert.Single(map.Nodes);
@@ -50,7 +41,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteNode()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var node = map.AddNode(new(-69, 0, -420), true);
 
             map.Delete(node);
@@ -71,7 +62,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void CompoundItems()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var model1 = Model.Add(map, new Vector3(22, 0, 16), "aaa", "bbb", "ccc");
             var model2 = Model.Add(map, new Vector3(30, 0, 8), "aaa", "bbb", "ccc");
 
@@ -93,7 +84,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void UncompoundItems()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var compound = Compound.Add(map, new Vector3(25, 0, 10));
             var model1 = Model.Add(compound, new Vector3(22, 0, 16), "aaa", "bbb", "ccc");
             var model2 = Model.Add(compound, new Vector3(30, 0, 8), "aaa", "bbb", "ccc");

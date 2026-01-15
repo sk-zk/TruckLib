@@ -19,29 +19,6 @@ namespace TruckLib.ScsMap
     /// </summary>
     public class Map : IItemContainer
     {
-        private string name;
-        /// <summary>
-        /// The name of the map, which is used for file and directory names.
-        /// </summary>
-        public string Name
-        {
-            get => name;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentNullException(nameof(Name),
-                        "The map name must not be null or just whitespace.");
-                }
-                if (value.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
-                {
-                    throw new ArgumentException("The map name must not contain characters which are " +
-                        "not allowed in filenames", nameof(Name));
-                }
-                name = value;
-            }
-        }
-
         /// <summary>
         /// Metadata of the map's sectors.
         /// </summary>
@@ -114,10 +91,8 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Creates an empty map.
         /// </summary>
-        /// <param name="name">The name of the map.</param>
-        public Map(string name)
+        public Map()
         {
-            Name = name;
             EditorMapId = Utils.GenerateUuid();
         }
 
@@ -164,7 +139,7 @@ namespace TruckLib.ScsMap
                 ? $"{fs.GetParent(path)}{fs.DirectorySeparator}{name}" 
                 : path;
 
-            var map = new Map(name);
+            var map = new Map();
             if (loadingFromMbd)
             {
                 Trace.WriteLine("Parsing .mbd");
@@ -761,11 +736,12 @@ namespace TruckLib.ScsMap
         /// Saves the map in binary format. If the sector directory does not yet exist, it will be created.
         /// </summary>
         /// <param name="mapDirectory">The path of the directory to save the map into.</param>
+        /// <param name="name">The name of the .mbd file and sector directory (without extension).</param>
         /// <param name="cleanSectorDirectory">If true, existing sector files will be removed 
         /// from the sector directory before saving the map.</param>
-        public void Save(string mapDirectory, bool cleanSectorDirectory = true)
+        public void Save(string mapDirectory, string name, bool cleanSectorDirectory = true)
         {
-            var sectorDirectory = Path.Combine(mapDirectory, Name);
+            var sectorDirectory = Path.Combine(mapDirectory, name);
             Directory.CreateDirectory(sectorDirectory);
 
             if (cleanSectorDirectory)
@@ -801,7 +777,7 @@ namespace TruckLib.ScsMap
                 }
             }
 
-            var mbdPath = Path.Combine(mapDirectory, $"{Name}.mbd");
+            var mbdPath = Path.Combine(mapDirectory, $"{name}.mbd");
             SaveMbd(mbdPath);
         }
 

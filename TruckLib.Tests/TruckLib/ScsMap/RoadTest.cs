@@ -21,7 +21,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var road = Road.Add(map, new Vector3(10, 0, 10), new Vector3(15, 0, 40), "bar");
 
             Assert.True(map.MapItems.ContainsKey(road.Uid));
@@ -42,7 +42,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Append()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new List<Vector3>()
             {
                 new(25.2734f, 0, 33.1445f),
@@ -106,7 +106,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DisallowAppendIfForwardItemExists()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var road1 = Road.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
             var road2 = road1.Append(new Vector3(-10, 0, -10), true);
 
@@ -117,7 +117,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var road = Road.Add(map, new Vector3(10, 0, 10), new Vector3(15, 0, 40), "ger1");
 
             road.Move(new Vector3(20, 0, 20));
@@ -129,7 +129,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var road = Road.Add(map, new Vector3(10, 0, 10), new Vector3(15, 0, 40), "ger1");
 
             road.Translate(new Vector3(10, 0, 10));
@@ -141,7 +141,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteIndividual()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var road = Road.Add(map, new Vector3(10, 0, 10), new Vector3(15, 0, 40), "ger1");
 
             map.Delete(road);
@@ -153,7 +153,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteInChain()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var points = new List<Vector3>()
             {
                 new(25.2734f, 0, 33.1445f),
@@ -181,7 +181,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void DeleteWhileBwItemIsPrefab()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var prefab = Prefab.Add(map, new Vector3(50, 0, 50), "dlc_blkw_02", fixture.CrossingPpd,
                 Quaternion.CreateFromYawPitchRoll(MathEx.Rad(-90f), 0, 0));
             var road = prefab.AppendRoad(1, new Vector3(55, 0, 10), "blkw1");

@@ -14,7 +14,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Add()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var point = CameraPoint.Add(map, new Vector3(10, 0, 10), new List<Token> { "bar" });
 
             Assert.True(map.MapItems.ContainsKey(point.Uid));
@@ -30,7 +30,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Move()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var point = CameraPoint.Add(map, new Vector3(10, 0, 10), new List<Token>());
 
             point.Move(new Vector3(-10, -20, -30));
@@ -41,7 +41,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Translate()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var point = CameraPoint.Add(map, new Vector3(10, 0, 10), new List<Token>());
 
             point.Translate(new Vector3(-20, -20, -40));
@@ -52,7 +52,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         [Fact]
         public void Delete()
         {
-            var map = new Map("foo");
+            var map = new Map();
             var point = CameraPoint.Add(map, new Vector3(10, 0, 10), new List<Token>());
 
             map.Delete(point);

@@ -662,6 +662,11 @@ namespace TruckLib.ScsMap
             using var r = new BinaryReader(fileStream);
 
             var header = new Header();
+            // Ignore version mismatch. .snd files in the ETS2/ATS base map
+            // are still on version 903 or 904, but since the Sound item itself
+            // has not changed between 903 and 905, we don't need to throw
+            // an exception over this.
+            header.EnforceVersion = false;
             header.Deserialize(r);
             ReadItems(r, ItemFile.Snd);
             ReadNodes(r);

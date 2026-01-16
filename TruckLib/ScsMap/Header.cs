@@ -30,12 +30,18 @@ namespace TruckLib.ScsMap
         /// </summary>
         public uint GameMapVersion { get; set; } = 3;
 
+        /// <summary>
+        /// Whether <see cref="Deserialize"/> should throw an exception.
+        /// </summary>
+        /// <remarks>Allows for reading .snd files in the base game that haven't been updated yet.</remarks>
+        internal bool EnforceVersion { get; set; } = true;
+
         /// <inheritdoc/>
         /// <exception cref="UnsupportedVersionException"></exception>
         public virtual void Deserialize(BinaryReader r, uint? version = null)
         {
             CoreMapVersion = r.ReadUInt32();
-            if (CoreMapVersion != supportedVersion)
+            if (EnforceVersion && CoreMapVersion != supportedVersion)
             {
                 throw new UnsupportedVersionException($"Map version {CoreMapVersion} is not supported.");
             }

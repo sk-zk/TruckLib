@@ -25,8 +25,8 @@ SiiFile sii = SiiFile.Load(siiStr, "/path/where/included/files/are/located");
 
 If an included file does not exist, `FileNotFoundException` is thrown unless the `ignoreMissingIncludes` parameter is set to true.
 
-There are additional overloads which allow loading a .sii file directly from a .scs file using a
-[`IHashFsReader`](~/docs/TruckLib.HashFs/reader.md): 
+There are additional overloads which allow loading a SII file directly from a `.scs` archive using an 
+[`IHashFsReader`](~/docs/TruckLib.HashFs/reader.md):
 
 ```cs
 using TruckLib.HashFs;
@@ -74,10 +74,10 @@ sii.Units.Add(unit);
 string siiStr = sii.Serialize();
 ```
 
-You can also write it to disk using [`Save`](xref:TruckLib.Sii.SiiFile.Serialize*):
+You can also write to disk directly using [`Save`](xref:TruckLib.Sii.SiiFile.Serialize*):
 
 ```cs
 sii.Save("foo.sii");
 ```
 
-Both methods have an optional parameter `indentation` which sets the indentation inside units. The default is `\t`.
+Both methods have an optional parameter `indentation` which sets the string to use as indentation inside units. Its default value is `\t`.

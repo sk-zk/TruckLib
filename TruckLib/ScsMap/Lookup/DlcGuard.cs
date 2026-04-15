@@ -15,7 +15,7 @@
             public static readonly byte Scandinavia = 2;
             public static readonly byte France = 3;
             public static readonly byte Italy = 4;
-            public static readonly byte FranceAndItaly = 5;
+            public static readonly byte ItalyAndFrance = 5;
             public static readonly byte Baltic = 6;
             public static readonly byte BalticAndEast = 7;
             public static readonly byte BalticAndScandinavia = 8;
@@ -24,7 +24,7 @@
             public static readonly byte Iberia = 11;
             public static readonly byte IberiaAndFrance = 12;
             public static readonly byte Russia = 13;
-            public static readonly byte BalticAndRussia = 14;
+            public static readonly byte RussiaAndBaltic = 14;
             public static readonly byte Krone = 15;
             public static readonly byte WestBalkans = 16;
             public static readonly byte WestBalkansAndEast = 17;
@@ -49,9 +49,9 @@
             public static readonly byte NewMexico = 3;
             public static readonly byte Oregon = 4;
             public static readonly byte Washington = 5;
-            public static readonly byte OregonAndWashington = 6;
+            public static readonly byte WashingtonAndOregon = 6;
             public static readonly byte Utah = 7;
-            public static readonly byte NewMexicoAndUtah = 8;
+            public static readonly byte UtahAndNewMexico = 8;
             public static readonly byte Idaho = 9;
             public static readonly byte IdahoAndOregon = 10;
             public static readonly byte IdahoAndUtah = 11;
@@ -60,9 +60,9 @@
             public static readonly byte ColoradoAndNewMexico = 14;
             public static readonly byte ColoradoAndUtah = 15;
             public static readonly byte Wyoming = 16;
-            public static readonly byte ColoradoAndWyoming = 17;
-            public static readonly byte IdahoAndWyoming = 18;
-            public static readonly byte UtahAndWyoming = 19;
+            public static readonly byte WyomingAndColorado = 17;
+            public static readonly byte WyomingAndIdaho = 18;
+            public static readonly byte WyomingAndUtah = 19;
             public static readonly byte Texas = 20;
             public static readonly byte TexasAndNewMexico = 21;
             public static readonly byte Montana = 22;

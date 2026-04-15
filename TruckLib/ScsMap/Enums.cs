@@ -228,6 +228,8 @@ namespace TruckLib.ScsMap
         Viewpoint = 0,
         Event = 1,
         MapScene = 2,
+        TouristBoard = 3,
+        PointOfInterest = 4,
     }
 
     /// <summary>

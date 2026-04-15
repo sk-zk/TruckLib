@@ -93,6 +93,14 @@
             public static readonly byte Louisiana = 47;
             public static readonly byte LouisianaAndArkansas = 48;
             public static readonly byte LouisianaAndTexas = 49;
+            public static readonly byte Illinois = 50;
+            public static readonly byte IllinoisAndIowa = 51;
+            public static readonly byte IllinoisAndMissouri = 52;
+            public static readonly byte SouthDakota = 53;
+            public static readonly byte SouthDakotaAndIowa = 54;
+            public static readonly byte SouthDakotaAndMontana = 55;
+            public static readonly byte SouthDakotaAndNebraska = 56;
+            public static readonly byte SouthDakotaAndWyoming = 57;
         }
     }
 }

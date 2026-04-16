@@ -20,7 +20,7 @@ namespace TruckLib.ScsMap
         private Quaternion prefabRot;
         private Quaternion inherentRot;
         private Prefab prefab;
-        private List<SpawnPoint> clonedPoints;
+        private List<SpawnPoint> pendingPoints;
 
         public Prefab FromPpd(IItemContainer map, Token unitName, PrefabDescriptor ppd,
             Vector3 position, Quaternion rotation)
@@ -49,7 +49,7 @@ namespace TruckLib.ScsMap
 
         private void CreateSlaveItems()
         {
-            clonedPoints = new List<SpawnPoint>(ppd.SpawnPoints);
+            pendingPoints = new List<SpawnPoint>(ppd.SpawnPoints);
 
             if (Has(SpawnPointType.CompanyPoint))
             {
@@ -101,7 +101,7 @@ namespace TruckLib.ScsMap
                     ServiceType.WeighStationCat);
             }
 
-            if (clonedPoints.Count > 0)
+            if (pendingPoints.Count > 0)
             {
                 Trace.WriteLine($"Unhandled spawn points in {prefab.Model.String}");
             }
@@ -114,9 +114,9 @@ namespace TruckLib.ScsMap
         {
             var company = CreateSlaveItem<Company>(SpawnPointType.CompanyPoint);
 
-            for (int i = 0; i < clonedPoints.Count; i++)
+            for (int i = 0; i < pendingPoints.Count; i++)
             {
-                switch (clonedPoints[i].Type)
+                switch (pendingPoints[i].Type)
                 {
                     case SpawnPointType.UnloadEasy:
                         i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadEasy);
@@ -138,10 +138,10 @@ namespace TruckLib.ScsMap
 
             int CreateCompanySpawnPoint(Company company, int i, CompanySpawnPointType type)
             {
-                var node = CreateSpawnPointNode(company, clonedPoints[i]);
+                var node = CreateSpawnPointNode(company, pendingPoints[i]);
                 var spawnPointStruct = new CompanySpawnPoint(node, type);
                 company.SpawnPoints.Add(spawnPointStruct);
-                clonedPoints.RemoveAt(i);
+                pendingPoints.RemoveAt(i);
                 i--;
                 return i;
             }
@@ -171,12 +171,12 @@ namespace TruckLib.ScsMap
 
         private void CreateServiceItemsOfType(SpawnPointType type, ServiceType serviceType)
         {
-            foreach (var point in clonedPoints.Where(x => x.Type == type))
+            foreach (var point in pendingPoints.Where(x => x.Type == type))
             {
                 var item = CreateSlaveItem<Service>(point);
                 item.ServiceType = serviceType;
             }
-            clonedPoints.RemoveAll(x => x.Type == type);
+            pendingPoints.RemoveAll(x => x.Type == type);
         }
 
         /// <summary>
@@ -187,9 +187,9 @@ namespace TruckLib.ScsMap
         /// <returns></returns>
         private T CreateSlaveItem<T>(SpawnPointType type) where T : PrefabSlaveItem, new()
         {
-            var first = clonedPoints.First(x => x.Type == type);
+            var first = pendingPoints.First(x => x.Type == type);
             var item = CreateSlaveItem<T>(first);
-            clonedPoints.Remove(first);
+            pendingPoints.Remove(first);
             return item;
         }
 
@@ -218,12 +218,12 @@ namespace TruckLib.ScsMap
         /// <returns>A list of map nodes.</returns>
         private List<INode> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType)
         {
-            var selected = clonedPoints.Where(x => x.Type == spawnPointType).ToList();
+            var selected = pendingPoints.Where(x => x.Type == spawnPointType).ToList();
             var list = new List<INode>(selected.Count);
             for (int i = 0; i < selected.Count; i++)
             {
                 list.Add(CreateSpawnPointNode(item, selected[i]));
-                clonedPoints.Remove(selected[i]);
+                pendingPoints.Remove(selected[i]);
             }
             return list;
         }
@@ -293,6 +293,6 @@ namespace TruckLib.ScsMap
             MathEx.RotatePointAroundPivot(point, ppd.Nodes[0].Position, rot);
 
         private bool Has(SpawnPointType type) 
-            => clonedPoints.Any(x => x.Type == type);
+            => pendingPoints.Any(x => x.Type == type);
     }
 }

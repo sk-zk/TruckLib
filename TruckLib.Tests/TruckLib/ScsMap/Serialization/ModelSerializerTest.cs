@@ -4,21 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TruckLib;
-using TruckLib.HashFs;
 using TruckLib.ScsMap;
 using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
 {
-    public class ModelSerializerFromHashFsTest
+    public class ModelSerializerTest
     {   
         private readonly Map map;
         private readonly Model model;
 
-        public ModelSerializerFromHashFsTest()
+        public ModelSerializerTest()
         {
-            using var fs = HashFsReader.Open("Data/ModelSerializerTest/modeltest.scs");
-            map = Map.Open("/map/modeltest.mbd", fs);
+            map = Map.Open("Data/ModelSerializerTest/modeltest.mbd");
             model = (Model)map.MapItems.First().Value;
         }
 

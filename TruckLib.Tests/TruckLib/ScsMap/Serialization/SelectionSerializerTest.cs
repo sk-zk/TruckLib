@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TruckLib.HashFs;
 using TruckLib.ScsMap;
 
 namespace TruckLib.Tests.TruckLib.ScsMap.Serialization
 {
-    public class SelectionSerializerFromHashFsTest
+    public class SelectionSerializerTest
     {
         private readonly Selection selection;
 
-        public SelectionSerializerFromHashFsTest()
+        public SelectionSerializerTest()
         {
-            using var fs = HashFsReader.Open("Data/SelectionSerializerTest/selectiontest.scs");
-            selection = Selection.Open("/map/selectiontest.sbd", fs);
+            selection = Selection.Open("Data/SelectionSerializerTest/selectiontest.sbd");
         }
 
         [Fact]

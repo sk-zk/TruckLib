@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A Buildings segment, which repeats one or more models along a path.
+    /// Repeats models along a path.
     /// </summary>
     public class Buildings : PolylineItem
     {

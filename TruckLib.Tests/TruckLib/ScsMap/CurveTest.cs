@@ -17,7 +17,7 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             var map = new Map();
             var curve = Curve.Add(map, new Vector3(-15, 0, 35), new Vector3(35, 0, -15), "bar");
 
-            Assert.Equal(curve.Model, "bar");
+            Assert.Equal(curve.Subcurves[0].Model, "bar");
             Assert.Equal(70.71f, curve.Length, 0.01f);
 
             Assert.True(curve.Node.IsRed);
@@ -35,23 +35,23 @@ namespace TruckLib.Tests.TruckLib.ScsMap
             var curve1 = Curve.Add(map, new Vector3(20, 0, 20), new Vector3(10, 0, 10), "bar");
 
             // set some settings we expect to get cloned
-            curve1.Stretch = 1.5f;
+            curve1.Subcurves[0].Stretch = 1.5f;
             curve1.MirrorReflection = false;
-            curve1.FirstPart = "aaa";
-            curve1.CenterPartVariation = "bbb";
-            curve1.LastPart = "ccc";
-            curve1.TerrainMaterial = "ddd";
-            curve1.TerrainRotation = 2f;
+            curve1.Subcurves[0].FirstPart = "aaa";
+            curve1.Subcurves[0].CenterPartVariation = "bbb";
+            curve1.Subcurves[0].LastPart = "ccc";
+            curve1.Subcurves[0].TerrainMaterial = "ddd";
+            curve1.Subcurves[0].TerrainRotation = 2f;
 
             var curve2 = curve1.Append(new Vector3(-50, 0, -50), true);
 
-            Assert.Equal(curve1.Stretch, curve2.Stretch);
+            Assert.Equal(curve1.Subcurves[0].Stretch, curve2.Subcurves[0].Stretch);
             Assert.Equal(curve1.MirrorReflection, curve2.MirrorReflection);
-            Assert.Equal(curve1.FirstPart, curve2.FirstPart);
-            Assert.Equal(curve1.CenterPartVariation, curve2.CenterPartVariation);
-            Assert.Equal(curve1.LastPart, curve2.LastPart);
-            Assert.Equal(curve1.TerrainMaterial, curve2.TerrainMaterial);
-            Assert.Equal(curve1.TerrainRotation, curve2.TerrainRotation);
+            Assert.Equal(curve1.Subcurves[0].FirstPart, curve2.Subcurves[0].FirstPart);
+            Assert.Equal(curve1.Subcurves[0].CenterPartVariation, curve2.Subcurves[0].CenterPartVariation);
+            Assert.Equal(curve1.Subcurves[0].LastPart, curve2.Subcurves[0].LastPart);
+            Assert.Equal(curve1.Subcurves[0].TerrainMaterial, curve2.Subcurves[0].TerrainMaterial);
+            Assert.Equal(curve1.Subcurves[0].TerrainRotation, curve2.Subcurves[0].TerrainRotation);
 
             Assert.True(curve2.Node.IsRed);
             Assert.False(curve2.ForwardNode.IsRed);

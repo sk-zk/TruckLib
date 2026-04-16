@@ -12,7 +12,7 @@ using TruckLib.ScsMap.Collections;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// A curve segment, which repeats one or more models along a path.
+    /// Repeats models along a path.
     /// </summary>
     public class Curve : PolylineItem
     {
@@ -45,71 +45,9 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Unit name of the curve model, as defined in <c>/def/world/curve_model.sii</c>.
+        /// The helper nodes placed for the corresponding locators
+        /// of the curve model.
         /// </summary>
-        public Token Model { get; set; }
-
-        /// <summary>
-        /// Unit name of the model look.
-        /// </summary>
-        public Token Look { get; set; }
-
-        /// <summary>
-        /// Unit name of the first part, if applicable.
-        /// </summary>
-        public Token FirstPart { get; set; }
-
-        /// <summary>
-        /// Unit name of the center part variation.
-        /// </summary>
-        public Token CenterPartVariation { get; set; }
-
-        /// <summary>
-        /// Unit name of the last part, if applicable.
-        /// </summary>
-        public Token LastPart { get; set; }
-
-        /// <summary>
-        /// Unit name of the terrain material, if applicable.
-        /// </summary>
-        public Token TerrainMaterial { get; set; }
-
-        /// <summary>
-        /// Color tint of the terrain.
-        /// </summary>
-        public Color TerrainColor { get; set; }
-
-        public uint RandomSeed { get; set; }
-
-        /// <summary>
-        /// Coefficient for stretching the scheme along the path. For some curves,
-        /// this stretches the model; for others, it places its elements further apart.
-        /// </summary>
-        public float Stretch { get; set; }
-
-        /// <summary>
-        /// If not 0, the model will repeat every <i>n</i> meters, overriding the default.
-        /// </summary>
-        public float FixedStep { get; set; }
-
-        /// <summary>
-        /// Relative scale of the model.
-        /// </summary>
-        public float Scale { get; set; }
-
-        /// <summary>
-        /// UV rotation of the terrain texture.
-        /// </summary>
-        public float TerrainRotation { get; set; }
-
-        /// <summary>
-        /// <para>Height offsets for individual elements of the curve.</para>
-        /// <para>Offsets are applied to elements in order. For instance, if you want
-        /// the third element to have an offset of 5, the content of the list should be
-        /// [0, 0, 5].</para>
-        /// </summary>
-        public List<float> HeightOffsets { get; set; }
-
         public CurveLocatorList Locators { get; set; }
 
         /// <summary>
@@ -140,35 +78,6 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Flips the model on the axis formed by the curve's two nodes.
-        /// </summary>
-        public bool InvertGeometry
-        {
-            get => Kdop.Flags[3];
-            set => Kdop.Flags[3] = value;
-        }
-
-        /// <summary>
-        /// Gets or sets if elements of a sloped item are rendered like stair steps
-        /// rather than being stretched along the path.
-        /// </summary>
-        public bool SteppedGeometry
-        {
-            get => Kdop.Flags[4];
-            set => Kdop.Flags[4] = value;
-        }
-
-        /// <summary>
-        /// Gets or sets if vertices of the model are covered in a random tint noise.<br />
-        /// That's what the editor tooltip says, anyway. I don't really see any difference.
-        /// </summary>
-        public bool PerlinNoise
-        {
-            get => Kdop.Flags[5];
-            set => Kdop.Flags[5] = value;
-        }
-
-        /// <summary>
         /// Gets or sets if the item casts shadows.
         /// </summary>
         public bool Shadows
@@ -187,7 +96,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// 1-indexed color variant of the model. Set to 0 if there aren't any.
+        /// 1-indexed color variant of the models, shared across all subcurves.
+        /// Set to 0 if there aren't any.
         /// </summary>
         public Nibble ColorVariant
         {
@@ -224,6 +134,13 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[22] = value;
         }
 
+        internal const int SubcurveCount = 4;
+
+        /// <summary>
+        /// The subcurves of this item.
+        /// </summary>
+        public Subcurve[] Subcurves { get; internal set; }
+
         public Curve() : base() { }
 
         internal Curve(bool initFields) : base(initFields)
@@ -235,11 +152,8 @@ namespace TruckLib.ScsMap
         protected override void Init()
         {
             base.Init();
-            Look = "default";
-            HeightOffsets = [];
-            Stretch = 1f;
-            Scale = 1f;
-            TerrainColor = Color.White;
+            Subcurves = new Subcurve[SubcurveCount];
+            Subcurves[0] = new();
             Locators = new CurveLocatorList(this);
         }
 
@@ -254,7 +168,7 @@ namespace TruckLib.ScsMap
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)
         {
             var curve = Add<Curve>(map, backwardPos, forwardPos);
-            curve.Model = model;
+            curve.Subcurves[0].Model = model;
             return curve;
         }
 
@@ -270,10 +184,10 @@ namespace TruckLib.ScsMap
         {
             if (!cloneSettings)
             {
-                return Append(position, Model);
+                return Append(position, Subcurves[0].Model);
             }
 
-            var b = Append(position, Model);
+            var b = Append(position, Subcurves[0].Model);
             CopySettingsTo(b);
             return b;
         }
@@ -288,7 +202,7 @@ namespace TruckLib.ScsMap
         public Curve Append(Vector3 position, Token model)
         {
             var curve = Append<Curve>(position);
-            curve.Model = model;
+            curve.Subcurves[0].Model = model;
             return curve;
         }
 
@@ -316,18 +230,12 @@ namespace TruckLib.ScsMap
         private void CopySettingsTo(Curve c)
         {
             c.Kdop.Flags = Kdop.Flags;
-            c.FirstPart = FirstPart;
-            c.CenterPartVariation = CenterPartVariation;
-            c.LastPart = LastPart;
-            c.Look = Look;
-            c.TerrainMaterial = TerrainMaterial;
-            c.TerrainColor = TerrainColor;
-            c.TerrainRotation = TerrainRotation;
             c.ViewDistance = ViewDistance;
-            c.RandomSeed = RandomSeed;
-            c.Stretch = Stretch;
-            c.FixedStep = FixedStep;
-            c.HeightOffsets = new List<float>(HeightOffsets);
+
+            for (int i = 0; i < SubcurveCount; i++)
+            {
+                c.Subcurves[i] = Subcurves[i]?.Clone();
+            }
         }
 
         /// <inheritdoc/>

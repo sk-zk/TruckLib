@@ -19,12 +19,12 @@ namespace TruckLib.ScsMap.Collections
         /// </summary>
         public Curve Parent { get; init; }
 
-        private readonly LimitedList<INode> list = new(MaxCapacity);
-
         /// <summary>
         /// The maximum size of the list.
         /// </summary>
         public const int MaxCapacity = 2;
+
+        private readonly LimitedList<INode> list = new(MaxCapacity);
 
         /// <summary>
         /// Instantiates an empty list.

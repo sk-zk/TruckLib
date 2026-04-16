@@ -10,16 +10,44 @@ using System.Diagnostics;
 namespace TruckLib.ScsMap
 {
     /// <summary>
-    /// Code for adding a prefab to the map.
+    /// Creates a new prefab item and associated prefab slave items from a prefab descriptor.
     /// </summary>
     internal class PrefabCreator
     {
+        /// <summary>
+        /// The prefab descriptor for which map items are being created.
+        /// </summary>
         private PrefabDescriptor ppd;
+
+        /// <summary>
+        /// The map which the items are being added to.
+        /// </summary>
         private IItemContainer map;
+
+        /// <summary>
+        /// The position of the prefab's 0th node in map space.
+        /// </summary>
         private Vector3 prefabPos;
+
+        /// <summary>
+        /// The rotation of the prefab's 0th node in map space.
+        /// </summary>
         private Quaternion prefabRot;
+
+        /// <summary>
+        /// A rotation applied by the game before the user-defined node rotation is applied. 
+        /// </summary>
         private Quaternion inherentRot;
+
+        /// <summary>
+        /// The prefab item which is being built.
+        /// </summary>
         private Prefab prefab;
+
+        /// <summary>
+        /// Spawn points from the prefab descriptor which have not yet been turned into
+        /// their corresponding map objects.
+        /// </summary>
         private List<SpawnPoint> pendingPoints;
 
         public Prefab FromPpd(IItemContainer map, Token unitName, PrefabDescriptor ppd,
@@ -29,8 +57,8 @@ namespace TruckLib.ScsMap
             this.ppd = ppd;
             this.prefabPos = position;
 
-            // the game reorients prefab models such that a rotation of 0° means the 0th
-            // control node has a direction of (0, 0, -1). this means that we need to
+            // The game reorients prefab models such that a rotation of 0° means the 0th
+            // control node has a direction of (0, 0, -1). This means that we need to
             // rotate the model in the same way to place nodes at the correct positions
             // and set map node rotations to the correct values.
             this.inherentRot = GetNodeRotation(ppd.Nodes[0].Direction);
@@ -147,6 +175,9 @@ namespace TruckLib.ScsMap
             }
         }
 
+        /// <summary>
+        /// Creates a Garage item for player garage prefabs.
+        /// </summary>
         private void CreateGarage()
         {
             var garage = CreateSlaveItem<Garage>(SpawnPointType.GaragePoint);
@@ -159,6 +190,9 @@ namespace TruckLib.ScsMap
             CreateSlaveItem<FuelPump>(SpawnPointType.GasStation);
         }
 
+        /// <summary>
+        /// Creates a truck dealer Service item for truck dealer prefabs.
+        /// </summary>
         private void CreateTruckDealer()
         {
             var dealer = CreateSlaveItem<Service>(SpawnPointType.TruckDealer);
@@ -213,9 +247,9 @@ namespace TruckLib.ScsMap
         /// <summary>
         /// Creates map nodes for all spawn points of the given type.
         /// </summary>
-        /// <param name="item">The company item.</param>
+        /// <param name="item">The slave item.</param>
         /// <param name="spawnPointType">The spawn point type.</param>
-        /// <returns>A list of map nodes.</returns>
+        /// <returns>A list of map nodes representing the spawn points.</returns>
         private List<INode> CreateSpawnPointNodes(PrefabSlaveItem item, SpawnPointType spawnPointType)
         {
             var selected = pendingPoints.Where(x => x.Type == spawnPointType).ToList();
@@ -238,7 +272,7 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Converts a point which is relative to the prefab's origin to an absolute map point.
+        /// Converts a point from model space to map space.
         /// </summary>
         /// <param name="ppdPointPos">The ppd point to convert.</param>
         /// <returns>The position of the point in the map.</returns>
@@ -283,8 +317,8 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Rotates a ppd point around the position of node 0. The returned point is
-        /// still in the coordinate system of the prefab.
+        /// Rotates a ppd point around the position of node 0.
+        /// The returned point is still in model space.
         /// </summary>
         /// <param name="point">The point to rotate.</param>
         /// <param name="rot">The rotation.</param>

@@ -79,51 +79,57 @@ namespace TruckLib.ScsMap
         {
             pendingPoints = new List<SpawnPoint>(ppd.SpawnPoints);
 
-            if (Has(SpawnPointType.CompanyPoint))
+            var has = Enum.GetValues<SpawnPointType>().ToDictionary(k => k, v => false);
+            foreach (var point in pendingPoints)
+            {
+                has[point.Type] = true;
+            }
+
+            if (has[SpawnPointType.CompanyPoint])
             {
                 CreateCompany();
             }
-            if (Has(SpawnPointType.GaragePoint))
+            if (has[SpawnPointType.GaragePoint])
             {
                 CreateGarage();
             }
-            if (Has(SpawnPointType.TruckDealer))
+            if (has[SpawnPointType.TruckDealer])
             {
                 CreateTruckDealer();
             }
 
             //////
 
-            if (Has(SpawnPointType.BusStation))
+            if (has[SpawnPointType.BusStation])
             {
                 CreateSlaveItem<BusStop>(SpawnPointType.BusStation);
             }
-            if (Has(SpawnPointType.GasStation))
+            if (has[SpawnPointType.GasStation])
             {
                 CreateServiceItemsOfType(SpawnPointType.GasStation,
                     ServiceType.GasStation);
             }
-            if (Has(SpawnPointType.Parking))
+            if (has[SpawnPointType.Parking])
             {
                 CreateServiceItemsOfType(SpawnPointType.Parking,
                     ServiceType.Parking);
             }
-            if (Has(SpawnPointType.Recruitment))
+            if (has[SpawnPointType.Recruitment])
             {
                 CreateServiceItemsOfType(SpawnPointType.Recruitment,
                     ServiceType.Recruitment);
             }
-            if (Has(SpawnPointType.ServiceStation))
+            if (has[SpawnPointType.ServiceStation])
             {
                 CreateServiceItemsOfType(SpawnPointType.ServiceStation,
                     ServiceType.ServiceStation);
             }
-            if (Has(SpawnPointType.WeighStation))
+            if (has[SpawnPointType.WeighStation])
             {
                 CreateServiceItemsOfType(SpawnPointType.WeighStation,
                     ServiceType.WeighStation);
             }
-            if (Has(SpawnPointType.WeighStationCat))
+            if (has[SpawnPointType.WeighStationCat])
             {
                 CreateServiceItemsOfType(SpawnPointType.WeighStationCat, 
                     ServiceType.WeighStationCat);
@@ -325,8 +331,5 @@ namespace TruckLib.ScsMap
         /// <returns>The rotated point.</returns>
         private Vector3 RotatePointAroundNode0(Vector3 point, Quaternion rot) =>
             MathEx.RotatePointAroundPivot(point, ppd.Nodes[0].Position, rot);
-
-        private bool Has(SpawnPointType type) 
-            => pendingPoints.Any(x => x.Type == type);
     }
 }

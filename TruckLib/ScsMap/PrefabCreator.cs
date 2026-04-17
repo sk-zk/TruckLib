@@ -153,27 +153,40 @@ namespace TruckLib.ScsMap
                 switch (pendingPoints[i].Type)
                 {
                     case SpawnPointType.UnloadEasy:
-                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadEasy);
+                        i = CreatePoint(company, i, CompanySpawnPointType.UnloadEasy);
                         break;
                     case SpawnPointType.UnloadMedium:
-                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadMedium);
+                        i = CreatePoint(company, i, CompanySpawnPointType.UnloadMedium);
                         break;
                     case SpawnPointType.UnloadHard:
-                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.UnloadHard);
+                        i = CreatePoint(company, i, CompanySpawnPointType.UnloadHard);
                         break;
                     case SpawnPointType.Trailer:
-                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.Trailer);
+                        i = CreatePoint(company, i, CompanySpawnPointType.Trailer);
                         break;
                     case SpawnPointType.LongTrailer:
-                        i = CreateCompanySpawnPoint(company, i, CompanySpawnPointType.Trailer);
+                        i = CreatePoint(company, i, CompanySpawnPointType.Trailer);
+                        break;
+                    case SpawnPointType.Custom:
+                        i = CreateCustomPoint(company, i);
                         break;
                 }
             }
 
-            int CreateCompanySpawnPoint(Company company, int i, CompanySpawnPointType type)
+            int CreatePoint(Company company, int i, CompanySpawnPointType type)
             {
                 var node = CreateSpawnPointNode(company, pendingPoints[i]);
                 var spawnPointStruct = new CompanySpawnPoint(node, type);
+                company.SpawnPoints.Add(spawnPointStruct);
+                pendingPoints.RemoveAt(i);
+                i--;
+                return i;
+            }
+
+            int CreateCustomPoint(Company company, int i)
+            {
+                var node = CreateSpawnPointNode(company, pendingPoints[i]);
+                var spawnPointStruct = new CompanySpawnPoint(node, pendingPoints[i].Flags.Bits);
                 company.SpawnPoints.Add(spawnPointStruct);
                 pendingPoints.RemoveAt(i);
                 i--;

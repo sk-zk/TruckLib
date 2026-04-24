@@ -16,11 +16,12 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
-            c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
+            c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, 
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
 
             Assert.Single(c.SpawnPoints);
 
-            Assert.Equal(CompanySpawnPointType.UnloadEasy, c.SpawnPoints[0].Type);
+            Assert.Equal(CompanyUnloadDifficulty.Easy, c.SpawnPoints[0].Difficulty);
 
             Assert.Equal(new(69, 0, 42), c.SpawnPoints[0].Node.Position);
             Assert.Equal(Quaternion.Identity, c.SpawnPoints[0].Node.Rotation);
@@ -35,12 +36,14 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
-            c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
-            c.SpawnPoints.Insert(0, new(72, 0, 27), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
+            c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity,
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
+            c.SpawnPoints.Insert(0, new(72, 0, 27), Quaternion.Identity,
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
 
             Assert.Equal(2, c.SpawnPoints.Count);
 
-            Assert.Equal(CompanySpawnPointType.UnloadEasy, c.SpawnPoints[0].Type);
+            Assert.Equal(CompanyUnloadDifficulty.Easy, c.SpawnPoints[0].Difficulty);
 
             Assert.Equal(new(72, 0, 27), c.SpawnPoints[0].Node.Position);
             Assert.Equal(new(69, 0, 42), c.SpawnPoints[1].Node.Position);
@@ -55,8 +58,10 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
-            var p1 = c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
-            var p2 = c.SpawnPoints.Add(new(72, 0, 27), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
+            var p1 = c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, 
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
+            var p2 = c.SpawnPoints.Add(new(72, 0, 27), Quaternion.Identity,
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
 
             c.SpawnPoints.RemoveAt(0);
             Assert.Single(c.SpawnPoints);
@@ -70,8 +75,10 @@ namespace TruckLib.Tests.TruckLib.ScsMap.Collections
             var map = new Map();
             var c = Company.Add(map, null, new Vector3(50, 0, 50));
 
-            var p1 = c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
-            var p2 = c.SpawnPoints.Add(new(72, 0, 27), Quaternion.Identity, CompanySpawnPointType.UnloadEasy);
+            var p1 = c.SpawnPoints.Add(new(69, 0, 42), Quaternion.Identity,
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
+            var p2 = c.SpawnPoints.Add(new(72, 0, 27), Quaternion.Identity,
+                CompanyDepotType.Unload, CompanyUnloadDifficulty.Easy);
 
             c.SpawnPoints.Clear();
 

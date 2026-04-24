@@ -25,7 +25,6 @@ namespace TruckLib.ScsMap.Serialization
             for (int i = 0; i < spawnPointUids.Count; i++)
             {
                 var flags = r.ReadUInt32();
-                // TODO does the upper nibble do anything?
                 company.SpawnPoints.Add(new CompanySpawnPoint(spawnPointUids[i], flags));
             }
 

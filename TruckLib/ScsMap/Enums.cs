@@ -382,33 +382,38 @@ namespace TruckLib.ScsMap
     }
 
     /// <summary>
-    /// The spawn point type of a node belonging to a <see cref="Company"/> item.
+    /// Depot type of a <see cref="CompanySpawnPoint"/>.
     /// </summary>
-    public enum CompanySpawnPointType
+    public enum CompanyDepotType
     {
+        Unload = 0,
+        Load = 1,
+    }
+
+    /// <summary>
+    /// Trailer parking difficulty of a <see cref="CompanySpawnPoint"/>.
+    /// </summary>
+    public enum CompanyUnloadDifficulty
+    {
+        None = 0,
         /// <summary>
         /// Easy difficulty (15 XP) parking spot.
         /// </summary>
-        UnloadEasy = 1,
+        Easy = 1,
         /// <summary>
         /// Medium difficulty (40 XP) parking spot.
         /// </summary>
-        UnloadMedium = 2,
+        Medium = 2,
         /// <summary>
         /// Hard difficulty (90 XP) parking spot.
         /// </summary>
-        UnloadHard = 3,
-        /// <summary>
-        /// Trailer spawn point.
-        /// </summary>
-        Trailer = 4,
-        /// <summary>
-        /// Not sure what this is (or whether the name is even correct).
-        /// </summary>
-        LoadPoint = 5,
+        Hard = 3,
     }
 
-    public enum CompanySpawnPointTrailerType
+    /// <summary>
+    /// Accepted trailer types of a <see cref="CompanySpawnPoint"/>.
+    /// </summary>
+    public enum CompanyTrailerType
     {
         Any = 0,
         Box = 1,

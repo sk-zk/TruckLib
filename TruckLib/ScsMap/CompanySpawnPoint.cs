@@ -19,12 +19,21 @@ namespace TruckLib.ScsMap
         internal FlagField Flags;
 
         /// <summary>
-        /// The spawn point type.
+        /// Whether this is a load or unload point.
         /// </summary>
-        public CompanySpawnPointType Type 
+        public CompanyDepotType DepotType
         {
-            get => (CompanySpawnPointType)Flags.GetBitString(0, 4);
-            set => Flags.SetBitString(0, 4, (byte)value);
+            get => Flags[2] ? CompanyDepotType.Load : CompanyDepotType.Unload;
+            set => Flags[2] = value == CompanyDepotType.Load;
+        }
+
+        /// <summary>
+        /// The unload difficulty.
+        /// </summary>
+        public CompanyUnloadDifficulty Difficulty 
+        {
+            get => (CompanyUnloadDifficulty)Flags.GetBitString(0, 2);
+            set => Flags.SetBitString(0, 2, (byte)value);
         }
 
         private const byte UnlimitedLengthValue = 15;
@@ -42,7 +51,7 @@ namespace TruckLib.ScsMap
             }
             set
             {
-                if (value != 0 && (value < 14 || value > 28))
+                if (value is not 0 and (< 14 or > 28))
                 {
                     throw new ArgumentOutOfRangeException(nameof(TrailerLength),
                         "Value must be 0 or between 14 and 28 inclusively.");
@@ -55,11 +64,11 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The trailer type.
+        /// The accepted trailer type.
         /// </summary>
-        public CompanySpawnPointTrailerType TrailerType
+        public CompanyTrailerType TrailerType
         {
-            get => (CompanySpawnPointTrailerType)Flags.GetBitString(16, 4);
+            get => (CompanyTrailerType)Flags.GetBitString(16, 4);
             set => Flags.SetBitString(16, 4, (byte)value);
         }
 
@@ -78,12 +87,17 @@ namespace TruckLib.ScsMap
         /// Instantiates a new CompanySpawnPoint.
         /// </summary>
         /// <param name="node">The node of the spawn point.</param>
-        /// <param name="type">The type of the spawn point.</param>
-        public CompanySpawnPoint(INode node, CompanySpawnPointType type)
+        /// <param name="type">The depot type.</param>
+        /// <param name="difficulty">The unload difficulty.</param>
+        public CompanySpawnPoint(INode node, CompanyDepotType type, CompanyUnloadDifficulty difficulty)
         {
             Node = node;
             Flags = new FlagField(0);
-            Type = type;
+            DepotType = type;
+            Difficulty = difficulty;
+            TrailerLength = type == CompanyDepotType.Load
+                    ? (byte)0
+                    : (byte)24;
         }
     }
 }

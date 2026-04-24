@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -78,7 +77,6 @@ namespace TruckLib.ScsMap
             get => Kdop.Flags[16];
             set => Kdop.Flags[16] = value;
         }
-
 
         public Nibble PriorityModifier
         {

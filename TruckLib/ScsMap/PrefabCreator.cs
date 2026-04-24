@@ -150,47 +150,49 @@ namespace TruckLib.ScsMap
 
             for (int i = 0; i < pendingPoints.Count; i++)
             {
-                switch (pendingPoints[i].Type)
+                var point = pendingPoints[i];
+
+                if (point.Type is SpawnPointType.UnloadEasy 
+                    or SpawnPointType.UnloadMedium 
+                    or SpawnPointType.UnloadHard
+                    or SpawnPointType.UnloadRigid
+                    or SpawnPointType.Trailer
+                    or SpawnPointType.LongTrailer
+                    or SpawnPointType.Custom)
                 {
-                    case SpawnPointType.UnloadEasy:
-                        i = CreatePoint(company, i, CompanySpawnPointType.UnloadEasy);
-                        break;
-                    case SpawnPointType.UnloadMedium:
-                        i = CreatePoint(company, i, CompanySpawnPointType.UnloadMedium);
-                        break;
-                    case SpawnPointType.UnloadHard:
-                        i = CreatePoint(company, i, CompanySpawnPointType.UnloadHard);
-                        break;
-                    case SpawnPointType.Trailer:
-                        i = CreatePoint(company, i, CompanySpawnPointType.Trailer);
-                        break;
-                    case SpawnPointType.LongTrailer:
-                        i = CreatePoint(company, i, CompanySpawnPointType.Trailer);
-                        break;
-                    case SpawnPointType.Custom:
-                        i = CreateCustomPoint(company, i);
-                        break;
+                    CreatePoint(company, point);
+                    pendingPoints.RemoveAt(i);
+                    i--;
                 }
             }
 
-            int CreatePoint(Company company, int i, CompanySpawnPointType type)
+            void CreatePoint(Company company, SpawnPoint point)
             {
-                var node = CreateSpawnPointNode(company, pendingPoints[i]);
-                var spawnPointStruct = new CompanySpawnPoint(node, type);
+                var node = CreateSpawnPointNode(company, point);
+                CompanySpawnPoint spawnPointStruct; 
+                if (point.Type == SpawnPointType.Custom)
+                {
+                    spawnPointStruct = new CompanySpawnPoint(node, point.Flags.Bits);
+                } 
+                else
+                {
+                    var depot = point.Type switch
+                    {
+                        SpawnPointType.Trailer or SpawnPointType.LongTrailer => CompanyDepotType.Load,
+                        _ => CompanyDepotType.Unload,
+                    };
+                    var difficulty = point.Type switch 
+                    { 
+                        SpawnPointType.UnloadEasy => CompanyUnloadDifficulty.Easy,
+                        SpawnPointType.UnloadMedium => CompanyUnloadDifficulty.Medium,
+                        SpawnPointType.UnloadHard => CompanyUnloadDifficulty.Hard,
+                        SpawnPointType.Trailer => CompanyUnloadDifficulty.Easy,
+                        SpawnPointType.LongTrailer => CompanyUnloadDifficulty.Easy,
+                        _ => CompanyUnloadDifficulty.Easy,
+                    };            
+                    spawnPointStruct = new CompanySpawnPoint(node, depot, difficulty);
+                }
                 company.SpawnPoints.Add(spawnPointStruct);
-                pendingPoints.RemoveAt(i);
-                i--;
-                return i;
-            }
-
-            int CreateCustomPoint(Company company, int i)
-            {
-                var node = CreateSpawnPointNode(company, pendingPoints[i]);
-                var spawnPointStruct = new CompanySpawnPoint(node, pendingPoints[i].Flags.Bits);
-                company.SpawnPoints.Add(spawnPointStruct);
-                pendingPoints.RemoveAt(i);
-                i--;
-                return i;
             }
         }
 

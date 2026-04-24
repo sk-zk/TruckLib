@@ -49,16 +49,18 @@ namespace TruckLib.ScsMap.Collections
         }
 
         /// <summary>
-        /// Creates a map node at the specified position and adds a <see cref="CompanySpawnPointType"/>
+        /// Creates a map node at the specified position and adds a <see cref="CompanyUnloadDifficulty"/>
         /// object with the given properties to the end of the list.
         /// </summary>
         /// <param name="position">The position of the node.</param>
         /// <param name="rotation">The rotation of the node.</param>
-        /// <param name="type">The spawn point type.</param>
+        /// <param name="type">The depot type.</param>
+        /// <param name="difficulty">The unload difficulty.</param>
         /// <returns>The newly created spawn point.</returns>
-        public CompanySpawnPoint Add(Vector3 position, Quaternion rotation, CompanySpawnPointType type)
+        public CompanySpawnPoint Add(Vector3 position, Quaternion rotation, CompanyDepotType type, 
+            CompanyUnloadDifficulty difficulty)
         {
-            var point = new CompanySpawnPoint(CreateNode(position), type);
+            var point = new CompanySpawnPoint(CreateNode(position), type, difficulty);
             point.Node.Rotation = rotation;
             Add(point);
             return point;
@@ -109,12 +111,13 @@ namespace TruckLib.ScsMap.Collections
         /// <param name="index">The zero-based index at which the object should be inserted.</param>
         /// <param name="position">The position of the node.</param>
         /// <param name="rotation">The rotation of the node.</param>
-        /// <param name="type">The spawn point type.</param>
+        /// <param name="type">The depot type.</param>
+        /// <param name="difficulty">The unload difficulty.</param>
         /// <returns>The newly created spawn point.</returns>
         public CompanySpawnPoint Insert(int index, Vector3 position, Quaternion rotation, 
-            CompanySpawnPointType type)
+            CompanyDepotType type, CompanyUnloadDifficulty difficulty)
         {
-            var point = new CompanySpawnPoint(CreateNode(position), type);
+            var point = new CompanySpawnPoint(CreateNode(position), type, difficulty);
             point.Node.Rotation = rotation;
             Insert(index, point);
             return point;

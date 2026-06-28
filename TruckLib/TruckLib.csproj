@@ -36,13 +36,13 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="5.3.0" />
 		<PackageReference Include="RBush" Version="4.0.0" />
-		<PackageReference Include="TruckLib.HashFs" Version="0.2.5" />
+		<PackageReference Include="TruckLib.HashFs" Version="0.2.6" />
 		<PackageReference Include="TruckLib.Models" Version="0.4.2" />
-		<PackageReference Include="TruckLib.Sii" Version="0.2.0" />
+		<PackageReference Include="TruckLib.Sii" Version="0.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.203" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.300" PrivateAssets="All" />
 	</ItemGroup>
 
 </Project>

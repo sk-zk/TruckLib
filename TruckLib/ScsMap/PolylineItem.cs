@@ -399,8 +399,8 @@ namespace TruckLib.ScsMap
         /// <returns>The position and rotation of the point at <em>t</em>.</returns>
         public OrientedPoint InterpolateCurve(float t)
         {
-            var position = HermiteSpline.InterpolatePolyline(Node, ForwardNode, t);
-            var rotation = MathEx.GetNodeRotation(HermiteSpline.DerivativePolyline(Node, ForwardNode, t));
+            var position = HermiteSpline.InterpolatePolyline(Node, ForwardNode, t, cachedLength: Length);
+            var rotation = MathEx.GetNodeRotation(HermiteSpline.DerivativePolyline(Node, ForwardNode, t, cachedLength: Length));
             return new OrientedPoint(position, rotation);
         }
 

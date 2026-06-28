@@ -14,9 +14,9 @@ namespace TruckLib
     /// </summary>
     public static class HermiteSpline
     {
-        public static Vector3 InterpolatePolyline(INode start, INode end, float t)
+        public static Vector3 InterpolatePolyline(INode start, INode end, float t, float? cachedLength = null)
         {
-            var (tanStart, tanEnd) = CalculateTangents(start, end);
+            var (tanStart, tanEnd) = CalculateTangents(start, end, cachedLength);
             return Interpolate(start.Position, end.Position, tanStart, tanEnd, t);
         }
 
@@ -30,9 +30,9 @@ namespace TruckLib
                 (t3 - t2) * m1;
         }
 
-        public static Vector3 DerivativePolyline(INode start, INode end, float t)
+        public static Vector3 DerivativePolyline(INode start, INode end, float t, float? cachedLength = null)
         {
-            var (tanStart, tanEnd) = CalculateTangents(start, end);
+            var (tanStart, tanEnd) = CalculateTangents(start, end, cachedLength);
             return Derivative(start.Position, end.Position, tanStart, tanEnd, t);
         }
 
@@ -45,9 +45,9 @@ namespace TruckLib
                 (3 * t2 - 2 * t) * m1;
         }
 
-        internal static (Vector3 tanStart, Vector3 tanEnd) CalculateTangents(INode start, INode end)
+        internal static (Vector3 tanStart, Vector3 tanEnd) CalculateTangents(INode start, INode end, float? cachedLength = null)
         {
-            var length = (end.Position - start.Position).Length();
+            var length = cachedLength ?? (end.Position - start.Position).Length();
             var initialVector = new Vector3(0, 0, -length);
             var tanStart = Vector3.Transform(initialVector, start.Rotation);
             var tanEnd = Vector3.Transform(initialVector, end.Rotation);

@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="DEM.Net.Core" Version="8.0.1" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DEM.Net.Core" Version="0.3.2" />
+    <PackageReference Include="DEM.Net.Core" Version="8.0.1" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
   </ItemGroup>
 

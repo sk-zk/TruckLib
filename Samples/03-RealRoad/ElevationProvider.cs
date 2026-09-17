@@ -6,7 +6,7 @@ namespace RealRoad
     internal class ElevationProvider
     {
         private readonly ElevationService elevationService;
-        private readonly DEMDataSet dataset = DEMDataSet.SRTM_GL1;
+        private readonly DEMDataSet dataset = DEMDataSet.AW3D30;
 
         public static ElevationProvider Create()
         {

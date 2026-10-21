@@ -654,7 +654,12 @@ namespace TruckLib.ScsMap
             {
                 for (int i = 0; i < PpdNodes.Count; i++)
                 {
-                    PrefabNodes[i].Terrain.TerrainPointCount = PpdNodes[i].TerrainPoints[variantIndex].Count;
+                    // A variant may define terrain points for only some control
+                    // nodes (the installed gas station kits, for example, define
+                    // them for their first variant only). A node without an entry
+                    // for the selected variant has no generated terrain.
+                    PpdNodes[i].TerrainPoints.TryGetValue(variantIndex, out var points);
+                    PrefabNodes[i].Terrain.TerrainPointCount = points?.Count ?? 0;
                     PrefabNodes[i].Terrain.CalculateQuadGrid();
                 }
             }

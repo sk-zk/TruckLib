@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using TruckLib.ScsMap.Serialization;
 
 namespace TruckLib.ScsMap
 {
@@ -36,12 +33,14 @@ namespace TruckLib.ScsMap
         /// </summary>
         public Token Climate { get; set; } = "default";
 
-        // Always 2 in both ETS2 and ATS.
-        private uint SectorDescVersion = 2;
+        // 3 as of 1.61
+        private uint SectorDescVersion = 3;
 
         public Vector2 MinBoundary { get; set; } = new Vector2(0, 0);
 
         public Vector2 MaxBoundary { get; set; } = new Vector2(4000, 4000);
+
+        public Token ReflectionCube { get; set; } = "default";
 
         internal FlagField Flags = new();
 
@@ -102,6 +101,11 @@ namespace TruckLib.ScsMap
             Flags = new FlagField(r.ReadUInt32());
 
             Climate = r.ReadToken();
+
+            if (SectorDescVersion > 2)
+            {
+                ReflectionCube = r.ReadToken();
+            }
         }
 
         /// <summary>
@@ -120,6 +124,11 @@ namespace TruckLib.ScsMap
             w.Write((int)(MaxBoundary.Y * boundaryFactor));
             w.Write(Flags.Bits);
             w.Write(Climate);
+
+            if (SectorDescVersion > 2)
+            {
+                w.Write(ReflectionCube);
+            }
         }
 
         /// <summary>
@@ -144,6 +153,5 @@ namespace TruckLib.ScsMap
         /// <returns>The name of this sector.</returns>
         public override string ToString() =>
             SectorFileNameFromSectorCoords(Coordinate);
-
     }
 }

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - pkg-refactor
 
 jobs:
   publish-docs:
@@ -12,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Dotnet Setup
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: 8.x
+        dotnet-version: 10.x
 
     - name: Update docfx
       run: dotnet tool update -g docfx
@@ -29,7 +28,7 @@ jobs:
       run: |
         git config --global user.email "action@github.com"
         git config --global user.name "GitHub Action"
-        git clone https://${{ secrets.PERSONAL_TOKEN }}@github.com/sk-zk/sk-zk.github.io.git
+        git clone https://sk-zk:${{ secrets.PERSONAL_TOKEN }}@github.com/sk-zk/sk-zk.github.io.git
         cd sk-zk.github.io
         rm -rf trucklib
         mkdir -p trucklib/master

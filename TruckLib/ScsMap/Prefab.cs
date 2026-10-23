@@ -188,6 +188,17 @@ namespace TruckLib.ScsMap
             set => Kdop.Flags[16] = !value;
         }
 
+        /// <summary>
+        /// Gets or sets if the game spawns the semaphore (traffic light) models
+        /// of this prefab. Without this flag (bit 19), a prefab with a semaphore
+        /// profile shows no heads in the game or the editor.
+        /// </summary>
+        public bool Semaphores
+        {
+            get => Kdop.Flags[19];
+            set => Kdop.Flags[19] = value;
+        }
+
         public bool TerrainShadows
         {
             get => !Kdop.Flags[30];

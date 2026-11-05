@@ -36,6 +36,8 @@
             public static readonly byte Nordic = 23;
             public static readonly byte NordicAndBaltic = 24;
             public static readonly byte NordicAndScandinavia = 25;
+            public static readonly byte Iceland = 26;
+            public static readonly byte IcelandAndNordic = 27;
         }
 
         /// <summary>

@@ -188,9 +188,9 @@ namespace TruckLib.ScsMap
                 other.Models[i] = Models[i].Clone();
             }
             other.Railings = Railings.Clone();
-            other.AdditionalParts = new List<Token>(AdditionalParts);
-            other.EdgeOverrides = new List<EdgeOverride>(EdgeOverrides);
-            other.VariantOverrides = new List<VariantOverride>(VariantOverrides);
+            other.AdditionalParts = new(AdditionalParts);
+            other.EdgeOverrides = new(EdgeOverrides);
+            other.VariantOverrides = new(VariantOverrides);
             other.tmpFlags = tmpFlags;
         }
     }

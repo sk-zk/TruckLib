@@ -82,14 +82,14 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// The start of the band, in meters, in which detail vegetation is not rendered.
+        /// The start of the band, in meters from the road, in which detail vegetation will be rendered.
         /// </summary>
-        public float NoDetailVegetationFrom { get; set; }
+        public float DetailVegetationFrom { get; set; }
 
         /// <summary>
-        /// The end of the band, in meters, in which detail vegetation is not rendered.
+        /// The end of the band, in meters from the road, in which detail vegetation will be rendered.
         /// </summary>
-        public float NoDetailVegetationTo { get; set; }
+        public float DetailVegetationTo { get; set; }
 
         /// <summary>
         /// Gets or sets if vegetation has collision.
@@ -157,6 +157,8 @@ namespace TruckLib.ScsMap
             EdgeOverrides = [];
             VariantOverrides = [];
             DetailVegetation = true;
+            DetailVegetationFrom = 5;
+            DetailVegetationTo = 100;
         }
 
         /// <summary>
@@ -171,8 +173,8 @@ namespace TruckLib.ScsMap
             other.RightEdge = RightEdge;
             other.LeftEdge = LeftEdge;
             other.HeightOffset = HeightOffset;
-            other.NoDetailVegetationFrom = NoDetailVegetationFrom;
-            other.NoDetailVegetationTo = NoDetailVegetationTo;
+            other.DetailVegetationFrom = DetailVegetationFrom;
+            other.DetailVegetationTo = DetailVegetationTo;
 
             Terrain.CopyTo(other.Terrain);
 

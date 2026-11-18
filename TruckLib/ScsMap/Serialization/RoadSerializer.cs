@@ -312,10 +312,10 @@ namespace TruckLib.ScsMap.Serialization
                 Scale = (VegetationScale)r.ReadByte(),
                 Offset = r.ReadByte() / centerVegOffsetFactor
             };
-            road.Left.NoDetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
-            road.Right.NoDetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
-            road.Left.NoDetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
-            road.Right.NoDetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
+            road.Left.DetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
+            road.Right.DetailVegetationFrom = r.ReadUInt16() / vegFromToFactor;
+            road.Left.DetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
+            road.Right.DetailVegetationTo = r.ReadUInt16() / vegFromToFactor;
 
             var vegSphereCount = r.ReadUInt32();
             road.VegetationSpheres = new List<VegetationSphere>((int)vegSphereCount);
@@ -378,10 +378,10 @@ namespace TruckLib.ScsMap.Serialization
             w.Write((byte)road.CenterVegetation.Scale);
             w.Write((byte)(road.CenterVegetation.Offset * centerVegOffsetFactor));
 
-            w.Write((ushort)(road.Left.NoDetailVegetationFrom * vegFromToFactor));
-            w.Write((ushort)(road.Right.NoDetailVegetationFrom * vegFromToFactor));
-            w.Write((ushort)(road.Left.NoDetailVegetationTo * vegFromToFactor));
-            w.Write((ushort)(road.Right.NoDetailVegetationTo * vegFromToFactor));
+            w.Write((ushort)(road.Left.DetailVegetationFrom * vegFromToFactor));
+            w.Write((ushort)(road.Right.DetailVegetationFrom * vegFromToFactor));
+            w.Write((ushort)(road.Left.DetailVegetationTo * vegFromToFactor));
+            w.Write((ushort)(road.Right.DetailVegetationTo * vegFromToFactor));
 
             w.Write(road.VegetationSpheres.Count);
             foreach (var sphere in road.VegetationSpheres)

@@ -29,7 +29,7 @@ namespace TruckLib.ScsMap.Collections
         /// <summary>
         /// Instantiates an empty list.
         /// </summary>
-        /// <param name="parent">The <see cref="Gate">Curve</see> item which parents these models.</param>
+        /// <param name="parent">The <see cref="Curve">Curve</see> item which parents these models.</param>
         public CurveLocatorList(Curve parent)
         {
             Parent = parent;

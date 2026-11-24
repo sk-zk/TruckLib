@@ -26,12 +26,12 @@ namespace TruckLib.ScsMap
         protected override ushort DefaultViewDistance => KdopItem.ViewDistanceClose;
 
         /// <summary>
-        /// Minimum length of a Curve item.
+        /// Minimum length of a curve item.
         /// </summary>
         public const float MinLength = 0f;
 
         /// <summary>
-        /// Maximum length of a Curve item.
+        /// Maximum length of a curve item.
         /// </summary>
         public const float MaxLength = 1000;
 
@@ -158,13 +158,13 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Adds a curve to the map.
+        /// Adds a curve item to the map.
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="backwardPos">Position of the backward (red) node.</param>
         /// <param name="forwardPos">Position of the forward (green) node.</param>
-        /// <param name="model">Unit name of the curve model.</param>
-        /// <returns>The newly created curve.</returns>
+        /// <param name="model">Unit name of the first curve model.</param>
+        /// <returns>The newly created item.</returns>
         public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, Token model)
         {
             var curve = Add<Curve>(map, backwardPos, forwardPos);
@@ -173,13 +173,39 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Appends a curve segment to the end of this one.
+        /// Adds a curve item to the map.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="backwardPos">Position of the backward (red) node.</param>
+        /// <param name="forwardPos">Position of the forward (green) node.</param>
+        /// <param name="models">Unit names of the curve models.</param>
+        /// <returns>The newly created item.</returns>
+        /// <exception cref="ArgumentException">Thrown if more than four model names are passed.</exception>
+        public static Curve Add(IItemContainer map, Vector3 backwardPos, Vector3 forwardPos, params Token[] models)
+        {
+            if (models.Length > SubcurveCount)
+            {
+                throw new ArgumentException(
+                    $"A curve item cannot have more than {SubcurveCount} subcurves.", 
+                    nameof(models));
+            }
+            var curve = Add<Curve>(map, backwardPos, forwardPos);
+            for (int i = 0; i < models.Length; i++)
+            {
+                curve.Subcurves[i] ??= new();
+                curve.Subcurves[i].Model = models[i];
+            }
+            return curve;
+        }
+
+        /// <summary>
+        /// Appends a curve item to the end of this one.
         /// </summary>
         /// <param name="position">The position of the <see cref="PolylineItem.ForwardNode">ForwardNode</see>
-        /// of the new curve segment.</param>
+        /// of the new curve item.</param>
         /// <param name="cloneSettings">Whether the new segment should have the
         /// same settings as this one. If false, the defaults will be used.</param>
-        /// <returns>The newly created curve segment.</returns>
+        /// <returns>The newly created curve item.</returns>
         public Curve Append(Vector3 position, bool cloneSettings = true)
         {
             if (!cloneSettings)
@@ -193,12 +219,12 @@ namespace TruckLib.ScsMap
         }
 
         /// <summary>
-        /// Appends a curve segment to the end of this one.
+        /// Appends a curve item to the end of this one.
         /// </summary>
         /// <param name="position">The position of the <see cref="PolylineItem.ForwardNode">ForwardNode</see>
-        /// of the new curve segment.</param>
-        /// <param name="model">Unit name of the curve model.</param>
-        /// <returns>The newly created curve.</returns>
+        /// of the new curve item.</param>
+        /// <param name="model">Unit name of the first curve model.</param>
+        /// <returns>The newly created curve item.</returns>
         public Curve Append(Vector3 position, Token model)
         {
             var curve = Append<Curve>(position);

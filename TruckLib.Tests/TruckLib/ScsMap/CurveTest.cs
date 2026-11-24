@@ -29,6 +29,27 @@ namespace TruckLib.Tests.TruckLib.ScsMap
         }
 
         [Fact]
+        public void AddWithMultiple()
+        {
+            var map = new Map();
+            var curve = Curve.Add(map, new Vector3(-15, 0, 35), new Vector3(35, 0, -15), "foo", "bar", "baz");
+
+            Assert.Equal(curve.Subcurves[0].Model, "foo");
+            Assert.Equal(curve.Subcurves[1].Model, "bar");
+            Assert.Equal(curve.Subcurves[2].Model, "baz");
+            Assert.Null(curve.Subcurves[3]);
+        }
+
+        [Fact]
+        public void AddWithMultipleThrowsIfTooMany()
+        {
+            var map = new Map();
+            Assert.Throws<ArgumentException>(() =>
+                Curve.Add(map, new Vector3(-15, 0, 35), new Vector3(35, 0, -15), "a", "e", "i", "o", "u")
+            );
+        }
+
+        [Fact]
         public void Append()
         {
             var map = new Map();
